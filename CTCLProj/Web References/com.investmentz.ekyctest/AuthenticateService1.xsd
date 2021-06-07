@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://tempuri.org/" elementFormDefault="qualified" targetNamespace="http://tempuri.org/" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:import schemaLocation="http://accountopening.investmentz.co.in/AcmiilService/AuthenticateService.svc?xsd=xsd2" namespace="http://schemas.datacontract.org/2004/07/KYCReqRespAPI.Models" />
+  <xs:element name="LoginAuthenticate">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IP" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ProductID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Browser" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="LoginAuthenticateResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q1="http://schemas.datacontract.org/2004/07/KYCReqRespAPI.Models" minOccurs="0" name="LoginAuthenticateResult" nillable="true" type="q1:AuthResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangePassword">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="EventName" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="UserId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="OldPassword" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="NewPassword" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangePasswordResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q2="http://schemas.datacontract.org/2004/07/KYCReqRespAPI.Models" minOccurs="0" name="ChangePasswordResult" nillable="true" type="q2:AuthResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangeUserId">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="UserId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="NewUserId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ChangeUserIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q3="http://schemas.datacontract.org/2004/07/KYCReqRespAPI.Models" minOccurs="0" name="ChangeUserIdResult" nillable="true" type="q3:AuthResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SessionManage">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LoginId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SessionId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ProductID" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="BrowserInfo" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="DeviceInfo" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="IPAdd" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="SType" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="SessionManageResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q4="http://schemas.datacontract.org/2004/07/KYCReqRespAPI.Models" minOccurs="0" name="SessionManageResult" nillable="true" type="q4:AuthResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ValidateMPIN">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="LoginId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="MPIN" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Type" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="ValidateMPINResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q5="http://schemas.datacontract.org/2004/07/KYCReqRespAPI.Models" minOccurs="0" name="ValidateMPINResult" nillable="true" type="q5:AuthResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateLoginId">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="CommonClientCode" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="LoginId" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="Password" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="MPIN" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="UType" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="CreateLoginIdResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q6="http://schemas.datacontract.org/2004/07/KYCReqRespAPI.Models" minOccurs="0" name="CreateLoginIdResult" nillable="true" type="q6:AuthResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSMSOTP">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="MobileNumber" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSMSOTPResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q7="http://schemas.datacontract.org/2004/07/KYCReqRespAPI.Models" minOccurs="0" name="GetSMSOTPResult" nillable="true" type="q7:AuthResponse" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSessionLog">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element minOccurs="0" name="FromDate" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="ToDate" nillable="true" type="xs:string" />
+        <xs:element minOccurs="0" name="LoginId" nillable="true" type="xs:string" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+  <xs:element name="GetSessionLogResponse">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element xmlns:q8="http://schemas.datacontract.org/2004/07/KYCReqRespAPI.Models" minOccurs="0" name="GetSessionLogResult" nillable="true" type="q8:ArrayOfSessionInfo" />
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>

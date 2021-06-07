@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<xs:schema xmlns:tns="http://schemas.datacontract.org/2004/07/KYCReqRespAPI.Models" elementFormDefault="qualified" targetNamespace="http://schemas.datacontract.org/2004/07/KYCReqRespAPI.Models" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="AuthResponse">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="RespCode" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="RespMessage" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="AuthResponse" nillable="true" type="tns:AuthResponse" />
+  <xs:complexType name="ArrayOfSessionInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" maxOccurs="unbounded" name="SessionInfo" nillable="true" type="tns:SessionInfo" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="ArrayOfSessionInfo" nillable="true" type="tns:ArrayOfSessionInfo" />
+  <xs:complexType name="SessionInfo">
+    <xs:sequence>
+      <xs:element minOccurs="0" name="BrowserInfo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="ClientName" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="DeviceInfo" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="IPAddress" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="LoginID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SessionEnd" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SessionID" nillable="true" type="xs:string" />
+      <xs:element minOccurs="0" name="SessionStart" nillable="true" type="xs:string" />
+    </xs:sequence>
+  </xs:complexType>
+  <xs:element name="SessionInfo" nillable="true" type="tns:SessionInfo" />
+</xs:schema>

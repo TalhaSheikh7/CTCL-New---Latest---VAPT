@@ -1,0 +1,1946 @@
+﻿
+@{
+    Layout = null;
+}
+
+@if (ViewBag.Message != null)
+{
+    <script type="text/javascript">
+
+            window.onload = function () {
+                alert("@ViewBag.Message");
+            };
+    </script>
+}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <link href="~/Content/Site.css" rel="stylesheet" />
+    <link href="~/Content/kendo/2021.1.224/kendo.bootstrap-v4.min.css" rel="stylesheet" />
+    <link href="~/Content/bootstrap.min.css" rel="stylesheet" />
+    <link href="~/Content/kendo/2021.1.224/kendo.metroblack.min.css" rel="stylesheet" class="ui-theme" />
+    <link href="~/Content/kendo/2021.1.224/kendo.common.min.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
+    <link href="~/Content/autocomplete.css" rel="stylesheet" />
+
+    <script src="~/Scripts/kendo/2021.1.224/jquery.min.js"></script>
+    <script src="~/MyJs/GlobalVariable.js"></script>
+    <style>
+        .error-detail {
+            display: block;
+            margin-bottom: 3px;
+            text-align: left;
+            color: red;
+            font-size: 12px;
+        }
+        /*-------------------------------
+                    LOGIN STYLES
+        -------------------------------*/
+
+        .login-body {
+            /*CHanged bg by Anjali on 6/2/18*/
+            /*background: #0f1938 url("../img/easytrade.svg") no-repeat fixed;*/
+            background: #0f1938 url("../img/login_bg.svg") no-repeat fixed;
+            background-size: cover;
+            width: 100%;
+            height: 100%;
+        }
+
+        .form-signin {
+            /*max-width: 370px;*/
+            min-width: 400px;
+            /*changed by Anjali on 2_11_17*/
+            /*margin-top:150px;*/
+            /*changed by Anjali on 5_02_18*/
+            /*margin-top:120px;*/
+            margin-top: 170px;
+            /*    margin: 100px auto;*/
+            border-right: 1px solid #999 !important;
+            /*background: #fff;
+            border-radius: 5px;
+            -webkit-border-radius: 5px;*/
+            min-height: 290px !important;
+        }
+
+            .form-signin .form-signin-heading {
+                margin: 0;
+                padding: 0px;
+                text-align: center;
+                color: #fff;
+                position: relative;
+            }
+
+        .sign-title {
+            font-size: 40px;
+            color: #fff;
+            position: absolute;
+            /*changed by Anjali on 2_11_17*/
+            /*top: 120px;*/
+            top: 100px;
+            left: 0;
+            text-align: center;
+            width: 100%;
+            text-transform: uppercase;
+            font-weight: bold;
+        }
+
+        .sign-title1 {
+            font-size: 20px;
+            color: #bcc1c1 !important;
+            position: absolute;
+            /*changed by Anjali on 2_11_17*/
+            /*top: 160px;*/
+            top: 140px;
+            left: 0;
+            text-align: center;
+            width: 100%;
+            font-weight: 400;
+        }
+
+        .form-signin .checkbox {
+            /*margin-bottom: 14px;*/
+            font-size: 12px;
+            font-weight: normal;
+            /*color:#40b767;*/
+            /*color:#E6552E;*/
+            color: #fff;
+            font-weight: normal;
+            font-family: easytradezFontbold;
+            /*Commented by Anjali on 27/10/17 for proper alignment*/
+            /*width: 85%;*/
+            /*Commented by hvb on 04/Oct/2017 to set relative location*/
+            /*position: absolute;
+            top:160px;
+            left: 20px;*/
+            position: relative;
+            /*top:2px;
+            left: 38px;*/
+            top: -30px;
+            left: 38px;
+        }
+
+            .form-signin .checkbox a,
+            .form-signin .checkbox a:hover {
+                color: #40b767;
+            }
+
+        .form-signin .form-control {
+            position: relative;
+            font-size: 16px;
+            height: auto;
+            padding: 10px;
+            -webkit-box-sizing: border-box;
+            -moz-box-sizing: border-box;
+            box-sizing: border-box;
+        }
+
+            .form-signin .form-control:focus {
+                z-index: 2;
+            }
+
+        .form-signin .btn-login {
+            /*background: #40b770;*/
+            background: #E6552E;
+            border-radius: 50px;
+            color: #fff;
+            /*    text-transform: uppercase;*/
+            font-weight: normal;
+            /*font-family: 'Open Sans', sans-serif;*/
+            /*font-family: easytradezFontbold;*/
+            margin: 30px 0 5px;
+            padding: 3px;
+            -webkit-transition: all 0.3s;
+            -moz-transition: all 0.3s;
+            transition: all 0.3s;
+            font-size: 17px;
+            /*top:90px !important;*/
+        }
+
+            .form-signin .btn-login:hover {
+                /*background: #6FC;*/
+                background: #E6552E;
+                -webkit-transition: all 0.3s;
+                -moz-transition: all 0.3s;
+                transition: all 0.3s;
+            }
+
+        .form-signin p {
+            text-align: left;
+            color: #b6b6b6;
+            font-size: 16px;
+            font-weight: normal;
+        }
+
+        .form-signin a,
+        .form-signin a:hover {
+            /*color: #6bc5a4;*/
+            /*color: #E6552E;*/
+            color: #fff;
+        }
+
+            .form-signin a:hover {
+                text-decoration: underline;
+            }
+
+        .login-wrap {
+            padding: 30px 30px 30px 30px;
+            position: relative;
+            width: 450px;
+            margin: 0px auto;
+            border: 1px solid #ccc;
+            box-shadow: 0 1px 10px 4px rgb(0 0 0 / 8%);
+        }
+
+        .registration {
+            /*edited by Anjali on 27/10/17*/
+            color: #c7c7c7;
+            position: absolute;
+            /*top:250px;*/
+            top: 170px !important;
+            padding-left: 5px;
+            text-align: left;
+        }
+        /*new code start*/
+
+        .group {
+            position: relative;
+            margin-bottom: 45px;
+        }
+        /*input 				{
+          font-size:18px;
+          padding:10px 10px 10px 5px;
+          display:block;
+          width:300px;
+          border:none;
+          border-bottom:1px solid #ffffff;
+          background-color:transparent !important;
+          color:#fff;
+        }*/
+
+        .text_box {
+            font-size: 17px;
+            padding: 10px 10px 3px 5px;
+            display: block;
+            width: 270px;
+            border: none;
+            border-bottom: 1px solid #ffffff;
+            background-color: transparent !important;
+            color: #fff;
+            margin-top: 25px;
+        }
+
+        input:focus {
+            outline: none;
+        }
+        /* LABEL ======================================= */
+
+        /*label :not (.checkbox)*/
+
+        /*label			 {
+          color:#fff;
+          font-size:15px;
+          font-weight:normal;
+          position:absolute;
+          pointer-events:none;
+          left:5px;
+          top:18px;
+          transition:0.2s ease all;
+          -moz-transition:0.2s ease all;
+          -webkit-transition:0.2s ease all;
+        }*/
+
+        .float-label {
+            color: #fff;
+            font-size: 15px;
+            font-weight: normal;
+            position: absolute;
+            pointer-events: none;
+            left: 5px;
+            top: 10px;
+            padding: 0px 0px 15px 0px;
+            transition: 0.2s ease all;
+            -moz-transition: 0.2s ease all;
+            -webkit-transition: 0.2s ease all;
+        }
+        /* active state */
+
+        /*input:focus ~ label, input:valid ~ label 		{
+          top:-10px;
+          font-size:11px;
+          color:#40b767;
+          border-bottom-color:#000000 !important;
+
+        }*/
+
+        /* BOTTOM BARS ================================= */
+
+        .bar {
+            position: relative;
+            display: block;
+            width: 300px;
+        }
+
+            .bar:before,
+            .bar:after {
+                content: '';
+                height: 2px;
+                width: 100%;
+                bottom: 1px;
+                position: absolute;
+                transition: 0.2s ease all;
+                -moz-transition: 0.2s ease all;
+                -webkit-transition: 0.2s ease all;
+            }
+
+            .bar:before {
+                left: 50%;
+            }
+
+            .bar:after {
+                right: 50%;
+            }
+        /* active state */
+
+        input:focus ~ .bar:before,
+        input:focus ~ .bar:after {
+            width: 50%;
+        }
+
+        .highlight {
+            position: absolute;
+            height: 60%;
+            width: 100px;
+            top: 25%;
+            left: 0;
+            pointer-events: none;
+            opacity: 0.5;
+        }
+
+        input:focus ~ .highlight {
+            -webkit-animation: inputHighlighter 0.3s ease;
+            -moz-animation: inputHighlighter 0.3s ease;
+            animation: inputHighlighter 0.3s ease;
+        }
+
+        /*new code end*/
+
+        /*added by anjali on 12/10/17*/
+
+        .text_box1 {
+            font-size: 17px;
+            padding: 10px 10px 3px 5px;
+            display: block;
+            width: 270px;
+            border: none;
+            border-bottom: 1px solid #ffffff;
+            background-color: transparent !important;
+            color: #fff;
+            margin-top: 25px;
+        }
+
+        .floating-label {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .floating-input,
+        .floating-select {
+            font-size: 14px;
+            padding: 4px 4px;
+            display: block;
+            width: 100%;
+            height: 40px;
+            background-color: transparent;
+            border: none;
+            border-bottom: 1px solid #eee;
+        }
+            /*Edited by Anjali on 21/2/18 to remove blue line on focus*/
+
+            .floating-input:focus,
+            .floating-select:focus {
+                outline: none;
+                border-bottom: 1px solid #eee;
+            }
+
+        label {
+            color: #999;
+            font-size: 14px;
+            font-weight: normal;
+            position: absolute;
+            pointer-events: none;
+            left: 5px;
+            top: -30px;
+            transition: 0.2s ease all;
+            -moz-transition: 0.2s ease all;
+            -webkit-transition: 0.2s ease all;
+        }
+
+        .floating-input:focus ~ label,
+        .floating-input:not(:placeholder-shown) ~ label {
+            top: -15px;
+            font-size: 12px;
+            /*color:#40b767;*/
+            color: #fff;
+        }
+        /* active state */
+
+        input:focus ~ label,
+        input:valid ~ label {
+            top: 10px;
+            font-size: 15px;
+            color: #fff;
+            border-bottom-color: #000000 !important;
+        }
+        /*added by anjali on 17/10/17*/
+
+        .modal-title2 {
+            color: #4f5095 !important;
+            font-size: 22px !important;
+            text-align: left;
+            font-weight: 900;
+        }
+        /*.modal-header {
+            padding-bottom: 0px !important;
+            border-bottom: 1px solid #4f5095!important;
+        }*/
+
+        .left_title {
+            color: #4f5095 !important;
+            font-size: 14px !important;
+            font-weight: bold;
+            border-right: 1px solid #8f9090;
+            padding: 3px 0px;
+        }
+
+        .butt_cancel {
+            background-color: #4F5095;
+            border-radius: 5px;
+            padding: 5px 30px 5px 30px;
+            color: #fff;
+            border: 0;
+        }
+
+        .butt_save {
+            background-color: #e04f10;
+            border-radius: 5px;
+            padding: 5px 30px 5px 30px;
+            color: #fff;
+            border: 0;
+        }
+
+        .popup_input {
+            border: none !important;
+            border-bottom: 1px solid #ccc !important;
+            color: #8f9090 !important;
+        }
+
+        .modal-content {
+            /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
+            width: 400px;
+            padding: 10px 25px;
+            height: inherit;
+            /* To center horizontally */
+            margin: 0 auto;
+            background-color: #FFF;
+            position: relative;
+            background-color: #fff;
+            -webkit-background-clip: padding-box;
+            background-clip: padding-box;
+            border: 1px solid #999;
+            border: 1px solid rgba(0, 0, 0, .2);
+            border-radius: 6px;
+            outline: 0;
+            -webkit-box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+            box-shadow: 0 3px 9px rgba(0, 0, 0, .5);
+        }
+
+        .lable_style {
+            padding-top: 7px;
+        }
+        /*added by hvb on 26/oct/2017 for success popup*/
+
+        .sucess-body {
+            text-align: center;
+        }
+
+            .sucess-body .fa {
+                color: green;
+                font-size: 90px;
+            }
+
+            .sucess-body .message {
+                font-size: 18px;
+                font-weight: bold;
+                color: green;
+                margin-top: 3px;
+                /*font-family:Calibri,Verdana;*/
+                font-family: easytradezFontbold;
+            }
+        /*Added by hvb on 27/oct/2017 as it's required to show some difference between error and message*/
+
+        .error-popup-label {
+            color: red;
+            font-size: 12px;
+        }
+
+        .information-popup-label {
+            color: orange;
+            font-size: 14px;
+            font-weight: bold;
+            /*font-family: verdana;*/
+            font-family: easytradezFontbold;
+        }
+        /*addeded by Anjali on 27/10/17 for responsive alignment*/
+
+        .panel {
+            margin-bottom: -180px !important;
+        }
+        /*CssClass="popup_input no-spinners"*/
+
+        /*added by anjali on 30/10/17*/
+
+        /* hide up/down arrows ("spinners") on input fields marked type="number" */
+
+        .no-spinners {
+            -moz-appearance: textfield;
+        }
+
+            .no-spinners::-webkit-outer-spin-button,
+            .no-spinners::-webkit-outer-spin-button:hover,
+            .no-spinners::-webkit-outer-spin-button:focus,
+            .no-spinners::-webkit-inner-spin-button {
+                -webkit-appearance: none !important;
+                margin: 0;
+            }
+        /*added by anjali on 06/11/17 remove yellow bg from input*/
+
+        .popup_input:-webkit-autofill {
+            -webkit-animation-name: autofill2;
+            -webkit-animation-fill-mode: both;
+        }
+        /*end of class bg from input*/
+
+        /*classes added on 6/2/18*/
+
+        .sign-title2 {
+            font-size: 21px;
+            color: #fff !important;
+            font-weight: bold;
+        }
+
+        .sign-title3 {
+            font-size: 16px;
+            color: #fff !important;
+            position: absolute;
+            top: 25px;
+        }
+
+        .small_contents {
+            color: #999;
+            font-size: 14PX;
+            font-weight: 400;
+        }
+
+        .btn:focus,
+        .btn:active {
+            outline: none !important;
+            box-shadow: none;
+        }
+        /*added by asitcmehta*/
+
+        .modal-content {
+            border-radius: 10px !important;
+            /*min-height: 350px !important;*/
+            border: 0px solid #000 !important;
+            -webkit-box-shadow: 0 0px 0px rgba(0, 0, 0, .5) !important;
+            box-shadow: 0 0 0px rgba(0, 0, 0, .5) !important;
+        }
+
+        .modal-dialog {
+            margin: 15% auto !important;
+        }
+
+        .modal {
+            /*background: rgba(65, 65, 65, 0.9);*/
+            background: rgb(181 176 176 / 80%);
+        }
+
+        :focus {
+            outline: -webkit-focus-ring-color auto 0px;
+        }
+
+        a.toggle-btn1 {
+            color: #fff !important;
+        }
+
+        .login-icon {
+            /*min-height: 350px !important;*/
+            border-top-left-radius: 10px !important;
+            border-bottom-left-radius: 10px !important;
+            background-color: #3a3942;
+        }
+
+        .fpsd-link {
+            color: #e04f10;
+        }
+
+        span.succes-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #000;
+        }
+
+        span.success-p {
+            font-size: 20px;
+            line-height: 25px;
+            font-weight: 900;
+            color: #797979;
+        }
+
+        .sucess-body1 {
+            text-align: left;
+        }
+
+        button.butt_cancel.btnorng {
+            background-color: #e04f10;
+            border-radius: 15px;
+            padding: 4px 30px 4px 30px;
+            color: #fff;
+            border: 0;
+        }
+
+        .modal-footer.btnft {
+            padding: 20px 0 20px 0 !important;
+        }
+
+        .login-icon .img-responsive {
+            padding: 64px 30px;
+            display: inline;
+        }
+
+        .modal-title2 {
+            color: #333333 !important;
+            font-size: 20px !important;
+            font-weight: 600;
+        }
+
+        .brd-none {
+            padding: 20px 0 !important;
+        }
+
+            .brd-none:focus,
+            .floating-select:focus {
+                border-bottom: 1px solid #5264AE !important;
+            }
+
+        .close {
+            color: #333333 !important;
+            opacity: 0.8 !important;
+        }
+
+        label.new-field {
+            color: #000 !important;
+            font-weight: 300;
+        }
+
+        .modal-header {
+            padding: 15px 0 0 0 !important;
+            /*border-bottom: 1px solid #e5e5e5;*/
+            border-bottom: 1px solid #000000 !important;
+        }
+
+        .modal-dialog .modal-body {
+            position: relative;
+            padding: 15px 0 20px 0 !important;
+        }
+
+        .modal-footer {
+            border-top: 0px solid #e5e5e5 !important;
+            background: #ffffff;
+            padding: 0 0 7px 0 !important;
+            /*edited by ANjali on 21/2/18*/
+            margin-top: 0px;
+        }
+
+        .floating-label input,
+        select,
+        textarea {
+            /*font-family: easytradezFontbold;*/
+            font-size: 15px;
+            font-weight: 600;
+            color: #767676 !important;
+            /*color: white !important;*/
+        }
+
+        .butt_cancel {
+            background-color: #fff;
+            border-radius: 15px;
+            padding: 4px 30px 4px 30px;
+            color: #3a3942;
+            border: 1px solid;
+        }
+
+        .butt_save {
+            background-color: #3a3942;
+            border-radius: 15px;
+            padding: 4px 30px 4px 30px;
+            color: #fff;
+            border: 0;
+        }
+
+        .input-field {
+            width: 100%;
+            border: none !important;
+            border-bottom: 1px solid #cccccc !important;
+            color: #8f9090 !important;
+        }
+
+        .popup_dotted {
+            border: none !important;
+            border-bottom: 1px dashed #cccccc !important;
+        }
+
+        .no-padd {
+            padding: 7px 0 !important;
+        }
+
+        .modal-dialog {
+            width: 600px !important;
+        }
+
+        .new-popup {
+            width: 100% !important;
+        }
+        /*Added by Anjali on 21/2/18*/
+
+        .resolution {
+            font-size: 13px;
+            color: #999999;
+            position: relative;
+            top: 200px;
+            left: 0;
+            text-align: center;
+            width: 100%;
+            font-weight: 400;
+        }
+
+        .call {
+            margin-top: 20px;
+            color: #000;
+            font-weight: bold;
+            font-size: 14px;
+            text-align: center !important;
+            width: 100%;
+        }
+
+        .number {
+            font-size: 16px;
+            color: #fff;
+        }
+
+        a:focus,
+        a:hover {
+            color: rgb(35, 82, 124);
+            text-decoration: none !important;
+        }
+
+        .btn-success:hover {
+            color: #000 !important;
+            background-color: #fff !important;
+            border-color: #fff !important;
+            width: 130px;
+            font-size: 16px !important;
+        }
+
+        .btn-success {
+            color: #000 !important;
+            background-color: #fff !important;
+            border-color: #fff !important;
+            width: 130px;
+            font-size: 16px !important;
+        }
+
+        .marginbottom0 {
+            margin-bottom: 0;
+        }
+
+        .margin0 {
+            margin: 0;
+        }
+
+        .margintop0 {
+            margin-top: 0;
+        }
+
+        .main-title1 {
+            font-size: 30px;
+            margin-bottom: 5px;
+            color: #fff;
+        }
+
+        .main-title2 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: #fff;
+        }
+
+        .close {
+            height: 30px;
+            width: 30px;
+            left: auto;
+            right: -24px;
+            bottom: auto;
+            top: -24px;
+            color: #ffffff !important;
+            font-family: inherit;
+            font-size: 25px;
+            line-height: 26px;
+            border: 2px solid #ffffff !important;
+            border-radius: 30px;
+            box-shadow: 0px 0px 15px 1px rgb(2 2 2 / 75%) !important;
+            text-shadow: 0px 0px 0px rgb(0 0 0 / 23%) !important;
+            background-color: rgba(0, 0, 0, 1.00) !important;
+            text-decoration: none;
+            text-align: center;
+            position: absolute;
+            min-width: 1em;
+            z-index: 2;
+            opacity: 1 !important;
+            cursor: pointer;
+        }
+
+        .m-top10 {
+            margin-top: 10px;
+        }
+
+        .img-block {
+            position: absolute;
+            left: 40%;
+            z-index: 1;
+            background-color: #000;
+            top: -70px;
+            padding: 25px;
+            border-radius: 100%;
+            width: 100px;
+            height: 100px;
+        }
+
+        .modal-header .close {
+            padding: 0;
+            margin: 0;
+        }
+
+        button:focus {
+            outline: 1px dotted;
+            outline: 0px auto -webkit-focus-ring-color !important;
+        }
+
+        .closespan {
+            position: relative;
+            bottom: 2px;
+            left: 1px;
+        }
+    </style>
+
+    <script src="~/Scripts/kendo/2021.1.224/jquery.min.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.4.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/6.3.3/firebase-messaging.js"></script>
+    <script src="https://ctcl.investmentz.com/iCtcl/ClinetJS/bootstrap-notify.min.js"></script>
+    <script>
+        $(document).ready(function () {
+
+            function notifyMe() {
+                // Let's check if the browser supports notifications
+                if (!("Notification" in window)) {
+                    console.log("This browser does not support desktop notification");
+                }
+
+                // Let's check whether notification permissions have alredy been granted
+                else if (Notification.permission === "granted") {
+                    // If it's okay let's create a notification
+                    //var notification = new Notification("Thank you for subscription!");
+                    console.log("Already subscribe to notifcations!");
+                    Notification.requestPermission().then((permission) => {
+                        if (permission === 'granted') {
+                            //console.log('Notification permission granted.');
+                            //var notification = new Notification("Thank you for subscription!");
+                            messaging.getToken().then((refreshedToken) => {
+                                console.log('Token refreshed.');
+                                console.log(refreshedToken);
+                                $("#Token").val(refreshedToken);
+                                subscribeTokenToTopic(refreshedToken, "General");
+                                // Indicate that the new Instance ID token has not yet been sent to the
+                                // app server.
+                                // setTokenSentToServer(false);
+                                // Send Instance ID token to app server.
+                                // sendTokenToServer(refreshedToken);
+                                // [START_EXCLUDE]
+                                // Display new Instance ID token and clear UI of all previous messages.
+                                // resetUI();
+                                // [END_EXCLUDE]
+                            }).catch((err) => {
+                                console.log('Unable to retrieve refreshed token ', err);
+                                // showToken('Unable to retrieve refreshed token ', err);
+                            });
+                        } else {
+                            console.log('Unable to get permission to notify.');
+                        }
+                    });
+                }
+
+                // Otherwise, we need to ask the user for permission
+                else if (Notification.permission !== 'denied' || Notification.permission === "default") {
+
+                    $("#modNotificationPermission").modal("show");
+
+                    /*Notification.requestPermission(function (permission) {
+                        // If the user accepts, let's create a notification
+                        if (permission === "granted") {
+                            var notification = new Notification("Hi there!");
+                        }
+                    });*/
+                }
+
+                // At last, if the user has denied notifications, and you
+                // want to be respectful there is no need to bother them any more.
+            }
+
+            var fcmPubKey = 'BDTM2QWDxgDfPHDTHKYHS7WZC2pVsxRimAy-XD4rhlehHKrxenY5bUCQpTV3wHn4plmmIxV9jYoDyvdjaZQn4WY';
+            function subscribeTokenToTopic(token, topic) {
+                fetch('https://iid.googleapis.com/iid/v1/' + token + '/rel/topics/' + topic, {
+                    method: 'POST',
+                    headers: new Headers({
+                        'Content-Type': 'application/json',
+                        'Authorization': 'key=' + 'AAAAZ-EnlJU:APA91bFZvcD1J5XqHV8dxX54SFwoYa5xf_n-5ga95IPBRY0NJd0mYF9StEFogMILOJSuHaAxV8fY8ozC4zvlfMVtLFinm-4cDQD7RYR31jJB75x1AnRHJvNe6XdISp3QRrHcxyFmRWTC'
+                    })
+                }).then(response => {
+                    if (response.status < 200 || response.status >= 400) {
+                        throw 'Error subscribing to topic: ' + response.status + ' - ' + response.text();
+                    }
+                    console.log('Subscribed to "' + topic + '"');
+                }).catch(error => {
+                    console.error(error);
+                })
+            }
+
+            const messaging = firebase.messaging();
+            messaging.usePublicVapidKey(fcmPubKey);
+
+            if ($("#Token").val() == "")
+                notifyMe();
+
+            // [START requestPermission]
+            $("#btnAllowNotification").click(function () {
+                $("#modNotificationPermission").modal("hide");
+                Notification.requestPermission().then((permission) => {
+                    if (permission === 'granted') {
+                        //console.log('Notification permission granted.');
+                        var notification = new Notification("Thank you for subscription!");
+                        messaging.getToken().then((refreshedToken) => {
+                            console.log('Token refreshed.');
+                            console.log(refreshedToken);
+                            $("#Token").val(refreshedToken);
+                            subscribeTokenToTopic(refreshedToken, "General");
+                            // Indicate that the new Instance ID token has not yet been sent to the
+                            // app server.
+                            // setTokenSentToServer(false);
+                            // Send Instance ID token to app server.
+                            // sendTokenToServer(refreshedToken);
+                            // [START_EXCLUDE]
+                            // Display new Instance ID token and clear UI of all previous messages.
+                            // resetUI();
+                            // [END_EXCLUDE]
+                        }).catch((err) => {
+                            console.log('Unable to retrieve refreshed token ', err);
+                            // showToken('Unable to retrieve refreshed token ', err);
+                        });
+                    } else {
+                        console.log('Unable to get permission to notify.');
+                    }
+                });
+            });
+            $("#btnDenyNotification").click(function () {
+                $("#modNotificationPermission").modal("hide");
+                $("#Token").val("USER_DENIED_NOTIFICATION_INVALID_TOKEN_SET");
+                alert("You won't be able to receive trading alerts");
+            });
+            // [END requestPermission]
+
+            // [START refresh_token]
+            messaging.onTokenRefresh(() => {
+                messaging.getToken().then((refreshedToken) => {
+                    console.log('Token refreshed.');
+                    // Indicate that the new Instance ID token has not yet been sent to the
+                    // app server.
+                    setTokenSentToServer(false);
+                    // Send Instance ID token to app server.
+                    sendTokenToServer(refreshedToken);
+                    // [START_EXCLUDE]
+                    // Display new Instance ID token and clear UI of all previous messages.
+                    resetUI();
+                    // [END_EXCLUDE]
+                }).catch((err) => {
+                    console.log('Unable to retrieve refreshed token ', err);
+                    showToken('Unable to retrieve refreshed token ', err);
+                });
+            });
+            // [END refresh_token]
+
+            //[START Message Recieved]
+            messaging.onMessage((payload) => {
+                console.log('Message received. ', payload);
+                $.notify({
+                    title: "<strong>" + payload.notification.title + "</strong> ",
+
+                    message: "  " + payload.notification.body,
+                    url: "https://trade.investmentz.com/Web/WebForms/Alerts.aspx",
+                    target: "_self"
+                }, {
+                        type: 'success',
+                        placement: {
+                            from: "bottom",
+                            align: "right"
+                        },
+                    });
+                // [START_EXCLUDE]
+                // Update the UI to include the received message.
+                //appendMessage(payload);
+                // [END_EXCLUDE]
+            });
+            //[END Message Recieved]
+
+            //[START BG Message]
+            /*messaging.setBackgroundMessageHandler(function (payload) {
+                console.log('[firebase-messaging-sw.js] Received background message ', payload);
+                // Customize notification here
+                var notificationTitle = 'Background Message Title';
+                var notificationOptions = {
+                    body: 'Background Message body.',
+                    icon: '/firebase-logo.png'
+                };
+
+                return self.registration.showNotification(notificationTitle,
+                  notificationOptions);
+            });*/
+            //[END BG Message]
+
+        });
+        // Your web app's Firebase configuration
+        var firebaseConfig = {
+            apiKey: "AIzaSyA5RKpJkXyjLy095J4A9XDPopAwDWRtlP4",
+            authDomain: "investmentz-41e35.firebaseapp.com",
+            databaseURL: "https://investmentz-41e35.firebaseio.com",
+            projectId: "investmentz-41e35",
+            storageBucket: "",
+            messagingSenderId: "446159099029",
+            appId: "1:446159099029:web:2db2613c86f6d353"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+    </script>
+    <script type="text/javascript">
+        //var showChangePwd;
+
+        $(document).ready(function () {
+            var isCtrl = false;
+
+            //Added hvb to clear client selection and start fresh
+            setGlobalVariable("selectedBaText", "");
+
+            $("#txtUid").focus();
+
+            jQuery(function () {
+                $("input[autocomplete=off]").val("");
+            });
+
+            //vpg on 28012018
+            //>>>>>>>
+            $("#txtUid").keyup(function (event) {
+                if (event.keyCode === 13) {
+                    //$("#btnLogin").click();
+                    $("#txtPassWd").focus();
+                }
+            });
+
+            var url = window.location.href;
+            if (url.indexOf("trade.investmentz") == -1) {
+                //$("#btnCreateId").hide();
+            }
+
+            $("#txtLoginMPin").keyup(function (event) {
+                if (event.keyCode === 13) {
+                    $("#btnVerifyMPin").click();
+                    return false;
+                }
+            });
+
+
+
+            var duration = 500;
+
+
+
+            if ($('#hFldOtpVisible').val() == "F") {
+                //Addded NYN 07/11/2017 for ClientCode readonly
+
+                if ($('#hFldPopupOperation').val() == 'FLOGIN') {
+                    $('#txtFPwdLoginId').removeAttr('readonly');
+
+                    //$("#fieldName").removeAttr('readonly');
+                }
+                //
+                $('#divOtpBlock').css('display', 'none');
+
+                $('#WelcomeMsg').attr('hidden', 'hidden');//vpg 210118
+
+            }
+            else {
+                if ($('#hFldPopupOperation').val() == 'FLOGIN') {
+                    //Addded NYN 07/11/2017 for ClientCode readonly
+
+                    //$("#txtFPwdLoginId").attr('readonly', 'readonly');
+                    $("#txtNCCommonId").attr('readonly', 'readonly');
+                }
+                //
+                $('#divOtpBlock').css('display', 'block');
+                $('#txtFPwdLoginId').removeAttr('autocomplete');//vpg 020118
+                $('#txtFPwdMobileNo').removeAttr('autocomplete');//vpg 020118
+                $('#loginrow').attr('hidden', 'hidden');//vpg 020118
+                $('#mobilerow').attr('hidden', 'hidden');//vpg 020118
+
+                $('#WelcomeMsg').removeAttr('hidden', 'hidden');//vpg 210118
+
+                // $('#hFldPopupOperation').val('FMPINotp'); //vpg 200218
+            }
+
+            if ($('#hFldOpenPopupId').val() != "") {
+
+                OpenPopuptfromHiddenField("");
+                if ($('#hFldOpenPopupId').val() == "modMpinValidate") {
+                    $('#txtLoginMPin').focus();
+                }
+                //>>> vpg 19042018
+                else if ($('#hFldOpenPopupId').val() == "modForgotPwd") {
+                    $('#txtFPwdOTP').focus();
+                }
+                else if ($('#hFldOpenPopupId').val() == "modNewCred") {
+                    $('#txtNCNewId').focus();
+                }
+                else if ($('#hFldOpenPopupId').val() == "modChangePwd") {
+                    $('#txtChangePwd1').focus();
+                }
+                else if ($('#hFldOpenPopupId').val() == "modForceLogout") {
+                    $("#flogoutmsg").html(hfldIPAddress.value);
+                }
+
+                //>>>
+            }
+
+            if ($('#hFldPopupOperation').val() == 'FPWD') {
+                $('#lblForgotpwdUid').html('Login Id');
+                $('#modForgotPwdLabel').html('Forgot Password');
+                $('#WelcomeMsgcp').removeAttr('hidden', 'hidden');//vpg 210118
+            }
+            else if ($('#hFldPopupOperation').val() == "FMPIN") {
+                $('#modForgotPwdLabel').html('Forgot M-Pin');
+                $('#lblForgotpwdUid').html('Login Id');
+                $('#WelcomeMsgcp').attr('hidden', 'hidden');//vpg 210118
+
+            }
+
+            else {
+                //$('#lblForgotpwdUid').html('Common Client Code');//cmnted by vpg 010118
+                $('#lblForgotpwdUid').html('UCC');//added by vpg 010118
+                $('#modForgotPwdLabel').html('First Time Login');
+            }
+
+            function OpenPopuptfromHiddenField(popupid) {
+                if (popupid != "")
+
+                    $("#" + popupid).show(duration);
+
+                else
+                    $("#" + $('#hFldOpenPopupId').val()).show(duration);
+            }
+
+            $("button[data-dismiss='modal']").click(function () {
+                $(this).closest(".modal").hide(duration);
+            });
+
+
+
+
+            //added by vpg 11062019 for Forgot Login
+            $('#btnForgotLogin').click(function () {
+                $("#modFgtLogin").show();
+            });
+            //<<<
+
+            $('#btnForgotPwd').click(function () {
+                $('#clientMessage').html(''); //vpg 19042018
+
+                $('#loginrow').removeAttr('hidden', 'hidden');//vpg 020118
+                $('#mobilerow').removeAttr('hidden', 'hidden');//vpg 020118
+                $('#txtFPwdLoginId').attr('autocomplete', 'off');//vpg 020118
+                $('#txtFPwdMobileNo').attr('autocomplete', 'off');//vpg 020118
+
+
+
+                $('#hFldPopupOperation').val('FPWD');
+                $('#modForgotPwdLabel').html('Forgot Password');
+                $('#lblForgotpwdUid').html('Login Id');
+
+                $('#txtFPwdLoginId').val('');
+                $('#txtFPwdMobileNo').val('');
+                $('#txtFPwdOTP').val('');
+
+                $('#txtFPwdLoginId').removeAttr('readonly'); //added NYN 10/11/2017 for removing readonly attribute
+                $('#divOtpBlock').css('display', 'none');
+                $('#lblFPwdError').html('');
+                $('#hFldOtpVisible').val('F');
+                OpenPopuptfromHiddenField('modForgotPwd');
+                $('#txtFPwdLoginId').focus();//19042018 vpg
+            });
+
+            $('#btnCreateId').click(function () {
+                $('#clientMessage').html(''); //vpg 19042018
+
+                $('#loginrow').removeAttr('hidden', 'hidden');//vpg 020118
+                $('#mobilerow').removeAttr('hidden', 'hidden');//vpg 020118
+                $('#txtFPwdLoginId').attr('autocomplete', 'off');//vpg 020118
+                $('#txtFPwdMobileNo').attr('autocomplete', 'off');//vpg 020118
+
+
+                $('#hFldPopupOperation').val('FLOGIN');
+                $('#modForgotPwdLabel').html('First Time Login');
+                //$('#lblForgotpwdUid').html('Common Client Code'); //cmnted by vpg 010118
+                $('#lblForgotpwdUid').html('UCC'); //added by vpg 010118
+
+
+                $('#txtFPwdLoginId').val('');
+                $('#txtFPwdMobileNo').val('');
+                $('#txtFPwdOTP').val('');
+
+                $('#txtFPwdLoginId').removeAttr('readonly');
+                $('#divOtpBlock').css('display', 'none');
+                $('#lblFPwdError').html('');
+                $('#hFldOtpVisible').val('F');
+
+                OpenPopuptfromHiddenField('modForgotPwd');
+
+                $('#txtFPwdLoginId').focus();//19042018 vpg
+            });
+
+            //Added by hvb on 07/11/2017 for forgot mpin
+            $('#btnForgotMpin').click(function () {
+                $('#hFldPopupOperation').val('FMPIN');
+                $('#modForgotPwdLabel').html('Forgot M-Pin');
+                $('#lblForgotpwdUid').html('Login Id');
+                $('#hFldOpenPopupId').val('modForgotPwd');
+
+                $('#txtFPwdLoginId').val('');
+                $('#txtFPwdMobileNo').val('');
+
+                $('#divOtpBlock').css('display', 'none');
+                $('#txtFPwdOTP').val('');
+                $('#lblFPwdError').html('');
+                $('#hFldOtpVisible').val('F');
+
+                //$('#lblCMpinError').val(''); //added by vpg on 05012018 to clear previous message
+                $(this).closest(".modal").hide();
+
+
+                //Commented by hvb on 03/01/2018 as this popup is now opened from server side.
+                //OpenPopuptfromHiddenField("");
+            });
+
+            $("#btnLogoutNo").click(function () {
+                $('#txtUid').focus();
+                $("#modForceLogout").hide();
+                //$(this).closest(".modal").hide();
+            });
+
+            $(document).keydown(function (e) {
+                if (e.which == 17) {
+                    isCtrl = true;
+                }
+                if (e.which == 16) {
+                    isShift = true;
+                }
+
+                if (e.which == 27 && isCtrl == false) {
+                    if ($("#modForgotPwd").css('display') != 'none') {
+                        $("#modForgotPwd").toggle();
+                    }
+                    else if ($("#modChangePwd").css('display') != 'none') {
+                        $("#modChangePwd").toggle();
+                    }
+                    else if ($("#modSuccess").css('display') != 'none') {
+                        $("#modSuccess").toggle();
+                    }
+                    else if ($("#modMpinValidate").css('display') != 'none') {
+                        $("#modMpinValidate").toggle();
+                    }
+                    else if ($("#modNewCred").css('display') != 'none') {
+                        $("#modNewCred").toggle();
+                    }
+                    else if ($("#modForceLogout").css('display') != 'none') {
+                        $("#modForceLogout").toggle();
+                    }
+
+                    $('.submenu[style="display: table-row;"]').click();
+
+                }
+
+            });
+
+        });
+
+
+/**/</script>
+</head>
+<body class="k-content">
+    <main>
+        <div class="container-fluid">
+            <h2></h2>
+            <form method="post" action="" id="form1">
+                <!-- START : Notification request popup -->
+                <div class="modal" id="modNotificationPermission" tabindex="-1" role="dialog" aria-labelledby="modNotificationPermissionLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="col-sm-4 login-icon text-center" style="height: 285px; width: 250px;">
+                            <img src="img/Notification.png" class="img-responsive" />
+                        </div>
+                        <div class="col-sm-8 modal-content" style="width: 350px;  height: 285px;">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span class="closespan" aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                                </button>
+                                <h4 class="modal-title2" id="modNotificationPermissionLabel">Notification Permission</h4>
+                            </div>
+                            <div class="modal-body" style="padding: 15px 0 5px 0 !important;">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div>
+                                            <p style="font-size: 16px;">Get latest Trading Alerts and Updates</p>
+                                            <p style="font-size: 16px;">Stay updated with Trading & Research Calls notification.</p>
+                                            <p style="font-size: 16px;">
+                                                <b>Click On Allow</b>
+                                            </p>
+                                            <br />
+                                            <br />
+                                            <button id="btnAllowNotification" type="button" class="butt_cancel">Allow</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+                                            <button id="btnDenyNotification" type="button" class="butt_cancel">cancel</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END : Notification request popup -->
+                <!-- START : SESSION-TERMINATE POPUP HVB  09/07/2020 -->
+                <div class="modal" id="modSessionTerminate" tabindex="-1" role="dialog" aria-labelledby="modSessionTerminateLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                                </button>
+                                <h4 class="modal-title2" id="modSessionTerminateLabel">Session terminated</h4>
+                            </div>
+                            <div class="modal-body" style="padding: 15px 0 5px 0 !important;">
+                                <div class="container-fluid">
+                                    <div class="row">
+                                        <div>
+                                            <p style="font-size: 16px;">
+                                                You have been logged out due to inactive session to protect your account.
+                                                <br />Please login again to continue.
+                                            </p>
+                                            <br />
+                                            <br />
+                                            <br />
+                                            <br />
+                                            <div style="text-align:right">
+                                                <button type="button" class="butt_cancel" data-dismiss="modal">Close</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- END : SESSION-TERMINATE POPUP HVB  09/07/2020 -->
+                <div class="container">
+                    <div class="row">
+                        <div class="col-sm-12">
+                            <div class="login-wrap">
+                                <div class="row">
+                                    <div class="col-md-12 form-group text-center">
+                                        <img src="~/images/logo.svg" alt="" style="width:229px;">
+                                        <h1 class="main-title1 marginbottom0 text-center">LOGIN</h1>
+                                        <h2 class="main-title2 margintop0 text-center">To continue with Investmentz</h2>
+                                    </div>
+                                    <div class="col-md-12">
+                                        <div class="floating-label">
+                                            <input name="txtUid" id="txtUid" class="floating-input" type="text" placeholder=" " autocomplete="off" style="color:#fff !important;" />	<span class="highlight"></span>
+                                            <span class="bar"></span>
+                                            <label class="float-label">Login Id</label>	<a id="btnForgotLogin" style="cursor:pointer; color:#fff;font-size: 12px;font-weight: 600; float:right;"> Forgot your Login?</a>
+                                        </div>
+                                        <div class="floating-label">
+                                            <input name="txtPassWd" id="txtPassWd" class="floating-input" placeholder=" " autocomplete="off" type="password" style="color:#fff !important;" />	<span class="highlight"></span>
+                                            <span class="bar"></span>
+                                            <label class="float-label">Password</label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        @*<a id="btnCreateId" style="cursor:pointer; color:#fff;font-size: 12px;font-weight: 600;"> First Time Login?</a>*@
+                                    </div>
+                                    <div class="col-md-6 text-right">
+                                        <a id="btnForgotPwd" style="cursor:pointer; color:#fff;font-size: 12px;font-weight: 600;">Forgot your password?</a>
+                                    </div>
+                                </div>
+                                <hr class="m-top10">
+                                <div class="row">
+                                    <div class="col-md-12 form-group text-center">
+                                        <input type="button" name="btnLogin" value="Login" id="btnLogin" class="btn btn-success" />
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <div class="form-group">
+                                            <div style="color:#fff;">For assistance in Login, Call Customer Service Desk</div>
+                                            <div class="number">022-28584545</div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-12 text-center">
+                                        <a href="#" target="_blank" style="cursor:pointer; color:#fff;font-size: 16px;font-weight: bold;">Login Help</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal for Forgot Password start -->
+                    <div class="modal" id="modForgotPwd" tabindex="-1" role="dialog" aria-labelledby="modForgotPwdLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                                    </button>
+                                    <h4 class="modal-title2" id="modForgotPwdLabel">Forgot Password</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container-fluid">
+                                        <div id="WelcomeMsg" class="row">
+                                            <span id="clientWelcome" class="succes-title">Welcome</span>
+                                            <span id="clientname" class="succes-title"></span>
+                                            <br /> <span id="clientMessage">Please enter the <big><strong>OTP</strong></big> sent to your registered mobile number.</span>
+                                            <br />
+                                            <br />
+                                        </div>
+                                        <div id="loginrow">
+                                            <div class="row">
+                                                <div class="floating-label" style="margin-bottom: 15px !important;">
+                                                    <input type="hidden" name="hFldFPwdLoginId" id="hFldFPwdLoginId" />
+                                                    <input type="hidden" name="hFldPopupOperation" id="hFldPopupOperation" />
+                                                    <input name="txtFPwdLoginId" type="text" autocomplete="off" id="txtFPwdLoginId" class="floating-input" placeholder=" " style="color: black " /> <span class="highlight"></span>
+                                                    <span class="bar"></span>
+                                                    <label class="new-field" id="lblForgotpwdUid"></label> <span id="txthiddenLoginId" class="popup_input"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row" id="mobilerow">
+                                                <div class="floating-label" style="margin-bottom: 15px !important;">
+                                                    <input name="txtFPwdMobileNo" type="text" autocomplete="off" maxlength="15" id="txtFPwdMobileNo" class="floating-input" placeholder=" " /> <span class="highlight"></span>
+                                                    <span class="bar"></span>
+                                                    <label class="new-field">Regd. Mobile No.</label> <span id="txthiddenMobNo" class="popup_input no-spinners" TextMode="Number" MaxLength="15"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top:8px; padding-bottom:8px; display:flex" id="divOtpBlock">
+                                            <input type="hidden" name="hFldOtpVisible" id="hFldOtpVisible" value="F" />
+                                            <div class="col-sm-5" style="padding: 0;">
+                                                <input name="txtFPwdOTP" type="password" autocomplete="off" id="txtFPwdOTP" class="popup_input" style="font-size:16px;" />
+                                            </div>
+                                            <div class="col-sm-7" style="line-height: 18px; padding: 0px 58px; position: relative;  top: -10px;">
+                                                <small>180 Seconds</small>
+                                                <br /><a id="resendotp" style="color:#000;" href="javascript:__doPostBack(&#39;resendotp&#39;,&#39;&#39;)">Resend OTP</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding-top:0px">
+                                        <div class="col-md-10 error-detail" style="text-align:center">
+                                            <span id="lblFPwdError"></span>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer" style="text-align:left; padding-top: 0px !important;">
+                                        <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
+                                        <input type="button" name="btnFPwdProceed" value="Submit" id="btnFPwdProceed" class="butt_save" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <!-- Modal for Forgot Password start -->
+                    <div class="modal" id="forgetpsdotp" tabindex="-1" role="dialog" aria-labelledby="modForgotPwdLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <span aria-hidden="true" class="closespan">×</span><span class="sr-only">Close</span>
+                                    </button>
+                                    <h4 class="modal-title2" id="modForgotPwdLabel">Forgot Password</h4>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="container-fluid">
+                                        <div id="WelcomeMsg" class="row">
+
+                                            <span id="clientWelcome" class="succes-title">Welcome</span><br />
+                                            <span id="clientname" class="succes-title"></span><br>
+                                            <span id="clientMessage" style="color:#000 !important;">Please enter the <big><strong>OTP</strong></big> sent to your registered mobile number.</span><br><br>
+
+                                        </div>
+                                        <div id="loginrow" hidden="hidden">
+
+                                            <div class="row">
+                                                <div class="floating-label" style="margin-bottom: 15px !important;">
+
+                                                    <input type="hidden" name="hFldFPwdLoginId" id="hFldFPwdLoginId">
+                                                    <input type="hidden" name="hFldPopupOperation" id="hFldPopupOperation" value="FPWD">
+                                                    <input name="txtFPwdLoginId" type="text" value="bittu68" id="txtFPwdLoginId" class="floating-input" placeholder=" " style="color: black ">
+                                                    <span class="highlight"></span>
+                                                    <span class="bar"></span>
+                                                    <label class="new-field" id="lblForgotpwdUid">Login Id</label>
+                                                    <span id="txthiddenLoginId" class="popup_input"></span>
+                                                </div>
+                                            </div>
+                                            <div class="row" id="mobilerow" hidden="hidden">
+
+                                                <div class="floating-label" style="margin-bottom: 15px !important;">
+
+                                                    <input name="txtFPwdMobileNo" type="text" value="" maxlength="15" id="txtFPwdMobileNo" class="floating-input" placeholder=" " onkeyup="integersOnly(this)" style="color: black">
+                                                    <span class="highlight"></span>
+                                                    <span class="bar"></span>
+                                                    <label class="new-field">Regd. Mobile No.</label>
+                                                    <span id="txthiddenMobNo" class="popup_input no-spinners" textmode="Number" maxlength="15"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top: 8px; padding-bottom: 8px; display: block;" id="divOtpBlock">
+                                            <input type="hidden" name="hFldOtpVisible" id="hFldOtpVisible" value="T">
+
+                                            <div class="col-sm-5" style="padding: 0;">
+
+
+                                                <input name="txtFPwdOTP" type="password" autocomplete="off" id="txtFPwdOTP1" class="popup_input" style="font-size:16px;">
+                                            </div>
+                                            <div class="col-sm-7" style="line-height: 18px; padding: 0px 58px; position: relative;  top: -10px;">
+                                                <small>180 Seconds</small><br><a id="resendotp" style="color:#000;" href="javascript:__doPostBack('resendotp','')">Resend OTP</a>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="row" style="padding-top:0px">
+                                        <div class="col-md-10 error-detail" style="text-align:center">
+                                            <span id="lblFPwdError" style="color:Green;">Please enter OTP you have recieved!!</span>
+                                        </div>
+                                    </div>
+                                    <div class="modal-footer" style="text-align:left; padding-top: 0px !important;">
+                                        <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
+                                        <input type="button" name="btnFPwdProceed" value="Submit" id="FPWDOTP" class="butt_save">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal for Forgot Password start -->
+                    <!-- Modal for change Password start -->
+                    <div class="modal" id="modChangePwd" tabindex="-1" role="dialog" aria-labelledby="modChangePwdLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                                    </button>
+                                    <h4 class="modal-title2" id="modChangePwdLabel">Change Password</h4>
+                                </div>
+                                <div class="">
+                                    <div class="container-fluid">
+                                        <div id="WelcomeMsgcp">
+                                            <span id="clientWelcomecp" class="succes-title">Welcome</span>
+                                            <span id="clientnamecp"></span>
+                                            <br />	<span id="clientMessagecp">Please create a new password to continue with your</span>
+                                            <br /> <span id="clientMessagecp1">login id "</span>
+                                            <span id="lblLoginIdCp">Rajesh</span>  <span>"</span>
+                                            <br />
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 lable_style">
+                                                <input type="hidden" name="hFldLoginIdCp" id="hFldLoginIdCp" />
+                                                <input type="hidden" name="hFldOldwPwdCp" id="hFldOldwPwdCp" />
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top:5px">
+                                            <div class="col-md-12">
+                                                <input name="txtChangePwd1" type="password" autocomplete="off" id="txtChangePwd1" class="popup_input new-popup" placeholder="Password" style="margin-bottom: 10px;" />
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top:5px">
+                                            <div class="col-md-12">
+                                                <input name="txtChangePwd2" type="password" autocomplete="off" id="txtChangePwd2" class="popup_input new-popup" placeholder="Re- Enter Password" />
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top:5px">
+                                            <div class="col-md-10 error-detail" style="text-align:center">
+                                                <span id="lblCPError"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="text-align:left;padding: 16px 0px !important;">
+                                    <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
+                                    <input type="submit" name="btnCPSave" value="Submit" id="btnCPSave" class="butt_save" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal for change Password start -->
+                    <div class="modal" id="modFgtLogin" tabindex="-1" role="dialog" aria-labelledby="modFGTLoginLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                                    </button>
+                                    <h4 class="modal-title2" id="modFGTLoginLabel">Forgot Login</h4>
+                                </div>
+                                <div class="">
+                                    <div class="">
+                                        <div>
+                                            <span class="succes-title"></span>
+                                            <span></span>
+                                            <br /> <span></span>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12 lable_style">
+                                                <input type="hidden" name="HiddenField1" id="HiddenField1" />
+                                                <input type="hidden" name="HiddenField2" id="HiddenField2" />
+                                            </div>
+                                        </div>
+                                        <div class="" style="padding-top:5px">
+                                            <div class="">
+                                                <input name="TextBox1" type="text" autocomplete="off" id="forgotLoginId" class="popup_input new-popup" placeholder="Enter UCC" style="margin-bottom: 10px;" />
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top:5px">
+                                            <div class="col-md-12"></div>
+                                        </div>
+                                        <div class="row" style="padding-top:5px">
+                                            <div class="col-md-10 error-detail" style="text-align:center">
+                                                <span id="Label3"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="text-align:left;padding: 16px 0px !important;">
+                                    <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
+                                    <input type="submit" name="btnForgotLoginid" value="Submit" id="btnForgotLoginid" class="butt_save" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+
+                    <!-- Modal for change Password start -->
+                    <div class="modal" id="changePWD" tabindex="-1" role="dialog" aria-labelledby="modFGTLoginLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <span aria-hidden="true" class="closespan">×</span><span class="sr-only">Close</span>
+                                    </button>
+                                    <h4 class="modal-title2" id="modChangePwdLabel">Change Password</h4>
+                                </div>
+                                <div class="">
+                                    <div class="container-fluid">
+                                        <div id="WelcomeMsgcp">
+                                            <span id="clientWelcomecp" class="succes-title">Welcome</span><br />
+                                            <span id="clientnamecp" style="color:#000;">PARTH KALPESH PATEL</span><br>
+                                            <span id="clientMessagecp" style="color:#000;">Please create a new password to continue with your</span><br>
+                                            <span id="clientMessagecp1" style="color:#000;">login id</span>
+                                            <span id="lblLoginIdCp" style="color:#000;">bittu68</span> <span>"</span><br>
+
+                                        </div>
+                                        <div class="row">
+
+                                            <div class="col-md-12 lable_style">
+                                                <input type="hidden" name="hFldLoginIdCp" id="hFldLoginIdCp" value="">
+                                                <input type="hidden" name="hFldOldwPwdCp" id="hFldOldwPwdCp">
+
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top:5px">
+
+                                            <div class="col-md-12">
+
+
+                                                <input name="txtChangePwd1" type="password" autocomplete="off" id="txtChangePwd11" class="popup_input new-popup" placeholder="Password" style="margin-bottom: 10px;">
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top:5px">
+
+                                            <div class="col-md-12">
+
+
+                                                <input name="txtChangePwd2" type="password" autocomplete="off" id="txtChangePwd21" class="popup_input new-popup" placeholder="Re- Enter Password">
+
+                                            </div>
+                                        </div>
+
+                                        <div class="row" style="padding-top:5px">
+                                            <div class="col-md-10 error-detail" style="text-align:center">
+                                                <span id="lblCPError" class="information-popup-label" style="color:Orange;"></span>
+                                            </div>
+                                        </div>
+
+
+
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="text-align:left;padding: 16px 0px !important;">
+                                    <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
+
+                                    <input type="button" name="btnCPSave" value="Submit" id="btnCPSave1" class="butt_save">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal for success message-->
+                    <div class="modal" id="modSuccess" tabindex="-1" role="dialog" aria-labelledby="modSuccessLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="col-sm-12 modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                                    </button>
+                                    <h4 class="modal-title2" id="modSuccessLabel">Success!</h4>
+                                </div>
+                                <div class="col-sm-12 modal-body">
+                                    <div class="sucess-body1">
+                                        <span class="succes-title">Hi </span>
+                                        <span id="clientnameSuccess" class="succes-title"></span>
+                                        <br />	<span id="lblSucces" class="succes-title"></span>
+                                    </div>
+                                </div>
+                                <div class="col-sm-12 modal-footer btnft" style="text-align: left">
+                                    <button type="button" class="butt_cancel btnorng" data-dismiss="modal">Continue</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/Modal for success message-->
+                    <!-- Modal for mpin validation added by hvb on 31/10/2017-->
+                    <div id="aPanel">
+                        <div class="modal" id="modMpinValidate" tabindex="-1" role="dialog" aria-labelledby="modMPinLabel" aria-hidden="true">
+                            <div class="modal-dialog" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <button type="button" class="close" data-dismiss="modal">
+                                            <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                                        </button>
+                                        <h4 class="modal-title2" id="modMPinLabel">M-Pin Verification</h4>
+                                    </div>
+                                    <div class="modal-body" style="padding: 10px 0 14px 0 !important;">
+                                        <div class="sucess-body1">
+                                            <span class="succes-title">Welcome</span>
+                                            <br />	<span id="lblClientName"></span>
+                                            <br />Please enter your M-Pin to continue
+                                            <br />
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-sm-5" style="padding:0;">
+                                                        <input name="txtLoginMPin" type="password" autocomplete="off" maxlength="4" id="txtLoginMPin" class="popup_input no-spinners" />
+                                                    </div>
+                                                    <div class="col-sm-7" style="padding: 4px 20px;">
+                                                        <a id="btnForgotMpin" style="color:#f00;" href="javascript:__doPostBack(&#39;btnForgotMpin&#39;,&#39;&#39;)">Forgot M-Pin?</a>
+                                                    </div>
+                                                </div>
+                                                <div class="row"></div>
+                                                <div class="row" style="padding-top:0px">
+                                                    <div class="col-md-10 error-detail" style="text-align:center">
+                                                        <span id="lblMPinVerError"></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="" style="text-align:left; padding:0;">
+                                        <input type="button" name="btnCancelMPinVerification" value="Cancel" id="btnCancelMPinVerification1" class="butt_cancel" />
+                                        <input type="button" name="btnVerifyMPin" value="Submit" id="btnVerifyMPin" class="butt_save" />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <!--/Modal for mpin validation added by hvb on 31/10/2017-->
+                    </div>
+                    <!-- Added By hvb on 07/11/2017 Modal for change mPin start -->
+                    <div class="modal" id="modChangeMpin" tabindex="-1" role="dialog" aria-labelledby="modChangeMpinLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                                    </button>
+                                    <h4 class="modal-title2" id="modChangeMpinLabel">Change M-Pin</h4>
+                                </div>
+                                <div class="modal-body" style="padding: 15px 0 5px 0 !important;">
+                                    <div class="container-fluid">
+                                        <div id="Div1" class="row">
+                                            <span id="Span1">Hi</span>
+                                            <span id="lblLoginIdCMpin">Rajesh</span> 	<span id="Span2">Please create a new M-pin to continue with your</span>
+                                            <br /> <span>login id "<span id="clientnameMpin"></span>"</span>
+                                            <br />
+                                        </div>
+                                        <div class="row">
+                                            <div class="lable_style">
+                                                <input type="hidden" name="hFldLoginIdCMpin" id="hFldLoginIdCMpin" />
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top:8px">
+                                            <div class="">
+                                                <input name="txtChangemPin1" type="password" autocomplete="off" id="txtChangemPin1" class="popup_input new-popup" placeholder="New M-Pin" />
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top:10px">
+                                            <div class="">
+                                                <input name="txtChangemPin2" type="password" autocomplete="off" id="txtChangemPin2" class="popup_input new-popup" placeholder="Re-enter M-Pin" />
+                                            </div>
+                                        </div>
+                                        <div class="row" style="padding-top:15px">
+                                            <div class="col-md-10 error-detail" style="text-align:center">
+                                                <span id="lblCMpinError"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="text-align:left">
+                                    <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
+                                    <input type="submit" name="btnCMPinSave" value="Submit" id="btnCMPinSave" class="butt_save" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Modal for change mPin end -->
+                    <!-- Modal for New credentials start -->
+                    <div class="modal" id="modNewCred" tabindex="-1" role="dialog" aria-labelledby="modNewCredLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                                    </button>
+                                    <h4 class="modal-title2" id="modNewCredLabel">Enter New Credentials</h4>
+                                </div>
+                                <div class="modal-body" style="padding:5px 0 15px 0 !important;">
+                                    <div class="container-fluid">
+                                        <div class="row" id="">
+                                            <div class="col-sm-12 no-padd lable_style">
+                                                <span left_title">UCC</span><br />
+                                                <input type="hidden" name="hFldNCUserId " id="hFldNCUserId " />
+
+
+
+                                                <input name="txtNCCommonId " type="text" id="txtNCCommonId " class="input-field " />
+
+                                            </div>
+                                        </div>
+                                        <div class="row " style="padding-top:0px ">
+
+
+                                            <div class="col-sm-12 no-padd lable_style ">
+
+                                                <input name="txtNCNewId " type="text" autocomplete="off " id="txtNCNewId " class="input-field " placeholder="Login ID " />
+                                            </div>
+                                        </div>
+                                        <div class="row " style="padding-top:0px ">
+                                            <div class="col-sm-12 no-padd ">
+
+                                                <input name="txtNCPassWd " type="password" autocomplete="off " id="txtNCPassWd " class="input-field " placeholder="Password " />
+                                            </div>
+                                        </div>
+                                        <div class="row " style="padding-top:0px ">
+                                            <div class="col-sm-12 no-padd ">
+
+                                                <input name="txtNCPassWd2 " type="password" autocomplete="off " id="txtNCPassWd2 " class="input-field " placeholder="Re- Enter Password " />
+                                            </div>
+                                        </div>
+                                        <div class="row " style="padding-top:0px ">
+                                            <div class="col-sm-12 no-padd ">
+
+                                                <input name="txtNCMpin " type="password" autocomplete="off " maxlength="4 " id="txtNCMpin " class="input-field no-spinners " placeholder="M-Pin " />
+                                            </div>
+                                        </div>
+                                        <div class="row " style="padding-top:0px ">
+                                            <div class="col-md-10 error-detail " style="text-align:center ">
+                                                <span id="lblNCError "></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="text-align:left ">
+                                    <button type="button" class="butt_cancel " data-dismiss="modal ">Close</button>
+                                    <input type="submit" name="btnSendCred " value="Submit " id="btnSendCred " class="butt_save " />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!-- Modal for New credentials start -->
+                <!-- Modal for force logout start -->
+                <div class="modal " id="modForceLogout" tabindex="-1 " role="dialog " aria-labelledby="modForceLogoutLabel " aria-hidden="true ">
+                    <div class="modal-dialog " role="document">
+                        <div class="modal-content ">
+                            <div class="modal-header ">
+
+                                <button type="button" class="close " data-dismiss="modal ">
+                                    <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only ">Close</span>
+                                </button>
+                                <h4 class="modal-title2 " id="H1 ">Force Logout</h4>
+                            </div>
+                            <div class="modal-body " style="padding: 15px 0 5px 0 !important; ">
+                                <div class="container-fluid ">
+                                    <div class="row ">
+                                        <div class="col-sm-9 ">
+                                            <input type="hidden" name="hfldUserId " id="hfldUserId " />
+                                            <input type="hidden" name="hfldSessionId " id="hfldSessionId " />
+                                            <input type="hidden" name="hfldLogoutPwd " id="hfldLogoutPwd " />
+                                            <input type="hidden" name="hfldIPAddress " id="hfldIPAddress " />
+                                            <p class="" id="flogoutmsg" style="color:#000;"></p>
+                                            <h4 class=""><strong id="delscrip" style="color:#000;"></strong></h4>
+                                            <input type="button" name="btnForceLogout" value="Yes " id="btnForceLogout1" class="butt_save " />
+                                            &nbsp;&nbsp;&nbsp;&nbsp;
+                                            <button id="btnLogoutNo" type="button" class="butt_cancel ">No</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal for force logout end here -->
+
+            </form>
+        </div>
+    </main>
+</body>
+</html>
+<script src="~/MyJs/Login.js"></script>

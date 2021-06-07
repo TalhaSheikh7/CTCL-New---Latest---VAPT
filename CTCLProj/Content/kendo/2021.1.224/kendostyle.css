@@ -1,0 +1,499 @@
+﻿.k-tilelayout-item-header .k-card-title {
+    font-size: 1rem;
+}
+
+.k-grid {
+    font-size: 12px;
+}
+
+.k-grid td {
+    line-height: 2em;
+}
+
+.red {
+    color: red;
+}
+
+.k-grid-toolbar {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+}
+
+.k-grid-toolbar .k-grid-excel {
+    margin-left: auto;
+}
+
+.k-card-header {
+    flex: 0 0 auto;
+}
+
+.k-card-body {
+    overflow: hidden;
+}
+
+.k-dropdown .k-dropdown-wrap {
+    height: 25px;
+    position: relative;
+    bottom: 5px;
+}
+
+.btnclas {
+    position: relative;
+    bottom: 5px;
+    height: 9px;
+}
+
+.iclass {
+    position: relative;
+    bottom: 6px;
+}
+
+.btnsub {
+    position: relative;
+    top: 10px;
+}
+
+ul {
+    list-style-type: none;
+}
+
+.scrip-search-box {
+    width: 25%;
+    font-size: 12px;
+    position: relative;
+    bottom: 5px;
+    border-radius: 30px;
+    text-transform: uppercase;
+    font-weight: bold; 
+    color: #0007ff;
+}
+
+.demo-section p {
+    margin: 3px 0 20px;
+    line-height: 50px;
+}
+.demo-section .k-button {
+    width: 60px;
+}
+
+
+/* Notifications */
+.k-notification h3 {
+    padding: 30px 10px 5px;
+    font-size: 1em;
+    line-height: normal;
+}
+.k-notification img {
+    margin: 20px;
+    float: left;
+}
+
+
+/* Info template */
+.new-mail {
+    width: 300px;
+    height: 100px;
+}
+
+/* Error template */
+.wrong-pass {
+    width: 300px;
+    height: 100px;
+}
+
+/* Success template */
+.upload-success {
+    width: 300px;
+    height: 100px;
+}
+
+
+/* For Bootstrap v4 theme */
+.k-bootstrap-v4 .k-notification h3 {
+    padding: 10px 10px 5px;
+}
+.k-bootstrap-v4 .k-notification img {
+    margin: 10px 20px 0 0;
+}
+.k-bootstrap-v4 .new-mail,
+.k-bootstrap-v4 .wrong-pass,
+.k-bootstrap-v4 .upload-success {
+    width: calc( 300px - 2.5rem );
+    height: calc( 100px - 1.5rem );
+}
+
+
+/* For Material v2 theme */
+.k-material-v2 .k-notification h3 {
+    padding: 10px 10px 5px;
+}
+.k-material-v2 .k-notification img {
+    margin: 10px 20px 0 0;
+}
+.k-material-v2 .new-mail,
+.k-material-v2 .wrong-pass,
+.k-material-v2 .upload-success {
+    width: 270px;
+    height: 70px;
+}
+
+.suggestion-wrapper {
+    height: 65px;
+    position: absolute;
+    top: 106px;
+    right: 247px;
+    width: 300px;
+    overflow: visible;
+    display: inline-block;
+    z-index: 1500;
+    font-size: 11px;
+}
+
+.hidden-suggestion-wrapper {
+    display: none;
+}
+
+.search_database {
+    z-index: 1;
+    position: relative;
+    list-style-type: none;
+    background-color: #f8f8f8;
+    border-top: none;
+    padding-left: 0px;
+    overflow-y: scroll;
+    height: 200px;
+    -webkit-box-shadow: 0 3px 9px rgba(0,0,0,.2);
+    box-shadow: 0 3px 9px rgba(0,0,0,.2);
+    padding-bottom: 30px;
+}
+
+.search_database li {
+    padding: 3px 3px !important;
+    font-weight: bold !important;
+    color: #333;
+    cursor: pointer; 
+}
+
+.selected-list-item {
+    background-color: #268ff9 !important;
+    text-decoration: none !important;
+}
+
+.orng{
+    min-width: 30px !important;
+    background-color: #e77b00 !important;
+}
+
+.num-qty1 
+{
+    color: #2669b3;
+}
+
+.num-qty2 
+{
+    color: #ee303c;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+.sunny, .cloudy, .rainy {
+    display: block;
+    margin: 30px auto 10px;
+    width: 128px;
+    height: 128px;
+    background: url('../content/web/tabstrip/weather.png') transparent no-repeat 0 0;
+}
+
+.cloudy {
+    background-position: -128px 0;
+}
+
+.rainy {
+    background-position: -256px 0;
+}
+
+.weather {
+    margin: 0 auto 30px;
+    text-align: center;
+}
+
+#tabstrip h2 {
+    font-weight: lighter;
+    font-size: 5em;
+    line-height: 1;
+    padding: 0 0 0 30px;
+    margin: 0;
+}
+
+#tabstrip h2 span {
+    background: none;
+    padding-left: 5px;
+    font-size: .3em;
+    vertical-align: top;
+}
+
+#tabstrip p {
+    margin: 0;
+    padding: 0;
+}
+
+.inpulvalue:focus-visible{
+    outline: -webkit-focus-ring-color auto 0px !important;
+}
+.selectlist:focus-visible{
+     outline: -webkit-focus-ring-color auto 0px !important;
+}
+.inpulvalue{
+     font-size: 14px;
+     width: 100%;
+}
+
+.radionew{
+    width: 14px;
+    height: 14px;
+    position: relative;
+    top: 2px;
+}
+
+button.btn.btn-buy {
+    background-color: #4987ee;
+    width: 85px;
+    font-size: 16px;
+    padding: 4px 0px;
+    color: #fff;
+}
+
+button.btn.btn-cancel {
+    background-color: transparent;
+    width: 85px;
+    font-size: 16px;
+    padding: 4px 0px;
+    color: #ccc;
+    border: 1px solid #ccc;
+}
+
+popup_panel .switch {
+  position: relative;
+  display: inline-block;
+  width: 42px;
+  height: 18px;
+  top:3px;
+}
+
+popup_panel .switch input { 
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+popup_panel .slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #808080;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+popup_panel .slider:before {
+    position: absolute;
+    content: "";
+    height: 14px;
+    width: 14px;
+    left: 0px;
+    bottom: 2px;
+    background-color: white;
+    -webkit-transition: .4s;
+    transition: .4s;
+}
+
+popup_panel input:checked + .slider {
+  background-color: #2196F3;
+}
+
+popup_panel input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+popup_panel input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.popup_panel .slider.round {
+  border-radius: 34px;
+}
+
+popup_panel .slider.round:before {
+  border-radius: 50%;
+}
+
+::placeholder { /* Chrome, Firefox, Opera, Safari 10.1+ */
+  color: #c1c1c1;
+  opacity: 1; /* Firefox */
+}
+
+
+    .switch-field {
+  display: flex;
+  margin-bottom: 36px;
+  overflow: hidden;
+}
+
+.switch-field input {
+  position: absolute !important;
+  clip: rect(0, 0, 0, 0);
+  height: 1px;
+  width: 1px;
+  border: 0;
+  overflow: hidden;
+}
+
+.switch-field label {
+  background-color: #e4e4e4;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 14px;
+  line-height: 1;
+  text-align: center;
+  padding: 8px 16px;
+  margin-right: -1px;
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  box-shadow: inset 0 1px 3px rgba(0, 0, 0, 0.3), 0 1px rgba(255, 255, 255, 0.1);
+  transition: all 0.1s ease-in-out;
+}
+
+.switch-field label:hover {
+  cursor: pointer;
+}
+
+.switch-field input:checked + label {
+  background-color: #4987ee;
+  box-shadow: none;
+}
+
+.switch-field label:first-of-type {
+  border-radius: 4px 0 0 4px;
+}
+
+.switch-field label:last-of-type {
+  border-radius: 0 4px 4px 0;
+}
+
+.depth{
+    font-size: 12px;
+    color: red;
+    font-weight: 500 !important;
+}
+
+.depth2{
+    font-size: 10px;
+    color: red;
+    font-weight: 500 !important;
+}
+
+.holdText{
+    font-weight: 500 !important;
+}
+
+
+
+.dropdown:hover .dropdown-menu{
+    display: block;
+}
+.dropdown-menu{
+    margin-top: 0;
+}
+
+#demo1 td, .customers th{
+	padding: 0px;
+	color: white;
+    font-size: 13px;
+	color: #fff;
+    font-weight: 500;
+	text-align: left;
+}
+
+#demo1 th {
+    background-color: #595959;
+    color: #fff;
+    padding: 0 5px !important;
+    border-right: 1px solid #fff;
+}
+
+.valign{
+    /*border: 1px solid #ccc;
+    padding:0 5px !important;*/
+    font-size: 12px;
+    color: #fff;
+    width: 25%;
+    vertical-align: top;
+}
+
+.valign td {
+    padding: 3px 10px !important;
+    border: 1px solid #554f4f;
+}
+
+#panels
+{
+    margin-left: 20px;
+    text-align: center;
+}
+
+#panels li
+{
+    margin-right: 10px;
+    margin-bottom: 10px;
+    list-style: none;
+    float: left;
+}
+
+.boxStyle{
+    color:#13c603 !important;
+    background-color:#000000 !important;
+    font-weight: 500 !important;
+    font-family: monospace !important;
+}
+
+.balancetable {
+    border: 1px solid white !important;
+    width:100% !important; 
+    font-family:Rajdhani;
+}
+
+.fundData{
+    font-size: 12pt; 
+    font-style:italic; 
+    font-weight: 700; 
+    cursor: pointer !important; 
+    color: #007bff !important;
+}
+
+.divHeader{
+    font-family:Rajdhani !important;
+    font-size: 10pt !important;
+    font-weight: 500 !important;
+}
+
+.k-pdf-export .k-grid tr
+{
+    background-color: #fff;
+    color: black;
+    border: 1px solid black !important;
+}

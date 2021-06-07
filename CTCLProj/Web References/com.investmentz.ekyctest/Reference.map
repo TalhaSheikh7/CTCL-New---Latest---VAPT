@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<DiscoveryClientResultsFile xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+  <Results>
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://accountopening.investmentz.co.in/AcmiilService/AuthenticateService.svc?xsd=xsd1" filename="AuthenticateService.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://accountopening.investmentz.co.in/AcmiilService/AuthenticateService.svc?xsd=xsd2" filename="AuthenticateService0.xsd" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.DiscoveryDocumentReference" url="http://accountopening.investmentz.co.in/AcmiilService/AuthenticateService.svc?disco" filename="AuthenticateService.disco" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.ContractReference" url="http://accountopening.investmentz.co.in/AcmiilService/AuthenticateService.svc?wsdl" filename="AuthenticateService.wsdl" />
+    <DiscoveryClientResult referenceType="System.Web.Services.Discovery.SchemaReference" url="http://accountopening.investmentz.co.in/AcmiilService/AuthenticateService.svc?xsd=xsd0" filename="AuthenticateService1.xsd" />
+  </Results>
+</DiscoveryClientResultsFile>
