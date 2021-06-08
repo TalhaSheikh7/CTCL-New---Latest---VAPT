@@ -223,10 +223,18 @@
             },
             dataType: "json",
             success: function (data) {
-
-                if (data == "Y") {
-                    location.href = "https://ctcl.investmentz.com/iCtcl/WebForms/MktWatch.aspx"
+                var str = data;
+                var res = str.split("()");
+                var status = res;
+                var BAName = res[0];
+                var BACode = res[1];
+                $("#BANameCode").val(data);
+                localStorage.setItem("NameCode", data)
+                if (data = ! "") {
+                    location.href = "http://localhost:49180/Home/Index"
                 }
+               
+
             },
             error: function (data) {
                 console.log(data);

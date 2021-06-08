@@ -22,6 +22,7 @@
     <IISExpressUseClassicPipelineMode />
     <UseGlobalApplicationHostFile />
     <ApplicationInsightsResourceId />
+    <Use64BitIISExpress />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -111,6 +112,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Class\AcmiilApiServices.cs" />
+    <Compile Include="Class\CryptoEngine.cs" />
     <Compile Include="Class\EmpInfo.cs" />
     <Compile Include="Class\EncryptDecrypt.cs" />
     <Compile Include="Class\GlobalFunctions.cs" />
