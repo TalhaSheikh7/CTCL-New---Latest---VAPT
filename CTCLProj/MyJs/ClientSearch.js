@@ -20,6 +20,7 @@ var searchClientDataKey = "AvailEmpClnts";
 
 $(document).ready(function () {
 
+    
     //Hvb for clearStorage @ 05/03/2019
     clearEmpStorageSmart = function (sJsId) {
 

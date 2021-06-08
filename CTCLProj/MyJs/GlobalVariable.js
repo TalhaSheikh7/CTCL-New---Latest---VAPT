@@ -8,7 +8,8 @@ var gblCTCLtype = '';
 
 
 $(document).ready(function () {
-    
+    var NameCode= localStorage.getItem("NameCode")
+    $("#BANameCode").html(NameCode)
     window.formatDate = function (inputDate, inputDateFormat, outPutFormat) {
         if (inputDate == "" && inputDateFormat.val() == "")
             return "";

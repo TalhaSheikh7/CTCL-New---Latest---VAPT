@@ -1,12 +1,17 @@
-﻿using CTCLProj.Class;
-using CTCLProj.com.investmentz.ekyctest;
+﻿using CTCLProj.com.investmentz.ekyctest;
+using CTCLProj.Models;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
 using System.Data;
 using System.Linq;
 using System.Text.RegularExpressions;
 using System.Web;
+using System.Web.Configuration;
 using System.Web.Mvc;
+using System.Web.UI;
+using System.Data.Entity;
+using CTCLProj.Class;
 
 namespace CTCLProj.Controllers
 {
@@ -644,6 +649,7 @@ namespace CTCLProj.Controllers
         {
             string RU = "";
             string returnurl = "";
+            string mergevalue = "";
 
             if (client == null)
                 client = new AuthenticateService();
@@ -709,6 +715,7 @@ namespace CTCLProj.Controllers
                             AcmiilApiServices.PutNotification(ref mObjUser, true, "");
                             Session[WebUser.SessionName] = mObjUser;
                             returnurl = "Y";
+                            mergevalue = mObjUser.sName + " (" + mObjUser.sTradingCode + ")";
                             //  returnurl = String.Format("https://www.Google.com");
                             //return RedirectToActionPermanent(returnurl);
                         }
@@ -734,7 +741,7 @@ namespace CTCLProj.Controllers
                 pLngErr = ReportError("btnVerifyMPin_Click", "Login", pLngErr, exError.GetBaseException().GetType().ToString(), exError.Message, exError.StackTrace);
                 // lblMPinVerError.Text = "Report an error no : " + Convert.ToString(pLngErr) + " to System Owner";
             }
-            return Json(returnurl, JsonRequestBehavior.AllowGet);
+            return Json(mergevalue, JsonRequestBehavior.AllowGet);
         }
 
         const int MIN_PASSOWRD_LENGTH = 8;
