@@ -12,7 +12,7 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment)
 {
     var nrow = 0;
     $.ajax({
-        url:"http://localhost:1610/api/AccoutingV1/",
+        url: gblurl + "AccoutingV1/",
         method: "get",
         data: {
             nAction: nAction,

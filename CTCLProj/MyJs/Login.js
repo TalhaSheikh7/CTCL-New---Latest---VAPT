@@ -231,7 +231,7 @@
                 $("#BANameCode").val(data);
                 localStorage.setItem("NameCode", data)
                 if (data = ! "") {
-                    location.href = "http://localhost:49180/Home/Index"
+                    location.href = "~/Home/Index"
                 }
                
 

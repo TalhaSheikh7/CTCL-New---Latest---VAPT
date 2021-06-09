@@ -544,7 +544,7 @@ $("#ModifyOrder").click(function () {
     });
 
     $.ajax({
-        url: "https://1trade.investmentz.com/EasyTradeAPI/api/OrderV4/",
+        //url: "https://1trade.investmentz.com/EasyTradeAPI/api/OrderV5/",
         // url: "http://localhost:1610/api/OrderV4",
         url: gblurl + "OrderV5/",
         type: 'PUT',

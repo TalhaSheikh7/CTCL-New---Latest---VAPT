@@ -99,7 +99,7 @@ function getExpiredScripDetails()
     };
 
     $.ajax({
-        url: "http://localhost:1610/api/WatchListExpiryV1/",
+        url: gblurl + "WatchListExpiryV1/",
         method: "get",
         data: Param,
         dataType: "json",
@@ -126,7 +126,7 @@ function getExpiredScripDetails()
 $(document).on("click", "#btnDelExpScrip", function (event) {
 
     $.ajax({
-        url: "http://localhost:1610/api/WatchListExpiryV1/?nAction=" + ActionID.DeleteExpiredScrip + "&UCC=" + 10000 + "",
+        url: gblurl + "WatchListExpiryV1/?nAction=" + ActionID.DeleteExpiredScrip + "&UCC=" + 10000 + "",
         method: "DELETE",
         contentType: "application/json",
         success: function (data) {
@@ -155,7 +155,7 @@ $(document).on("click", "#btnConvExpScrip", function (event) {
     });
 
     $.ajax({
-        url: "http://localhost:1610/api/WatchListExpiryV1/",
+        url: gblurl + "WatchListExpiryV1/",
         type: 'PUT',
         contentType: 'application/json',
         data: UpdateOrderParams,
