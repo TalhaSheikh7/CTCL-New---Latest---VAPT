@@ -754,13 +754,10 @@ function GetBoiLienSetting() {
 }
 function ConvertOrder(nStockType, sTradeNo, sDealerCode, sOrderNo, nCNCMIS, nOrderId, Exchange) {
       $.ajax({
-        // url: "http://localhost:1610/api/OrderV4/",
         url: gblurl + "OrderV5/",
         type: 'PUT',
         contentType: 'application/json',
         dataType: "json",
-        //contentType: 'application/json; charset=utf-8',
-        //dataType: "text/json",
         data: JSON.stringify({
 
             'orderId': nOrderId,
