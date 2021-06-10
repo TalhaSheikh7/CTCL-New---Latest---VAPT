@@ -22,7 +22,7 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment)
         },
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             HoldingColumns = [];
             var ISIN = "";
             var ScripName = "";

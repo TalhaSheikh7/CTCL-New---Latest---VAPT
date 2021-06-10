@@ -563,7 +563,7 @@ function ProcessData(bcastData, scriplblName, Qty)
 
 
 //ajax to get and set broadcast url.
-var gblurl = "https://trade.investmentz.com/EasyTradeApi/api/";
+//var gblurl = "https://trade.investmentz.com/EasyTradeApi/api/";
 function savegblBCastUrl(url) {
     window.localStorage.setItem("BroadcastUrl", url);
 }
