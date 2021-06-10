@@ -66,7 +66,26 @@ function GetExchangeType(exhangeid) {
         return "BSE";
     }
 }
+function GetOrdetype(sotype) {
+    var Otypval = '';
 
+    if (sotype == 1) {
+        Otypval = 'LIMIT'
+    }
+    else if (sotype == 2 || sotype == 11) {
+        Otypval = 'MARKET'
+    }
+    else if (sotype == 3) {
+        Otypval = 'STOP LOSS'
+    }
+    else if (sotype == 4 || sotype == 12) {
+        Otypval = 'STOP LOSS MARKET'
+    }
+    else {
+        Otypval = '-'
+    }
+    return Otypval;
+}
 function GetInstrument(sinstrument) {
     sinstrument = sinstrument.trim();
     var constval = '';
