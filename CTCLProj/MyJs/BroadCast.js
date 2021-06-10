@@ -373,7 +373,7 @@ function reconnectSocketAndSendTokens(lblScript) {
             sendTokens(scriplblName);
         };
         ws.onmessage = function (evt) {
-            ProcessData(evt.data, scriplblName, Qty);
+            ProcessData(evt.data, scriplblName);
             $("#Broadcast1").attr("src", "../img/dis-2.png");
         };
         ws.onerror = function (evt) {
