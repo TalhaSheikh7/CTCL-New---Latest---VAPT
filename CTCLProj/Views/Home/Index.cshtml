@@ -3,148 +3,150 @@
 }
 
 @*<!DOCTYPE html>
-<html>
-<head>
-    <title></title>*@
-    
-    <style>
-        .facolor{
-            color:black;
+    <html>
+    <head>
+        <title></title>*@
+
+<style>
+    .facolor {
+        color: black;
+    }
+
+    .btn.rounded.outline-5 {
+        background-color: #ffffff;
+        border-radius: 20px;
+        color: black;
+        border: 2px solid;
+        font-weight: 400;
+        padding: 3px 14px;
+        font-size: 14px;
+    }
+
+        .btn.rounded.outline-5:hover {
+            background-color: #00bfff;
+            border-color: #00bfff;
         }
 
-       .btn.rounded.outline-5 {
-           background-color: #ffffff;
-           border-radius: 20px;
-           color: black;
-           border: 2px solid;
-           font-weight: 400;
-           padding: 3px 14px;
-           font-size: 14px;
-       }
+    .switch {
+        position: relative;
+        display: inline-block;
+        width: 90px;
+        height: 34px;
+    }
 
-       .btn.rounded.outline-5:hover 
-       {
-           background-color: #00bfff;
-           border-color: #00bfff; 
-       }
-
-       .switch {
-          position: relative;
-          display: inline-block;
-          width: 90px;
-          height: 34px;
-        }
-        
-        .switch input {display:none;}
-        
-        .slider {
-          position: absolute;
-          cursor: pointer;
-          top: 0;
-          left: 0;
-          right: 0;
-          bottom: 0;
-          background-color: #2ab934; 
-          -webkit-transition: .4s;
-          transition: .4s;
-           border-radius: 34px;
-        }
-        
-        .slider:before {
-          position: absolute;
-          content: "";
-          height: 26px;
-          width: 26px;
-          left: 4px;
-          bottom: 4px;
-          background-color: white;
-          -webkit-transition: .4s;
-          transition: .4s;
-          border-radius: 50%;
-        }
-        
-        input:checked + .slider {
-          background-color: #ca2222;
-        }
-        
-        input:focus + .slider {
-          box-shadow: 0 0 1px #2196F3;
-        }
-        
-        input:checked + .slider:before {
-          -webkit-transform: translateX(26px);
-          -ms-transform: translateX(26px);
-          transform: translateX(55px);
-        }
-        
-        /*------ ADDED CSS ---------*/
-        .slider:after
-        {
-         content:'BUY';
-         color: white;
-         display: block;
-         position: absolute;
-         transform: translate(-50%,-50%);
-         top: 50%;
-         left: 50%;
-         font-size: 10px;
-         font-family: Verdana, sans-serif;
-        }
-        
-        input:checked + .slider:after
-        {  
-          content:'SELL';
-        }
-
-        .k-pdf-export .k-grid-toolbar,
-        .k-pdf-export .k-pager-wrap
-        {
+        .switch input {
             display: none;
         }
-        .table-responsive th, .table-responsive td{
-            padding: 3px 10px !important;
-            border: 1px solid #554f4f;
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #2ab934;
+        -webkit-transition: .4s;
+        transition: .4s;
+        border-radius: 34px;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+            border-radius: 50%;
         }
-        .k-grid-content {
-            min-height: 200px;
-        }
-        .divbutton{
-            background-color:aquamarine;
-        }
-        .critical {
+
+    input:checked + .slider {
+        background-color: #ca2222;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(55px);
+    }
+
+    /*------ ADDED CSS ---------*/
+    .slider:after {
+        content: 'BUY';
+        color: white;
+        display: block;
+        position: absolute;
+        transform: translate(-50%,-50%);
+        top: 50%;
+        left: 50%;
+        font-size: 10px;
+        font-family: Verdana, sans-serif;
+    }
+
+    input:checked + .slider:after {
+        content: 'SELL';
+    }
+
+    .k-pdf-export .k-grid-toolbar,
+    .k-pdf-export .k-pager-wrap {
+        display: none;
+    }
+
+    .table-responsive th, .table-responsive td {
+        padding: 3px 10px !important;
+        border: 1px solid #554f4f;
+    }
+
+    .k-grid-content {
+        min-height: 200px;
+    }
+
+    .divbutton {
+        background-color: aquamarine;
+    }
+
+    .critical {
         background-color: #fdd;
-      }
-    </style>
-    @*<link rel="stylesheet" href="styles/kendo.common.min.css" />
-        <link rel="stylesheet" href="styles/kendo.default.min.css" />
-        <link rel="stylesheet" href="styles/kendo.default.mobile.min.css" />
+    }
+</style>
+@*<link rel="stylesheet" href="styles/kendo.common.min.css" />
+    <link rel="stylesheet" href="styles/kendo.default.min.css" />
+    <link rel="stylesheet" href="styles/kendo.default.mobile.min.css" />
 
-        <script src="js/jquery.min.js"></script>
+    <script src="js/jquery.min.js"></script>
 
 
-        <script src="js/kendo.all.min.js"></script>*@
-    <link href="~/Content/kendo/2021.1.224/kendostyle.css" rel="stylesheet" />
+    <script src="js/kendo.all.min.js"></script>*@
+<link href="~/Content/kendo/2021.1.224/kendostyle.css" rel="stylesheet" />
 @*</head>*@
 
-    <label id="lblScripts" style="display:none;"></label>
-    <label id="lblHoldingScripts" style="display:none;"></label>
-    <label id="lblMarketWath" style="display: none;"></label>
-    <label id="lblSegmentType" style="display: none;"></label>
-    <input type="hidden" id="hfldUser" />
+<label id="lblScripts" style="display:none;"></label>
+<label id="lblHoldingScripts" style="display:none;"></label>
+<label id="lblMarketWath" style="display: none;"></label>
+<label id="lblSegmentType" style="display: none;"></label>
+<input type="hidden" id="hfldUser" />
 
-    <div id="example">
-        <div id="tilelayout"></div>
-        <span id="notification" style="display:none;"></span>
+<div id="example">
+    <div id="tilelayout"></div>
+    <span id="notification" style="display:none;"></span>
 
-        <script id="errorTemplate" type="text/x-kendo-template">
-            <div class="wrong-pass">
-                <img src="../content/web/notification/error-icon.png" />
-                <h3>#= title #</h3>
-                <p>#= message #</p>
-            </div>
-        </script>
-        <!-- container grid templates -->
-        <script id="WatchList-template" type="text/x-kendo-template">
+    <script id="errorTemplate" type="text/x-kendo-template">
+        <div class="wrong-pass">
+            <img src="../content/web/notification/error-icon.png" />
+            <h3>#= title #</h3>
+            <p>#= message #</p>
+        </div>
+    </script>
+    <!-- container grid templates -->
+    <script id="WatchList-template" type="text/x-kendo-template">
             <div id="WatchlistSet">
                 <div id="refresh"></div>
                 @*<p id="time-clock" style="color:#00f">&nbsp;</p>*@
@@ -170,1058 +172,1062 @@
                 </div>
                 <div id="WatchList" style="height:100%;"></div>
             </div>
-            
-        </script>
-        <script id="users-grid-template" type="text/x-kendo-template">
-            <div id="DepthWindow">
-                <div class="demo-section k-content">
-                    <div>
-                        <label class="depth">Scrip Name: &nbsp;</label><span style="font-size:10pt;" id="sScripName"></span>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label class="depth">ISIN: &nbsp;</label><span style="font-size:10pt;" id="sISIN">IN00000000</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                    </div>
-                    <div>
-                        <label class="depth">LTP: &nbsp;</label><span style="font-size:10pt;" id="nLTP">1.50</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label class="depth">Change: &nbsp;</label><span style="font-size:10pt;" id="nChange">0.30</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                        <label class="depth">Change(%): &nbsp;</label><span style="font-size:10pt;" id="nChangePerc">1.0%</span>&nbsp;&nbsp;&nbsp;&nbsp;
-                    </div>
+
+    </script>
+    <script id="users-grid-template" type="text/x-kendo-template">
+        <div id="DepthWindow">
+            <div class="demo-section k-content">
+                <div>
+                    <label class="depth">Scrip Name: &nbsp;</label><span style="font-size:10pt;" id="sScripName"></span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label class="depth">ISIN: &nbsp;</label><span style="font-size:10pt;" id="sISIN">IN00000000</span>&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
-                <div id="users-grid"></div>
+                <div>
+                    <label class="depth">LTP: &nbsp;</label><span style="font-size:10pt;" id="nLTP">1.50</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label class="depth">Change: &nbsp;</label><span style="font-size:10pt;" id="nChange">0.30</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    <label class="depth">Change(%): &nbsp;</label><span style="font-size:10pt;" id="nChangePerc">1.0%</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                </div>
             </div>
-        </script>
-        @*<script id="users-grid-template2" type="text/x-kendo-template">
-                <div id="users-grid2" style="height:100%;"></div>
-            </script>*@
-    </div>
-    <div class="demo-section k-content">
-        <div id="tabWindow">
-            <div id="tabstrip">
-                <ul>
-                    <li>
-                        TradeBook
-                    </li>
-                    <li>
-                        OrderBook
-                    </li>
-                    <li>
-                        Net Position
-                    </li>
-                    <li class="k-state-active">
-                        Holding Valuation
-                    </li>
-                    <li>
-                        Activity Log
-                    </li>
-                    <li>
-                        Funds
-                    </li>
-                </ul>
-                <div>
-                    <input id="mraketsegment" style="width: 12%; font-size: 12px;" />
-                    <input id="marketscript" style="width: 12%; font-size: 12px;" />
-                    <div id="tradebookgrid" style="height:100%;">
-                    </div>
-                    <div id="windowForconvertScrip" style="display:none">
-                        <h8 id="msgyn"></h8>
-                        <table style="width: 100%;">
-                            <tr>
-                                <td style="padding-right: 10px; border-right: 1px solid #ccc;">
-                                    <table style="width: 100%;">
-                                        <tr>
-                                            <td style="text-align: left; padding-bottom: 5px; font-weight: bold; padding-left: 7px;" id="availMarText">AVAILABLE/MARGIN</td>
-                                            <td style="text-align: right; padding-bottom: 5px; font-weight: bold; " id="availMar">0000</td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: left; font-weight: bold;  padding-left: 7px;" id="reqMarText">REQUIRED MARGIN</td>
-                                            <td style="text-align: right; font-weight: bold;  " id="reqMar">0000</td>
-                                        </tr>
-                                    </table>
-
-                                </td>
-                                <td style="padding-left: 10px;">
-                                    <table style="width: 100%;">
-                                        <tr>
-                                            <td style="text-align: left; padding-bottom: 5px; font-weight: bold;">VAR/FDMR %</td>
-                                            <td style="text-align: right; padding-bottom: 5px; font-weight: bold; padding-right: 7px;" id="varper"></td>
-                                        </tr>
-                                        <tr>
-                                            <td style="text-align: left; font-weight: bold;" id="excessMarText">EXCESS MARGIN</td>
-                                            <td style="text-align: right; font-weight: bold; padding-right: 7px;" id="excessMar"></td>
-                                        </tr>
-                                    </table>
-
-                                </td>
-                            </tr>
-                        </table>
-
-                        <tr>
-                            <td colspan="3" style="text-align: center; padding-bottom: 20px;">
-
-                                <button id="btnyes" type="button" class="butt_save" style="margin-top:14px; margin-left:92px;" data-script-id="" data-marketwatch-id="">Yes</button>
-                                &nbsp;&nbsp;&nbsp;&nbsp;
-                                <button id="btnno" type="button" class="butt_cancel" style="margin-top:14px; margin-left:31px;">No</button>
-
-                            </td>
-                        </tr>
-                      
-                    </div>
+            <div id="users-grid"></div>
+        </div>
+    </script>
+    @*<script id="users-grid-template2" type="text/x-kendo-template">
+            <div id="users-grid2" style="height:100%;"></div>
+        </script>*@
+</div>
+<div class="demo-section k-content">
+    <div id="tabWindow">
+        <div id="tabstrip">
+            <ul>
+                <li>
+                    TradeBook
+                </li>
+                <li>
+                    OrderBook
+                </li>
+                <li>
+                    Net Position
+                </li>
+                <li class="k-state-active">
+                    Holding Valuation
+                </li>
+                <li>
+                    Activity Log
+                </li>
+                <li>
+                    Funds
+                </li>
+            </ul>
+            <div>
+                <input id="mraketsegment" style="width: 12%; font-size: 12px;" />
+                <input id="marketscript" style="width: 12%; font-size: 12px;" />
+                <div id="tradebookgrid" style="height:100%;">
                 </div>
-                <div>
-                    <input id="Omraketsegment" style="width: 12%; font-size: 12px;" />
-                    <input id="Omarketscript" style="width: 12%; font-size: 12px;" />
-                    <input id="OStatus" />
-                    <div id="OrderBookgrid" style="height:100%;">
-                    </div>
-
-                    <div id="modifycancel" style="display:none; text-align:center">
-                        <div class="popup_panel">
-                            <div style="font-size: 14px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="font-weight: 600; float:left; font-size: 14px; text-align: left; color: #ccc;"><span id="buysell"></span> <span id="scrip"></span><span> x </span><span id="qyt"></span></span> <span class="pull-right"><span style="text-align:left; font-size: 16px;">ACM4850 - Darshan Bhatt</span></span></div>
-
-                            <div style="font-size: 13px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="color: #ccc; width: 175px;float: left;">LTP : ₹<span id="ltprice"></span></span>  <span style="width: 175px;float: left;">Position(Net Wise)</span><span style="width: 175px;float: left;">Holdings : <span id="Oholdings"> </span></span></div>
-                            <div style="padding: 5px 0;clear: both;;">
-                                <table style="width:100%;text-align: left;border-bottom: 1px solid #312f2f;border-top: 1px solid #312f2f;margin: 15px 0;">
+                <div id="windowForconvertScrip" style="display:none">
+                    <h8 id="msgyn"></h8>
+                    <table style="width: 100%;">
+                        <tr>
+                            <td style="padding-right: 10px; border-right: 1px solid #ccc;">
+                                <table style="width: 100%;">
                                     <tr>
-                                        <td>
-                                            <table style="width:100%; text-align: left;">
-                                                <tr>
-                                                    <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="OMIS" type="radio" name="name" class="radionew" /> Intraday MIS</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
-                                                            <tr>
-                                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Qty.</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="number" id="tradeqty" class="inpulvalue" onchange="changeQty();" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-                                        <td>
-                                            <table style="width:100%; text-align: left;">
-                                                <tr>
-                                                    <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="ONRML" type="radio" class="radionew" name="name" /> Overnight NRML/CNC</td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
-                                                            <tr>
-                                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Price</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="number" id="tradeprice" class="inpulvalue" onchange="changeprice();" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-
-                                        <td>
-                                            <table style="width:100%; text-align: left;">
-                                                <tr>
-                                                    <td> &nbsp; <br /></td>
-                                                </tr>
-                                                <tr>
-                                                    <td>
-                                                        <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
-                                                            <tr>
-                                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Trigger Price</td>
-                                                            </tr>
-                                                            <tr>
-                                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="text" id="triggerprice" class="inpulvalue" value="0" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
+                                        <td style="text-align: left; padding-bottom: 5px; font-weight: bold; padding-left: 7px;" id="availMarText">AVAILABLE/MARGIN</td>
+                                        <td style="text-align: right; padding-bottom: 5px; font-weight: bold; " id="availMar">0000</td>
                                     </tr>
-
                                     <tr>
-
-                                        <td>
-                                            <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
-                                                <tr>
-                                                    <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Discolsed QTY.</td>
-                                                </tr>
-                                                <tr>
-                                                    <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="text" idvalue="0" class="inpulvalue" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
-                                                </tr>
-                                            </table>
-                                        </td>
-
-                                        <td>
-                                            <table style="width:100%;">
-                                                <tr>
-                                                    <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                                        <input id="marketorder" type="radio" name="name1" class="radionew" checked /> Market
-                                                    </td>
-                                                    <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                                        <input id="limitorder" type="radio" name="name1" class="radionew" /> Limit
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-
-                                        <td>
-                                            <table style="width:100%;">
-                                                <tr>
-                                                    <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                                        <input id="stoploss" type="radio" name="name1" class="radionew" /> SL
-                                                    </td>
-                                                    <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                                        <input type="radio" name="name1" class="radionew" /> SL-M
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
+                                        <td style="text-align: left; font-weight: bold;  padding-left: 7px;" id="reqMarText">REQUIRED MARGIN</td>
+                                        <td style="text-align: right; font-weight: bold;  " id="reqMar">0000</td>
                                     </tr>
-
                                 </table>
 
-                                <table style="width:100%;">
-
+                            </td>
+                            <td style="padding-left: 10px;">
+                                <table style="width: 100%;">
                                     <tr>
-                                        <td colspan="3">
-                                            <table style="width:100%;">
-                                                <tr>
-                                                    <td>
-                                                        <table style="width:100%;">
-                                                            <tr>
-                                                                <td colspan="4" style="border: 1px solid #312f2f;">
-                                                                    <table style="width: 100%;">
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td style="padding-right: 10px;border-right: 1px solid #312f2f;font-size: 12px;padding: 8px;color: #ccc;">
-                                                                                    <table style="width: 100%;">
-                                                                                        <tbody>
-                                                                                            <tr>
-                                                                                                <td style="text-align: left; padding-bottom: 5px; font-weight: bold;" id="availMarText1">AVAILABLE/MARGIN</td>
-                                                                                                <td style="text-align: right; padding-bottom: 5px; font-weight: bold;" id="availMar1">0000</td>
-                                                                                            </tr>
-                                                                                            <tr>
-                                                                                                <td style="text-align: left; font-weight: bold;" id="reqMarText1">REQUIRED MARGIN</td>
-                                                                                                <td style="text-align: right; font-weight: bold;" id="reqMar1">0.0</td>
-                                                                                            </tr>
-                                                                                        </tbody>
-                                                                                    </table>
-
-                                                                                </td>
-                                                                                <td style="font-size: 12px;padding: 8px;color: #ccc;">
-                                                                                    <table style="width: 100%;">
-                                                                                        <tbody>
-                                                                                            <tr>
-                                                                                                <td style="text-align: left; padding-bottom: 5px; font-weight: bold;">VAR/FDMR %</td>
-                                                                                                <td style="text-align: right; padding-bottom: 5px; font-weight: bold;" id="varper1">00.00%</td>
-                                                                                            </tr>
-                                                                                            <tr>
-                                                                                                <td style="text-align: left; font-weight: bold;" id="excessMarText1">EXCESS MARGIN</td>
-                                                                                                <td style="text-align: right; font-weight: bold;" id="excessMar1">0</td>
-                                                                                            </tr>
-                                                                                        </tbody>
-                                                                                    </table>
-
-                                                                                </td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-
-                                                    <td style="float:right;">
-                                                        <table style="width:100%;">
-                                                            <tr>
-                                                                <td style="padding: 5px 10px; text-align: right;">
-                                                                    <button class="btn btn-buy" id="CancelOrder">Cancel</button>
-                                                                </td>
-                                                                <td style="padding: 5px 10px;text-align: left;">
-                                                                    <button class="btn btn-buy" id="ModifyOrder">Modify</button>
-                                                                </td>
-                                                            </tr>
-                                                        </table>
-                                                    </td>
-                                                </tr>
-                                            </table>
-                                        </td>
-
+                                        <td style="text-align: left; padding-bottom: 5px; font-weight: bold;">VAR/FDMR %</td>
+                                        <td style="text-align: right; padding-bottom: 5px; font-weight: bold; padding-right: 7px;" id="varper"></td>
+                                    </tr>
+                                    <tr>
+                                        <td style="text-align: left; font-weight: bold;" id="excessMarText">EXCESS MARGIN</td>
+                                        <td style="text-align: right; font-weight: bold; padding-right: 7px;" id="excessMar"></td>
                                     </tr>
                                 </table>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <div>
 
-                    <input id="drpMarketSelection" style="width: 12%; font-size: 12px;" />
-                    <input id="dtrange" style="width: 12%; font-size: 12px;" />
-                    <button id="btnRefresh" style="width: 12%; font-size: 12px;">Refresh</button>
-                    <button id="btnsqoff" style="width: 12%; font-size: 12px;">Sq. Off</button>
-                    <div id="sqoffpopup" style="display:none; text-align:center">
-
-                        <div id="sqallgrid" style="height:100%;">
-                        </div>
-                        <div class="form-group" style="margin-top: 45px;">
-                            <button id="btnSqlAll" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;">OK</button>
-                            <button id="btncancel" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;">CANCEL</button>
-                        </div>
-                    </div>
-                    <div id="NetPositionGrid" style="height:100%;">
-                    </div>
-
-                    <td width="22%" class="total-pl">
-                        <img id="pl" src="../img/icons/down-arrow-01.png" width="12px" data-original-title="" title="">
-                        <span class="tp">Today's P/L:</span> <span id="tpcol" class="red_text">&nbsp;&nbsp; <strong id="todaypl"></strong></span>
-                    </td>
-
-
-                </div>
-                <div>
-                    <div id="HoldingValuation" style="height:100%;"></div>
-                </div>
-                <div>
-                    <div id="tabstrip1">
-                        <ul>
-                            <li clss="k-state-active">
-                                Orders
-                            </li>
-                            <li>
-                                Notifications
-                            </li>
-                            <li>
-                                Research Calls
-                            </li>
-                            <li class="k-state-active">
-                                EXCHANGE MESSAGE
-                            </li>
-                        </ul>
-                        <div>
-                            <div id="alerttrade" style="height:100%;"></div>
-                        </div>
-                        <div>
-                            <div id="Notificationgrid" style="height:100%;"></div>
-                        </div>
-
-                        <div>
-                            <div id="NotificationgridReseaarchcall" style="height:100%;"></div>
-                            <div id="remaeks" style="display:none; text-align:center">
-                                <span id="remarkdetails"></span>
-                            </div>
-                            <div id="researchbuysell" style="display:none; text-align:center">
-                                <div class="popup_panel">
-                                    <div style="font-size: 14px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="font-weight: 600; float:left; font-size: 14px; text-align: left; color: #ccc;"><span id="buysell"></span> <span id="scrip"></span><span> x </span><span id="qyt"></span></span> <span class="pull-right"><span style="text-align:left; font-size: 16px;">ACM4850 - Darshan Bhatt</span></span></div>
-
-                                    <div style="font-size: 13px;text-align: left;color: #ccc;width: 100%;float: left;">
-                                        <span style="color: #ccc; width: 175px;float: left;">LTP : ₹<span id="ltprice1"></span></span>
-                                    </div>
-                                    <div style="padding: 5px 0;clear: both;;">
-                                        <table style="width:100%;text-align: left;border-bottom: 1px solid #312f2f;border-top: 1px solid #312f2f;margin: 15px 0;">
-                                            <tr>
-                                                <td>
-                                                    <table style="width:100%; text-align: left;">
-                                                        <tr>
-                                                            <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="OMIS1" type="radio" name="name" class="radionew" /> Intraday MIS</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
-                                                                    <tr>
-                                                                        <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Qty.</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="number" id="tradeqty1" class="inpulvalue" onchange="changeQty1();" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                                <td>
-                                                    <table style="width:100%; text-align: left;">
-                                                        <tr>
-                                                            <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="ONRML1" type="radio" class="radionew" name="name" checked /> Overnight NRML/CNC</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
-                                                                    <tr>
-                                                                        <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Price</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="number" id="tradeprice1" class="inpulvalue" onchange="changeprice1();" style="border: 0 !important; background: transparent !important; color: #fff !important;" value="0.00" /></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-
-                                                <td>
-                                                    <table style="width:100%; text-align: left;">
-                                                        <tr>
-                                                            <td> &nbsp; <br /></td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td>
-                                                                <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
-                                                                    <tr>
-                                                                        <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Trigger Price</td>
-                                                                    </tr>
-                                                                    <tr>
-                                                                        <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="text" id="triggerprice1" class="inpulvalue" value="0" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-
-                                            <tr>
-
-                                                <td>
-                                                    <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
-                                                        <tr>
-                                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Discolsed QTY.</td>
-                                                        </tr>
-                                                        <tr>
-                                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="text" idvalue="0" class="inpulvalue" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-
-                                                <td>
-                                                    <table style="width:100%;">
-                                                        <tr>
-                                                            <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                                                <input id="marketorder1" type="radio" name="checkked" class="radionew" checked /> Market
-                                                            </td>
-                                                            <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                                                <input id="limitorder1" type="radio" name="checkked" class="radionew" /> Limit
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-
-                                                <td>
-                                                    <table style="width:100%;">
-                                                        <tr>
-                                                            <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                                                <input id="stoploss1" type="radio" name="checkked" class="radionew" /> SL
-                                                            </td>
-                                                            <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                                                <input id="stoplossmarket1" type="radio" name="checkked" class="radionew" /> SL-M
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-                                            </tr>
-
-                                        </table>
-
-                                        <table style="width:100%;">
-
-                                            <tr>
-                                                <td colspan="3">
-                                                    <table style="width:100%;">
-                                                        <tr>
-                                                            <td>
-                                                                <table style="width:100%;">
-                                                                    <tr>
-                                                                        <td colspan="4" style="border: 1px solid #312f2f;">
-                                                                            <table style="width: 100%;">
-                                                                                <tbody>
-                                                                                    <tr>
-                                                                                        <td style="padding-right: 10px;border-right: 1px solid #312f2f;font-size: 12px;padding: 8px;color: #ccc;">
-                                                                                            <table style="width: 100%;">
-                                                                                                <tbody>
-                                                                                                    <tr>
-                                                                                                        <td style="text-align: left; padding-bottom: 5px; font-weight: bold;" id="availMarText2">AVAILABLE/MARGIN</td>
-                                                                                                        <td style="text-align: right; padding-bottom: 5px; font-weight: bold;" id="availMar2">0000</td>
-                                                                                                    </tr>
-                                                                                                    <tr>
-                                                                                                        <td style="text-align: left; font-weight: bold;" id="reqMarText2">REQUIRED MARGIN</td>
-                                                                                                        <td style="text-align: right; font-weight: bold;" id="reqMar2">0.0</td>
-                                                                                                    </tr>
-                                                                                                </tbody>
-                                                                                            </table>
-
-                                                                                        </td>
-                                                                                        <td style="font-size: 12px;padding: 8px;color: #ccc;">
-                                                                                            <table style="width: 100%;">
-                                                                                                <tbody>
-                                                                                                    <tr>
-                                                                                                        <td style="text-align: left; padding-bottom: 5px; font-weight: bold;">VAR/FDMR %</td>
-                                                                                                        <td style="text-align: right; padding-bottom: 5px; font-weight: bold;" id="varper2">00.00%</td>
-                                                                                                    </tr>
-                                                                                                    <tr>
-                                                                                                        <td style="text-align: left; font-weight: bold;" id="excessMarText2">EXCESS MARGIN</td>
-                                                                                                        <td style="text-align: right; font-weight: bold;" id="excessMar2">0</td>
-                                                                                                    </tr>
-                                                                                                </tbody>
-                                                                                            </table>
-
-                                                                                        </td>
-                                                                                    </tr>
-                                                                                </tbody>
-                                                                            </table>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-
-                                                            <td style="float:right;">
-                                                                <table style="width:100%;">
-                                                                    <tr>
-                                                                        <td style="padding: 5px 10px; text-align: right;">
-                                                                            <button class="btn btn-buy" id="Buyordersearch" style="display:none">BUY</button>
-                                                                        </td>
-                                                                        <td style="padding: 5px 10px;text-align: left;">
-                                                                            <button class="btn btn-buy" id="Sellordersearch" style="display:none;">SELL</button>
-                                                                        </td>
-                                                                    </tr>
-                                                                </table>
-                                                            </td>
-                                                        </tr>
-                                                    </table>
-                                                </td>
-
-                                            </tr>
-                                        </table>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <div>
-                            <div id="Exchangemessage1" style="height:100%;"></div>
-                        </div>
-                    </div>
-                </div>
-                <div>
-                    <div id="example">
-                        <div>
-                            <table class="table-responsive" style="font-family:Rajdhani;">
-                                <tr>
-                                    <th>A/C Balance</th>
-                                    <th>Utilised</th>
-                                    <th>Available</th>
-                                    <th>Current Holdings</th>
-                                    <th>View Running Ledger Transactions</th>
-                                    <th colspan="4" style="text-align: center;">Go To</th>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <i class="fa fa-rupee"></i>
-                                        <a id="totalBalance" class="fundData"></a>
-                                    </td>
-                                    <td>
-                                        <i class="fa fa-rupee"></i>
-                                        <a id="utilised" class="fundData"></a>
-                                    </td>
-                                    <td>
-                                        <i class="fa fa-rupee"></i>
-                                        <a id="available" class="fundData"></a>
-                                    </td>
-                                    <td>
-                                        <i class="fa fa-rupee"></i>
-                                        <a id="curHolding" class="fundData"></a>
-                                    </td>
-                                    <td style="text-align: center;">
-                                        <a id="viewLedger" class="fundData">View</a>
-                                    </td>
-
-                                    <td>
-
-                                        <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">QUICK REPORTS</a>
-                                    </td>
-                                    <td>
-                                        <a id="" onclick="Backoffice()" class="fundData">BACKOFFICE REPORTS</a>
-                                    </td>
-                                    <td>
-                                        <a href="~/Home/FundTransfer" class="fundData" target="_blank">FUND PAYIN</a>
-                                    </td>
-                                    <td>
-                                        <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">WITHDRAW FUND</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-    <div id="windowForAdd" style="display:none">
-        <h4>Set as Default ?</h4>
-        <ul class="fieldlist">
-            <li>
-                <input type="radio" name="sDefault" id="Yes" class="k-radio" checked="checked">
-                <label class="k-radio-label" for="engine1">Yes</label>
-                <input type="radio" name="sDefault" id="No" class="k-radio">
-                <label class="k-radio-label" for="engine2">No</label>
-            </li>
-        </ul>
-        <h6>Create New WatchList</h6>
-        <div>
-            <div>
-                <input type="text" name="textfield" id="txtAddScript" class="input-box" autocomplete="off">
-            </div>
-            <div>
-                <button id="btnAddNew" class="k-primary btnsub">Save</button>
-                <button id="CancelWatch" class="k-primary btnsub">Cancel</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="windowForDelete" style="display:none">
-        <h5>Are you sure you want to Delete this WatchList?</h5>
-        <div>
-            <div>
-                <button id="btnDeleteWatch" class="k-primary btnsub">Yes</button>
-                <button id="CancelDelWatch" class="k-primary btnsub">No</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="windowForDeleteScrip" style="display:none">
-        <h5>Are you sure you want to Delete this Scrip?</h5>
-        <div>
-            <div>
-                <button id="btnDeleteScrip" class="k-primary btnsub">Yes</button>
-                <button id="CancelDelScrip" class="k-primary btnsub">No</button>
-            </div>
-        </div>
-    </div>
-
-    <div id="windowforwatchaddsuccess" style="display:none; text-align:center">
-        <h5>Watchlist Added Successfully!</h5>
-    </div>
-
-    @*<div id="windowforscripaddsuccess" style="display:none; text-align:center">
-            <h5>Scrip Added Successfully!</h5>
-        </div>*@
-
-    <div id="DeleteScripSuccess" style="display:none; text-align:center">
-        <h5>Scrip Deleted Successfully!</h5>
-    </div>
-
-    <div id="DeleteWatchSuccess" style="display:none; text-align:center">
-        <h5>Watch Deleted Successfully!</h5>
-    </div>
-
-    <div id="modrmsvalidation" style="display:none; text-align:center">
-        <div style="text-align: center">
-            <h5>
-                <label for="displayresult" id="displayrms" style="font-weight: bold"></label>
-            </h5>
-        </div>
-    </div>
-
-    <div id="myModalnt" style="display:none; text-align:center">
-        <div style="text-align: center">
-            <span id="successmsg">
-                
-            </span>
-        </div>
-    </div>
-
-    <div id="ExpiryScripSuccess" style="display:none; text-align:center">
-        <h5><span id="convDelMsg"></span></h5>
-    </div>
-
-    <div id="ExpiryModal" style="display:none; text-align:center">
-        <div style="text-align: center">
-            <span id="ScripMsg"></span>
-        </div>
-        <div style="margin-top: 25px;">
-            <button class="button btn rounded outline-5" id="btnConvExpScrip">Convert</button>
-            <button class="button btn rounded outline-5" id="btnDelExpScrip">Delete</button>
-        </div>
-        
-    </div>
-
-    <div id="windowbuysell" style="display:none; text-align:center">
-        <div class="popup_panel">
-            <input type="hidden" id="cmbSegment1" />
-            <input type="hidden" id="Select2" />
-            <div style="font-size: 16px;">ACM4850 - Darshan Bhatt 
-                <span class="pull-right">
-                    <span>
-                        <img id="Broadcast" src="../img/dis-2.png"> B 
-                        <img id="Exchange" src="../img/dis-2.png"> E
-                    </span> 
-                    <span class="form" id="myForm">
-                        <div class="switch-field">
-                            <input type="radio" id="radio-one" name="switch" value="buy" checked />
-                            <label for="radio-one">BUY</label>
-                            <input type="radio" id="radio-two" name="switch" value="sell" />
-                            <label for="radio-two">SELL</label>
-                        </div>
-                    </span>
-                </span>
-            </div>
-            <span id="markettype" data-stocktype="1" style="display:none;"></span>
-            <span id="ltp" data-ltp="" style="display:none;"></span>
-            <div style="font-size: 14px;text-align: left;padding: 10px 0;color: #ccc;">
-                <span id="sellbuy"></span>
-                <span id="scriptname" data-token="0" data-buysell="0"></span>
-                @*<span>22<sup>nd</sup></span> 
-                <span>APR 14500 CR x 75 Qty</span>&nbsp;*@
-                <span id="tdISINCode"></span>
-                <span id="segmenttype" data-segement="CASH" style="float: right;" hidden="hidden"></span>
-            </div>
-            <div style="font-size: 13px; text-align: left; color: #ccc;">
-                <span style="color: #ccc; width: 175px;float: left;">NFO: ₹17.80</span> 
-                <span style="width: 135px;float: left;">Holding:&nbsp;<span id="Hqty">0</span></span>
-                <span style="width: 135px;float: left;">Position(Net Wise)</span>
-            </div>
-            <div style="font-size: 13px; text-align: left; color: #ccc;">
-                <div style="font-size: 13px; text-align: left; color: #ccc;">
-                    <table style="width:100%; text-align: left;">
-                        <tr>
-                            <td id="expDate" style="padding: 5px 0px; font-size: 13px; color: #ccc; width: 205px;">
-                                <label>Exp.Date</label><br />
-                                <select id="expirydate" name="service-area"></select>
-                            </td>
-
-                            <td id="nOption" style="padding: 5px 0px; font-size: 13px; color: #ccc; width: 205px;">
-                                <label>Option</label><br />
-                                <select id="optCallPut" name="service-area"></select>
-                            </td>
-
-                            <td id="sPrice" style="padding: 5px 0px; font-size: 13px; color: #ccc;">
-                                <label>Strike Price</label><br />
-                                <select id="optStrike" name="service-area"></select>
                             </td>
                         </tr>
                     </table>
+
+                    <tr>
+                        <td colspan="3" style="text-align: center; padding-bottom: 20px;">
+
+                            <button id="btnyes" type="button" class="butt_save" style="margin-top:14px; margin-left:92px;" data-script-id="" data-marketwatch-id="">Yes</button>
+                            &nbsp;&nbsp;&nbsp;&nbsp;
+                            <button id="btnno" type="button" class="butt_cancel" style="margin-top:14px; margin-left:31px;">No</button>
+
+                        </td>
+                    </tr>
+
                 </div>
             </div>
-            <div style="padding: 5px 0;clear: both;;">
-                <table style="width:100%; text-align: left;">
-                    <tr>
-                        <td>
-                            <table style="width:100%; text-align: left;">
-                                <tr>
-                                    <td style="padding: 5px 10px; font-size: 13px; color: #ccc;">
-                                        <input type="radio" class="radionew" name="name" id="cnc" /> CNC / Normal
-                                    </td>
-                                </tr>
+            <div>
+                <input id="Omraketsegment" style="width: 12%; font-size: 12px;" />
+                <input id="Omarketscript" style="width: 12%; font-size: 12px;" />
+                <input id="OStatus" />
+                <div id="OrderBookgrid" style="height:100%;">
+                </div>
+
+                <div id="modifycancel" style="display:none; text-align:center">
+                    <div class="popup_panel">
+                        <div style="font-size: 14px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="font-weight: 600; float:left; font-size: 14px; text-align: left; color: #ccc;"><span id="buysell"></span> <span id="scrip"></span><span> x </span><span id="qyt"></span></span> <span class="pull-right"><span style="text-align:left; font-size: 16px;">ACM4850 - Darshan Bhatt</span></span></div>
+
+                        <div style="font-size: 13px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="color: #ccc; width: 175px;float: left;">LTP : ₹<span id="ltprice"></span></span>  <span style="width: 175px;float: left;">Position(Net Wise)</span><span style="width: 175px;float: left;">Holdings : <span id="Oholdings"> </span></span></div>
+                        <div style="padding: 5px 0;clear: both;;">
+                            <table style="width:100%;text-align: left;border-bottom: 1px solid #312f2f;border-top: 1px solid #312f2f;margin: 15px 0;">
                                 <tr>
                                     <td>
-                                        <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
+                                        <table style="width:100%; text-align: left;">
                                             <tr>
-                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Qty.&nbsp; <span>(Min Lot Size <span id="lotsize" style="font-weight: 600;"></span>)</span></td>
+                                                <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="OMIS" type="radio" name="name" class="radionew" /> Intraday MIS</td>
                                             </tr>
                                             <tr>
-                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;">
-                                                    <input type="number" class="inpulvalue" id="txtqty" step="0" min="0" data-oldvalue="" data-qty='' data-lotsize='' value="1" style="border: 0 !important; background: transparent !important; color: #fff !important;" />
+                                                <td>
+                                                    <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
+                                                        <tr>
+                                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Qty.</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="number" id="tradeqty" class="inpulvalue" onchange="changeQty();" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
+                                                        </tr>
+                                                    </table>
                                                 </td>
                                             </tr>
                                         </table>
                                     </td>
-                                </tr>
-                            </table>
-                        </td>
-                        <td>
-                            <table style="width:100%; text-align: left;">
-                                <tr>
-                                    <td style="padding: 5px 0px; font-size: 13px; color: #ccc;">
-                                        <input type="radio" name="name" class="radionew" id="mis" checked /> MIS
-                                    </td>
-                                </tr>
-                                <tr>
                                     <td>
-                                        <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
+                                        <table style="width:100%; text-align: left;">
                                             <tr>
-                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Price</td>
+                                                <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="ONRML" type="radio" class="radionew" name="name" /> Overnight NRML/CNC</td>
                                             </tr>
                                             <tr>
-                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;">
-                                                    <input type="text" class="inpulvalue" id="txtorderprice" step="0" min="0" data-oldvalue="" data-price="" data-tickprice="" value="0" style="border: 0 !important; background: transparent !important; color: #fff !important;" />
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-
-                        <td>
-                            <table style="width:100%; text-align: left;">
-                                <tr>
-                                    <td> &nbsp; <br /></td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
-                                            <tr>
-                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Trigger Price</td>
-                                            </tr>
-                                            <tr>
-                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;">
-                                                <input type="text" class="inpulvalue" id="txttrigprice" step="0" min="0" data-oldvalue="" data-price="" value="0" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <table style="width:100%; text-align: left;">
-                                <tr>
-                                    <td style="padding: 5px 0px; font-size: 13px; color: #ccc;">
-                                        <input type="radio" name="name2" class="radionew" id="Day" checked /> Day
-                                    </td>
-                                    <td style="padding: 5px 0px; font-size: 13px; color: #ccc;">
-                                        <input type="radio" name="name2" class="radionew" id="Ioc" /> IOC
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td>
-                            <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
-                                <tr>
-                                    <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Disclosed Qty.</td>
-                                </tr>
-                                <tr>
-                                    <td style="padding: 0 10px; font-size: 13px; color: #ccc;">
-                                        <input type="number" class="inpulvalue" id="txtdisclosedqty" step="1" min="0" value="5" style="border: 0 !important; background: transparent !important; color: #fff !important;" />
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-                               
-
-                    <tr>
-
-                        <td>
-                            <table style="width:100%;">
-                                <tr>
-                                    <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                        <input type="radio" name="oType" class="radionew typeRadio" id="" value="11" /> Market
-                                    </td>
-                                    <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                        <input type="radio" name="oType" class="radionew typeRadio" id="" value="1"  checked /> Limit
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-
-                        <td>
-                            <table style="width:100%;">
-                                <tr>
-                                    <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                        <input type="radio" name="oType" class="radionew typeRadio" id="" value="3"/> SL
-                                    </td>
-                                    <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                        <input type="radio" name="oType" class="radionew typeRadio" id="" value="12"/> SL-M
-                                    </td>
-                                </tr>
-                            </table>
-                        </td>
-                    </tr>
-
-                    <tr>
-                        <td colspan="3" style="padding: 10px 0;">
-                            <table style="width:100%;">
-                                <tr>
-                                    <td>
-                                        <table style="width:100%;">
-                                            <tr>
-                                                <td colspan="4" style="border: 1px solid #312f2f;">
-                                                    <table style="width: 100%;">
-                                                        <tbody>
-                                                            <tr>
-                                                                <td style="padding-right: 10px;border-right: 1px solid #312f2f;font-size: 12px;padding: 8px;color: #ccc;">
-                                                                    <table style="width: 100%;">
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td style="text-align: left; padding-bottom: 5px; font-weight: bold;" id="availMarText">AVAILABLE/MARGIN</td>
-                                                                                <td style="text-align: right; padding-bottom: 5px; font-weight: bold;" id="availMargin">0000</td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td style="text-align: left; font-weight: bold;" id="reqMarText">REQUIRED MARGIN</td>
-                                                                                <td style="text-align: right; font-weight: bold;" id="reqMargin">0.0</td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-
-                                                                </td>
-                                                                <td style="font-size: 12px;padding: 8px;color: #ccc;">
-                                                                    <table style="width: 100%;">
-                                                                        <tbody>
-                                                                            <tr>
-                                                                                <td style="text-align: left; padding-bottom: 5px; font-weight: bold;">VAR/FDMR %</td>
-                                                                                <td style="text-align: right; padding-bottom: 5px; font-weight: bold;" id="varmarper">00.00%</td>
-                                                                            </tr>
-                                                                            <tr>
-                                                                                <td style="text-align: left; font-weight: bold;" id="excessMarText">EXCESS MARGIN</td>
-                                                                                <td style="text-align: right; font-weight: bold;" id="excessMargin">0</td>
-                                                                            </tr>
-                                                                        </tbody>
-                                                                    </table>
-
-                                                                </td>
-                                                            </tr>
-                                                        </tbody>
+                                                <td>
+                                                    <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
+                                                        <tr>
+                                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Price</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="number" id="tradeprice" class="inpulvalue" onchange="changeprice();" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
+                                                        </tr>
                                                     </table>
                                                 </td>
                                             </tr>
                                         </table>
                                     </td>
 
-                                    <td style="float:right;">
-                                        <table style="width:100%;">
+                                    <td>
+                                        <table style="width:100%; text-align: left;">
                                             <tr>
-                                                <td style="padding: 5px 10px; text-align: right;">
-                                                    <button class="btn btn-buy" id="btntrade" onclick="tradebutton();">Buy</button>
-                                                </td>
-                                                <td style="padding: 5px 10px;text-align: left;">
-                                                    <button class="btn btn-cancel" id="btncancelbuysell">Cancel</button>
+                                                <td> &nbsp; <br /></td>
+                                            </tr>
+                                            <tr>
+                                                <td>
+                                                    <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
+                                                        <tr>
+                                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Trigger Price</td>
+                                                        </tr>
+                                                        <tr>
+                                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="text" id="triggerprice" class="inpulvalue" value="0" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
+                                                        </tr>
+                                                    </table>
                                                 </td>
                                             </tr>
                                         </table>
                                     </td>
                                 </tr>
+
+                                <tr>
+
+                                    <td>
+                                        <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
+                                            <tr>
+                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Discolsed QTY.</td>
+                                            </tr>
+                                            <tr>
+                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="text" idvalue="0" class="inpulvalue" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                    <td>
+                                        <table style="width:100%;">
+                                            <tr>
+                                                <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
+                                                    <input id="marketorder" type="radio" name="name1" class="radionew" checked /> Market
+                                                </td>
+                                                <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
+                                                    <input id="limitorder" type="radio" name="name1" class="radionew" /> Limit
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                    <td>
+                                        <table style="width:100%;">
+                                            <tr>
+                                                <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
+                                                    <input id="stoploss" type="radio" name="name1" class="radionew" /> SL
+                                                </td>
+                                                <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
+                                                    <input type="radio" name="name1" class="radionew" /> SL-M
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+                                </tr>
+
                             </table>
+
+                            <table style="width:100%;">
+
+                                <tr>
+                                    <td colspan="3">
+                                        <table style="width:100%;">
+                                            <tr>
+                                                <td>
+                                                    <table style="width:100%;">
+                                                        <tr>
+                                                            <td colspan="4" style="border: 1px solid #312f2f;">
+                                                                <table style="width: 100%;">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td style="padding-right: 10px;border-right: 1px solid #312f2f;font-size: 12px;padding: 8px;color: #ccc;">
+                                                                                <table style="width: 100%;">
+                                                                                    <tbody>
+                                                                                        <tr>
+                                                                                            <td style="text-align: left; padding-bottom: 5px; font-weight: bold;" id="availMarText1">AVAILABLE/MARGIN</td>
+                                                                                            <td style="text-align: right; padding-bottom: 5px; font-weight: bold;" id="availMar1">0000</td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td style="text-align: left; font-weight: bold;" id="reqMarText1">REQUIRED MARGIN</td>
+                                                                                            <td style="text-align: right; font-weight: bold;" id="reqMar1">0.0</td>
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                </table>
+
+                                                                            </td>
+                                                                            <td style="font-size: 12px;padding: 8px;color: #ccc;">
+                                                                                <table style="width: 100%;">
+                                                                                    <tbody>
+                                                                                        <tr>
+                                                                                            <td style="text-align: left; padding-bottom: 5px; font-weight: bold;">VAR/FDMR %</td>
+                                                                                            <td style="text-align: right; padding-bottom: 5px; font-weight: bold;" id="varper1">00.00%</td>
+                                                                                        </tr>
+                                                                                        <tr>
+                                                                                            <td style="text-align: left; font-weight: bold;" id="excessMarText1">EXCESS MARGIN</td>
+                                                                                            <td style="text-align: right; font-weight: bold;" id="excessMar1">0</td>
+                                                                                        </tr>
+                                                                                    </tbody>
+                                                                                </table>
+
+                                                                            </td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+
+                                                <td style="float:right;">
+                                                    <table style="width:100%;">
+                                                        <tr>
+                                                            <td style="padding: 5px 10px; text-align: right;">
+                                                                <button class="btn btn-buy" id="CancelOrder">Cancel</button>
+                                                            </td>
+                                                            <td style="padding: 5px 10px;text-align: left;">
+                                                                <button class="btn btn-buy" id="ModifyOrder">Modify</button>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </td>
+
+                                </tr>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div>
+
+                <input id="drpMarketSelection" style="width: 12%; font-size: 12px;" />
+                <input id="dtrange" style="width: 12%; font-size: 12px;" />
+                <button id="btnRefresh" style="width: 12%; font-size: 12px;">Refresh</button>
+                <button id="btnsqoff" style="width: 12%; font-size: 12px;">Sq. Off</button>
+                <div id="sqoffpopup" style="display:none; text-align:center">
+
+                    <div id="sqallgrid" style="height:100%;">
+                    </div>
+                    <div class="form-group" style="margin-top: 45px;">
+                        <button id="btnSqlAll" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;">OK</button>
+                        <button id="btncancel" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;">CANCEL</button>
+                    </div>
+                </div>
+                <div id="NetPositionGrid" style="height:100%;">
+                </div>
+
+                <td width="22%" class="total-pl">
+                    <img id="pl" src="../img/icons/down-arrow-01.png" width="12px" data-original-title="" title="">
+                    <span class="tp">Today's P/L:</span> <span id="tpcol" class="red_text">&nbsp;&nbsp; <strong id="todaypl"></strong></span>
+                </td>
+
+
+            </div>
+            <div>
+                <div id="HoldingValuation" style="height:100%;"></div>
+            </div>
+            <div>
+                <div id="tabstrip1">
+                    <ul>
+                        <li clss="k-state-active">
+                            Orders
+                        </li>
+                        <li>
+                            Notifications
+                        </li>
+                        <li>
+                            Research Calls
+                        </li>
+                        <li class="k-state-active">
+                            EXCHANGE MESSAGE
+                        </li>
+                    </ul>
+                    <div>
+                        <div id="alerttrade" style="height:100%;"></div>
+                    </div>
+                    <div>
+                        <div id="Notificationgrid" style="height:100%;"></div>
+                    </div>
+
+                    <div>
+                        <div id="NotificationgridReseaarchcall" style="height:100%;"></div>
+                        <div id="remaeks" style="display:none; text-align:center">
+                            <span id="remarkdetails"></span>
+                        </div>
+                        <div id="researchbuysell" style="display:none; text-align:center">
+                            <div class="popup_panel">
+                                <div style="font-size: 14px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="font-weight: 600; float:left; font-size: 14px; text-align: left; color: #ccc;"><span id="buysell"></span> <span id="scrip"></span><span> x </span><span id="qyt"></span></span> <span class="pull-right"><span style="text-align:left; font-size: 16px;">ACM4850 - Darshan Bhatt</span></span></div>
+
+                                <div style="font-size: 13px;text-align: left;color: #ccc;width: 100%;float: left;">
+                                    <span style="color: #ccc; width: 175px;float: left;">LTP : ₹<span id="ltprice1"></span></span>
+                                </div>
+                                <div style="padding: 5px 0;clear: both;;">
+                                    <table style="width:100%;text-align: left;border-bottom: 1px solid #312f2f;border-top: 1px solid #312f2f;margin: 15px 0;">
+                                        <tr>
+                                            <td>
+                                                <table style="width:100%; text-align: left;">
+                                                    <tr>
+                                                        <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="OMIS1" type="radio" name="name" class="radionew" /> Intraday MIS</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
+                                                                <tr>
+                                                                    <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Qty.</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="number" id="tradeqty1" class="inpulvalue" onchange="changeQty1();" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                            <td>
+                                                <table style="width:100%; text-align: left;">
+                                                    <tr>
+                                                        <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="ONRML1" type="radio" class="radionew" name="name" checked /> Overnight NRML/CNC</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
+                                                                <tr>
+                                                                    <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Price</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="number" id="tradeprice1" class="inpulvalue" onchange="changeprice1();" style="border: 0 !important; background: transparent !important; color: #fff !important;" value="0.00" /></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+
+                                            <td>
+                                                <table style="width:100%; text-align: left;">
+                                                    <tr>
+                                                        <td> &nbsp; <br /></td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td>
+                                                            <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
+                                                                <tr>
+                                                                    <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Trigger Price</td>
+                                                                </tr>
+                                                                <tr>
+                                                                    <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="text" id="triggerprice1" class="inpulvalue" value="0" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+                                        <tr>
+
+                                            <td>
+                                                <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
+                                                    <tr>
+                                                        <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Discolsed QTY.</td>
+                                                    </tr>
+                                                    <tr>
+                                                        <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="text" idvalue="0" class="inpulvalue" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+
+                                            <td>
+                                                <table style="width:100%;">
+                                                    <tr>
+                                                        <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
+                                                            <input id="marketorder1" type="radio" name="checkked" class="radionew" checked /> Market
+                                                        </td>
+                                                        <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
+                                                            <input id="limitorder1" type="radio" name="checkked" class="radionew" /> Limit
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+
+                                            <td>
+                                                <table style="width:100%;">
+                                                    <tr>
+                                                        <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
+                                                            <input id="stoploss1" type="radio" name="checkked" class="radionew" /> SL
+                                                        </td>
+                                                        <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
+                                                            <input id="stoplossmarket1" type="radio" name="checkked" class="radionew" /> SL-M
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+                                        </tr>
+
+                                    </table>
+
+                                    <table style="width:100%;">
+
+                                        <tr>
+                                            <td colspan="3">
+                                                <table style="width:100%;">
+                                                    <tr>
+                                                        <td>
+                                                            <table style="width:100%;">
+                                                                <tr>
+                                                                    <td colspan="4" style="border: 1px solid #312f2f;">
+                                                                        <table style="width: 100%;">
+                                                                            <tbody>
+                                                                                <tr>
+                                                                                    <td style="padding-right: 10px;border-right: 1px solid #312f2f;font-size: 12px;padding: 8px;color: #ccc;">
+                                                                                        <table style="width: 100%;">
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td style="text-align: left; padding-bottom: 5px; font-weight: bold;" id="availMarText2">AVAILABLE/MARGIN</td>
+                                                                                                    <td style="text-align: right; padding-bottom: 5px; font-weight: bold;" id="availMar2">0000</td>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <td style="text-align: left; font-weight: bold;" id="reqMarText2">REQUIRED MARGIN</td>
+                                                                                                    <td style="text-align: right; font-weight: bold;" id="reqMar2">0.0</td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                        </table>
+
+                                                                                    </td>
+                                                                                    <td style="font-size: 12px;padding: 8px;color: #ccc;">
+                                                                                        <table style="width: 100%;">
+                                                                                            <tbody>
+                                                                                                <tr>
+                                                                                                    <td style="text-align: left; padding-bottom: 5px; font-weight: bold;">VAR/FDMR %</td>
+                                                                                                    <td style="text-align: right; padding-bottom: 5px; font-weight: bold;" id="varper2">00.00%</td>
+                                                                                                </tr>
+                                                                                                <tr>
+                                                                                                    <td style="text-align: left; font-weight: bold;" id="excessMarText2">EXCESS MARGIN</td>
+                                                                                                    <td style="text-align: right; font-weight: bold;" id="excessMar2">0</td>
+                                                                                                </tr>
+                                                                                            </tbody>
+                                                                                        </table>
+
+                                                                                    </td>
+                                                                                </tr>
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+
+                                                        <td style="float:right;">
+                                                            <table style="width:100%;">
+                                                                <tr>
+                                                                    <td style="padding: 5px 10px; text-align: right;">
+                                                                        <button class="btn btn-buy" id="Buyordersearch" style="display:none">BUY</button>
+                                                                    </td>
+                                                                    <td style="padding: 5px 10px;text-align: left;">
+                                                                        <button class="btn btn-buy" id="Sellordersearch" style="display:none;">SELL</button>
+                                                                    </td>
+                                                                </tr>
+                                                            </table>
+                                                        </td>
+                                                    </tr>
+                                                </table>
+                                            </td>
+
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div>
+                        <div id="Exchangemessage1" style="height:100%;"></div>
+                    </div>
+                </div>
+            </div>
+            <div>
+                <div id="example">
+                    <div>
+                        <table class="table-responsive" style="font-family:Rajdhani;">
+                            <tr>
+                                <th>A/C Balance</th>
+                                <th>Utilised</th>
+                                <th>Available</th>
+                                <th>Current Holdings</th>
+                                <th>View Running Ledger Transactions</th>
+                                <th colspan="4" style="text-align: center;">Go To</th>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <i class="fa fa-rupee"></i>
+                                    <a id="totalBalance" class="fundData"></a>
+                                </td>
+                                <td>
+                                    <i class="fa fa-rupee"></i>
+                                    <a id="utilised" class="fundData"></a>
+                                </td>
+                                <td>
+                                    <i class="fa fa-rupee"></i>
+                                    <a id="available" class="fundData"></a>
+                                </td>
+                                <td>
+                                    <i class="fa fa-rupee"></i>
+                                    <a id="curHolding" class="fundData"></a>
+                                </td>
+                                <td style="text-align: center;">
+                                    <a id="viewLedger" class="fundData">View</a>
+                                </td>
+
+                                <td>
+
+                                    <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">QUICK REPORTS</a>
+                                </td>
+                                <td>
+                                    <a id="" onclick="Backoffice()" class="fundData">BACKOFFICE REPORTS</a>
+                                </td>
+                                <td>
+                                    <a href="~/Home/FundTransfer" class="fundData" target="_blank">FUND PAYIN</a>
+                                </td>
+                                <td>
+                                    <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">WITHDRAW FUND</a>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="windowForAdd" style="display:none">
+    <h4>Set as Default ?</h4>
+    <ul class="fieldlist">
+        <li>
+            <input type="radio" name="sDefault" id="Yes" class="k-radio" checked="checked">
+            <label class="k-radio-label" for="engine1">Yes</label>
+            <input type="radio" name="sDefault" id="No" class="k-radio">
+            <label class="k-radio-label" for="engine2">No</label>
+        </li>
+    </ul>
+    <h6>Create New WatchList</h6>
+    <div>
+        <div>
+            <input type="text" name="textfield" id="txtAddScript" class="input-box" autocomplete="off">
+        </div>
+        <div>
+            <button id="btnAddNew" class="k-primary btnsub">Save</button>
+            <button id="CancelWatch" class="k-primary btnsub">Cancel</button>
+        </div>
+    </div>
+</div>
+
+<div id="windowForDelete" style="display:none">
+    <h5>Are you sure you want to Delete this WatchList?</h5>
+    <div>
+        <div>
+            <button id="btnDeleteWatch" class="k-primary btnsub">Yes</button>
+            <button id="CancelDelWatch" class="k-primary btnsub">No</button>
+        </div>
+    </div>
+</div>
+
+<div id="windowForDeleteScrip" style="display:none">
+    <h5>Are you sure you want to Delete this Scrip?</h5>
+    <div>
+        <div>
+            <button id="btnDeleteScrip" class="k-primary btnsub">Yes</button>
+            <button id="CancelDelScrip" class="k-primary btnsub">No</button>
+        </div>
+    </div>
+</div>
+
+<div id="windowforwatchaddsuccess" style="display:none; text-align:center">
+    <h5>Watchlist Added Successfully!</h5>
+</div>
+
+@*<div id="windowforscripaddsuccess" style="display:none; text-align:center">
+        <h5>Scrip Added Successfully!</h5>
+    </div>*@
+
+<div id="DeleteScripSuccess" style="display:none; text-align:center">
+    <h5>Scrip Deleted Successfully!</h5>
+</div>
+
+<div id="DeleteWatchSuccess" style="display:none; text-align:center">
+    <h5>Watch Deleted Successfully!</h5>
+</div>
+
+<div id="modrmsvalidation" style="display:none; text-align:center">
+    <div style="text-align: center">
+        <h5>
+            <label for="displayresult" id="displayrms" style="font-weight: bold"></label>
+        </h5>
+    </div>
+</div>
+
+<div id="myModalnt" style="display:none; text-align:center">
+    <div style="text-align: center">
+        <span id="successmsg">
+
+        </span>
+    </div>
+</div>
+
+<div id="ExpiryScripSuccess" style="display:none; text-align:center">
+    <h5><span id="convDelMsg"></span></h5>
+</div>
+
+<div id="ExpiryModal" style="display:none; text-align:center">
+    <div style="text-align: center">
+        <span id="ScripMsg"></span>
+    </div>
+    <div style="margin-top: 25px;">
+        <button class="button btn rounded outline-5" id="btnConvExpScrip">Convert</button>
+        <button class="button btn rounded outline-5" id="btnDelExpScrip">Delete</button>
+    </div>
+
+</div>
+
+<div id="windowbuysell" style="display:none; text-align:center">
+    <div class="popup_panel">
+        <input type="hidden" id="cmbSegment1" />
+        <input type="hidden" id="Select2" />
+        <div style="font-size: 16px;">
+            ACM4850 - Darshan Bhatt
+            <span class="pull-right">
+                <span>
+                    <img id="Broadcast" src="../img/dis-2.png"> B
+                    <img id="Exchange" src="../img/dis-2.png"> E
+                </span>
+                <span class="form" id="myForm">
+                    <div class="switch-field">
+                        <input type="radio" id="radio-one" name="switch" value="buy" checked />
+                        <label for="radio-one">BUY</label>
+                        <input type="radio" id="radio-two" name="switch" value="sell" />
+                        <label for="radio-two">SELL</label>
+                    </div>
+                </span>
+            </span>
+        </div>
+        <span id="markettype" data-stocktype="1" style="display:none;"></span>
+        <span id="ltp" data-ltp="" style="display:none;"></span>
+        <div style="font-size: 14px;text-align: left;padding: 10px 0;color: #ccc;">
+            <span id="sellbuy"></span>
+            <span id="scriptname" data-token="0" data-buysell="0"></span>
+            @*<span>22<sup>nd</sup></span>
+                <span>APR 14500 CR x 75 Qty</span>&nbsp;*@
+            <span id="tdISINCode"></span>
+            <span id="segmenttype" data-segement="CASH" style="float: right;" hidden="hidden"></span>
+        </div>
+        <div style="font-size: 13px; text-align: left; color: #ccc;">
+            <span style="color: #ccc; width: 175px;float: left;">NFO: ₹17.80</span>
+            <span style="width: 135px;float: left;">Holding:&nbsp;<span id="Hqty">0</span></span>
+            <span style="width: 135px;float: left;">Position(Net Wise)</span>
+        </div>
+        <div style="font-size: 13px; text-align: left; color: #ccc;">
+            <div style="font-size: 13px; text-align: left; color: #ccc;">
+                <table style="width:100%; text-align: left;">
+                    <tr>
+                        <td id="expDate" style="padding: 5px 0px; font-size: 13px; color: #ccc; width: 205px;">
+                            <label>Exp.Date</label><br />
+                            <select id="expirydate" name="service-area"></select>
                         </td>
 
+                        <td id="nOption" style="padding: 5px 0px; font-size: 13px; color: #ccc; width: 205px;">
+                            <label>Option</label><br />
+                            <select id="optCallPut" name="service-area"></select>
+                        </td>
+
+                        <td id="sPrice" style="padding: 5px 0px; font-size: 13px; color: #ccc;">
+                            <label>Strike Price</label><br />
+                            <select id="optStrike" name="service-area"></select>
+                        </td>
                     </tr>
                 </table>
             </div>
         </div>
-    </div>
+        <div style="padding: 5px 0;clear: both;;">
+            <table style="width:100%; text-align: left;">
+                <tr>
+                    <td>
+                        <table style="width:100%; text-align: left;">
+                            <tr>
+                                <td style="padding: 5px 10px; font-size: 13px; color: #ccc;">
+                                    <input type="radio" class="radionew" name="name" id="cnc" /> CNC / Normal
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
+                                        <tr>
+                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Qty.&nbsp; <span>(Min Lot Size <span id="lotsize" style="font-weight: 600;"></span>)</span></td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;">
+                                                <input type="number" class="inpulvalue" id="txtqty" step="0" min="0" data-oldvalue="" data-qty='' data-lotsize='' value="1" style="border: 0 !important; background: transparent !important; color: #fff !important;" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                    <td>
+                        <table style="width:100%; text-align: left;">
+                            <tr>
+                                <td style="padding: 5px 0px; font-size: 13px; color: #ccc;">
+                                    <input type="radio" name="name" class="radionew" id="mis" checked /> MIS
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
+                                        <tr>
+                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Price</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;">
+                                                <input type="text" class="inpulvalue" id="txtorderprice" step="0" min="0" data-oldvalue="" data-price="" data-tickprice="" value="0" style="border: 0 !important; background: transparent !important; color: #fff !important;" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
 
-    <div id="windowForconvertScrip" style="display:none">
-        <h8 id="msgyn"></h8>
-        <table style="width: 100%;">
-            <tr>
-                <td style="padding-right: 10px; border-right: 1px solid #ccc;">
-                    <table style="width: 100%;">
-                        <tr>
-                            <td style="text-align: left; padding-bottom: 5px; font-weight: bold; padding-left: 7px;" id="availMarText">AVAILABLE/MARGIN</td>
-                            <td style="text-align: right; padding-bottom: 5px; font-weight: bold; " id="availMar">0000</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left; font-weight: bold;  padding-left: 7px;" id="reqMarText">REQUIRED MARGIN</td>
-                            <td style="text-align: right; font-weight: bold;  " id="reqMar">0000</td>
-                        </tr>
-                    </table>
+                    <td>
+                        <table style="width:100%; text-align: left;">
+                            <tr>
+                                <td> &nbsp; <br /></td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
+                                        <tr>
+                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Trigger Price</td>
+                                        </tr>
+                                        <tr>
+                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;">
+                                                <input type="text" class="inpulvalue" id="txttrigprice" step="0" min="0" data-oldvalue="" data-price="" value="0" style="border: 0 !important; background: transparent !important; color: #fff !important;" />
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
 
-                </td>
-                <td style="padding-left: 10px;">
-                    <table style="width: 100%;">
-                        <tr>
-                            <td style="text-align: left; padding-bottom: 5px; font-weight: bold;">VAR/FDMR %</td>
-                            <td style="text-align: right; padding-bottom: 5px; font-weight: bold; padding-right: 7px;" id="varper">0.00%</td>
-                        </tr>
-                        <tr>
-                            <td style="text-align: left; font-weight: bold;" id="excessMarText">EXCESS MARGIN</td>
-                            <td style="text-align: right; font-weight: bold; padding-right: 7px;" id="excessMar">0000</td>
-                        </tr>
-                    </table>
+                <tr>
+                    <td>
+                        <table style="width:100%; text-align: left;">
+                            <tr>
+                                <td style="padding: 5px 0px; font-size: 13px; color: #ccc;">
+                                    <input type="radio" name="name2" class="radionew" id="Day" checked /> Day
+                                </td>
+                                <td style="padding: 5px 0px; font-size: 13px; color: #ccc;">
+                                    <input type="radio" name="name2" class="radionew" id="Ioc" /> IOC
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
 
-                </td>
-            </tr>
-        </table>
+                <tr>
+                    <td>
+                        <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
+                            <tr>
+                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Disclosed Qty.</td>
+                            </tr>
+                            <tr>
+                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;">
+                                    <input type="number" class="inpulvalue" id="txtdisclosedqty" step="1" min="0" value="5" style="border: 0 !important; background: transparent !important; color: #fff !important;" />
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
 
-        <tr>
-            <td colspan="3" style="text-align: center; padding-bottom: 20px;">
 
-                <button id="btnyes" type="button" class="butt_save" style="margin-top 14px; margin-left 92px;" data-script-id="" data-marketwatch-id="">Yes</button>
-                &nbsp;&nbsp;&nbsp;&nbsp;
-                <button id="btnno" type="button" class="butt_cancel" style="margin-top 14px; margin-left 31px;">No</button>
+                <tr>
 
-            </td>
-        </tr>
-        @*<input ID="hfldUser" type="text" hidden />*@
-    </div>
+                    <td>
+                        <table style="width:100%;">
+                            <tr>
+                                <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
+                                    <input type="radio" name="oType" class="radionew typeRadio" id="" value="11" /> Market
+                                </td>
+                                <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
+                                    <input type="radio" name="oType" class="radionew typeRadio" id="" value="1" checked /> Limit
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
 
-    <div id="fundSummary" style="display:none">
-        <div id="headerset" style="height:100%;"></div>
-    </div>
+                    <td>
+                        <table style="width:100%;">
+                            <tr>
+                                <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
+                                    <input type="radio" name="oType" class="radionew typeRadio" id="" value="3" /> SL
+                                </td>
+                                <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
+                                    <input type="radio" name="oType" class="radionew typeRadio" id="" value="12" /> SL-M
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+                </tr>
 
-    <div id="holdingSummary" style="display:none">
-        <div id="holdingData" style="height:100%;"></div>
-    </div>
+                <tr>
+                    <td colspan="3" style="padding: 10px 0;">
+                        <table style="width:100%;">
+                            <tr>
+                                <td>
+                                    <table style="width:100%;">
+                                        <tr>
+                                            <td colspan="4" style="border: 1px solid #312f2f;">
+                                                <table style="width: 100%;">
+                                                    <tbody>
+                                                        <tr>
+                                                            <td style="padding-right: 10px;border-right: 1px solid #312f2f;font-size: 12px;padding: 8px;color: #ccc;">
+                                                                <table style="width: 100%;">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td style="text-align: left; padding-bottom: 5px; font-weight: bold;" id="availMarText">AVAILABLE/MARGIN</td>
+                                                                            <td style="text-align: right; padding-bottom: 5px; font-weight: bold;" id="availMargin">0000</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td style="text-align: left; font-weight: bold;" id="reqMarText">REQUIRED MARGIN</td>
+                                                                            <td style="text-align: right; font-weight: bold;" id="reqMargin">0.0</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
 
-    <div id="TransactionSummary" style="display:none">
-        <button id="btnExcelExport"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;Excel</button>
-        <button id="btnPDFExport"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;PDF</button>
-        <div id="runledtrans" style="height:100%;"></div>
-    </div>
+                                                            </td>
+                                                            <td style="font-size: 12px;padding: 8px;color: #ccc;">
+                                                                <table style="width: 100%;">
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td style="text-align: left; padding-bottom: 5px; font-weight: bold;">VAR/FDMR %</td>
+                                                                            <td style="text-align: right; padding-bottom: 5px; font-weight: bold;" id="varmarper">00.00%</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td style="text-align: left; font-weight: bold;" id="excessMarText">EXCESS MARGIN</td>
+                                                                            <td style="text-align: right; font-weight: bold;" id="excessMargin">0</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
 
-    <div id="AccountBalance" style="display:none">
-        <div>
-            <table class="balancetable" border="1">
-                <tr>
-                    <th colspan="2">Today's Account Balance</th>
-                </tr>
-                <tr>
-                    <td>OPENING LEDGER BALANCE</td>
-                    <td><span id="opening"></span></td>
-                </tr>
-                <tr>
-                    <td>COLLATERAL STOCK VALUE 40%</td>
-                    <td><span id="collat"></span></td>
-                </tr>
-                <tr>
-                    <td>INTRADAY PAYIN</td>
-                    <td><span id="payin"></span></td>
-                </tr>
-                <tr>
-                    <td>HOLDING SELL VALUATION</td>
-                    <td><span id="holselval"></span></td>
-                </tr>
-                <tr>
-                    <td>MARGIN RELEASE VALUATION</td>
-                    <td><span id="margin"></span></td>
-                </tr>
-                <tr>
-                    <td>MANNUAL ADMIN LIMIT</td>
-                    <td><span id="mannnual"></span></td>
-                </tr>
-                <tr>
-                    <td>ADDITIONAL LIMIT</td>
-                    <td><span id="Addlimit"></span></td>
-                </tr>
-                <tr>
-                    <th colspan="2">Other Account Balance</th>
-                </tr>
-                <tr>
-                    <td>OPENING LEDGER BALANCE</td>
-                    <td><span id="otheropening"></span></td>
-                </tr>
-                <tr>
-                    <td>INTRADAY PAYIN</td>
-                    <td><span id="othercollat"></span></td>
+                                                            </td>
+                                                        </tr>
+                                                    </tbody>
+                                                </table>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+
+                                <td style="float:right;">
+                                    <table style="width:100%;">
+                                        <tr>
+                                            <td style="padding: 5px 10px; text-align: right;">
+                                                <button class="btn btn-buy" id="btntrade" onclick="tradebutton();">Buy</button>
+                                            </td>
+                                            <td style="padding: 5px 10px;text-align: left;">
+                                                <button class="btn btn-cancel" id="btncancelbuysell">Cancel</button>
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </td>
+                            </tr>
+                        </table>
+                    </td>
+
                 </tr>
             </table>
         </div>
     </div>
+</div>
 
-    <div id="modScripDetails" style="display:none; text-align:center">
-        <div id="sDetails">
-            
-        </div>
+<div id="windowForconvertScrip" style="display:none">
+    <h8 id="msgyn"></h8>
+    <table style="width: 100%;">
+        <tr>
+            <td style="padding-right: 10px; border-right: 1px solid #ccc;">
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="text-align: left; padding-bottom: 5px; font-weight: bold; padding-left: 7px;" id="availMarText">AVAILABLE/MARGIN</td>
+                        <td style="text-align: right; padding-bottom: 5px; font-weight: bold; " id="availMar">0000</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; font-weight: bold;  padding-left: 7px;" id="reqMarText">REQUIRED MARGIN</td>
+                        <td style="text-align: right; font-weight: bold;  " id="reqMar">0000</td>
+                    </tr>
+                </table>
+
+            </td>
+            <td style="padding-left: 10px;">
+                <table style="width: 100%;">
+                    <tr>
+                        <td style="text-align: left; padding-bottom: 5px; font-weight: bold;">VAR/FDMR %</td>
+                        <td style="text-align: right; padding-bottom: 5px; font-weight: bold; padding-right: 7px;" id="varper">0.00%</td>
+                    </tr>
+                    <tr>
+                        <td style="text-align: left; font-weight: bold;" id="excessMarText">EXCESS MARGIN</td>
+                        <td style="text-align: right; font-weight: bold; padding-right: 7px;" id="excessMar">0000</td>
+                    </tr>
+                </table>
+
+            </td>
+        </tr>
+    </table>
+
+    <tr>
+        <td colspan="3" style="text-align: center; padding-bottom: 20px;">
+
+            <button id="btnyes" type="button" class="butt_save" style="margin-top 14px; margin-left 92px;" data-script-id="" data-marketwatch-id="">Yes</button>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <button id="btnno" type="button" class="butt_cancel" style="margin-top 14px; margin-left 31px;">No</button>
+
+        </td>
+    </tr>
+    @*<input ID="hfldUser" type="text" hidden />*@
+</div>
+
+<div id="fundSummary" style="display:none">
+    <div id="headerset" style="height:100%;"></div>
+</div>
+
+<div id="holdingSummary" style="display:none">
+    <div id="holdingData" style="height:100%;"></div>
+</div>
+
+<div id="TransactionSummary" style="display:none">
+    <button id="btnExcelExport"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;Excel</button>
+    <button id="btnPDFExport"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;PDF</button>
+    <div id="runledtrans" style="height:100%;"></div>
+</div>
+
+<div id="AccountBalance" style="display:none">
+    <div>
+        <table class="balancetable" border="1">
+            <tr>
+                <th colspan="2">Today's Account Balance</th>
+            </tr>
+            <tr>
+                <td>OPENING LEDGER BALANCE</td>
+                <td><span id="opening"></span></td>
+            </tr>
+            <tr>
+                <td>COLLATERAL STOCK VALUE 40%</td>
+                <td><span id="collat"></span></td>
+            </tr>
+            <tr>
+                <td>INTRADAY PAYIN</td>
+                <td><span id="payin"></span></td>
+            </tr>
+            <tr>
+                <td>HOLDING SELL VALUATION</td>
+                <td><span id="holselval"></span></td>
+            </tr>
+            <tr>
+                <td>MARGIN RELEASE VALUATION</td>
+                <td><span id="margin"></span></td>
+            </tr>
+            <tr>
+                <td>MANNUAL ADMIN LIMIT</td>
+                <td><span id="mannnual"></span></td>
+            </tr>
+            <tr>
+                <td>ADDITIONAL LIMIT</td>
+                <td><span id="Addlimit"></span></td>
+            </tr>
+            <tr>
+                <th colspan="2">Other Account Balance</th>
+            </tr>
+            <tr>
+                <td>OPENING LEDGER BALANCE</td>
+                <td><span id="otheropening"></span></td>
+            </tr>
+            <tr>
+                <td>INTRADAY PAYIN</td>
+                <td><span id="othercollat"></span></td>
+            </tr>
+        </table>
     </div>
+</div>
+
+<div id="modScripDetails" style="display:none; text-align:center">
+    <div id="sDetails">
+
+    </div>
+</div>
 @*</body>
-</html>*@
+    </html>*@
 
 <script src="~/MyJs/MarketWatch.js"></script>
 <script src="~/MyJs/TradeBook.js"></script>
 <script src="~/MyJs/Holding.js"></script>
 <script src="~/MyJs/Funds.js"></script>
 <script src="~/MyJs/Alerts.js"></script>
+<script src="~/MyJs/OrderBook.js"></script>
+<script src="~/MyJs/NetPosition.js"></script>

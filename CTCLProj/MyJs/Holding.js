@@ -66,8 +66,8 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment)
                         
                         BuyingValue = parseFloat(row.nBuyAvg).toFixed(2) * parseFloat(row.nQty).toFixed(2);
                         
-                        alert(row.sScript);
-                        alert(row.nQty);
+                        //alert(row.sScript);
+                        //alert(row.nQty);
                         //
                         //ProfLoss = parseFloat(CurrentValue) - parseFloat(BuyingValue);
                         //ProfLossPerc = (parseFloat(ProfLoss) / parseFloat(BuyingValue)) * 100;
