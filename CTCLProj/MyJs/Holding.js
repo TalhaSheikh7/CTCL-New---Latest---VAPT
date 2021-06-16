@@ -3,7 +3,11 @@ var topicName1;
 var nExchangeId1 = 1;
 var instrumentindex = 0;
 
+//var tokens2;
+var ws2;
+
 $(document).ready(function () {
+    //tokens2 = [];
     getHolding(3, 3010098, 1, 0)
 });
 
@@ -47,15 +51,17 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment)
                     HoldingColumns = [];
                 } else {
                     var record = 0;
+
+                    tokens = [];
                     
                     $.each(data.Result.Result, function (i, row) {
 
                         if (row.nBroadCastContants == 12 || row.nBroadCastContants == 13) {
-                            currrate = '<span><strong id= "' + row.nBroadCastContants + '_' + row.nToken + '_LRH">0.0000</strong></span>';
+                            currrate = '<span><strong class= "' + row.nBroadCastContants + '_' + row.nToken + '_LR">0.0000</strong></span>';
                             CurrentValue = '<span><strong id= "">' + parseFloat(currrate) * parseFloat(row.nQty); +'</strong></span>';
                         }
                         else {
-                            currrate = '<span><strong id= "' + row.nBroadCastContants + '_' + row.nToken + '_LRH">0.00</strong></span>';
+                            currrate = '<span><strong class= "' + row.nBroadCastContants + '_' + row.nToken + '_LR">0.00</strong></span>';
                             CurrentValue = '<span><strong id= "">' + parseFloat(currrate) * parseFloat(row.nQty); +'</strong></span>';
                         }
 
@@ -78,13 +84,14 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment)
                         //alert(ProfLossPerc);
                         
                         var lblScript = "lblHoldingScripts";
-                        var token = "tokens2"
-
-                        $('#lblHoldingScripts').html(sScripts.substring(0, sScripts.length - 1));
-                        $('#lblHoldingScripts').html($('#lblHoldingScripts').html() + "," + "17.999908,17.999988,5.1")
-                        tokens2.push(row.nToken);
+                        var token = "tokens"
                         
-                        //reconnectSocketAndSendTokens(lblScript, token, row.nQty);
+                        $('#lblHoldingScripts').html(sScripts.substring(0, sScripts.length - 1));
+                        $('#lblHoldingScripts').html($('#lblHoldingScripts').html() + "," + "17.999908,17.999988,5.1");
+
+                        tokens.push(row.nToken);
+                        
+                        reconnectSocketAndSendTokens("lblHoldingScripts");
                         //return false;
 
                         HoldingColumns.push({
@@ -149,33 +156,33 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment)
                                 width: 80,
                                 title: "",
                                 template: '<button class="k-button" style="min-width: 30px; background-color:Green;" ' +
-                                              ' id="#= BroadCastConstant #_#= Token #_buy" title="Buy" ' +
-                                              ' data-buysell="1" data-exchangeid = "#= ExchangId #"' +
-                                              ' data-script-id = "#= ScriptId #"' +
-                                              ' data-priceStatus  = "#= PriceStatus #"' +
-                                              ' data-marketwatch-id  = "#= MarketWatchId #"' +
-                                              ' data-instrument = "#= Instrument #"' +
-                                              ' data-strike = "#= Strike #"' +
-                                              ' data-cp = "#= CP #"' +
-                                              ' data-token = "#= Token #"' +
-                                              ' data-exchangeconstants = "#= BroadCastConstant #"' +
-                                              ' data-script = "#= ScripName #" onclick="buysellwindow1(this)">' +
-                                             'ADD' +
-                                            '</button>' +
-                                          '<button class="k-button" style="min-width: 30px; background-color:red;" ' +
-                                              ' id="#= BroadCastConstant #_#= Token #_sell" title="Buy" ' +
-                                              ' data-buysell="2" data-exchangeid = "#= ExchangId #"' +
-                                              ' data-script-id = "#= ScriptId #"' +
-                                              ' data-priceStatus  = "#= PriceStatus #"' +
-                                              ' data-marketwatch-id  = "#= MarketWatchId #"' +
-                                              ' data-instrument = "#= Instrument #"' +
-                                              ' data-strike = "#= Strike #"' +
-                                              ' data-cp = "#= CP #"' +
-                                              ' data-token = "#= Token #"' +
-                                              ' data-exchangeconstants = "#= BroadCastConstant #"' +
-                                              ' data-script = "#= ScripName #" onclick="buysellwindow1(this)">' +
-                                             'SELL' +
-                                            '</button>',
+                                    ' id="#= BroadCastConstant #_#= Token #_buy" title="Buy" ' +
+                                    ' data-buysell="1" data-exchangeid = "#= ExchangId #"' +
+                                    ' data-script-id = "#= ScriptId #"' +
+                                    ' data-priceStatus  = "#= PriceStatus #"' +
+                                    ' data-marketwatch-id  = "#= MarketWatchId #"' +
+                                    ' data-instrument = "#= Instrument #"' +
+                                    ' data-strike = "#= Strike #"' +
+                                    ' data-cp = "#= CP #"' +
+                                    ' data-token = "#= Token #"' +
+                                    ' data-exchangeconstants = "#= BroadCastConstant #"' +
+                                    ' data-script = "#= ScripName #" onclick="buysellwindow1(this)">' +
+                                    'ADD' +
+                                    '</button>' +
+                                    '<button class="k-button" style="min-width: 30px; background-color:red;" ' +
+                                    ' id="#= BroadCastConstant #_#= Token #_sell" title="Buy" ' +
+                                    ' data-buysell="2" data-exchangeid = "#= ExchangId #"' +
+                                    ' data-script-id = "#= ScriptId #"' +
+                                    ' data-priceStatus  = "#= PriceStatus #"' +
+                                    ' data-marketwatch-id  = "#= MarketWatchId #"' +
+                                    ' data-instrument = "#= Instrument #"' +
+                                    ' data-strike = "#= Strike #"' +
+                                    ' data-cp = "#= CP #"' +
+                                    ' data-token = "#= Token #"' +
+                                    ' data-exchangeconstants = "#= BroadCastConstant #"' +
+                                    ' data-script = "#= ScripName #" onclick="buysellwindow1(this)">' +
+                                    'SELL' +
+                                    '</button>',
                                 attributes: {
                                     "class": "holdText"
                                 }
@@ -289,7 +296,8 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment)
                             });
                         }
 
-                    })
+                    });
+                   // reconnectSocketAndSendTokens();
                 }
                 
                 
@@ -550,3 +558,5 @@ function ShowHide() {
         $("#nOption").hide();
     }
 }
+
+

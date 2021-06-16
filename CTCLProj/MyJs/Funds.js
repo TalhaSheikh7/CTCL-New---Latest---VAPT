@@ -48,6 +48,7 @@ function GetHoldingDetails(nAction, sUserID, nPageIndex, nAccountSegment)
         },
         dataType: "json",
         success: function (data) {
+           // console.log(data);
             valuation = data.Result.Result[0].nClosingValuationCumalative;
             $("#curHolding").html(Intl.NumberFormat('en-IN').format(parseFloat(valuation).toFixed(2)));
 

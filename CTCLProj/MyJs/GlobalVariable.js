@@ -8,24 +8,9 @@ var gblCTCLtype = '';
 
 
 $(document).ready(function () {
-    var NameCode= localStorage.getItem("NameCode")
-    $("#BANameCode").html(NameCode)
-    window.formatDate = function (inputDate, inputDateFormat, outPutFormat) {
-        if (inputDate == "" && inputDateFormat.val() == "")
-            return "";
-        else {
-            if (inputDate == "NOW")
-                return moment().format(outPutFormat);
-            else {
-                if (inputDateFormat == "") {
-                    return moment(inputDate).format(outPutFormat);
-                }
-                else {
-                    return moment(inputDate, inputDateFormat).format(outPutFormat);
-                }
-            }
-        }
-    }
+    var NameCode = localStorage.getItem("NameCode");
+    $("#BANameCode").html(NameCode);
+    
 
     clearClntDetails = function () {
         setGlobalVariable("AvailEmpClnts", "");
@@ -49,6 +34,22 @@ $(document).ready(function () {
 });
 
 
+    window.formatDate = function (inputDate, inputDateFormat, outPutFormat) {
+        if (inputDate == "" && inputDateFormat.val() == "")
+            return "";
+        else {
+            if (inputDate == "NOW")
+                return moment().format(outPutFormat);
+            else {
+                if (inputDateFormat == "") {
+                    return moment(inputDate).format(outPutFormat);
+                }
+                else {
+                    return moment(inputDate, inputDateFormat).format(outPutFormat);
+                }
+            }
+        }
+    }
 
 function getCCID() {
 
