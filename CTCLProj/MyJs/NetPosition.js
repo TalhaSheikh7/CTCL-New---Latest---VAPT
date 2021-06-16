@@ -112,7 +112,7 @@ function GetNetPositionReport(strInst, strdtrange) {
     if ($("#cmbCtclSelect").val() == "") {
         gblCTCLid = '';
     }
-
+    var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
     var GetNetPosition = $.ajax({
 
         //url: "http://192.168.0.104/EasyTradeAPI/api/ReportsV2/",
@@ -130,10 +130,10 @@ function GetNetPositionReport(strInst, strdtrange) {
             sFromDate: sFromDate,
             sTillDate: sTillDate,
             sdtrange: sdtrange,
-            sAccCD: 869397,//sAccCD,
+            sAccCD: ClientCode,//sAccCD,
             sProCli: sProCli,
             sInstrumentName: sInstrumentName.toUpperCase(),
-            sCTCLId: ""
+            sCTCLId: localStorage.getItem("CTCLId")//""
         },
         type: "json"
     });
@@ -165,6 +165,8 @@ function getTotalNetQty() {
     return parseFloat(totalNAqty[totalNAqty.length - 1].TotalNetQty);
 }
 function FillGrid(msg) {
+
+    console.log(msg);
     var htmlval = '';
     var strExp = '';
     $('#tblheader tbody').empty();
@@ -353,7 +355,8 @@ function FillGrid(msg) {
                 ExchangeBroadcastConstant: row.ExchangeBroadcastConstant,
                 Script: row.Script,
                 Expiry: row.Expiry,
-                Strike: row.Strike
+                Strike: row.Strike,
+                OrderType: row.OrderType
 
             });
             totbuyqty = (parseFloat(totbuyqty) + parseFloat(row.BuyQty));
@@ -374,7 +377,7 @@ function FillGrid(msg) {
 
             $('#lblScripts2').html(sScripts.substring(0, sScripts.length - 1));
             $('#lblScripts2').html($('#lblScripts2').html() + "," + "17.999908,17.999988,5.1")
-            reconnectSocketAndSendTokens(lblScript);
+           // reconnectSocketAndSendTokens(lblScript);
 
         })
     }
@@ -579,17 +582,23 @@ $("#btnsqoff").click(function () {
         ]
     });
 })
-$("#btnSqlAll").click(function () {
+function btnSqALL() {
 
     $.each(items, function (i, val) {
         var clientcode = val.ClientCode;
         var MISCNC = val.MISCNC;
         var NetQty = val.NetQty;
-        var script = val.script;
+        var script = val.Script;
         var Token = val.Token;
         var Exchange = val.Exchange;
         var OrderType = val.OrderType;
-        var instrumentindex = GetInstrument(OrderType) 
+        var instrumentindex = GetInstrument(OrderType)
+
+        if (NetQty == "0") {
+            alert("You have no position in this scrip.");
+            return false;
+            
+        }
         if (NetQty < 0) {
             buysell = "BUY";
         }
@@ -605,13 +614,13 @@ $("#btnSqlAll").click(function () {
             bs = 2;
         }
 
-        if (MISCNC == "CNC/NORMAL")
+        if (MISCNC == "CNC / NORMAL")
         {
-            cncmis = 0;
+           var cncmis = "0";
         }
         else if (MISCNC == "MIS")
         {
-            cncmis = 1;
+          var  cncmis = "1";
         }
 
         SaveRecordSqOffALL(script, Token, bs, Math.abs(NetQty), instrumentindex, cncmis, Exchange)
@@ -621,13 +630,12 @@ $("#btnSqlAll").click(function () {
 
     
     //alert(ClientCode);
-})
-
+}
 
 function SaveRecordSqOffALL(sScript, nToken, nBuysell, NetQty, nstocktype, cncmis, ExchangeID) { //Modified by PSN on 29/05/2018
     var empclientid = '';
-
-    if (gblCTCLtype.toString().toLocaleLowerCase() == "ba" || gblCTCLtype.toString().toLocaleLowerCase() == "emp") {
+    var sqAllMessage = "";
+            if (gblCTCLtype.toString().toLocaleLowerCase() == "ba" || gblCTCLtype.toString().toLocaleLowerCase() == "emp") {
         empclientid = $("#cmbClients").val();
         Source = "C";
     } else {
@@ -728,7 +736,7 @@ function SaveRecordSqOffALL(sScript, nToken, nBuysell, NetQty, nstocktype, cncmi
                 else {
                     sqAllMessage = sqAllMessage + '\n' + sScript + " Order Request Created with ID : " + JSON.parse(data.responseText).Result.Id;
                 }
-
+                
             }
             else {
                 //vpg 10032018 for any error to show  [hitesh told]
@@ -741,6 +749,7 @@ function SaveRecordSqOffALL(sScript, nToken, nBuysell, NetQty, nstocktype, cncmi
                     sqAllMessage = sqAllMessage + '\n' + sScript + " " + JSON.parse(data.responseText).Result;
                 }
             }
+            alert(sqAllMessage)
         },
         error: function () {
             console.log('there is some error');

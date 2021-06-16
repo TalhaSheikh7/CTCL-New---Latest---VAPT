@@ -321,7 +321,8 @@ namespace CTCLProj.Controllers
   
                         ViewBag.Message = resp.RespMessage;
 
-                        ViewBag.Message = resp.RespMessage;
+                        hFldOpenPopupId = resp.RespMessage;
+                        return Json(hFldOpenPopupId, JsonRequestBehavior.AllowGet);
                         break;
                     }
               
@@ -650,7 +651,7 @@ namespace CTCLProj.Controllers
             string RU = "";
             string returnurl = "";
             string mergevalue = "";
-
+            var clientdetails = new clientssdata();
             if (client == null)
                 client = new AuthenticateService();
             try
@@ -706,7 +707,8 @@ namespace CTCLProj.Controllers
                         }
 
                         if (RU != "")
-                            returnurl = "N";
+                            clientdetails.sTradingCode = "N";
+
                         //  return Redirect(RU);
                         else
                         {
@@ -714,8 +716,16 @@ namespace CTCLProj.Controllers
                             //ARV
                             AcmiilApiServices.PutNotification(ref mObjUser, true, "");
                             Session[WebUser.SessionName] = mObjUser;
-                            returnurl = "Y";
-                            mergevalue = mObjUser.sName + " (" + mObjUser.sTradingCode + ")";
+                          
+
+                            clientdetails.sTradingCode = mObjUser.sTradingCode;
+                            clientdetails.sName = mObjUser.sName;
+                            clientdetails.UserType = mObjUser.sUserType;
+                            clientdetails.passwordsExpiry = mObjUser.sExpiryDaysMessage;
+                            clientdetails.Sessionid = mObjUser.sSessionID;
+
+
+                           // mergevalue = mObjUser.sName + " (" + mObjUser.sTradingCode + ")";
                             //  returnurl = String.Format("https://www.Google.com");
                             //return RedirectToActionPermanent(returnurl);
                         }
@@ -741,13 +751,22 @@ namespace CTCLProj.Controllers
                 pLngErr = ReportError("btnVerifyMPin_Click", "Login", pLngErr, exError.GetBaseException().GetType().ToString(), exError.Message, exError.StackTrace);
                 // lblMPinVerError.Text = "Report an error no : " + Convert.ToString(pLngErr) + " to System Owner";
             }
-            return Json(mergevalue, JsonRequestBehavior.AllowGet);
+            return Json(clientdetails, JsonRequestBehavior.AllowGet);
         }
 
         const int MIN_PASSOWRD_LENGTH = 8;
         const int MAX_PASSOWRD_LENGTH = 15;
         public static System.Web.HttpContext Current { get; set; }
         public HttpResponse Response1 { get; }
+
+        public class clientssdata
+        {
+            public string sName { get; set; }
+            public string sTradingCode { get; set; }
+            public string UserType { get; set; }
+            public string Sessionid { get; set; }
+            public string passwordsExpiry { get; set; }
+        }
 
     }
 }

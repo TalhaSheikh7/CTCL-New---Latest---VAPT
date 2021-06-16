@@ -70,14 +70,14 @@ function Orderstatuschange() {
 function GetOrder(orderstatus) {
 
     var orderAction = 1;
-    var userId = "869397";
+    var userId = $("#txtSelectedClient").val().split('-')[0].trim();
     var orderId = "-1";
     var pageIndex = "1";
     var OrderSegment = "0";
     var orderStatus = "C,M,E,Q,A,X,U,P,O,X,Z";
-    var DateRange1 = "2021/5/07";
-    var DateRange2 = "2021/5/07";
-    var sCTCLId = "400072001005";
+    var DateRange1 = "2021/6/10";
+    var DateRange2 = "2021/6/10";
+    var sCTCLId = localStorage.getItem("CTCLId");//"400072001005";
     var ScriptName = "";
     var strDisplay = "";
     var qtypending = "";
@@ -302,78 +302,6 @@ function GetOrder(orderstatus) {
                      title: "Dis qty", width: 80,
                      field: "Disqty",
        
-                 },
-                 {
-                     title: "buy sell", width: 80,
-                     field: "Getbuysell",
-                     hidden: "true"
-
-                 },
-                 {
-                     title: "ExchangeID",
-                     field: "nExchangeID",
-                     hidden:"true"
-                 },
-                 {
-                     title: "Instrument",
-                     field: "Instrument",
-                     hidden:"true"
-                 },
-                 {
-                     title: "strike",
-                     field: "strike",
-                     hidden:"true"
-                 },
-                 {
-                     title: "cp",
-                     field: "cp",
-                     hidden:"true"
-                 },
-                 {
-                     title: "Expiry",
-                     field: "Expiry",
-                     hidden:"true"
-                 }
-                 ,
-                 {
-                     title: "Token",
-                     field: "Token",
-                     hidden: "true"
-                 },
-                 {
-                     title: "exchangeconstants",
-                     field: "exchangeconstants",
-                     hidden:"true"
-                 },
-                 {
-                     title: "ordertype",
-                     field: "ordertype",
-                     hidden:"true"
-                 },
-                 {
-                     title: "Order Number",
-                     field: "OrderNumber",
-                     hidden:"true"
-                 },
-                 {
-                     title: "TriggerPrice",
-                     field: "TriggerPrice",
-                     hidden:"true"
-                 },
-                 {
-                     title: "Dis closed Qty",
-                     field: "DisclosedQty",
-                     hidden:"true"
-                 },
-                 {
-                     title: "Script",
-                     field: "Script",
-                     hidden:"true"
-                 },
-                 {
-                     title: "ExchangeName",
-                     field: "ExchangeName",
-                     hidden : "true"
                  }
                 ]
             });
@@ -494,7 +422,7 @@ $("#ModifyOrder").click(function () {
     var DQ = parseInt($("#txtdisclosedqty").val());
     var MarketPrice = $("#ltp").text();//parseInt($("#ltp").data("ltp"));
     var Source = "W";
-    var CTCLId = "400072001005";//localStorage.getItem("EmpCTCLid");
+    var CTCLId = localStorage.getItem("CTCLId");//"400072001005";//localStorage.getItem("EmpCTCLid");
 
     sScript = $("#scriptname").text();
     segmenttype = $("#segmenttype").text();
@@ -625,7 +553,7 @@ $("#CancelOrder").click(function () {
     var segmenttype = segmenttype;
     var ExchangeName = localStorage.getItem("ExchangeName");
     var NewBOIFlag = "0";
-    var CTCLId = "400072001005";
+    var CTCLId = localStorage.getItem("CTCLId");//"400072001005";
 
     if ($("#hfldBOIYN").val().toString() == "Y" || $("#txtSelectedClient").css('color') == "rgb(0, 0, 255)") {
         NewBOIFlag = 1;
@@ -1051,8 +979,6 @@ function GetNetPositionDetails(nToken, strInst, nCNCMIS) {
         empclientid = gblnUserId;
     }
     if (empclientid == "All") { empclientid = ''; }
-
-
     var GetNetPosition = $.ajax({
 
         //url: "http://192.168.0.104/EasyTradeAPI/api/ReportsV2/",
@@ -1073,7 +999,7 @@ function GetNetPositionDetails(nToken, strInst, nCNCMIS) {
             sAccCD: 869397,//sAccCD,
             sProCli: sProCli,
             sInstrumentName: sInstrumentName,
-            sCTCLId: 400072001005,
+            sCTCLId: localStorage.getItem("CTCLId"),//400072001005,
             nCNCMIS: nCNCMIS
         },
         type: "json"

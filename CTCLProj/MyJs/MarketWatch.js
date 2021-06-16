@@ -1,6 +1,6 @@
 ﻿var nMarketSegment = 1;
 var intselectedId = 0;
-var gblnUserId = 3010098;
+var gblnUserId =  $("#txtSelectedClient").val().split('-')[0].trim();
 var pnSourceID = 0;
 var psName = '';
 var nInstrument = 0;
@@ -957,11 +957,13 @@ function CashTypeChange() {
 
 function GetWatches(nUserId, nMarketWatchID, nMarketSegment, intPageIndex)
 {
+
+   var ClientCode= $("#txtSelectedClient").val().split('-')[0].trim();
     $.ajax({
         url: "https://trade.investmentz.com/EasyTradeApi/api/WatchListV2/",
         method: "get",
         data: {
-            pnUserId: '3010098',
+            pnUserId: ClientCode,
             pnMarketWatchID: nMarketWatchID,
             pnMarketSegment: nMarketSegment,
             pintPageIndex: intPageIndex
@@ -1498,7 +1500,9 @@ function getOptionChain(data)
     var StockType = GetInstrument(data.dataset.instrument);
     var ltpid = data.dataset.exchangeconstants + '_' + data.dataset.token;
     var LTP = parseFloat($('#' + ltpid + '_LR').text());
-       
+
+    var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
+
     if (StockType != 4 && StockType != 1 && StockType != 6)
     {
         kendo.alert("This feature is available only for Future scrips!");
@@ -1508,7 +1512,7 @@ function getOptionChain(data)
             npageIndex: 1,
             nStockType: StockType + 1,
             nExchageId: parseInt(data.dataset.exchangeid),
-            sUserId: 3010098,
+            sUserId: ClientCode,
             sExpiryDt: ExpiryDate,
             sScript: data.dataset.script,
             Ltp: LTP
@@ -2328,9 +2332,9 @@ function SaveRecord() {
     else {
         NewBOIFlag = 0;
     }
-
+    var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
     var NewOrderParams = JSON.stringify({
-        'userId': "3010098",
+        'userId': ClientCode,
         'sScript': sScript,
         'Token': Token,
         'BuySell': BuySell,
@@ -2348,7 +2352,7 @@ function SaveRecord() {
         'Source': Source,
         'OrderHandling': CncMis,
         'ExchangeId': ExchangeID,
-        'CTCLId': "400072565016",
+        'CTCLId': localStorage.getItem("CTCLId"),//"400072565016",
         'IsBoiOrder': 0
     });
 

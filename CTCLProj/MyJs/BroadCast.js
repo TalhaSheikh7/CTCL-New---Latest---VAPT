@@ -1,4 +1,4 @@
-﻿var ws;
+var ws;
 var wsH;
 var wsManaged;
 var gblBCastUrl;
