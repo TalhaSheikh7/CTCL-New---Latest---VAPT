@@ -79,15 +79,49 @@ $(document).ready(function () {
     }).data("kendoWindow").center().open();
 
     $("#WatchlistSet").closest(".k-window").css({
-        width: 824,
-        top: 66,
-        left: 30,
-        height: 402,
+        width: "58.5%",
+        top: "10%",
+        left: "1%",
+        height: "52%",
 
     });
 
-    MainKendoWindow("DepthWindow", 550, 402, 66, 858, "Market Depth");
-    MainKendoWindow("tabWindow", 1385, 275, 471, 29, "");
+    $("#DepthWindow").kendoWindow({
+        width: 300,
+        draggable: false,
+        resizable: false,
+        visible: false,
+        actions: ["Custom", "maximize", "minimize"],
+        title: "Market Watch"
+    }).data("kendoWindow").center().open();
+
+    $("#DepthWindow").closest(".k-window").css({
+        width: "39.5%",
+        top: "10%",
+        left: "60%",
+        height: "52%",
+
+    });
+
+    $("#tabWindow").kendoWindow({
+        width: 300,
+        draggable: false,
+        resizable: false,
+        visible: false,
+        actions: ["Custom", "maximize", "minimize"],
+        title: ""
+    }).data("kendoWindow").center().open();
+
+    $("#tabWindow").closest(".k-window").css({
+        width: "98.5%",
+        top: "62.2%",
+        left: "1%",
+        height: "37%",
+
+    });
+
+    //MainKendoWindow("DepthWindow", 550, 402, 66, 858, "Market Depth");
+    //MainKendoWindow("tabWindow", 1385, 275, 471, 29, "");
 
     var setofOption = [
         { value: 0, Id: 1, name: "Your Watchlists" },

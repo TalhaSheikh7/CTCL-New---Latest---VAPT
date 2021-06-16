@@ -26,7 +26,7 @@ $(document).ready(function () {
 
 function sendTokens(lblScript) {
     //var scr = "#" + lblScript;
-    var TokensValues = $('#lblScripts').html() +","+ $('#lblHoldingScripts').html()
+    var TokensValues = $('#lblScripts').html() + "," + $('#lblHoldingScripts').html() + "," + "17.999908,17.999988,5.1"
     //console.log("tokens.length" + tokens.length);
     if (tokens.length > 0) {
         setTimeout(function () {
@@ -175,25 +175,26 @@ function ProcessData(bcastData) {
             }
 
             if (startsWith(Data.SymbolKey, '12.') == true || startsWith(Data.SymbolKey, '13.') == true) {
-                $("." + SymbolId + "_RateChange").text(nDifference.toFixed(4));
-                $("." + SymbolId + "_RateChangePc").text('(' + nPerChange.toFixed(4) + '%)');
+                $("." + SymbolId + "_RateChange").html(nDifference.toFixed(4));
+                $("." + SymbolId + "_RateChangePc").html('(' + nPerChange.toFixed(4) + '%)');
 
-                $("." + SymbolId + "_RateChange").val(nDifference.toFixed(4));
-                $("." + SymbolId + "_RateChangePc").val('(' + nPerChange.toFixed(4) + '%)');
+                $("." + SymbolId + "_RateChange").html(nDifference.toFixed(4));
+                $("." + SymbolId + "_RateChangePc").html('(' + nPerChange.toFixed(4) + '%)');
 
                 $("." + SymbolId + "_RateChangePc").css("color", "#01fb01");
                 $("." + SymbolId + "_RateChange").css("color", "#01fb01");
             } else {
-                $("." + SymbolId + "_RateChange").text(nDifference.toFixed(2));
-                $("." + SymbolId + "_RateChangePc").text('(' + nPerChange.toFixed(2) + '%)');
+                $("." + SymbolId + "_RateChange").html(nDifference.toFixed(2));
+                $("." + SymbolId + "_RateChangePc").html('(' + nPerChange.toFixed(2) + '%)');
 
-                $("." + SymbolId + "_RateChange").val(nDifference.toFixed(2));
-                $("." + SymbolId + "_RateChangePc").val('(' + nPerChange.toFixed(2) + '%)');
+                $("." + SymbolId + "_RateChange").html(nDifference.toFixed(2));
+                $("." + SymbolId + "_RateChangePc").html('(' + nPerChange.toFixed(2) + '%)');
 
                 $("." + SymbolId + "_RateChange").css("color", "#01fb01");
                 $("." + SymbolId + "_RateChangePc").css("color", "#01fb01");
             }
             if (SymbolId == "17_999908" || SymbolId == "17_999988" || SymbolId == "5_1") {
+                alert("Yes");
                 $("." + SymbolId + "_RateChange").css("color", "white");
                 $("." + SymbolId + "_RateChangePc").css("color", "white");
             }
@@ -229,6 +230,7 @@ function ProcessData(bcastData) {
                 $("." + SymbolId + "_RateChange").css("color", "red");
             }
             if (SymbolId == "17_999908" || SymbolId == "17_999988" || SymbolId == "5_1") {
+                alert("Yes");
                 $("." + SymbolId + "_RateChangePc").css("color", "white");
                 $("." + SymbolId + "_RateChange").css("color", "white");
             }
@@ -499,7 +501,7 @@ function RefreshScriptsDetail(data) {
 }
 
 //ajax to get and set broadcast url.
-var gblurl = "https://trade.investmentz.com/EasyTradeApi/api/";
+//var gblurl = "https://trade.investmentz.com/EasyTradeApi/api/";
 function savegblBCastUrl(url) {
     window.localStorage.setItem("BroadcastUrl", url);
 }
