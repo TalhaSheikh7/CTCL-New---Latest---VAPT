@@ -20,7 +20,7 @@ $(document).ready(function () {
     tokens = [];
     tokens2 = [];
     gblBCastUrl = getgblBCastUrl();
-    
+
 });
 
 var tokens;
@@ -28,7 +28,7 @@ var tokens2;
 var ws;
 function sendTokens(lblScript) {
     var scr = "#" + lblScript;
-
+    console.log("tokens.length" + tokens.length);
     if (tokens.length > 0) {
         setTimeout(function () {
             SendJson = { SeqNo: 1, Action: "sub.add.topics", RType: "O1", Topic: "", Body: $(scr).html() };
@@ -41,9 +41,10 @@ function sendTokens(lblScript) {
 }
 
 function sendTokens2() {
+    console.log("tokens2.length: " + tokens2.length);
     if (tokens2.length > 0) {
         setTimeout(function () {
-            SendJson = { SeqNo: 1, Action: "sub.add.topics", RType: "O1", Topic: "", Body: $('#lblHoldingScripts').html() };
+            SendJson = { SeqNo: 1, Action: "sub.add.topics", RType: "O1", Topic: "", Body: $('#lblScripts').html() };
             ws.send(JSON.stringify(SendJson));
         }, 100);
     }
@@ -83,7 +84,7 @@ function ResetAll(topicName) {
     $("#lblTopAskRate4").html((0).toFixed(isCd ? 4 : 2));
     $("#lblTopAskRate5").html((0).toFixed(isCd ? 4 : 2));
 
-    
+
     isCd ? $("#lblAP").html('0.0000') : $("#lblAP").html('0.00');
     isCd ? $("#lblHigh52").html('N/A') : $("#lblHigh52").html('0.00');
     isCd ? $("#lblLow52").html('N/A') : $("#lblLow52").html('0.00');
@@ -94,16 +95,16 @@ function ResetAll(topicName) {
 var ws2;
 var lastSubscriptionV2 = "";
 function RefreshScriptsLevel2(topicName) {
-    
+
     ResetAll(topicName);
     var SendJson;
 
     if (ws2 == null || ws2 == undefined || ws2.readyState != WebSocket.OPEN) {
 
         ws2 = new WebSocket(gblBCastUrl);
-        
+
         ws2.onopen = function () {
-            
+
             lastSubscriptionV2 = topicName;
 
             setTimeout(function () {
@@ -111,10 +112,10 @@ function RefreshScriptsLevel2(topicName) {
                 ws2.send(JSON.stringify(SendJson));
             }, 100);
 
-            
+
         };
         ws2.onmessage = function (evt) {
-            
+
             ProcessData2(evt.data);
         };
         ws2.onerror = function (evt) {
@@ -152,23 +153,21 @@ function ProcessData2(bcastData) {
 
         var nPerChange = 0;
         var nDifference = 0;
-        
+
         nDifference = parseFloat($("#" + SymbolId + "_LR").text()) - parseFloat($("#" + SymbolId + "_PC").text());
         nPerChange = (parseFloat($("#" + SymbolId + "_LR").text()) * 100 / parseFloat($("#" + SymbolId + "_PC").text())) - 100;
 
-        if (nDifference >= 0)
-        {
-            if (startsWith(Data.SymbolKey, '12.') == true || startsWith(Data.SymbolKey, '13.') == true)
-            {
+        if (nDifference >= 0) {
+            if (startsWith(Data.SymbolKey, '12.') == true || startsWith(Data.SymbolKey, '13.') == true) {
                 $("#lblChng").html(nDifference.toFixed(4));
                 $("#lblPercChange").html('(' + nPerChange.toFixed(4) + '%)');
             } else {
                 $("#lblChng").html(nDifference.toFixed(2));
                 $("#lblPercChange").html('(' + nPerChange.toFixed(2) + '%)');
             }
-           // if ($("#Iratechange").attr('data-symbol') == SymbolId) {
-                $("#lblChange").html('(' + nPerChange.toFixed(2) + '%)');
-           // }
+            // if ($("#Iratechange").attr('data-symbol') == SymbolId) {
+            $("#lblChange").html('(' + nPerChange.toFixed(2) + '%)');
+            // }
         } else if (nDifference < 0) {
             if (startsWith(Data.SymbolKey, '12.') == true || startsWith(Data.SymbolKey, '13.') == true) {
                 $("#lblChng").html(nDifference.toFixed(4));
@@ -177,13 +176,13 @@ function ProcessData2(bcastData) {
                 $("#lblChng").html(nDifference.toFixed(2));
                 $("#lblPercChange").html('(' + nPerChange.toFixed(2) + '%)');
             }
-           // if ($("#Iratechange").attr('data-symbol') == SymbolId) {
-                $("#lblChange").html('(' + nPerChange.toFixed(2) + '%)');
-           // }
+            // if ($("#Iratechange").attr('data-symbol') == SymbolId) {
+            $("#lblChange").html('(' + nPerChange.toFixed(2) + '%)');
+            // }
         }
     }
 
-    
+
 
     if (Type == "O2" && lastSubscriptionV2 == Topic) {
 
@@ -231,14 +230,14 @@ function ProcessData2(bcastData) {
 
         //var LR = Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000)
         //var PC = Data.PClose / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000)
-        
+
 
         $("#lblLTP").html((Data.Last / (isCd ? 10000 : 100)).toFixed(isCd ? 4 : 2));
-        
+
         $("#lblClose").html((Data.Last / (isCd ? 10000 : 100)).toFixed(isCd ? 4 : 2));
 
         if (rateread == false) {
-            
+
             $("#txtorderprice").val((Data.Last / (isCd ? 10000 : 100)).toFixed(isCd ? 4 : 2)).trigger('change');
             rateread = true;
         }
@@ -249,7 +248,7 @@ function ProcessData2(bcastData) {
 
         if (parseFloat(Data.TotalQty).toFixed(0) > 0) {
 
-            if (startsWith(Topic, '5.') == false) {               
+            if (startsWith(Topic, '5.') == false) {
                 $("#lblAP").html(parseFloat((Data.TotalValue / (isCd ? 1000 : 1)) / Data.TotalQty).toFixed(isCd ? 4 : 2));
                 $("#lblAP_1").html(parseFloat((Data.TotalValue / (isCd ? 1000 : 1)) / Data.TotalQty).toFixed(isCd ? 4 : 2));
                 $("#lblAP_FS").html(parseFloat((Data.TotalValue / (isCd ? 1000 : 1)) / Data.TotalQty).toFixed(isCd ? 4 : 2));
@@ -303,8 +302,7 @@ function reconnectSocketAndSendTokensH() {
     return false;
 }
 
-function ProcessDataH(bcastData)
-{
+function ProcessDataH(bcastData) {
     var Data = JSON.parse(JSON.parse(bcastData).Body);
 
     var SymbolId = '';
@@ -313,25 +311,23 @@ function ProcessDataH(bcastData)
         return;
     }
     SymbolId = Data.SymbolKey.replace(".", "_").toUpperCase();
+    console.log("SymbolIdH:" + SymbolId);
     var atp;
 
-    if ($("#" + SymbolId + "_LRH").length == 0)
-    {
+    if ($("." + SymbolId + "_LR").length == 0) {
 
     } else {
-        $("#" + SymbolId + "_LRH").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
+        $("." + SymbolId + "_LR").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
 
-        if (startsWith(Data.SymbolKey, '12.') == true || startsWith(Data.SymbolKey, '13.') == true)
-        {
-            $("#" + SymbolId + "_LRH").text(parseFloat($("#" + SymbolId + "_LRH").text()).toFixed(4));
+        if (startsWith(Data.SymbolKey, '12.') == true || startsWith(Data.SymbolKey, '13.') == true) {
+            $("." + SymbolId + "_LR").text(parseFloat($("." + SymbolId + "_LR").text()).toFixed(4));
         } else {
-            $("#" + SymbolId + "_LRH").text(parseFloat($("#" + SymbolId + "_LRH").text()).toFixed(2));
+            $("." + SymbolId + "_LR").text(parseFloat($("." + SymbolId + "_LR").text()).toFixed(2));
         }
     }
 }
 
-function RefreshScriptsDetail(data)
-{
+function RefreshScriptsDetail(data) {
     if (ws == null || ws == undefined || ws.readyState != WebSocket.OPEN) {
 
         ws = new WebSocket(gblBCastUrl);
@@ -348,7 +344,7 @@ function RefreshScriptsDetail(data)
             }
         };
         ws.onerror = function (evt) {
-           
+
         };
         ws.onclose = function () {
 
@@ -360,13 +356,13 @@ function RefreshScriptsDetail(data)
             ws.send(JSON.stringify(SendJson));
         }, 100);
     }
-    return false;    
+    return false;
 }
 
 function reconnectSocketAndSendTokens(lblScript) {
 
     var scriplblName = lblScript;
-    
+
     if (ws == null || ws == undefined || ws.readyState != WebSocket.OPEN) {
         ws = new WebSocket(gblBCastUrl);
         ws.onopen = function () {
@@ -389,8 +385,7 @@ function reconnectSocketAndSendTokens(lblScript) {
     return false;
 }
 
-function ProcessData(bcastData, scriplblName, Qty)
-{
+function ProcessData(bcastData, scriplblName) {
     //alert(Qty);
     var Data = JSON.parse(JSON.parse(bcastData).Body);
 
@@ -400,10 +395,10 @@ function ProcessData(bcastData, scriplblName, Qty)
         return;
     }
     SymbolId = Data.SymbolKey.replace(".", "_").toUpperCase();
+    console.log("SymbolId:" + SymbolId);
     var atp;
-    
-    if (scriplblName == "lblHoldingScripts")
-    {
+
+    if (scriplblName == "lblHoldingScripts") {
         if ($("#" + SymbolId + "_LRH").length == 0) {
 
         } else {
@@ -415,149 +410,148 @@ function ProcessData(bcastData, scriplblName, Qty)
                 $("#" + SymbolId + "_LRH").text(parseFloat($("#" + SymbolId + "_LRH").text()).toFixed(2));
             }
         }
-    } else if (scriplblName == "lblScripts")
-    {
+    } else if (scriplblName == "lblScripts") {
 
-            var nPerChange = 0;
-            var nDifference = 0;
+        var nPerChange = 0;
+        var nDifference = 0;
 
-            $("#" + SymbolId + "_LR").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
-            $("#" + SymbolId + "_LRH").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
-            $("." + SymbolId + "_LTP").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
+        $("." + SymbolId + "_LR").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
+        $("." + SymbolId + "_LRH").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
+        $("." + SymbolId + "_LTP").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
 
-            $("#" + SymbolId + "_H").text(Data.High / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
-            $("#" + SymbolId + "_L").text(Data.Low / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
-            $("#" + SymbolId + "_O").text(Data.Open / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
-            $("#" + SymbolId + "_PC").text(Data.PClose / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
-            $("#" + SymbolId + "_LP").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
-            $("#" + SymbolId + "_LQ").text(Data.LastQty);
-            $("#" + SymbolId + "_TQ").text(Data.TotalQty);
-            $("#" + SymbolId + "_TV").text(Data.TotalValue / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
-            $("#" + SymbolId + "_OI").text(Data.OpenInt);
+        $("." + SymbolId + "_H").text(Data.High / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
+        $("." + SymbolId + "_L").text(Data.Low / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
+        $("." + SymbolId + "_O").text(Data.Open / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
+        $("." + SymbolId + "_PC").text(Data.PClose / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
+        $("." + SymbolId + "_LP").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
+        $("." + SymbolId + "_LQ").text(Data.LastQty);
+        $("." + SymbolId + "_TQ").text(Data.TotalQty);
+        $("." + SymbolId + "_TV").text(Data.TotalValue / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
+        $("." + SymbolId + "_OI").text(Data.OpenInt);
 
-            $("#" + SymbolId + "_BQ").text(Data.Buy1Qty);
-            $("#" + SymbolId + "_BR").text(Data.Buy1Rate / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
-            $("#" + SymbolId + "_SR").text(Data.Sell1Rate / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
-            $("#" + SymbolId + "_SQ").text(Data.Sell1Qty);
+        $("." + SymbolId + "_BQ").text(Data.Buy1Qty);
+        $("." + SymbolId + "_BR").text(Data.Buy1Rate / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
+        $("." + SymbolId + "_SR").text(Data.Sell1Rate / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
+        $("." + SymbolId + "_SQ").text(Data.Sell1Qty);
 
 
-            if (Data.TotalValue == 0) {
-                atp = 0;
-            } else {
-                if (startsWith(Data.SymbolKey, '5.') == false) { //bse false
-                    if (startsWith(Data.SymbolKey, '12.') == true || startsWith(Data.SymbolKey, '13.') == true) {
-                        atp = (parseFloat(Data.TotalValue) / 1000) / parseFloat(Data.TotalQty);
-                    }
-                    else {
-                        atp = (parseFloat(Data.TotalValue)) / parseFloat(Data.TotalQty);
-                    }
+        if (Data.TotalValue == 0) {
+            atp = 0;
+        } else {
+            if (startsWith(Data.SymbolKey, '5.') == false) { //bse false
+                if (startsWith(Data.SymbolKey, '12.') == true || startsWith(Data.SymbolKey, '13.') == true) {
+                    atp = (parseFloat(Data.TotalValue) / 1000) / parseFloat(Data.TotalQty);
                 }
                 else {
                     atp = (parseFloat(Data.TotalValue)) / parseFloat(Data.TotalQty);
                 }
             }
+            else {
+                atp = (parseFloat(Data.TotalValue)) / parseFloat(Data.TotalQty);
+            }
+        }
 
-            $("#" + SymbolId + "_ATP").text(atp);
+        $("." + SymbolId + "_ATP").text(atp);
+
+        if (startsWith(Data.SymbolKey, '12.') == true || startsWith(Data.SymbolKey, '13.') == true) {
+            $("." + SymbolId + "_LR").text(parseFloat($("." + SymbolId + "_LR").text()).toFixed(4));
+            $("." + SymbolId + "_LRH").text(parseFloat($("." + SymbolId + "_LRH").text()).toFixed(4));
+            $("." + SymbolId + "_H").text(parseFloat($("." + SymbolId + "_H").text()).toFixed(4));
+            $("." + SymbolId + "_L").text(parseFloat($("." + SymbolId + "_L").text()).toFixed(4));
+            $("." + SymbolId + "_O").text(parseFloat($("." + SymbolId + "_O").text()).toFixed(4));
+            $("." + SymbolId + "_PC").text(parseFloat($("." + SymbolId + "_PC").text()).toFixed(4));
+            $("." + SymbolId + "_LP").text(parseFloat($("." + SymbolId + "_LP").text()).toFixed(4));
+            $("." + SymbolId + "_TV").text(parseFloat($("." + SymbolId + "_TV").text()).toFixed(4));
+            $("." + SymbolId + "_OI").text(parseFloat($("." + SymbolId + "_OI").text()).toFixed(4));
+            $("." + SymbolId + "_BR").text(parseFloat($("." + SymbolId + "_BR").text()).toFixed(4));
+            $("." + SymbolId + "_SR").text(parseFloat($("." + SymbolId + "_SR").text()).toFixed(4));
+            $("." + SymbolId + "_ATP").text(parseFloat($("." + SymbolId + "_ATP").text()).toFixed(4));
+        }
+        else {
+            $("." + SymbolId + "_LR").text(parseFloat($("." + SymbolId + "_LR").text()).toFixed(2));
+            $("." + SymbolId + "_LRH").text(parseFloat($("." + SymbolId + "_LRH").text()).toFixed(2));
+            $("." + SymbolId + "_H").text(parseFloat($("." + SymbolId + "_H").text()).toFixed(2));
+            $("." + SymbolId + "_L").text(parseFloat($("." + SymbolId + "_L").text()).toFixed(2));
+            $("." + SymbolId + "_O").text(parseFloat($("." + SymbolId + "_O").text()).toFixed(2));
+            $("." + SymbolId + "_PC").text(parseFloat($("." + SymbolId + "_PC").text()).toFixed(2));
+            $("." + SymbolId + "_LP").text(parseFloat($("." + SymbolId + "_LP").text()).toFixed(2));
+            $("." + SymbolId + "_TV").text(parseFloat($("." + SymbolId + "_TV").text()).toFixed(2));
+            $("." + SymbolId + "_OI").text(parseFloat($("." + SymbolId + "_OI").text()).toFixed(2));
+            $("." + SymbolId + "_BR").text(parseFloat($("." + SymbolId + "_BR").text()).toFixed(2));
+            $("." + SymbolId + "_SR").text(parseFloat($("." + SymbolId + "_SR").text()).toFixed(2));
+            $("." + SymbolId + "_ATP").text(parseFloat($("." + SymbolId + "_ATP").text()).toFixed(2));
+        }
+
+        $("." + SymbolId + "_LUD").text(formatDate(Data.LastTradeTime, '', "DD/MM/YYYY"));
+        $("." + SymbolId + "_LUDT").text(formatDate(Data.LastTradeTime, '', "HH:mm:ss"));
+
+        nDifference = parseFloat($("." + SymbolId + "_LR").text()) - parseFloat($("." + SymbolId + "_PC").text());
+        nPerChange = (parseFloat($("." + SymbolId + "_LR").text()) * 100 / parseFloat($("." + SymbolId + "_PC").text())) - 100;
+
+        if (nDifference >= 0) {
+            if ($("#Iratechange").attr('data-symbol') == SymbolId) {
+                $("#lblChange").html('(' + nPerChange.toFixed(2) + '%)');
+            }
 
             if (startsWith(Data.SymbolKey, '12.') == true || startsWith(Data.SymbolKey, '13.') == true) {
-                $("#" + SymbolId + "_LR").text(parseFloat($("#" + SymbolId + "_LR").text()).toFixed(4));
-                $("#" + SymbolId + "_LRH").text(parseFloat($("#" + SymbolId + "_LRH").text()).toFixed(4));
-                $("#" + SymbolId + "_H").text(parseFloat($("#" + SymbolId + "_H").text()).toFixed(4));
-                $("#" + SymbolId + "_L").text(parseFloat($("#" + SymbolId + "_L").text()).toFixed(4));
-                $("#" + SymbolId + "_O").text(parseFloat($("#" + SymbolId + "_O").text()).toFixed(4));
-                $("#" + SymbolId + "_PC").text(parseFloat($("#" + SymbolId + "_PC").text()).toFixed(4));
-                $("#" + SymbolId + "_LP").text(parseFloat($("#" + SymbolId + "_LP").text()).toFixed(4));
-                $("#" + SymbolId + "_TV").text(parseFloat($("#" + SymbolId + "_TV").text()).toFixed(4));
-                $("#" + SymbolId + "_OI").text(parseFloat($("#" + SymbolId + "_OI").text()).toFixed(4));
-                $("#" + SymbolId + "_BR").text(parseFloat($("#" + SymbolId + "_BR").text()).toFixed(4));
-                $("#" + SymbolId + "_SR").text(parseFloat($("#" + SymbolId + "_SR").text()).toFixed(4));
-                $("#" + SymbolId + "_ATP").text(parseFloat($("#" + SymbolId + "_ATP").text()).toFixed(4));
+                $("." + SymbolId + "_RateChange").text(nDifference.toFixed(4));
+                $("." + SymbolId + "_RateChangePc").text('(' + nPerChange.toFixed(4) + '%)');
+
+                $("." + SymbolId + "_RateChange").val(nDifference.toFixed(4));
+                $("." + SymbolId + "_RateChangePc").val('(' + nPerChange.toFixed(4) + '%)');
+
+                $("." + SymbolId + "_RateChangePc").css("color", "#01fb01");
+                $("." + SymbolId + "_RateChange").css("color", "#01fb01");
+            } else {
+                $("." + SymbolId + "_RateChange").text(nDifference.toFixed(2));
+                $("." + SymbolId + "_RateChangePc").text('(' + nPerChange.toFixed(2) + '%)');
+
+                $("." + SymbolId + "_RateChange").val(nDifference.toFixed(2));
+                $("." + SymbolId + "_RateChangePc").val('(' + nPerChange.toFixed(2) + '%)');
+
+                $("." + SymbolId + "_RateChange").css("color", "#01fb01");
+                $("." + SymbolId + "_RateChangePc").css("color", "#01fb01");
             }
-            else {
-                $("#" + SymbolId + "_LR").text(parseFloat($("#" + SymbolId + "_LR").text()).toFixed(2));
-                $("#" + SymbolId + "_LRH").text(parseFloat($("#" + SymbolId + "_LRH").text()).toFixed(2));
-                $("#" + SymbolId + "_H").text(parseFloat($("#" + SymbolId + "_H").text()).toFixed(2));
-                $("#" + SymbolId + "_L").text(parseFloat($("#" + SymbolId + "_L").text()).toFixed(2));
-                $("#" + SymbolId + "_O").text(parseFloat($("#" + SymbolId + "_O").text()).toFixed(2));
-                $("#" + SymbolId + "_PC").text(parseFloat($("#" + SymbolId + "_PC").text()).toFixed(2));
-                $("#" + SymbolId + "_LP").text(parseFloat($("#" + SymbolId + "_LP").text()).toFixed(2));
-                $("#" + SymbolId + "_TV").text(parseFloat($("#" + SymbolId + "_TV").text()).toFixed(2));
-                $("#" + SymbolId + "_OI").text(parseFloat($("#" + SymbolId + "_OI").text()).toFixed(2));
-                $("#" + SymbolId + "_BR").text(parseFloat($("#" + SymbolId + "_BR").text()).toFixed(2));
-                $("#" + SymbolId + "_SR").text(parseFloat($("#" + SymbolId + "_SR").text()).toFixed(2));
-                $("#" + SymbolId + "_ATP").text(parseFloat($("#" + SymbolId + "_ATP").text()).toFixed(2));
+            if (SymbolId == "17_999908" || SymbolId == "17_999988" || SymbolId == "5_1") {
+                $("." + SymbolId + "_RateChange").css("color", "white");
+                $("." + SymbolId + "_RateChangePc").css("color", "white");
             }
-
-            $("#" + SymbolId + "_LUD").text(formatDate(Data.LastTradeTime, '', "DD/MM/YYYY"));
-            $("#" + SymbolId + "_LUDT").text(formatDate(Data.LastTradeTime, '', "HH:mm:ss"));
-
-            nDifference = parseFloat($("#" + SymbolId + "_LR").text()) - parseFloat($("#" + SymbolId + "_PC").text());
-            nPerChange = (parseFloat($("#" + SymbolId + "_LR").text()) * 100 / parseFloat($("#" + SymbolId + "_PC").text())) - 100;
-
-            if (nDifference >= 0) {
-                if ($("#Iratechange").attr('data-symbol') == SymbolId) {
-                    $("#lblChange").html('(' + nPerChange.toFixed(2) + '%)');
-                }
-
-                if (startsWith(Data.SymbolKey, '12.') == true || startsWith(Data.SymbolKey, '13.') == true) {
-                    $("#" + SymbolId + "_RateChange").text(nDifference.toFixed(4));
-                    $("#" + SymbolId + "_RateChangePc").text('(' + nPerChange.toFixed(4) + '%)');
-
-                    $("#" + SymbolId + "_RateChange").val(nDifference.toFixed(4));
-                    $("#" + SymbolId + "_RateChangePc").val('(' + nPerChange.toFixed(4) + '%)');
-
-                    $("#" + SymbolId + "_RateChangePc").css("color", "#01fb01");
-                    $("#" + SymbolId + "_RateChange").css("color", "#01fb01");
-                } else {
-                    $("#" + SymbolId + "_RateChange").text(nDifference.toFixed(2));
-                    $("#" + SymbolId + "_RateChangePc").text('(' + nPerChange.toFixed(2) + '%)');
-
-                    $("#" + SymbolId + "_RateChange").val(nDifference.toFixed(2));
-                    $("#" + SymbolId + "_RateChangePc").val('(' + nPerChange.toFixed(2) + '%)');
-
-                    $("#" + SymbolId + "_RateChange").css("color", "#01fb01");
-                    $("#" + SymbolId + "_RateChangePc").css("color", "#01fb01");
-                }
-                if (SymbolId == "17_999908" || SymbolId == "17_999988" || SymbolId == "5_1") {
-                    $("#" + SymbolId + "_RateChange").css("color", "white");
-                    $("#" + SymbolId + "_RateChangePc").css("color", "white");
-                }
+        }
+        else if (nDifference < 0) {
+            if ($("#Iratechange").attr('data-symbol') == SymbolId) {
+                $("#lblChange").html('(' + nPerChange.toFixed(2) + '%)');
             }
-            else if (nDifference < 0) {
-                if ($("#Iratechange").attr('data-symbol') == SymbolId) {
-                    $("#lblChange").html('(' + nPerChange.toFixed(2) + '%)');
-                }
-                if (startsWith(Data.SymbolKey, '12.') == true || startsWith(Data.SymbolKey, '13.') == true) {
-                    $("#" + SymbolId + "_RateChange").text(nDifference.toFixed(4));
-                    $("#" + SymbolId + "_RateChangePc").text('(' + nPerChange.toFixed(4) + '%)');
+            if (startsWith(Data.SymbolKey, '12.') == true || startsWith(Data.SymbolKey, '13.') == true) {
+                $("." + SymbolId + "_RateChange").text(nDifference.toFixed(4));
+                $("." + SymbolId + "_RateChangePc").text('(' + nPerChange.toFixed(4) + '%)');
 
 
-                    $("#" + SymbolId + "_RateChange").val(nDifference.toFixed(4));
-                    $("#" + SymbolId + "_RateChangePc").val('(' + nPerChange.toFixed(4) + '%)');
+                $("." + SymbolId + "_RateChange").val(nDifference.toFixed(4));
+                $("." + SymbolId + "_RateChangePc").val('(' + nPerChange.toFixed(4) + '%)');
 
-                    $("#" + SymbolId + "_RateChangePc").css("color", "red");
-                    $("#" + SymbolId + "_RateChange").css("color", "red");
-                } else {
-                    $("#" + SymbolId + "_RateChange").text(nDifference.toFixed(2));
-                    $("#" + SymbolId + "_RateChangePc").text('(' + nPerChange.toFixed(2) + '%)');
+                $("." + SymbolId + "_RateChangePc").css("color", "red");
+                $("." + SymbolId + "_RateChange").css("color", "red");
+            } else {
+                $("." + SymbolId + "_RateChange").text(nDifference.toFixed(2));
+                $("." + SymbolId + "_RateChangePc").text('(' + nPerChange.toFixed(2) + '%)');
 
 
-                    $("#" + SymbolId + "_RateChange").val(nDifference.toFixed(2));
-                    $("#" + SymbolId + "_RateChangePc").val('(' + nPerChange.toFixed(2) + '%)');
+                $("." + SymbolId + "_RateChange").val(nDifference.toFixed(2));
+                $("." + SymbolId + "_RateChangePc").val('(' + nPerChange.toFixed(2) + '%)');
 
-                    //var columnIndex = $("#WatchList").wrapper.find(".k-grid-header [data-field=" + "Change" + "]").index();
+                //var columnIndex = $("#WatchList").wrapper.find(".k-grid-header [data-field=" + "Change" + "]").index();
 
-                    //var cell = row.children().eq(columnIndex);
-                    //cell.addClass("critical");
+                //var cell = row.children().eq(columnIndex);
+                //cell.addClass("critical");
 
-                    $("#" + SymbolId + "_RateChangePc").css("color", "red");
-                    $("#" + SymbolId + "_RateChange").css("color", "red");
-                }
-                if (SymbolId == "17_999908" || SymbolId == "17_999988" || SymbolId == "5_1") {
-                    $("#" + SymbolId + "_RateChangePc").css("color", "white");
-                    $("#" + SymbolId + "_RateChange").css("color", "white");
-                }
+                $("." + SymbolId + "_RateChangePc").css("color", "red");
+                $("." + SymbolId + "_RateChange").css("color", "red");
             }
+            if (SymbolId == "17_999908" || SymbolId == "17_999988" || SymbolId == "5_1") {
+                $("." + SymbolId + "_RateChangePc").css("color", "white");
+                $("." + SymbolId + "_RateChange").css("color", "white");
+            }
+        }
     }
 }
 

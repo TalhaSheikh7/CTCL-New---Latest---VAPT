@@ -4,11 +4,13 @@ var TrancationColumn = [];
 var HoldingDataColumns = [];
 
 $(document).ready(function () {
-    GetHoldingDetails(3, 3010098, 1, 0);
-    GetAccountDetails(892937, 8, 1, 0);
-    GetHeaderDetails(892910, 10, 1, 0);
-    GetOthertDetails(892937, 9, 1, 0);
-    GetRunLedTransDetails(892910, 11, 1, 0);
+
+    var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim()
+    GetHoldingDetails(3, ClientCode, 1, 0);
+    GetAccountDetails(ClientCode, 8, 1, 0);
+    GetHeaderDetails(ClientCode, 10, 1, 0);
+    GetOthertDetails(ClientCode, 9, 1, 0);
+    GetRunLedTransDetails(ClientCode, 11, 1, 0);
 
     
 });

@@ -71,6 +71,11 @@
     <script>
         var theme = [];
         $(document).ready(function () {
+
+
+
+
+
             theme = [
                 { value: "kendo.metroblack.min", Id: 4, name: "Metro-Black" },
                 { value: "kendo.black.min", Id: 1, name: "Black" },
@@ -94,6 +99,26 @@
                 orientation: "top"
             });
             $("#menu").kendoMenu();
+
+            $.ajax({
+                url: "https://ctcluat.investmentz.com/Home/clientnameanducc",
+                type: "GET",
+                data: {
+                },
+                dataType: "json",
+                success: function (data) {
+                    console.log(data);
+
+                    if (data == false) {
+                        location.href = "https://ctcluat.investmentz.com/Login/Login"
+                    }
+                   
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+
 
         });
 

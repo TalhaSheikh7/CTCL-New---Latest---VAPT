@@ -1,4 +1,7 @@
-﻿$(document).ready(function () {
+﻿//var Glbvar = "https://ctcluat.investmentz.com/"
+    var Glbvar ="http://localhost:49180/"
+$(document).ready(function () {
+
     $("#btnLogin").click(function () {
         var LoginID = $("#txtUid").val();
         var Loginpassword = $("#txtPassWd").val();
@@ -12,9 +15,9 @@
             alert("Password should not be left blank!!")
             return false;
         }
-
+      var strmsg = "";
         $.ajax({
-            url: "/Login/btnLogin_Click",
+            url:  Glbvar + "Login/btnLogin_Click",
             type: "GET",
             data: {
                 LoginID: LoginID,
@@ -22,16 +25,25 @@
             },
             dataType: "json",
             success: function (data) {
-              //  alert(data);
-                if (data == "modMpinValidate") {
+                var str = data.split(" ");
+                 strmsg = str[0]
+              //  alert(strmsg);
+
+                if (strmsg == "Incorrect") {
+                    alert(data);
+                    return false;
+                }
+                
+                if (data == "modMpinValidate")
+                {
                     $("#modMpinValidate").show();
                 }
-                if (data == "") {
-
-                } else {
+                if (strmsg == "Login") {
                     $("#modForceLogout").show();
                     $("#flogoutmsg").html(data);
+                    strmsg = "";
                 }
+              
             },
             error: function (data) {
                 console.log(data);
@@ -64,7 +76,7 @@
         var hFldPopupOperation = "FPWD";//$('#hFldPopupOperation').val('FPWD');
         var hFldOpenPopupId = "modForgotPwd";
         $.ajax({
-            url: "/Login/btnFPwdProceed_Click",
+            url: "https://ctcluat.investmentz.com/Login/btnFPwdProceed_Click",
             type: "GET",
             data: {
                 Loginid: Loginid,
@@ -94,7 +106,7 @@
         var hFldOtpVisible = "F";//$("#hFldOtpVisible").val("F");
         var hFldPopupOperation = "FLOGIN"//$("#hFldPopupOperation").val("FLOGIN");
         $.ajax({
-            url: "/Login/btnFPwdProceed_Click",
+            url: Glbvar + "Login/btnFPwdProceed_Click",
             type: "GET",
             data: {
                 Loginid: Loginid,
@@ -124,7 +136,7 @@
         var hFldPopupOperation = "FPWD"//$("#hFldPopupOperation").val("FLOGIN");
         var txtFPwdOTP = $("#txtFPwdOTP1").val();
         $.ajax({
-            url: "/Login/btnFPwdProceed_Click",
+            url: Glbvar + "Login/btnFPwdProceed_Click",
             type: "GET",
             data: {
                 Loginid: Loginid,
@@ -155,7 +167,7 @@
         var txtChangePwd2 = $("#txtChangePwd21").val();
         var hFldOpenPopupId = "modChangePwd";
         $.ajax({
-            url: "/Login/btnCPSave_Click",
+            url: Glbvar + "Login/btnCPSave_Click",
             type: "GET",
             data: {
                 txtChangePwd1: txtChangePwd1,
@@ -185,7 +197,7 @@
         var Loginpassword = $("#txtPassWd").val();
 
         $.ajax({
-            url: "/Login/btnForceLogout_Click",
+            url: Glbvar + "Login/btnForceLogout_Click",
             type: "GET",
             data: {
                 LoginID: LoginID,
@@ -193,13 +205,14 @@
             },
             dataType: "json",
             success: function (data) {
-                alert(data.Data);
+             //   alert(data.Data);
 
                 if (data.Data == "modMpinValidate") {
+                    $("#modForceLogout").hide();
                     $("#modMpinValidate").show();
                 }
 
-                if (data != "") {
+                if (data == "") {
                     $("#modForceLogout").show();
                     $("#flogoutmsg").html(data);
                 }
@@ -215,7 +228,7 @@
         var txtLoginMPin = $("#txtLoginMPin").val();
         var LoginID = $("#txtUid").val();
         $.ajax({
-            url: "/Login/btnCancelMPinVerification_Click",
+            url: Glbvar + "Login/btnCancelMPinVerification_Click",
             type: "GET",
             data: {
                 txtLoginMPin: txtLoginMPin,
@@ -224,15 +237,29 @@
             dataType: "json",
             success: function (data) {
                 var str = data;
-                var res = str.split("()");
-                var status = res;
-                var BAName = res[0];
-                var BACode = res[1];
-                $("#BANameCode").val(data);
-                localStorage.setItem("NameCode", data)
-                if (data = ! "") {
-                    location.href = "http://localhost:49180/Home/Index"
+                if (data.sName == null) {
+                    alert("Incorrect mPIN")
+                    return false;
                 }
+      
+                var BAName = data.sName;
+                var BACode = data.sTradingCode;
+                localStorage.setItem("BACode", BACode)
+                var UserType = data.UserType;
+                var Sessionid = data.Sessionid;
+                var passwordsExpiry = data.passwordsExpiry;
+                var BANameBACode = BAName + " (" + BACode + ")"
+                $("#BANameCode").val(data);
+                localStorage.setItem("NameCode", BANameBACode)
+
+                if (UserType == "Emp") {
+                    GetEmpCTCLId(BACode)
+                }
+                else {
+                    GetBACTCLId(BACode)
+                }
+
+               
                
 
             },
@@ -242,3 +269,51 @@
         });
     })
 });
+
+function GetEmpCTCLId(EmpCode) {
+    $.ajax({
+        url: "https://ctcl.investmentz.com/iCtclServiceT/api/URLSecure/?UCC=" + EmpCode +"&UAction=2",
+        type: "GET",
+        data: {
+        },
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+
+            var CTCLID = data.EmpCTCL[0].CTCLID;
+
+            localStorage.setItem("CTCLId", CTCLID);
+
+           // alert(CTCLID);
+
+            if (data = ! "") {
+                location.href = Glbvar + "Home/Index"
+            }
+           
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+}
+
+
+function GetBACTCLId(BACode) {
+    $.ajax({
+        url: "https://ctcl.investmentz.com/iCtclServiceT/api/BACtclData?CCode=" + BACode + "",
+        type: "GET",
+        data: {
+        },
+        dataType: "json",
+        success: function (data) {
+            console.log(data);
+
+            if (data = ! "") {
+                location.href = Glbvar + "Home/Index"
+            }
+        },
+        error: function (data) {
+            console.log(data);
+        }
+    });
+}

@@ -10,8 +10,9 @@ $(document).ready(function () {
     var sorderStatus = "";
     var dDateRange1 = "";
     var dDateRange2 = "";
+    var LoginCode = localStorage.getItem("BACode");
     Gettradealert("4", "", norderId, "1", "0", sorderStatus, dDateRange1, dDateRange2);
-    Notification(norderAction, "ACM4861", norderId, "1", "0", sorderStatus, dDateRange1, dDateRange2);
+    Notification(norderAction, LoginCode, norderId, "1", "0", sorderStatus, dDateRange1, dDateRange2);
 
     var norderAction = 2;
     var dDateRange1 = "";
@@ -30,7 +31,8 @@ $(document).ready(function () {
     sOrderStatus = '';
     nOrderSegment = 0;
     OrderId = -1;
-    GetCorpActions(norderAction, "ACM4861", OrderId, "1", nOrderSegment, sorderStatus, dDateRange1, dDateRange2);
+    var LoginCode = localStorage.getItem("BACode");
+    GetCorpActions(norderAction, LoginCode, OrderId, "1", nOrderSegment, sorderStatus, dDateRange1, dDateRange2);
 });
 
 function gotSystemMessage(Msg, Time) {
@@ -105,7 +107,7 @@ function Notification(norderAction, suserID, norderId, npageIndexNew, nOrderSegm
             DateRange1: dDateRange1,
             DateRange2: dDateRange2,
             ScriptName: "",
-            sCTCLId: "400072001005"
+            sCTCLId: localStorage.getItem("CTCLId")//"400072001005"
 
         },
         dataType: "json",
@@ -487,7 +489,7 @@ function Gettradealert(norderAction, suserID, norderId, npageindex, nOrderSegmen
             DateRange1: dDateRange1,
             DateRange2: dDateRange2,
             ScriptName: sScript,
-            sCTCLId: "400072001005"
+            sCTCLId: localStorage.getItem("CTCLId")//"400072001005"
 
         },
         dataType: "json",
@@ -894,9 +896,10 @@ $("#Buyordersearch").click(function () {
         empclientid = gblnUserId;
         Source = "W";
     }
+        var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim()
     var UpdateOrderParams = JSON.stringify({
 
-        'userId': 892937, //gblnUserId,// nuserId,
+        'userId': ClientCode, //gblnUserId,// nuserId,
         'sScript': sScript,
         'Token': ntoken,
         'BuySell': nBuySell,
@@ -914,7 +917,7 @@ $("#Buyordersearch").click(function () {
         'Source': Source,
         'OrderHandling': CncMis,
         'ExchangeId': 1,
-        'CTCLId': gblCTCLid
+        'CTCLId': localStorage.getItem("CTCLId")//gblCTCLid
 
     });
 

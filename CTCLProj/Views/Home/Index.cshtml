@@ -222,19 +222,19 @@
                 <input id="marketscript" style="width: 12%; font-size: 12px;" />
                 <div id="tradebookgrid" style="height:100%;">
                 </div>
-                <div id="windowForconvertScrip" style="display:none">
+                <div id="windowForconvertScrip1" style="display:none">
                     <h8 id="msgyn"></h8>
                     <table style="width: 100%;">
                         <tr>
                             <td style="padding-right: 10px; border-right: 1px solid #ccc;">
                                 <table style="width: 100%;">
                                     <tr>
-                                        <td style="text-align: left; padding-bottom: 5px; font-weight: bold; padding-left: 7px;" id="availMarText">AVAILABLE/MARGIN</td>
-                                        <td style="text-align: right; padding-bottom: 5px; font-weight: bold; " id="availMar">0000</td>
+                                        <td style="text-align: left; padding-bottom: 5px; font-weight: bold; padding-left: 7px;" id="availMarText123">AVAILABLE/MARGIN</td>
+                                        <td style="text-align: right; padding-bottom: 5px; font-weight: bold; " id="availMar123">0000</td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: left; font-weight: bold;  padding-left: 7px;" id="reqMarText">REQUIRED MARGIN</td>
-                                        <td style="text-align: right; font-weight: bold;  " id="reqMar">0000</td>
+                                        <td style="text-align: left; font-weight: bold;  padding-left: 7px;" id="reqMarText123">REQUIRED MARGIN</td>
+                                        <td style="text-align: right; font-weight: bold;  " id="reqMar123">0000</td>
                                     </tr>
                                 </table>
 
@@ -243,11 +243,11 @@
                                 <table style="width: 100%;">
                                     <tr>
                                         <td style="text-align: left; padding-bottom: 5px; font-weight: bold;">VAR/FDMR %</td>
-                                        <td style="text-align: right; padding-bottom: 5px; font-weight: bold; padding-right: 7px;" id="varper"></td>
+                                        <td style="text-align: right; padding-bottom: 5px; font-weight: bold; padding-right: 7px;" id="varper123"></td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: left; font-weight: bold;" id="excessMarText">EXCESS MARGIN</td>
-                                        <td style="text-align: right; font-weight: bold; padding-right: 7px;" id="excessMar"></td>
+                                        <td style="text-align: left; font-weight: bold;" id="excessMarText123">EXCESS MARGIN</td>
+                                        <td style="text-align: right; font-weight: bold; padding-right: 7px;" id="excessMar123"></td>
                                     </tr>
                                 </table>
 
@@ -467,10 +467,10 @@
 
                     <div id="sqallgrid" style="height:100%;">
                     </div>
-                    <div class="form-group" style="margin-top: 45px;">
-                        <button id="btnSqlAll" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;">OK</button>
+                  @*  <div class="form-group" style="margin-top: 45px;">*@
+                        <input type="button" onclick="btnSqALL();" id="btnSqlAll" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;" value="OK">
                         <button id="btncancel" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;">CANCEL</button>
-                    </div>
+                   <!--</div>-->
                 </div>
                 <div id="NetPositionGrid" style="height:100%;">
                 </div>
