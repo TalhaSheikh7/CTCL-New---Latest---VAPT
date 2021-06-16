@@ -126,7 +126,7 @@ namespace CTCLProj.Controllers
                                                 Session[WebUser.SessionName] = mObjloggedInUser;
 
                                                 string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo(); setEmpDetails('" + "" + "', '" + mObjloggedInUser.sUserType + "');},150);   </script> ";
-                                              //  ScriptManager.RegisterStartupScript(this, typeof(Page), "CCIDfn", script, false);
+                                                //ScriptManager.RegisterStartupScript(this, typeof(Page), "CCIDfn", script, false);
                                             }
                                             else if (mLstclientInfos[0].UserType == "Emp")
                                             {

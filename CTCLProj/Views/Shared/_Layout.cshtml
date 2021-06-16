@@ -4,9 +4,9 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewBag.Title - My Telerik MVC Application</title>
-	<link href="@Url.Content("~/Content/kendo/2021.1.224/kendo.bootstrap-v4.min.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
-	<link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/kendo/2021.1.224/kendo.bootstrap-v4.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/bootstrap.min.css")" rel="stylesheet" type="text/css" />
+    <link href="@Url.Content("~/Content/Site.css")" rel="stylesheet" type="text/css" />
     <link href="~/Content/kendo/2021.1.224/kendo.metroblack.min.css" rel="stylesheet" class="ui-theme" />
     <link href="~/Content/kendo/2021.1.224/kendo.common.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
@@ -15,22 +15,21 @@
 
     @*<link href="~/Content/jquery.toolbar.css" rel="stylesheet" />*@
 
-	@*<script src="@Url.Content("~/Scripts/kendo/2021.1.224/jquery.min.js")"></script>*@
+    @*<script src="@Url.Content("~/Scripts/kendo/2021.1.224/jquery.min.js")"></script>*@
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://kendo.cdn.telerik.com/2021.2.511/js/kendo.all.min.js"></script>
-	<script src="@Url.Content("~/Scripts/kendo/2021.1.224/angular.min.js")"></script>
-	<script src="@Url.Content("~/Scripts/kendo/2021.1.224/jszip.min.js")"></script>
-	@*<script src="@Url.Content("~/Scripts/kendo/2021.1.224/kendo.all.min.js")"></script>*@
-	<script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
-    
-    @*<script src="~/Scripts/jquery.toolbar.js"></script>*@
+    <script src="@Url.Content("~/Scripts/kendo/2021.1.224/angular.min.js")"></script>
+    <script src="@Url.Content("~/Scripts/kendo/2021.1.224/jszip.min.js")"></script>
+    @*<script src="@Url.Content("~/Scripts/kendo/2021.1.224/kendo.all.min.js")"></script>*@
+    <script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
 
+    @*<script src="~/Scripts/jquery.toolbar.js"></script>*@
+    <script src="~/MyJs/moment.js"></script>
     <script src="~/MyJs/KendoGlobalFunctions.js"></script>
     <script src="~/MyJs/GlobalVariable.js"></script>
     <script src="~/MyJs/BroadCast.js"></script>
     <script src="~/MyJs/CommonFunctions.js"></script>
     <script src="~/MyJs/lz-string.js"></script>
-    <script src="~/MyJs/moment.js"></script>
     <script src="~/MyJs/BOISettings.js"></script>
     <script src="~/Scripts/jquery.autocomplete.min.js"></script>
 </head>
@@ -38,10 +37,27 @@
     <input type="hidden" id="cmbClients" value="All" />
     <input type="hidden" id="hfldUser" value="" />
     <input type="hidden" id="hfldBOIYN" value="" />
-
+    
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid d-flex justify-content-between p-0">
             <h1 class="navbar-brand d-flex align-items-center">Project Title</h1>
+            @*<table border="1" style="width:20%">
+                <tr  class="indicesTr">
+                    <th>Nifty 50</th>
+                    <th>Nifty Bank</th>
+                    <th>Sensex</th>
+                </tr>
+                <tr  class="indicesTr">
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+                <tr  class="indicesTr">
+                    <td>1</td>
+                    <td>1</td>
+                    <td>1</td>
+                </tr>
+            </table>*@
             <input id="colorDrop" style="width: 10%; font-size: 12px;" />
             <button id="configure" class="k-rpanel-toggle k-button k-primary btn-toggle">
                 <span class="k-icon k-i-menu"></span>
@@ -53,7 +69,7 @@
                 </span>
             </span>
             <span id="BANameCode"></span>
-            <input type="text" class="scrip-search-box" id="txtSelectedClient"/>
+            <input type="text" class="scrip-search-box" id="txtSelectedClient" />
             <input id="clntSearchType" style="width: 5%; font-size: 12px;" />
         </div>      
     </nav>
