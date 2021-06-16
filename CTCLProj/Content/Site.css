@@ -90,4 +90,8 @@ p .k-button {
         box-sizing: border-box;
     }
 }
+
+.indicesTr {
+    font-size: 10px;
+    height: 15px;
 }

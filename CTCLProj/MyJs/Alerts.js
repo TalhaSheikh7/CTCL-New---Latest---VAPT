@@ -191,7 +191,7 @@ function GetResearchCall(norderAction, npageindex, dDateRange1, dDateRange2) {
         },
         dataType: "json",
         success: function (data) {
-            console.log(data)
+            //console.log(data)
             var company = "";
 
             var datafalse = data.Result.Result;
@@ -498,7 +498,7 @@ function Gettradealert(norderAction, suserID, norderId, npageindex, nOrderSegmen
             var company = "";
 
             var datafalse = data.IsResultSuccess;
-            console.log(data)
+            //console.log(data)
             if (datafalse == false) {
                 Gettrade = [];
             }
@@ -632,7 +632,7 @@ function GetCorpActions(norderAction, suserID, norderId, npageindex, nOrderSegme
         },
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             var company = "";
 
             var datafalse = data.IsResultSuccess;
@@ -1037,7 +1037,7 @@ function VarMargin1(nExchangeId, nToken, nstockType) {
         data: rowdata,
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             if (data.IsResultSuccess == true) {
                 $("#varper2").html(data.Result.nVarMarginInPerc + '%');
             } else {
