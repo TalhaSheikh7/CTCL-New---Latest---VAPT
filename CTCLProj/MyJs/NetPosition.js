@@ -93,11 +93,11 @@ function GetNetPositionReport(strInst, strdtrange) {
     var nAction = 5;
     var sUserID = 0;
     var nPageIndex = 1;
+    var sdtrange = strdtrange;  //dtrange.val(); //"Only Today"
+    var sAccCD = '';//$("#cmbClients").val(); //gblnUserId
     var nToken = -1;
     var sFromDate = "2010/01/29"
     var sTillDate = "";
-    var sdtrange = strdtrange;  //dtrange.val(); //"Only Today"
-    var sAccCD = '';//$("#cmbClients").val(); //gblnUserId
     var sProCli = "Cli";
     var sInstrumentName = InsName;
 

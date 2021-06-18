@@ -30,7 +30,14 @@ $(document).ready(function () {
               //  alert(strmsg);
 
                 if (strmsg == "Incorrect") {
-                    alert(data);
+                   // alert(data);
+
+                    KendoWindow("remaeks", 650, 120, "", 0);
+                    $("#remaeks").closest(".k-window").css({
+                        top: 350,
+                        left: 200
+                    });
+                    $("#remarkdetails").html(data)
                     return false;
                 }
                 
@@ -61,7 +68,13 @@ $(document).ready(function () {
             },
             dataType: "json",
             success: function (data) {
-                alert("Your login ID has been send on your registered Mobile No and Email id.");
+              //  alert("Your login ID has been send on your registered Mobile No and Email id.");
+                KendoWindow("remaeks", 650, 120, "", 0);
+                $("#remaeks").closest(".k-window").css({
+                    top: 350,
+                    left: 200
+                });
+                $("#remarkdetails").html("Your login ID has been send on your registered Mobile No and Email id.")
             },
             error: function (data) {
                 console.log(data);
@@ -151,8 +164,15 @@ $(document).ready(function () {
 
                 $("#forgetpsdotp").hide();
                 $("#changePWD").show();
-                alert(data)
-                alert(MobileNumber);
+              //  alert(data)
+
+                KendoWindow("remaeks", 650, 120, "", 0);
+                $("#remaeks").closest(".k-window").css({
+                    top: 350,
+                    left: 200
+                });
+                $("#remarkdetails").html(data)
+              //  alert(MobileNumber);
             },
             error: function (data) {
                 console.log(data);
@@ -181,7 +201,13 @@ $(document).ready(function () {
 
                 $("#forgetpsdotp").hide();
                 $("#changePWD").hide();
-                alert(data)
+               // alert(data)
+                KendoWindow("remaeks", 650, 120, "", 0);
+                $("#remaeks").closest(".k-window").css({
+                    top: 350,
+                    left: 200
+                });
+                $("#remarkdetails").html(data)
                // alert(MobileNumber);
             },
             error: function (data) {
@@ -238,7 +264,18 @@ $(document).ready(function () {
             success: function (data) {
                 var str = data;
                 if (data.sName == null) {
-                    alert("Incorrect mPIN")
+                    KendoWindow("remaeks", 650, 120, "", 0);
+                    $("#remaeks").closest(".k-window").css({
+                        top: 350,
+                        left: 200
+                    });
+                   // alert("Incorrect mPIN")
+                    KendoWindow("remaeks", 650, 120, "", 0);
+                    $("#remaeks").closest(".k-window").css({
+                        top: 350,
+                        left: 200
+                    });
+                    $("#remarkdetails").html("Incorrect mPIN")
                     return false;
                 }
       
