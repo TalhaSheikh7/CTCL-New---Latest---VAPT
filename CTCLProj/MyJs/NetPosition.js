@@ -110,7 +110,7 @@ function GetNetPositionReport(strInst, strdtrange) {
     if (empclientid == "All") { empclientid = ''; }
 
     if ($("#cmbCtclSelect").val() == "") {
-        gblCTCLid = '';
+        //gblCTCLid = '';
     }
     var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
     var GetNetPosition = $.ajax({
@@ -133,7 +133,7 @@ function GetNetPositionReport(strInst, strdtrange) {
             sAccCD: ClientCode,//sAccCD,
             sProCli: sProCli,
             sInstrumentName: sInstrumentName.toUpperCase(),
-            sCTCLId: localStorage.getItem("CTCLId")//""
+            sCTCLId: gblCTCLid//localStorage.getItem("CTCLId")//""
         },
         type: "json"
     });
@@ -214,81 +214,82 @@ function FillGrid(msg) {
                 arr.push(row.Script);
             }
             if (row.ExchangeBroadcastConstant == 12 || row.ExchangeBroadcastConstant == 13) {
-                currrate = '<span><strong id= "' + row.ExchangeBroadcastConstant + '_' + row.nToken + '_LR">0.0000</strong></span>';
+                currrate = '<span><strong class= "' + row.ExchangeBroadcastConstant + '_' + row.Token + '_LR">0.0000</strong></span>';
 
-                NetM2M = '<span  id="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdM2M' + vcncmis + '_' + nrow + '" class="netposition-12 ' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdM2M" style="font-weight: bold;">0.00</span>';
+                NetM2M = '<span  class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdM2M' + vcncmis + '_' + nrow + '" class="netposition-12 ' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdM2M" style="font-weight: bold;">0.00</span>';
 
-                buyqty = '<td class="netposition-4"><strong>' + row.BuyQty + '</strong><br>' +
+                buyqty = '<td><strong>' + row.BuyQty + '</strong><br>' +
                   '</td>';
 
 
                 if (parseFloat(row.BuyValue) >= 0) {
-                    buyval = '<td class="netposition-5"><strong>' + parseFloat(row.BuyAvg).toFixed(4) + '</strong><br><strong><Span  class="num-qty1">' + parseFloat(row.BuyValue).toFixed(4) + '</span></strong></td>';
+                    buyval = '<td><strong>' + parseFloat(row.BuyAvg).toFixed(4) + '</strong><br><strong><Span  class="num-qty1">' + parseFloat(row.BuyValue).toFixed(4) + '</span></strong></td>';
                 }
                 else {
-                    buyval = '<td class="netposition-5"><strong>' + parseFloat(row.BuyAvg).toFixed(4) + '</strong><br><strong><span class="num-qty2"><strong>' + parseFloat(row.BuyValue).toFixed(4) + '</span></strong></td>';
+                    buyval = '<td><strong>' + parseFloat(row.BuyAvg).toFixed(4) + '</strong><br><strong><span class="num-qty2"><strong>' + parseFloat(row.BuyValue).toFixed(4) + '</span></strong></td>';
                 }
 
-                sellqty = '<td class="netposition-6"><strong>' + row.SellQty + '<br>' +
+                sellqty = '<td><strong>' + row.SellQty + '<br>' +
                        '</td>';
 
                 if (parseFloat(row.SellValue) >= 0) {
-                    sellval = '<td class="netposition-7"><strong>' + parseFloat(row.SellAvg).toFixed(4) + '</strong><br><strong><Span  class="num-qty2">' + parseFloat(row.SellValue).toFixed(4) + '</span></strong></td>';
+                    sellval = '<td><strong>' + parseFloat(row.SellAvg).toFixed(4) + '</strong><br><strong><Span  class="num-qty2">' + parseFloat(row.SellValue).toFixed(4) + '</span></strong></td>';
                 }
                 {
-                    sellval = '<td class="netposition-7"><strong>' + parseFloat(row.SellAvg).toFixed(4) + '</strong><br><strong><span class="num-qty1"><strong>' + parseFloat(row.SellValue).toFixed(4) + '</span></strong></td>';
+                    sellval = '<td><strong>' + parseFloat(row.SellAvg).toFixed(4) + '</strong><br><strong><span class="num-qty1"><strong>' + parseFloat(row.SellValue).toFixed(4) + '</span></strong></td>';
                 }
 
-                netqty = '<td class="netposition-8" id="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdNQ" ><strong>' + row.NetQty + '</strong><br></td>';
-                netval = '<td id="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdNV" class="netposition-10">' + parseFloat(row.NetValue).toFixed(4) + '</td>';
+                netqty = '<td class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdNQ" ><strong>' + row.NetQty + '</strong><br></td>';
+                netval = '<td class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdNV" class="netposition-10">' + parseFloat(row.NetValue).toFixed(4) + '</td>';
 
                 if (row.NetQty > 0) {
 
-                    Netavg = '<span class="netposition-9" id="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdnavg" ><strong>' + parseFloat(Math.abs(row.NetValue / row.NetQty)).toFixed(4) + '</strong></span>';
+                    Netavg = '<span class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdnavg" ><strong>' + parseFloat(Math.abs(row.NetValue / row.NetQty)).toFixed(4) + '</strong></span>';
 
                 }
                 else if (row.NetQty < 0) {
 
-                    Netavg = '<span class="netposition-9" id="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdnavg" ><strong>' + parseFloat(Math.abs(row.NetValue / row.NetQty)).toFixed(4) + '</strong></span>';
+                    Netavg = '<span class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdnavg" ><strong>' + parseFloat(Math.abs(row.NetValue / row.NetQty)).toFixed(4) + '</strong></span>';
                 }
                 else {
-                    Netavg = '<span class="netposition-9" id="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdnavg" ><strong>0</strong></span>';
+                    Netavg = '<span class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdnavg" ><strong>0</strong></span>';
                 }
             }
             else {
-                currrate = '<span><strong id= "' + row.ExchangeBroadcastConstant + '_' + row.nToken + '_LR">0.0000</strong></span>';
-                NetM2M = '<span  id="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdM2M' + vcncmis + '_' + nrow + '"  class="netposition-12 ' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdM2M" style="font-weight: bold;">0.00</span>';
-                buyqty = '<td class="netposition-4"><strong>' + row.BuyQty + '</strong><br>' +
+                currrate = '<span><strong class= "' + row.ExchangeBroadcastConstant + '_' + row.Token + '_LR">0.0000</strong></span>';
+                NetM2M = '<span  class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdM2M' + vcncmis + '_' + nrow + '" >0.00</span>';
+                //NetM2M = '<span  class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdM2M' + vcncmis + '_' + nrow + '"  class="netposition-12 ' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdM2M" style="font-weight: bold;">0.00</span>';
+                buyqty = '<td><strong>' + row.BuyQty + '</strong><br>' +
                          '</td>';
 
 
                 if (parseFloat(row.BuyValue) >= 0) {
-                    buyval = '<td class="netposition-5"><strong>' + parseFloat(row.BuyAvg).toFixed(2) + '</strong><br><strong><Span  class="num-qty1">' + parseFloat(row.BuyValue).toFixed(2) + '</span></strong></td>';
+                    buyval = '<td><strong>' + parseFloat(row.BuyAvg).toFixed(2) + '</strong><br><strong><Span  class="num-qty1">' + parseFloat(row.BuyValue).toFixed(2) + '</span></strong></td>';
                 }
                 else {
-                    buyval = '<td class="netposition-5"><strong>' + parseFloat(row.BuyAvg).toFixed(2) + '</strong><br><strong><span class="num-qty2"><strong>' + parseFloat(row.BuyValue).toFixed(2) + '</span></strong></td>';
+                    buyval = '<td><strong>' + parseFloat(row.BuyAvg).toFixed(2) + '</strong><br><strong><span class="num-qty2"><strong>' + parseFloat(row.BuyValue).toFixed(2) + '</span></strong></td>';
                 }
 
-                sellqty = '<td class="netposition-6"><strong>' + row.SellQty + '<br></td>';
+                sellqty = '<td><strong>' + row.SellQty + '<br></td>';
                 if (parseFloat(row.SellValue) >= 0) {
-                    sellval = '<td class="netposition-7"><strong>' + parseFloat(row.SellAvg).toFixed(2) + '</strong><br><strong><Span  class="num-qty2">' + parseFloat(row.SellValue).toFixed(2) + '</span></strong></td>';
+                    sellval = '<td><strong>' + parseFloat(row.SellAvg).toFixed(2) + '</strong><br><strong><Span  class="num-qty2">' + parseFloat(row.SellValue).toFixed(2) + '</span></strong></td>';
                 }
                 {
-                    sellval = '<td class="netposition-7"><strong>' + parseFloat(row.SellAvg).toFixed(2) + '</strong><br><strong><span class="num-qty1"><strong>' + parseFloat(row.SellValue).toFixed(2) + '</span></strong></td>';
+                    sellval = '<td><strong>' + parseFloat(row.SellAvg).toFixed(2) + '</strong><br><strong><span class="num-qty1"><strong>' + parseFloat(row.SellValue).toFixed(2) + '</span></strong></td>';
                 }
-                sellqty = '<td class="netposition-6"><strong>' + row.SellQty + '<br>' +
+                sellqty = '<td><strong>' + row.SellQty + '<br>' +
                           '</td>';
-                netqty = '<span id="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdNQ" ><strong>' + row.NetQty + '</strong><br></span>';
-                netval = '<span id="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdNV" class="netposition-10">' + parseFloat(row.NetValue).toFixed(2) + '</span>';
+                netqty = '<span class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdNQ"><strong>' + row.NetQty + '</strong><br></span>';
+                netval = '<span class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdNV">' + parseFloat(row.NetValue).toFixed(2) + '</span>';
 
                 if (row.NetQty > 0) {
-                    Netavg = '<span class="netposition-9" id="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdnavg" ><strong>' + parseFloat(Math.abs((row.BuyValue - row.SellValue) / row.NetQty)).toFixed(2) + '</strong></span>';
+                    Netavg = '<span class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdnavg" ><strong>' + parseFloat(Math.abs((row.BuyValue - row.SellValue) / row.NetQty)).toFixed(2) + '</strong></span>';
                 }
                 else if (row.NetQty < 0) {
-                    Netavg = '<span class="netposition-9" id="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdnavg" ><strong>' + parseFloat(Math.abs((row.SellValue - row.BuyValue) / Math.abs(parseFloat(row.NetQty)))).toFixed(2) + '</strong></span>';
+                    Netavg = '<span class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdnavg" ><strong>' + parseFloat(Math.abs((row.SellValue - row.BuyValue) / Math.abs(parseFloat(row.NetQty)))).toFixed(2) + '</strong></span>';
                 }
                 else {
-                    Netavg = '<span class="netposition-9" id="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdnavg" ><strong>0</strong></span>';
+                    Netavg = '<span class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdnavg" ><strong>0</strong></span>';
                 }
 
             }
@@ -376,8 +377,9 @@ function FillGrid(msg) {
             var lblScript = "lblScripts2";
 
             $('#lblScripts2').html(sScripts.substring(0, sScripts.length - 1));
-            $('#lblScripts2').html($('#lblScripts2').html() + "," + "17.999908,17.999988,5.1")
-           // reconnectSocketAndSendTokens(lblScript);
+            $('#lblScripts2').html($('#lblScripts2').html() + "," + "17.999908,17.999988,5.1");
+            tokens.push(row.Token);
+            reconnectSocketAndSendTokens(lblScript);
 
         })
     }
@@ -496,6 +498,58 @@ function FillGrid(msg) {
             setTimeout(function () { $("#footerPlaceholder1").text(getTotalNetQty()); });
         }
     });
+}
+
+function M2mlive(SymbolId, MtoM) {
+    var nrow = -2;
+
+    $('#tblheader').find('tr').each(function (i, el) {
+        nrow = nrow + 1;
+        var $tds = $(this).find('td');
+        var vsymbolid = "";
+        if ($tds.eq(0).text() != "Total" && $tds.eq(0).text() != "" && $tds.eq(11).text() != "M2M") {
+
+            product = $tds.eq(12).html();
+            netqty = $tds.eq(7).html();
+            sqm2m = $tds.eq(9).html();
+            Netavg = $tds.eq(8).html();
+            vltp = $tds.eq(10).html();
+
+            if (product == "<strong>CNC/NORMAL</strong><br>") {
+                vsymbolid = SymbolId + "_tdM2MCNC" + '_' + nrow;
+            }
+            else {
+                vsymbolid = SymbolId + "_tdM2MMIS" + '_' + nrow;
+            }
+
+            //NetVal = parseFloat($("#" + SymbolId + "_tdNV").text());
+
+            netqty = netqty.substring(netqty.indexOf('>') + 1, netqty.indexOf('/') - 1)
+            Netavg = Netavg.substring(Netavg.indexOf('>') + 1, Netavg.indexOf('/') - 1)
+
+            vltp = vltp.substring(vltp.indexOf('>') + 1, vltp.indexOf('/') - 1)
+
+            var MtoMNew = 0;
+
+            if (parseFloat(netqty) == 0 || parseFloat(vltp) == 0) {
+                $("#" + vsymbolid).text(sqm2m);
+
+            }
+
+            else if (parseFloat(netqty) != 0) {
+                MtoMNew = parseFloat(netqty) * (parseFloat(vltp) - Math.abs(parseFloat(Netavg)));
+                $("#" + vsymbolid).text(parseFloat(MtoMNew).toFixed(2));
+            }
+            else {;
+
+                MtoMNew = Math.abs(parseFloat(netqty)) * (Math.abs(parseFloat(Netavg)) - vltp);
+
+                $("#" + vsymbolid).text(parseFloat(MtoMNew).toFixed(2));
+            }
+
+        }
+    });
+
 }
 $("#btnRefresh").click(function () {
     PositionData();

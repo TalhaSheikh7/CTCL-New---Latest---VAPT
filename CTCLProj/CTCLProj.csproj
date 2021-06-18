@@ -146,6 +146,8 @@
     <Content Include="Content\bootstrap-reboot.min.css" />
     <Content Include="Content\bootstrap.css" />
     <Content Include="Content\bootstrap.min.css" />
+    <Content Include="Content\fonts.googleapis.css" />
+    <Content Include="Content\font-awesome.css" />
     <Content Include="Content\jquery.toolbar.css" />
     <Content Include="Content\kendo\2021.1.224\Black\editor.png" />
     <Content Include="Content\kendo\2021.1.224\Black\imagebrowser.png" />
@@ -675,6 +677,7 @@
     <Content Include="MyJs\Funds.js" />
     <Content Include="MyJs\GlobalVariable.js" />
     <Content Include="MyJs\Holding.js" />
+    <Content Include="MyJs\jquery.autocomplete.min.js" />
     <Content Include="MyJs\KendoGlobalFunctions.js" />
     <Content Include="MyJs\Login.js" />
     <Content Include="MyJs\lz-string.js" />
@@ -804,8 +807,10 @@
     <Content Include="Scripts\jquery-3.3.1.min.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.js" />
     <Content Include="Scripts\jquery-3.3.1.slim.min.js" />
+    <Content Include="Scripts\jquery-3.6.0.min.js" />
     <Content Include="Scripts\jquery.autocomplete.min.js" />
     <Content Include="Scripts\jquery.toolbar.js" />
+    <Content Include="Scripts\kendo.all.min.js" />
     <Content Include="Scripts\kendo.modernizr.custom.js" />
     <Content Include="Scripts\kendo\2021.1.224\angular.min.js" />
     <Content Include="Scripts\kendo\2021.1.224\jquery.min.js" />

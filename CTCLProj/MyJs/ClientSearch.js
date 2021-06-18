@@ -5,8 +5,8 @@ var getGlobalVariable, setGlobalVariable, getClntDetails, clearEmpStorageSmart;
 var setSearchStripReadOnly, setSearchTrip;
 
 //Constants
-//var common_url = "http://localhost:51590"; //comment In Live
-//var common_url = "https://uat.investmentz.com/"; //uncomment in Live
+var common_url = "http://localhost:49180/"; //comment In Live
+//var common_url = "https://ctcluat.investmentz.com/"; //uncomment in Live
 var url_employee_clients_Live = "https://trade.investmentz.com/";
 var gblurl1 = "https://trade.investmentz.com/EasyTradeApi/api/";
 
@@ -19,9 +19,6 @@ var searchClientDataKey = "AvailEmpClnts";
 //TODO - do from init ... add reference and proceed. 
 
 $(document).ready(function () {
-
-    
-    //Hvb for clearStorage @ 05/03/2019
     clearEmpStorageSmart = function (sJsId) {
 
         if (getGlobalVariable("js-Session-id", "") != sJsId) {

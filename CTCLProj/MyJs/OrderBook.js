@@ -75,9 +75,9 @@ function GetOrder(orderstatus) {
     var pageIndex = "1";
     var OrderSegment = "0";
     var orderStatus = "C,M,E,Q,A,X,U,P,O,X,Z";
-    var DateRange1 = "2021/6/10";
-    var DateRange2 = "2021/6/10";
-    var sCTCLId = localStorage.getItem("CTCLId");//"400072001005";
+    var DateRange1 = "2021/6/18";
+    var DateRange2 = "2021/6/18";
+    var sCTCLId = gblCTCLid;//"400072001005";
     var ScriptName = "";
     var strDisplay = "";
     var qtypending = "";
@@ -85,7 +85,7 @@ function GetOrder(orderstatus) {
     var arr = new Array();
 
     $.ajax({
-        url: "https://ctcl.investmentz.com/iCtclService/api/OrderV5",
+        url: "https://ctcl.investmentz.com/iCtclServiceT/api/OrderV5",
         method: "get",
         data: {
             orderAction: orderAction,
@@ -147,10 +147,10 @@ function GetOrder(orderstatus) {
                     else { discqtypend = row.DisclosedQtyRemaining; }
 
                     if (row.ExchnageBroadcastConstant == 12 || row.ExchnageBroadcastConstant == 13) {
-                        currrate = '<span><strong id= "' + row.ExchnageBroadcastConstant + '_' + row.Token + '_LR">0.0000</strong></span>';
+                        currrate = '<span><strong class= "' + row.ExchnageBroadcastConstant + '_' + row.Token + '_LR">0.0000</strong></span>';
                     }
                     else {
-                        currrate = '<span><strong id= "' + row.ExchnageBroadcastConstant + '_' + row.Token + '_LR">0.00</strong></span>';
+                        currrate = '<span><strong class= "' + row.ExchnageBroadcastConstant + '_' + row.Token + '_LR">0.00</strong></span>';
                     }
 
                     var lltp = $("#" + row.ExchnageBroadcastConstant + "_" + row.Token + "_LR").text();
@@ -193,13 +193,13 @@ function GetOrder(orderstatus) {
                         CloseSocket();//Close and open
                     }
 
-                    var lblScript = "lblScripts1";
+                    var lblScript = "lblScriptsObook";
 
-                    $('#lblScripts1').html(sScripts.substring(0, sScripts.length - 1));
-                    $('#lblScripts1').html($('#lblScripts1').html() + "," + "17.999908,17.999988,5.1")
+                    $('#lblScriptsObook').html(sScripts.substring(0, sScripts.length - 1));
+                    $('#lblScriptsObook').html($('#lblScriptsObook').html() + "," + "17.999908,17.999988,5.1")
 
 
-                    //reconnectSocketAndSendTokens(lblScript);
+                    reconnectSocketAndSendTokens(lblScript);
                 });
                 
               
@@ -602,7 +602,7 @@ $("#CancelOrder").click(function () {
     });
 })
 
-getCTCLID();
+//getCTCLID();
 if (gblCTCLtype.toString().toLocaleLowerCase() == "ba" || gblCTCLtype.toString().toLocaleLowerCase() == "emp") {
     $("#baimg").css('display', 'inline');
     $("#baimgdiv").addClass('styled-select-new2');

@@ -26,7 +26,7 @@ $(document).ready(function () {
 
 function sendTokens(lblScript) {
     //var scr = "#" + lblScript;
-    var TokensValues = $('#lblScripts').html() + "," + $('#lblHoldingScripts').html() + "," + "17.999908,17.999988,5.1"
+    var TokensValues = $('#lblScripts').html() + "," + $('#lblHoldingScripts').html() + "," + $('#lblScripts2').html(); + "," + $('#lblScriptsObook').html() + "," + "17.999908,17.999988,5.1"
     //console.log("tokens.length" + tokens.length);
     if (tokens.length > 0) {
         setTimeout(function () {
@@ -50,7 +50,7 @@ function reconnectSocketAndSendTokens(lblScript) {
             sendTokens(scriplblName);
         };
         ws.onmessage = function (evt) {
-            ProcessData(evt.data);
+            ProcessData(evt.data, lblScript);
             $("#Broadcast1").attr("src", "../img/dis-2.png");
         };
         ws.onerror = function (evt) {
@@ -66,7 +66,7 @@ function reconnectSocketAndSendTokens(lblScript) {
     return false;
 }
 
-function ProcessData(bcastData) {
+function ProcessData(bcastData, lblScript) {
     //alert(Qty);
     var Data = JSON.parse(JSON.parse(bcastData).Body);
 
@@ -166,8 +166,8 @@ function ProcessData(bcastData) {
         $("." + SymbolId + "_LUD").text(formatDate(Data.LastTradeTime, '', "DD/MM/YYYY"));
         $("." + SymbolId + "_LUDT").text(formatDate(Data.LastTradeTime, '', "HH:mm:ss"));
 
-        nDifference = parseFloat($("." + SymbolId + "_LRH").text()) - parseFloat($("." + SymbolId + "_PC").text());
-        nPerChange = (parseFloat($("." + SymbolId + "_LRH").text()) * 100 / parseFloat($("." + SymbolId + "_PC").text())) - 100;
+        nDifference = parseFloat($("." + SymbolId + "_LR").text()) - parseFloat($("." + SymbolId + "_PC").text());
+        nPerChange = (parseFloat($("." + SymbolId + "_LR").text()) * 100 / parseFloat($("." + SymbolId + "_PC").text())) - 100;
 
         if (nDifference >= 0) {
             if ($("#Iratechange").attr('data-symbol') == SymbolId) {
@@ -235,7 +235,63 @@ function ProcessData(bcastData) {
                 $("." + SymbolId + "_RateChange").css("color", "white");
             }
         }
-    //}
+
+        if (lblScript == "lblScripts2") {
+            var MtoM = 0;
+            var NetVal = parseFloat($("." + SymbolId + "_tdNV").text());
+
+            if (parseFloat($("." + SymbolId + "_tdNQ").text()) == 0) {
+                MtoM = NetVal;
+            }
+            else if (parseFloat($("." + SymbolId + "_tdNQ").text()) > 0) {                
+                MtoM = parseFloat($("." + SymbolId + "_tdNQ").text()) * (parseFloat($("." + SymbolId + "_LR").text()) - parseFloat($("." + SymbolId + "_tdnavg").text()));
+            }
+            else {
+                MtoM = parseFloat($("." + SymbolId + "_tdNQ").text()) * (parseFloat($("." + SymbolId + "_tdnavg").text()) - parseFloat($("." + SymbolId + "_LR").text()));
+            }
+
+            if (MtoM == "" || MtoM == undefined)
+            { MtoM = 0; }
+
+            if (startsWith(Data.SymbolKey, '12.') == true || startsWith(Data.SymbolKey, '13.') == true) {
+                $("." + SymbolId + "_LR").text(parseFloat($("." + SymbolId + "_LR").text()).toFixed(4));
+                if (SymbolId != "17_999908" && SymbolId != "17_999988") {
+                    M2mlive(SymbolId, parseFloat(MtoM).toFixed(4));
+                }
+            } else {                
+                $("." + SymbolId + "_LR").html(parseFloat($("." + SymbolId + "_LR").html()).toFixed(2));
+                if (SymbolId != "17_999908" && SymbolId != "17_999988") {
+                    M2mlive(SymbolId, parseFloat(MtoM).toFixed(2));
+                }
+            }
+
+            if ($("." + SymbolId + "_LR").text() != "")
+            {
+                LTP = $("." + SymbolId + "_LR").text();
+            }
+            else
+            {
+                LTP = 0;
+            }
+
+            var PL = 0;
+            var Netavg = 0;
+            if (parseFloat($("." + SymbolId + "_tdnavg").text()) < 0) {
+                Netavg = parseFloat($("." + SymbolId + "_tdnavg").text()) * -1;
+            }
+            else { Netavg = parseFloat($("." + SymbolId + "_tdnavg").text()); }
+            if (((LTP - Netavg) * parseFloat($("." + SymbolId + "_tdNQ").text())) > 1) {
+                $("." + SymbolId + "_data-pl").text(Math.round((parseFloat(LTP) - Netavg) * parseFloat($("." + SymbolId + "_tdNQ").text()), 0));
+            }
+            else {
+
+                $("." + SymbolId + "_data-pl").text(Math.round((parseFloat(LTP) - Netavg) * parseFloat($("." + SymbolId + "_tdNQ").text()), 2));
+            }
+
+            var totpl = 0;
+
+
+        }
 }
 
 

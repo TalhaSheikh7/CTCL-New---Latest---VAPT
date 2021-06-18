@@ -86,7 +86,7 @@ function GetOrdetype(sotype) {
     }
     return Otypval;
 }
-function GetInstrument(sinstrument) {
+function GetInstrumentNumber(sinstrument) {
     sinstrument = sinstrument.trim();
     var constval = '';
 

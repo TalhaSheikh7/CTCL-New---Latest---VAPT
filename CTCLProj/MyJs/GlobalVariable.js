@@ -1,10 +1,10 @@
 ﻿
 //var gblurl = "http://localhost:1610/api/";
-var gblurl = "https://ctcl.investmentz.com/iCtclServiceT/api/";
+var gblurl = "https://ctcl.investmentz.com/iCtclService/api/";
 var gblnUserId;
 var clearClntDetails, saveClntDetails, getClntDetails;
-var gblCTCLid = '';
-var gblCTCLtype = '';
+var gblCTCLid = localStorage.getItem("CTCLId");
+var gblCTCLtype = localStorage.getItem("EmpCTCLtype");
 
 
 $(document).ready(function () {
@@ -30,7 +30,7 @@ $(document).ready(function () {
 
 
     GetBcastUrl(6);
-    getCTCLID();
+    //getCTCLID();
 });
 
 
@@ -51,31 +51,31 @@ $(document).ready(function () {
         }
     }
 
-function getCCID() {
+//function getCCID() {
 
-    gblnUserId = getGlobalVariable("CCID", "ACM4859");
-    gblnChartToken = getGlobalVariable("CHARTTOKEN", "");
-}
+//    gblnUserId = getGlobalVariable("CCID", "ACM4859");
+//    gblnChartToken = getGlobalVariable("CHARTTOKEN", "");
+//}
 
-function setEmpDetails(ctclid, emptype) {
-    //return getGlobalVariable("CCID", "");
-    setGlobalVariable("EmpCTCLid", ctclid);
-    setGlobalVariable("EmpCTCLtype", emptype);
-}
+//function setEmpDetails(ctclid, emptype) {
+//    //return getGlobalVariable("CCID", "");
+//    setGlobalVariable("EmpCTCLid", ctclid);
+//    setGlobalVariable("EmpCTCLtype", emptype);
+//}
 
-function getCTCLID() {
-    gblCTCLid = getEmpDetails("EmpCTCLid", "");
-    gblCTCLtype = getEmpDetails("EmpCTCLtype", "");
-}
+//function getCTCLID() {
+//    gblCTCLid = getEmpDetails("EmpCTCLid", "");
+//    gblCTCLtype = getEmpDetails("EmpCTCLtype", "");
+//}
 
-function getEmpDetails(variableName, defaultValue) {
-    if (window.localStorage.getItem(variableName) == undefined || window.localStorage.getItem(variableName) == null) {
-        setGlobalVariable(variableName, defaultValue);
-        return defaultValue;
-    }
-    else
-        return window.localStorage.getItem(variableName);
-}
+//function getEmpDetails(variableName, defaultValue) {
+//    if (window.localStorage.getItem(variableName) == undefined || window.localStorage.getItem(variableName) == null) {
+//        setGlobalVariable(variableName, defaultValue);
+//        return defaultValue;
+//    }
+//    else
+//        return window.localStorage.getItem(variableName);
+//}
 
 
 getClntDetails = function (cbClntDetailsFetched) {

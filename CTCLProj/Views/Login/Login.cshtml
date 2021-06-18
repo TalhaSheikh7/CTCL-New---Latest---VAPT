@@ -26,6 +26,8 @@
 
     <script src="~/Scripts/kendo/2021.1.224/jquery.min.js"></script>
     <script src="~/MyJs/GlobalVariable.js"></script>
+    <script src="~/MyJs/lz-string.js"></script>
+    <script src="~/MyJs/jquery.autocomplete.min.js"></script>
     <style>
         .error-detail {
             display: block;
@@ -997,12 +999,12 @@
                     url: "https://trade.investmentz.com/Web/WebForms/Alerts.aspx",
                     target: "_self"
                 }, {
-                        type: 'success',
-                        placement: {
-                            from: "bottom",
-                            align: "right"
-                        },
-                    });
+                    type: 'success',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
+                });
                 // [START_EXCLUDE]
                 // Update the UI to include the received message.
                 //appendMessage(payload);
@@ -1298,7 +1300,7 @@
         });
 
 
-/**/</script>
+        /**/</script>
 </head>
 <body class="k-content">
     <main>
@@ -1309,7 +1311,7 @@
                 <div class="modal" id="modNotificationPermission" tabindex="-1" role="dialog" aria-labelledby="modNotificationPermissionLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="col-sm-4 login-icon text-center" style="height: 285px; width: 250px;">
-                            <img src="img/Notification.png" class="img-responsive" />
+                            <img src="~/img/Notification.png" class="img-responsive"/>
                         </div>
                         <div class="col-sm-8 modal-content" style="width: 350px;  height: 285px;">
                             <div class="modal-header">

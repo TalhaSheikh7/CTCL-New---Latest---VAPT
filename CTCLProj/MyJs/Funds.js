@@ -5,7 +5,8 @@ var HoldingDataColumns = [];
 
 $(document).ready(function () {
 
-    var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim()
+    //var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
+    var ClientCode = 5014669;
     GetHoldingDetails(3, ClientCode, 1, 0);
     GetAccountDetails(ClientCode, 8, 1, 0);
     GetHeaderDetails(ClientCode, 10, 1, 0);
@@ -36,11 +37,11 @@ function Backoffice() {
 
 function GetHoldingDetails(nAction, sUserID, nPageIndex, nAccountSegment)
 {
-    var valuation;
+    var valuation = 0;
 
     kendo.ui.progress($("#holdingData"), true);
     $.ajax({
-        url: gblurl + "AccoutingV1/",
+        url: "https://ctcl.investmentz.com/iCtclService/api/AccoutingV1/",
         method: "get",
         data: {
             nAction: nAction,
@@ -50,26 +51,28 @@ function GetHoldingDetails(nAction, sUserID, nPageIndex, nAccountSegment)
         },
         dataType: "json",
         success: function (data) {
-           // console.log(data);
-            valuation = data.Result.Result[0].nClosingValuationCumalative;
-            $("#curHolding").html(Intl.NumberFormat('en-IN').format(parseFloat(valuation).toFixed(2)));
-
+            //console.log(data);
             HoldingColumns = [];
-            var ISIN = "";
-            var ScripName = "";
-            var YesterDayPrice = "";
-            var Quantity = "";
-            var Valuation = "";
-            var PoolQty = "";
-            var DematQty = "";
-            var currrate;
-            var sScripts = "";
-            if (data.ResultStatus == 3) {
-                if (data.Result == "No Data Found") {
-                    HoldingDataColumns = [];
-                } else {
+            $("#curHolding").html(Intl.NumberFormat('en-IN').format(parseFloat(valuation).toFixed(2)))
+            if (data.ResultStatus != 3) {
+                
+            } else {
+                if (data.Result != "No Data Found") {
+                    valuation = data.Result.Result[0].nClosingValuationCumalative;
+                    $("#curHolding").html(Intl.NumberFormat('en-IN').format(parseFloat(valuation).toFixed(2)));
+
+                    HoldingColumns = [];
+                    var ISIN = "";
+                    var ScripName = "";
+                    var YesterDayPrice = "";
+                    var Quantity = "";
+                    var Valuation = "";
+                    var PoolQty = "";
+                    var DematQty = "";
+                    var currrate;
+                    var sScripts = "";
                     var record = 0;
-            
+
                     $.each(data.Result.Result, function (i, row) {
                         HoldingDataColumns.push({
                             ISIN: row.sISINNumber,
@@ -82,8 +85,11 @@ function GetHoldingDetails(nAction, sUserID, nPageIndex, nAccountSegment)
                         });
                         //reconnectSocketAndSendTokens(lblScript, token);
                     });
+                } else {
+                    HoldingColumns = [];
                 }
-                    $("#holdingData").kendoGrid({
+             }
+                $("#holdingData").kendoGrid({
                         dataSource: {
                             data: HoldingDataColumns
                         },
@@ -186,12 +192,8 @@ function GetHoldingDetails(nAction, sUserID, nPageIndex, nAccountSegment)
                             });
                         }
 
-                    })
-                
-            } else {
-
-            }
-            kendo.ui.progress($("#holdingData"), false);
+                    });
+                kendo.ui.progress($("#holdingData"), false);
         },
         error: function (data) {
 
