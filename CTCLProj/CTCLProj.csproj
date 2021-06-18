@@ -671,6 +671,7 @@
     <Content Include="MyJs\BroadCast.js" />
     <Content Include="MyJs\ClientSearch.js" />
     <Content Include="MyJs\CommonFunctions.js" />
+    <Content Include="MyJs\firebase.js" />
     <Content Include="MyJs\Funds.js" />
     <Content Include="MyJs\GlobalVariable.js" />
     <Content Include="MyJs\Holding.js" />
@@ -680,6 +681,7 @@
     <Content Include="MyJs\MarketWatch.js" />
     <Content Include="MyJs\moment.js" />
     <Content Include="MyJs\NetPosition.js" />
+    <Content Include="MyJs\Notification.js" />
     <Content Include="MyJs\OrderBook.js" />
     <Content Include="MyJs\TradeBook.js" />
     <Content Include="packages.config" />

@@ -153,6 +153,7 @@
                 <div class="demo-section k-content">
                     <input type="hidden" id="Iratechange" data-symbol="" />
                     <div>
+                        <input id="watchlistOption" style="width: 15%; font-size: 12px;" />
                         <input id="watchDrop" style="width: 25%; font-size: 12px;" />
                         <button class="btn btnclas" onclick="AddWatchPopUp();"><i class="fa fa-plus iclass"></i></button>
                         <button class="btn btnclas" onclick="DeleteWatch();"><i class="fa fa-trash iclass"></i></button>
@@ -497,6 +498,7 @@
                         <li>
                             Research Calls
                         </li>
+
                         <li>
                             EXCHANGE MESSAGE
                         </li>
@@ -1161,6 +1163,10 @@
     <div id="holdingData" style="height:100%;"></div>
 </div>
 
+<div id="optChain" style="display:none">
+    <div id="optionChainData" style="height:100%;"></div>
+</div>
+
 <div id="TransactionSummary" style="display:none">
     <button id="btnExcelExport"><i class="fa fa-file-excel-o" aria-hidden="true"></i>&nbsp;Excel</button>
     <button id="btnPDFExport"><i class="fa fa-file-pdf-o" aria-hidden="true"></i>&nbsp;PDF</button>
@@ -1232,3 +1238,4 @@
 <script src="~/MyJs/OrderBook.js"></script>
 <script src="~/MyJs/NetPosition.js"></script>
 <script src="~/MyJs/Login.js"></script>
+
