@@ -62,11 +62,12 @@
                     </td>
                     <td id="17_999988_nf">
                         <span class="17_999988_LR">00000.00</span>
-
+                        <span type="hidden" class="17_999988_PC" hidden />
+                        <span type="hidden" class="17_999908_PC" hidden />
                     </td>
                     <td id="5_1_nf">
                         <span class="5_1_LR">00000.00</span>
-
+                        <span type="hidden" class="5_1_PC" hidden />
                     </td>
                 </tr>
                 <tr class="indicesTr">
@@ -96,6 +97,7 @@
             </span>
             <span id="BANameCode"></span>
             <input type="text" class="scrip-search-box" id="txtSelectedClient" />
+            <input type="hidden" id="hdnSelectedClient" />
             <input id="clntSearchType" style="width: 5%; font-size: 12px;" />
         </div>      
     </nav>
@@ -136,6 +138,8 @@
                 orientation: "top"
             });
             $("#menu").kendoMenu();
+
+            GetBcastUrl(6);
 
             $.ajax({
                 url: "https://ctcluat.investmentz.com/Home/clientnameanducc",
