@@ -327,7 +327,7 @@ function buysellwindow1(data) {
 
 
 
-    GetBcastUrl(6);
+    //GetBcastUrl(6);
 
     if ($("#Exchange").attr("src") == "../img/dis-1.png") {
         alert('Due to techical reason you cannot place order now, try after sometime')

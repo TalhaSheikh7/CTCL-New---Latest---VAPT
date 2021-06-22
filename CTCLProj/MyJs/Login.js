@@ -1,5 +1,4 @@
-﻿var Glbvar = "https://ctcluat.investmentz.com/"
-//    var Glbvar ="http://localhost:49180/"
+﻿
 $(document).ready(function () {
     localStorage.setItem("CTCLId", "");
     $("#btnLogin").click(function () {
@@ -17,7 +16,7 @@ $(document).ready(function () {
         }
       var strmsg = "";
         $.ajax({
-            url:  Glbvar + "Login/btnLogin_Click",
+            url: common_url + "Login/btnLogin_Click",
             type: "GET",
             data: {
                 LoginID: LoginID,
@@ -119,7 +118,7 @@ $(document).ready(function () {
         var hFldOtpVisible = "F";//$("#hFldOtpVisible").val("F");
         var hFldPopupOperation = "FLOGIN"//$("#hFldPopupOperation").val("FLOGIN");
         $.ajax({
-            url: Glbvar + "Login/btnFPwdProceed_Click",
+            url: common_url + "Login/btnFPwdProceed_Click",
             type: "GET",
             data: {
                 Loginid: Loginid,
@@ -149,7 +148,7 @@ $(document).ready(function () {
         var hFldPopupOperation = "FPWD"//$("#hFldPopupOperation").val("FLOGIN");
         var txtFPwdOTP = $("#txtFPwdOTP1").val();
         $.ajax({
-            url: Glbvar + "Login/btnFPwdProceed_Click",
+            url: common_url + "Login/btnFPwdProceed_Click",
             type: "GET",
             data: {
                 Loginid: Loginid,
@@ -187,7 +186,7 @@ $(document).ready(function () {
         var txtChangePwd2 = $("#txtChangePwd21").val();
         var hFldOpenPopupId = "modChangePwd";
         $.ajax({
-            url: Glbvar + "Login/btnCPSave_Click",
+            url: common_url + "Login/btnCPSave_Click",
             type: "GET",
             data: {
                 txtChangePwd1: txtChangePwd1,
@@ -223,7 +222,7 @@ $(document).ready(function () {
         var Loginpassword = $("#txtPassWd").val();
 
         $.ajax({
-            url: Glbvar + "Login/btnForceLogout_Click",
+            url: common_url + "Login/btnForceLogout_Click",
             type: "GET",
             data: {
                 LoginID: LoginID,
@@ -254,7 +253,7 @@ $(document).ready(function () {
         var txtLoginMPin = $("#txtLoginMPin").val();
         var LoginID = $("#txtUid").val();
         $.ajax({
-            url: Glbvar + "Login/btnCancelMPinVerification_Click",
+            url: common_url + "Login/btnCancelMPinVerification_Click",
             type: "GET",
             data: {
                 txtLoginMPin: txtLoginMPin,
@@ -328,7 +327,7 @@ function GetEmpCTCLId(EmpCode) {
            // alert(CTCLID);
 
             if (data = ! "") {
-                location.href = Glbvar + "Home/Index"
+                location.href = common_url + "Home/Index"
             }
            
         },
@@ -351,7 +350,7 @@ function GetBACTCLId(BACode) {
             var CTCLID = "";
             localStorage.setItem("CTCLId", CTCLID);
             if (data = ! "") {
-                location.href = Glbvar + "Home/Index"
+                location.href = common_url + "Home/Index"
             }
         },
         error: function (data) {
