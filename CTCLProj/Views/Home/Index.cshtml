@@ -121,6 +121,10 @@
         width: 50%;
         float: left;
     }
+
+    .clear{
+        clear:both;
+    }
 </style>
 @*<link rel="stylesheet" href="styles/kendo.common.min.css" />
     <link rel="stylesheet" href="styles/kendo.default.min.css" />
@@ -179,7 +183,7 @@
                         <button class="btn btnclas" onclick="AddScripts()" style="margin-top: -4px;"><i class="fa fa-sign-out" style="vertical-align: top; margin-top:-3px;"></i></button>
                     </div>
                 </div>
-                <div id="WatchList" style="height:100%;"></div>
+                <div id="WatchList" class="clear" style="height:100%;"></div>
             </div>
 
     </script>
@@ -196,7 +200,7 @@
                     <label class="depth">Change(%): &nbsp;</label><span style="font-size:10pt;" id="nChangePerc">1.0%</span>&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
             </div>
-            <div id="users-grid"></div>
+            <div id="users-grid" class="clear" style="height:100%;"></div>
         </div>
     </script>
     @*<script id="users-grid-template2" type="text/x-kendo-template">
