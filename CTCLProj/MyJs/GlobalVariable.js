@@ -1,6 +1,9 @@
 ﻿
-//var gblurl = "http://localhost:1610/api/";
-var gblurl = "https://ctcl.investmentz.com/iCtclServiceT/api/";
+var common_url = "http://localhost:49180/"; //comment In Live
+var gblurl = "http://localhost:1610/api/";
+
+//var common_url = "https://ctcluat.investmentz.com/"; //comment In Live
+//var gblurl = "https://ctcl.investmentz.com/iCtclServiceT/api/";
 var gblnUserId;
 var clearClntDetails, saveClntDetails, getClntDetails;
 var gblCTCLid = localStorage.getItem("CTCLId");
@@ -8,6 +11,7 @@ var gblCTCLtype = localStorage.getItem("EmpCTCLtype");
 
 
 $(document).ready(function () {
+    
     var NameCode = localStorage.getItem("NameCode");
     $("#BANameCode").html(NameCode);
     
@@ -23,16 +27,50 @@ $(document).ready(function () {
         setGlobalVariable("AvailEmpClnts", JSON.stringify(clntInfo));
     };
 
-    getClntDetails(function (data) {
-        initAutoComplete(data.EmpBAClientMaster);
-    });
+    //getClntDetails(function (data) {
+    //    initAutoComplete(data.EmpBAClientMaster);
+    //});
 
+    getClntDetails = function (cbClntDetailsFetched) {
+        var option = 3;
 
+        if (gblCTCLtype.toString().toLocaleLowerCase() == "ba") {
+            option = 1;
+        } else if (gblCTCLtype.toString().toLocaleLowerCase() == "emp") {
+            option = 3;
+        }
 
-    GetBcastUrl(6);
+        var data1 = getGlobalVariable("AvailEmpClnts", "");
+        if (data1 != "" && cbClntDetailsFetched != null) {
+            var decompData = LZString.decompress(data1);
+            cbClntDetailsFetched(JSON.parse(decompData));
+        }
+        else {
+            //getCCID();
+            var empBaCode = gblnUserId;
+            var GetClients = $.ajax(
+                {
+                    url: "https://trade.investmentz.com/" + "InvestmentzAPI/api/EmpBaClients/",
+                    method: "get",
+                    data: {
+                        EmpBACode: empBaCode,
+                        Option: option
+                    },
+                    dataType: "json"
+                });
+
+            GetClients.done(function (msg) {
+                setGlobalVariable("AvailEmpClnts", LZString.compress(JSON.stringify(msg)));
+                if (cbClntDetailsFetched != null)
+                    cbClntDetailsFetched(msg);
+            });
+            GetClients.fail(function (jqXHR, textStatus) {
+                alert("Failed to collect to employee details");
+            });
+        }
+    }
     //getCTCLID();
 });
-
 
     window.formatDate = function (inputDate, inputDateFormat, outPutFormat) {
         if (inputDate == "" && inputDateFormat.val() == "")
@@ -76,46 +114,6 @@ $(document).ready(function () {
 //    else
 //        return window.localStorage.getItem(variableName);
 //}
-
-
-getClntDetails = function (cbClntDetailsFetched) {
-    var option = 3;
-
-    if (gblCTCLtype.toString().toLocaleLowerCase() == "ba") {
-        option = 1;
-    } else if (gblCTCLtype.toString().toLocaleLowerCase() == "emp") {
-        option = 3;
-    }
-
-    var data1 = getGlobalVariable("AvailEmpClnts", "");
-    if (data1 != "" && cbClntDetailsFetched != null) {
-        var decompData = LZString.decompress(data1);
-        cbClntDetailsFetched(JSON.parse(decompData));
-    }
-    else {
-        //getCCID();
-        var empBaCode = gblnUserId;
-        var GetClients = $.ajax(
-        {
-            url: "https://trade.investmentz.com/" + "InvestmentzAPI/api/EmpBaClients/",
-            method: "get",
-            data: {
-                EmpBACode: empBaCode,
-                Option: option
-            },
-            dataType: "json"
-        });
-
-        GetClients.done(function (msg) {
-            setGlobalVariable("AvailEmpClnts", LZString.compress(JSON.stringify(msg)));
-            if (cbClntDetailsFetched != null)
-                cbClntDetailsFetched(msg);
-        });
-        GetClients.fail(function (jqXHR, textStatus) {
-            alert("Failed to collect to employee details");
-        });
-    }
-}
 
 //$("#txtSelectedClient").on("change keyup paste", clearStorage);
 
@@ -307,48 +305,3 @@ function cleargblBCastUrl() {
     setGlobalVariable("BroadcastUrl", "");
 }
 
-function GetBcastUrl(nAction) {
-    var GetUrl = $.ajax(
-        {
-            url: gblurl + "AccoutingV1/",
-            method: "get",
-            async: false,
-            data: {
-                nAction: nAction,
-                sUserId: "",
-                nPageIndex: 1,
-                AccountSegment: 0,
-                nExchange: 1
-            },
-            dataType: "json"
-        });
-
-    GetUrl.done(function (msg) {
-
-        if (msg.ResultStatus == 3) {
-            if (msg.Result.nLoginStatus == 1) {
-                $("#Exchange").attr("src", "../img/dis-2.png");
-                $("#Exchang1").attr("src", "../img/dis-2.png");
-                
-                if (msg.Result.sAmoMsg.toString().trim() != "")
-                {
-                    alert("This Order will be treated as AMO order, Order Will be Processed on next trading Day.");
-                }
-                savegblBCastUrl(msg.Result.sCtclBroadcastUrl.toString().trim());
-            }
-            else {
-                $("#Exchange").attr("src", "../img/dis-1.png");
-                $("#Exchang1").attr("src", "../img/dis-1.png");
-                $("#amo").html("");
-            }
-        } else {
-            $("#Exchange").attr("src", "../img/dis-1.png");
-            $("#Exchang1").attr("src", "../img/dis-1.png");
-            $("#amo").html("");
-        }
-    });
-
-    GetUrl.fail(function (jqXHR, textStatus) {
-        alert("Request failed: " + textStatus + ' GetOStatus');
-    });
-}

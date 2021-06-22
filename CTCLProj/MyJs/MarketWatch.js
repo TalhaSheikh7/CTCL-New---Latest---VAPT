@@ -72,7 +72,7 @@ $(document).ready(function () {
 
     var win = $("#WatchlistSet").kendoWindow({
         width: 300,
-        draggable: false,
+        draggable: true,
         resizable: true,
         visible: false,
         actions: ["Custom", "maximize", "minimize"],
@@ -89,7 +89,7 @@ $(document).ready(function () {
 
     $("#DepthWindow").kendoWindow({
         width: 300,
-        draggable: false,
+        draggable: true,
         resizable: true,
         visible: false,
         actions: ["Custom", "maximize", "minimize"],
@@ -127,8 +127,8 @@ $(document).ready(function () {
 
 
     var setofOption = [
-        { value: 0, Id: 1, name: "Your Watchlists" },
-        { value: 1, Id: 2, name: "Default Watchlists" }
+        { value: 0, Id: 1, name: "Watchlists" },
+        { value: 1, Id: 2, name: "Market Watch" }
     ];
 
     KendoDropDownList("watchlistOption", setofOption, "Id", "name", WatchOptionChange, false, "", 0);
@@ -1708,7 +1708,7 @@ function buysellwindow(data)
         localStorage.setItem("BuySell", "Sell");
     }
 
-    GetBcastUrl(6);
+   // GetBcastUrl(6);
 
     if ($("#Exchange").attr("src") == "../img/dis-1.png") {
         alert('Due to techical reason you cannot place order now, try after sometime')

@@ -611,10 +611,10 @@ if (gblCTCLtype.toString().toLocaleLowerCase() == "ba" || gblCTCLtype.toString()
     $("#cmbCtclSelect").css('display', 'inline');
     $("#cmbCtclSelect").html('<option value="">All</option>' + '<option value="' + gblCTCLid + '" selected="selected">' + $("#lblClientCode").html() + '</option>');
 
-    getClntDetails(function (data) {
+    //getClntDetails(function (data) {
 
-        initAutoComplete(data.EmpBAClientMaster);
-    });
+    //    initAutoComplete(data.EmpBAClientMaster);
+    //});
 }
 else {
 
