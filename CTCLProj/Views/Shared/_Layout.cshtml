@@ -117,7 +117,8 @@
             $("#menu").kendoMenu();
 
             $.ajax({
-                url: "https://ctcluat.investmentz.com/Home/clientnameanducc",
+               // url: "https://ctcluat.investmentz.com/Home/clientnameanducc",
+                url: "/Home/clientnameanducc",
                 type: "GET",
                 data: {
                 },
@@ -126,7 +127,7 @@
                     console.log(data);
 
                     if (data == false) {
-                        location.href = "https://ctcluat.investmentz.com/Login/Login"
+                     //   location.href = "https://ctcluat.investmentz.com/Login/Login"
                     }
                    
                 },

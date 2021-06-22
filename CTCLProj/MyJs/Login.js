@@ -30,14 +30,15 @@ $(document).ready(function () {
               //  alert(strmsg);
 
                 if (strmsg == "Incorrect") {
-                   // alert(data);
-
-                    KendoWindow("remaeks", 650, 120, "", 0);
-                    $("#remaeks").closest(".k-window").css({
-                        top: 350,
-                        left: 200
-                    });
-                    $("#remarkdetails").html(data)
+                    alert(data);
+                    $("#anyonepopup").show();
+                    $("#commenpopup").html(data)
+                    //KendoWindow("remaeks", 650, 120, "", 0);
+                    //$("#remaeks").closest(".k-window").css({
+                    //    top: 350,
+                    //    left: 200
+                    //});
+                    //$("#remarkdetails").html(data)
                     return false;
                 }
                 
@@ -68,13 +69,13 @@ $(document).ready(function () {
             },
             dataType: "json",
             success: function (data) {
-              //  alert("Your login ID has been send on your registered Mobile No and Email id.");
-                KendoWindow("remaeks", 650, 120, "", 0);
-                $("#remaeks").closest(".k-window").css({
-                    top: 350,
-                    left: 200
-                });
-                $("#remarkdetails").html("Your login ID has been send on your registered Mobile No and Email id.")
+                alert("Your login ID has been send on your registered Mobile No and Email id.");
+                //KendoWindow("remaeks", 650, 120, "", 0);
+                //$("#remaeks").closest(".k-window").css({
+                //    top: 350,
+                //    left: 200
+                //});
+                //$("#remarkdetails").html("Your login ID has been send on your registered Mobile No and Email id.")
             },
             error: function (data) {
                 console.log(data);
@@ -89,7 +90,7 @@ $(document).ready(function () {
         var hFldPopupOperation = "FPWD";//$('#hFldPopupOperation').val('FPWD');
         var hFldOpenPopupId = "modForgotPwd";
         $.ajax({
-            url: "https://ctcluat.investmentz.com/Login/btnFPwdProceed_Click",
+            url: Glbvar + "Login/btnFPwdProceed_Click",
             type: "GET",
             data: {
                 Loginid: Loginid,
@@ -122,7 +123,7 @@ $(document).ready(function () {
             url: Glbvar + "Login/btnFPwdProceed_Click",
             type: "GET",
             data: {
-                Loginid: Loginid,
+                Loginid: Loginid,   
                 MobileNumber: MobileNumber,
                 hFldOtpVisible: hFldOtpVisible,
                 hFldPopupOperation: hFldPopupOperation
@@ -166,13 +167,13 @@ $(document).ready(function () {
                 $("#changePWD").show();
               //  alert(data)
 
-                KendoWindow("remaeks", 650, 120, "", 0);
-                $("#remaeks").closest(".k-window").css({
-                    top: 350,
-                    left: 200
-                });
-                $("#remarkdetails").html(data)
-              //  alert(MobileNumber);
+                //KendoWindow("remaeks", 650, 120, "", 0);
+                //$("#remaeks").closest(".k-window").css({
+                //    top: 350,
+                //    left: 200
+                //});
+                //$("#remarkdetails").html(data)
+                alert(MobileNumber);
             },
             error: function (data) {
                 console.log(data);
@@ -202,13 +203,13 @@ $(document).ready(function () {
                 $("#forgetpsdotp").hide();
                 $("#changePWD").hide();
                // alert(data)
-                KendoWindow("remaeks", 650, 120, "", 0);
-                $("#remaeks").closest(".k-window").css({
-                    top: 350,
-                    left: 200
-                });
-                $("#remarkdetails").html(data)
-               // alert(MobileNumber);
+                //KendoWindow("remaeks", 650, 120, "", 0);
+                //$("#remaeks").closest(".k-window").css({
+                //    top: 350,
+                //    left: 200
+                //});
+                //$("#remarkdetails").html(data)
+                alert(MobileNumber);
             },
             error: function (data) {
                 console.log(data);
@@ -264,18 +265,18 @@ $(document).ready(function () {
             success: function (data) {
                 var str = data;
                 if (data.sName == null) {
-                    KendoWindow("remaeks", 650, 120, "", 0);
-                    $("#remaeks").closest(".k-window").css({
-                        top: 350,
-                        left: 200
-                    });
-                   // alert("Incorrect mPIN")
-                    KendoWindow("remaeks", 650, 120, "", 0);
-                    $("#remaeks").closest(".k-window").css({
-                        top: 350,
-                        left: 200
-                    });
-                    $("#remarkdetails").html("Incorrect mPIN")
+                    //KendoWindow("remaeks", 650, 120, "", 0);
+                    //$("#remaeks").closest(".k-window").css({
+                    //    top: 350,
+                    //    left: 200
+                    //});
+                    alert("Incorrect mPIN")
+                    //KendoWindow("remaeks", 650, 120, "", 0);
+                    //$("#remaeks").closest(".k-window").css({
+                    //    top: 350,
+                    //    left: 200
+                    //});
+                   // $("#remarkdetails").html("Incorrect mPIN")
                     return false;
                 }
       

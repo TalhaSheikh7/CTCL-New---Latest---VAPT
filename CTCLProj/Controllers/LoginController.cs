@@ -57,7 +57,7 @@ namespace CTCLProj.Controllers
                     {
                         case -1:
                         //Account locked , redirect to forget password page
-                        // ResetForgotPassword(resp.RespMessage, LoginID);
+                       //  ResetForgotPassword(resp.RespMessage, LoginID);
                         hFldPopupOperation = GlobalVariables.hFldPopupOperation1;
                         hFldOpenPopupId = GlobalVariables.hFldOpenPopupId1;
                         break;

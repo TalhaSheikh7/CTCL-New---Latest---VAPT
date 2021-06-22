@@ -184,10 +184,10 @@
             }
 
         .login-wrap {
-            padding: 30px 30px 30px 30px;
+            padding: 15px 30px 30px 30px;
             position: relative;
             width: 450px;
-            margin: 0px auto;
+            margin: 28px auto;
             border: 1px solid #ccc;
             box-shadow: 0 1px 10px 4px rgb(0 0 0 / 8%);
         }
@@ -395,7 +395,7 @@
         /*added by anjali on 17/10/17*/
 
         .modal-title2 {
-            color: #4f5095 !important;
+            color: #fff !important;
             font-size: 22px !important;
             text-align: left;
             font-weight: 900;
@@ -419,6 +419,7 @@
             padding: 5px 30px 5px 30px;
             color: #fff;
             border: 0;
+            cursor: pointer;
         }
 
         .butt_save {
@@ -426,13 +427,15 @@
             border-radius: 5px;
             padding: 5px 30px 5px 30px;
             color: #fff;
+            cursor:pointer;
             border: 0;
         }
 
         .popup_input {
             border: none !important;
             border-bottom: 1px solid #ccc !important;
-            color: #8f9090 !important;
+            background-color:transparent !important;
+            color: #fff !important;
         }
 
         .modal-content {
@@ -563,7 +566,7 @@
 
         .modal {
             /*background: rgba(65, 65, 65, 0.9);*/
-            background: rgb(181 176 176 / 80%);
+            /* background: rgb(181 176 176 / 80%);*/
         }
 
         :focus {
@@ -588,7 +591,7 @@
         span.succes-title {
             font-size: 16px;
             font-weight: 600;
-            color: #000;
+            color: #fff;
         }
 
         span.success-p {
@@ -620,7 +623,7 @@
         }
 
         .modal-title2 {
-            color: #333333 !important;
+            color: #fff !important;
             font-size: 20px !important;
             font-weight: 600;
         }
@@ -640,7 +643,7 @@
         }
 
         label.new-field {
-            color: #000 !important;
+            color: #fff !important;
             font-weight: 300;
         }
 
@@ -795,7 +798,7 @@
             color: #ffffff !important;
             font-family: inherit;
             font-size: 25px;
-            line-height: 26px;
+            line-height: 20px;
             border: 2px solid #ffffff !important;
             border-radius: 30px;
             box-shadow: 0px 0px 15px 1px rgb(2 2 2 / 75%) !important;
@@ -841,6 +844,21 @@
             bottom: 2px;
             left: 1px;
         }
+
+        .modal-content {
+            background-color: #0e0e0e !important;
+            border: 1px solid #ccc !important;
+        }
+
+        .popup_input.new-popup {
+            background-color: transparent !important;
+        }
+
+        .modal-footer {
+            background-color: transparent !important;
+        }
+
+
     </style>
 
     <script src="~/Scripts/kendo/2021.1.224/jquery.min.js"></script>
@@ -997,12 +1015,12 @@
                     url: "https://trade.investmentz.com/Web/WebForms/Alerts.aspx",
                     target: "_self"
                 }, {
-                        type: 'success',
-                        placement: {
-                            from: "bottom",
-                            align: "right"
-                        },
-                    });
+                    type: 'success',
+                    placement: {
+                        from: "bottom",
+                        align: "right"
+                    },
+                });
                 // [START_EXCLUDE]
                 // Update the UI to include the received message.
                 //appendMessage(payload);
@@ -1298,7 +1316,7 @@
         });
 
 
-/**/</script>
+        /**/</script>
 </head>
 <body class="k-content">
     <main>
@@ -1308,14 +1326,13 @@
                 <!-- START : Notification request popup -->
                 <div class="modal" id="modNotificationPermission" tabindex="-1" role="dialog" aria-labelledby="modNotificationPermissionLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
-                        <div class="col-sm-4 login-icon text-center" style="height: 285px; width: 250px;">
-                            <img src="img/Notification.png" class="img-responsive" />
-                        </div>
-                        <div class="col-sm-8 modal-content" style="width: 350px;  height: 285px;">
+
+                        <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">
-                                    <span class="closespan" aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                                </button>
+                                <span onclick="document.getElementById('modSessionTerminate').style.display='none'" class="close" title="Close">×</span>
+                                @*<button type="button" class="close" data-dismiss="modal">
+                            <span class="closespan" aria-hidden="true">&times;</span><span class="sr-only">Close</span>
+                        </button>*@
                                 <h4 class="modal-title2" id="modNotificationPermissionLabel">Notification Permission</h4>
                             </div>
                             <div class="modal-body" style="padding: 15px 0 5px 0 !important;">
@@ -1327,10 +1344,10 @@
                                             <p style="font-size: 16px;">
                                                 <b>Click On Allow</b>
                                             </p>
-                                            <br />
-                                            <br />
+
                                             <button id="btnAllowNotification" type="button" class="butt_cancel">Allow</button>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
                                             <button id="btnDenyNotification" type="button" class="butt_cancel">cancel</button>
+                                            <br />  <br />
                                         </div>
                                     </div>
                                 </div>
@@ -1344,9 +1361,10 @@
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <button type="button" class="close" data-dismiss="modal">
-                                    <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                                </button>
+                                <span onclick="document.getElementById('modSessionTerminate').style.display='none'" class="close" title="Close">×</span>
+                                @*<button type="button" class="close" data-dismiss="modal">
+                            <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                        </button>*@
                                 <h4 class="modal-title2" id="modSessionTerminateLabel">Session terminated</h4>
                             </div>
                             <div class="modal-body" style="padding: 15px 0 5px 0 !important;">
@@ -1377,6 +1395,9 @@
                         <div class="col-sm-12">
                             <div class="login-wrap">
                                 <div class="row">
+                                    <div class="col-md-12 text-center">
+                                        <img src="~/img/investment_logo.png" style="width: 285px;" />
+                                    </div>
                                     <div class="col-md-12 form-group text-center">
                                         <img src="~/images/logo.svg" alt="" style="width:229px;">
                                         <h1 class="main-title1 marginbottom0 text-center">LOGIN</h1>
@@ -1384,12 +1405,16 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="floating-label">
-                                            <input name="txtUid" id="txtUid" class="floating-input" type="text" placeholder=" " autocomplete="off" style="color:#fff !important;" />	<span class="highlight"></span>
+                                            <input name="txtUid" id="txtUid" class="floating-input" type="text" placeholder=" " autocomplete="off" style="color:#fff !important;" />
+                                            <span class="highlight"></span>
                                             <span class="bar"></span>
                                             <label class="float-label">Login Id</label>	<a id="btnForgotLogin" style="cursor:pointer; color:#fff;font-size: 12px;font-weight: 600; float:right;"> Forgot your Login?</a>
                                         </div>
                                         <div class="floating-label">
-                                            <input name="txtPassWd" id="txtPassWd" class="floating-input" placeholder=" " autocomplete="off" type="password" style="color:#fff !important;" />	<span class="highlight"></span>
+                                            <input name="txtPassWd" id="txtPassWd" class="floating-input active" placeholder=" " autocomplete="off" type="password" style="color:#fff !important;" />
+                                            <span toggle="#txtPassWd" class="fa fa-fw fa-eye field-icon toggle-password" style="color: #fff;position: absolute;right: 14px;top: 11px;cursor: pointer;font-size: 16px;"></span>
+
+                                            <span class="highlight"></span>
                                             <span class="bar"></span>
                                             <label class="float-label">Password</label>
                                         </div>
@@ -1428,14 +1453,15 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">
-                                        <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                                    </button>
+                                    <span onclick="document.getElementById('modForgotPwd').style.display='none'" class="close" title="Close">×</span>
+                                    @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                            </button>*@
                                     <h4 class="modal-title2" id="modForgotPwdLabel">Forgot Password</h4>
                                 </div>
                                 <div class="modal-body">
                                     <div class="container-fluid">
-                                        <div id="WelcomeMsg" class="row">
+                                        <div id="WelcomeMsg" class="">
                                             <span id="clientWelcome" class="succes-title">Welcome</span>
                                             <span id="clientname" class="succes-title"></span>
                                             <br /> <span id="clientMessage">Please enter the <big><strong>OTP</strong></big> sent to your registered mobile number.</span>
@@ -1467,7 +1493,7 @@
                                             </div>
                                             <div class="col-sm-7" style="line-height: 18px; padding: 0px 58px; position: relative;  top: -10px;">
                                                 <small>180 Seconds</small>
-                                                <br /><a id="resendotp" style="color:#000;" href="javascript:__doPostBack(&#39;resendotp&#39;,&#39;&#39;)">Resend OTP</a>
+                                                <br /><a id="resendotp" style="font-size:12px; color:#000;" href="javascript:__doPostBack(&#39;resendotp&#39;,&#39;&#39;)">Resend OTP</a>
                                             </div>
                                         </div>
                                     </div>
@@ -1492,9 +1518,10 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">
-                                        <span aria-hidden="true" class="closespan">×</span><span class="sr-only">Close</span>
-                                    </button>
+                                    <span onclick="document.getElementById('forgetpsdotp').style.display='none'" class="close" title="Close">×</span>
+                                    @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">×</span><span class="sr-only">Close</span>
+                            </button>*@
                                     <h4 class="modal-title2" id="modForgotPwdLabel">Forgot Password</h4>
                                 </div>
                                 <div class="modal-body">
@@ -1503,7 +1530,7 @@
 
                                             <span id="clientWelcome" class="succes-title">Welcome</span><br />
                                             <span id="clientname" class="succes-title"></span><br>
-                                            <span id="clientMessage" style="color:#000 !important;">Please enter the <big><strong>OTP</strong></big> sent to your registered mobile number.</span><br><br>
+                                            <span id="clientMessage" style="color:#fff !important;">Please enter the <big><strong>OTP</strong></big> sent to your registered mobile number.</span><br><br>
 
                                         </div>
                                         <div id="loginrow" hidden="hidden">
@@ -1535,14 +1562,12 @@
                                         <div class="row" style="padding-top: 8px; padding-bottom: 8px; display: block;" id="divOtpBlock">
                                             <input type="hidden" name="hFldOtpVisible" id="hFldOtpVisible" value="T">
 
-                                            <div class="col-sm-5" style="padding: 0;">
-
-
+                                            <span>
                                                 <input name="txtFPwdOTP" type="password" autocomplete="off" id="txtFPwdOTP1" class="popup_input" style="font-size:16px;">
-                                            </div>
-                                            <div class="col-sm-7" style="line-height: 18px; padding: 0px 58px; position: relative;  top: -10px;">
-                                                <small>180 Seconds</small><br><a id="resendotp" style="color:#000;" href="javascript:__doPostBack('resendotp','')">Resend OTP</a>
-                                            </div>
+                                            </span>
+                                            <span>
+                                                <small>180 Seconds</small><br><a id="resendotp" style="color:#fff;" href="javascript:__doPostBack('resendotp','')">Resend OTP</a>
+                                            </span>
                                         </div>
 
                                     </div>
@@ -1565,13 +1590,14 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">
-                                        <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                                    </button>
+                                    <span onclick="document.getElementById('modChangePwd').style.display='none'" class="close" title="Close">×</span>
+                                    @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                            </button>*@
                                     <h4 class="modal-title2" id="modChangePwdLabel">Change Password</h4>
                                 </div>
                                 <div class="">
-                                    <div class="container-fluid">
+                                    <div class="">
                                         <div id="WelcomeMsgcp">
                                             <span id="clientWelcomecp" class="succes-title">Welcome</span>
                                             <span id="clientnamecp"></span>
@@ -1589,6 +1615,7 @@
                                         <div class="row" style="padding-top:5px">
                                             <div class="col-md-12">
                                                 <input name="txtChangePwd1" type="password" autocomplete="off" id="txtChangePwd1" class="popup_input new-popup" placeholder="Password" style="margin-bottom: 10px;" />
+
                                             </div>
                                         </div>
                                         <div class="row" style="padding-top:5px">
@@ -1615,9 +1642,10 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">
-                                        <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                                    </button>
+                                    <span onclick="document.getElementById('modFgtLogin').style.display='none'" class="close" title="Close">×</span>
+                                    @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                            </button>*@
                                     <h4 class="modal-title2" id="modFGTLoginLabel">Forgot Login</h4>
                                 </div>
                                 <div class="">
@@ -1664,19 +1692,20 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">
-                                        <span aria-hidden="true" class="closespan">×</span><span class="sr-only">Close</span>
-                                    </button>
+                                    <span onclick="document.getElementById('changePWD').style.display='none'" class="close" title="Close">×</span>
+                                    @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">×</span><span class="sr-only">Close</span>
+                            </button>*@
                                     <h4 class="modal-title2" id="modChangePwdLabel">Change Password</h4>
                                 </div>
                                 <div class="">
-                                    <div class="container-fluid">
+                                    <div class="">
                                         <div id="WelcomeMsgcp">
                                             <span id="clientWelcomecp" class="succes-title">Welcome</span><br />
-                                            <span id="clientnamecp" style="color:#000;">PARTH KALPESH PATEL</span><br>
-                                            <span id="clientMessagecp" style="color:#000;">Please create a new password to continue with your</span><br>
-                                            <span id="clientMessagecp1" style="color:#000;">login id</span>
-                                            <span id="lblLoginIdCp" style="color:#000;">bittu68</span> <span>"</span><br>
+                                            <span id="clientnamecp" style="color:#fff;"></span><br>
+                                            <span id="clientMessagecp" style="color:#fff;">Please create a new password to continue with your</span><br>
+                                            <span id="clientMessagecp1" style="color:#fff;">login id</span>
+                                            <span id="lblLoginIdCp" style="color:#fff;"></span> <span>"</span><br>
 
                                         </div>
                                         <div class="row">
@@ -1693,6 +1722,7 @@
 
 
                                                 <input name="txtChangePwd1" type="password" autocomplete="off" id="txtChangePwd11" class="popup_input new-popup" placeholder="Password" style="margin-bottom: 10px;">
+                                                <span toggle="#txtChangePwd11" class="fa fa-fw fa-eye field-icon toggle-password" style="color: #fff;position: absolute;right: 14px;top: 5px;cursor: pointer;font-size: 16px;"></span>
                                             </div>
                                         </div>
                                         <div class="row" style="padding-top:5px">
@@ -1728,9 +1758,10 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="col-sm-12 modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">
-                                        <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                                    </button>
+                                    <span onclick="document.getElementById('modSuccess').style.display='none'" class="close" title="Close">×</span>
+                                    @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                            </button>*@
                                     <h4 class="modal-title2" id="modSuccessLabel">Success!</h4>
                                 </div>
                                 <div class="col-sm-12 modal-body">
@@ -1753,9 +1784,10 @@
                             <div class="modal-dialog" role="document">
                                 <div class="modal-content">
                                     <div class="modal-header">
-                                        <button type="button" class="close" data-dismiss="modal">
-                                            <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                                        </button>
+                                        <span onclick="document.getElementById('modMpinValidate').style.display='none'" class="close" title="Close">×</span>
+                                        @*<button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                                </button>*@
                                         <h4 class="modal-title2" id="modMPinLabel">M-Pin Verification</h4>
                                     </div>
                                     <div class="modal-body" style="padding: 10px 0 14px 0 !important;">
@@ -1796,9 +1828,10 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">
-                                        <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                                    </button>
+                                    <span onclick="document.getElementById('modChangeMpin').style.display='none'" class="close" title="Close">×</span>
+                                    @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                            </button>*@
                                     <h4 class="modal-title2" id="modChangeMpinLabel">Change M-Pin</h4>
                                 </div>
                                 <div class="modal-body" style="padding: 15px 0 5px 0 !important;">
@@ -1844,9 +1877,10 @@
                         <div class="modal-dialog" role="document">
                             <div class="modal-content">
                                 <div class="modal-header">
-                                    <button type="button" class="close" data-dismiss="modal">
-                                        <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                                    </button>
+                                    <span onclick="document.getElementById('modNewCred').style.display='none'" class="close" title="Close">×</span>
+                                    @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                            </button>*@
                                     <h4 class="modal-title2" id="modNewCredLabel">Enter New Credentials</h4>
                                 </div>
                                 <div class="modal-body" style="padding:5px 0 15px 0 !important;">
@@ -1906,14 +1940,14 @@
                 </div>
                 <!-- Modal for New credentials start -->
                 <!-- Modal for force logout start -->
-                <div class="modal " id="modForceLogout" tabindex="-1 " role="dialog " aria-labelledby="modForceLogoutLabel " aria-hidden="true ">
+                <div class="modal" id="modForceLogout" tabindex="-1 " role="dialog " aria-labelledby="modForceLogoutLabel " aria-hidden="true ">
                     <div class="modal-dialog " role="document">
                         <div class="modal-content ">
                             <div class="modal-header ">
-
-                                <button type="button" class="close " data-dismiss="modal ">
-                                    <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only ">Close</span>
-                                </button>
+                                <span onclick="document.getElementById('modForceLogout').style.display='none'" class="close" title="Close">×</span>
+                                @*<button type="button" class="close " data-dismiss="modal ">
+                            <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only ">Close</span>
+                        </button>*@
                                 <h4 class="modal-title2 " id="H1 ">Force Logout</h4>
                             </div>
                             <div class="modal-body " style="padding: 15px 0 5px 0 !important; ">
@@ -1937,6 +1971,30 @@
                     </div>
                 </div>
                 <!-- Modal for force logout end here -->
+                <!-- Modal for force logout start -->
+                <div class="modal" id="anyonepopup" tabindex="-1 " role="dialog " aria-labelledby="modForceLogoutLabel " aria-hidden="true ">
+                    <div class="modal-dialog " role="document">
+                        <div class="modal-content ">
+                            <div class="modal-header ">
+                                <span onclick="document.getElementById('anyonepopup').style.display='none'" class="close" title="Close">×</span>
+                                @*<button type="button" class="close " data-dismiss="modal ">
+                            <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only ">Close</span>
+                        </button>*@
+                               
+                            </div>
+                            <div class="modal-body">
+                                <div class="container-fluid ">
+                                    <div class="row ">
+                                        <div class="col-sm-12">
+                                           <div id="commenpopup"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal for force logout end here -->
 
             </form>
             <div id="remaeks" style="display:none; text-align:center">
@@ -1948,3 +2006,16 @@
 </body>
 </html>
 <script src="~/MyJs/Login.js"></script>
+
+<script>
+    $(".toggle-password").click(function () {
+
+        $(this).toggleClass("fa-eye fa-eye-slash");
+        var input = $($(this).attr("toggle"));
+        if (input.attr("type") == "password") {
+            input.attr("type", "text");
+        } else {
+            input.attr("type", "password");
+        }
+    });
+</script>
