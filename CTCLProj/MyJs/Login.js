@@ -1,7 +1,7 @@
-﻿//var Glbvar = "https://ctcluat.investmentz.com/"
-    var Glbvar ="http://localhost:49180/"
+﻿var Glbvar = "https://ctcluat.investmentz.com/"
+//    var Glbvar ="http://localhost:49180/"
 $(document).ready(function () {
-
+    localStorage.setItem("CTCLId", "");
     $("#btnLogin").click(function () {
         var LoginID = $("#txtUid").val();
         var Loginpassword = $("#txtPassWd").val();
@@ -30,9 +30,11 @@ $(document).ready(function () {
               //  alert(strmsg);
 
                 if (strmsg == "Incorrect") {
+
                     alert(data);
                     $("#anyonepopup").show();
                     $("#commenpopup").html(data)
+
                     //KendoWindow("remaeks", 650, 120, "", 0);
                     //$("#remaeks").closest(".k-window").css({
                     //    top: 350,
@@ -75,7 +77,7 @@ $(document).ready(function () {
                 //    top: 350,
                 //    left: 200
                 //});
-                //$("#remarkdetails").html("Your login ID has been send on your registered Mobile No and Email id.")
+                //$("#remarkdetails").html("Your login ID has been sent on your registered Mobile No and Email id.")
             },
             error: function (data) {
                 console.log(data);
@@ -165,8 +167,6 @@ $(document).ready(function () {
 
                 $("#forgetpsdotp").hide();
                 $("#changePWD").show();
-              //  alert(data)
-
                 //KendoWindow("remaeks", 650, 120, "", 0);
                 //$("#remaeks").closest(".k-window").css({
                 //    top: 350,
@@ -210,6 +210,7 @@ $(document).ready(function () {
                 //});
                 //$("#remarkdetails").html(data)
                 alert(MobileNumber);
+
             },
             error: function (data) {
                 console.log(data);
@@ -265,6 +266,7 @@ $(document).ready(function () {
             success: function (data) {
                 var str = data;
                 if (data.sName == null) {
+
                     //KendoWindow("remaeks", 650, 120, "", 0);
                     //$("#remaeks").closest(".k-window").css({
                     //    top: 350,
@@ -282,16 +284,19 @@ $(document).ready(function () {
       
                 var BAName = data.sName;
                 var BACode = data.sTradingCode;
-                localStorage.setItem("BACode", BACode)
+                
                 var UserType = data.UserType;
                 var Sessionid = data.Sessionid;
                 var passwordsExpiry = data.passwordsExpiry;
                 var BANameBACode = BAName + " (" + BACode + ")"
                 $("#BANameCode").val(data);
-                localStorage.setItem("NameCode", BANameBACode)
-
+                localStorage.setItem("NameCode", BANameBACode);
+                localStorage.setItem("CCID", data.sTradingCode);
+                localStorage.setItem("BACode", BACode);
+                localStorage.setItem("EmpCTCLtype", UserType);
                 if (UserType == "Emp") {
                     GetEmpCTCLId(BACode)
+                    gblCTCLtype = getEmpDetails("EmpCTCLtype", "");
                 }
                 else {
                     GetBACTCLId(BACode)
@@ -316,7 +321,7 @@ function GetEmpCTCLId(EmpCode) {
         },
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            //console.log(data);
 
             var CTCLID = data.EmpCTCL[0].CTCLID;
 
@@ -345,7 +350,8 @@ function GetBACTCLId(BACode) {
         dataType: "json",
         success: function (data) {
             console.log(data);
-
+            var CTCLID = "";
+            localStorage.setItem("CTCLId", CTCLID);
             if (data = ! "") {
                 location.href = Glbvar + "Home/Index"
             }

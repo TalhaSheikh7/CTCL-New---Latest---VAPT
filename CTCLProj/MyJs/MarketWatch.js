@@ -1,6 +1,7 @@
 ﻿var nMarketSegment = 1;
 var intselectedId = 0;
-var gblnUserId =  $("#txtSelectedClient").val().split('-')[0].trim();
+/*var gblnUserId =  $("#txtSelectedClient").val().split('-')[0].trim();*/
+var gblnUserId = 3010098;
 var pnSourceID = 0;
 var psName = '';
 var nInstrument = 0;
@@ -85,6 +86,16 @@ $(document).ready(function () {
         height: "52%",
 
     });
+
+    $("#DepthWindow").kendoWindow({
+        width: 300,
+        draggable: false,
+        resizable: false,
+        visible: false,
+        actions: ["Custom", "maximize", "minimize"],
+        title: "Market Watch"
+    }).data("kendoWindow").center().open();
+
     $("#DepthWindow").closest(".k-window").css({
         width: "39.5%",
         top: "10%",
@@ -92,6 +103,7 @@ $(document).ready(function () {
         height: "52%",
 
     });
+
     $("#tabWindow").kendoWindow({
         width: 300,
         draggable: false,
@@ -109,8 +121,10 @@ $(document).ready(function () {
 
     });
 
-  //  MainKendoWindow("DepthWindow", 550, 402, 66, 858, "Market Depth");
-   // MainKendoWindow("tabWindow", 1385, 275, 471, 29, "");
+
+    //MainKendoWindow("DepthWindow", 550, 402, 66, 858, "Market Depth");
+    //MainKendoWindow("tabWindow", 1385, 275, 471, 29, "");
+
 
     var setofOption = [
         { value: 0, Id: 1, name: "Your Watchlists" },
@@ -122,6 +136,7 @@ $(document).ready(function () {
     getExpiredScripDetails();
     //getgrid2();
 });
+
 
 function WatchOptionChange()
 {
@@ -149,7 +164,7 @@ function DefaultWatchlist(nHoldingWatchID, seq)
         data: rowdata,
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            //console.log(data);
 
             if (seq == 1) {
                 DefaultWatch = [];
@@ -224,7 +239,7 @@ function GetHoldinWatchData(OptionID)
         URL = gblurl + "AccoutingV1/";
         rowdata = {
             nAction: 3,
-            sUserid: 3010098,
+            sUserid: gblnUserId,
             nPageIndex: 1,
             AccountSegment: 0
         };
@@ -261,7 +276,7 @@ function getExpiredScripDetails()
 {
     var Param = {
         nActionID: ActionID.GetExpiredScrip,
-        UCC: 197806
+        UCC: gblnUserId
     };
 
     $.ajax({
@@ -317,7 +332,7 @@ $(document).on("click", "#btnConvExpScrip", function (event) {
 
     var UpdateOrderParams = JSON.stringify({
         nAction: 3,
-        UCC: 197806
+        UCC: gblnUserId
     });
 
     $.ajax({
@@ -983,10 +998,10 @@ function GetWatches(nUserId, nMarketWatchID, nMarketSegment, intPageIndex)
 
    var ClientCode= $("#txtSelectedClient").val().split('-')[0].trim();
     $.ajax({
-        url: "https://trade.investmentz.com/EasyTradeApi/api/WatchListV2/",
+        url: "https://ctcl.investmentz.com/iCtclServiceT/api/WatchListV2/",
         method: "get",
         data: {
-            pnUserId: ClientCode,
+            pnUserId: 3010098,
             pnMarketWatchID: nMarketWatchID,
             pnMarketSegment: nMarketSegment,
             pintPageIndex: intPageIndex
@@ -1071,7 +1086,7 @@ function ChangeWatchList() {
 
 function FillWatchGrid(data, type)
 {
-    console.log(data);
+    //console.log(data);
     //return false;
     //var scrip = "";
     //var button = "";
@@ -1156,10 +1171,10 @@ function FillWatchGrid(data, type)
 
         //PC = '<span><strong id= "' + row.nExchangeConstants + '_' + row.nToken + '_PC">0.0000</strong></span>';
         if (Exchangeconstant == 12 || Exchangeconstant == 13) {
-            currrate = '<span><strong class= "' + Exchangeconstant + '_' + row.nToken + '_LRH">0.0000</strong></span>';
+            currrate = '<span><strong class= "' + Exchangeconstant + '_' + row.nToken + '_LR">0.0000</strong></span>';
         }
         else {
-            currrate = '<span><strong class= "' + Exchangeconstant + '_' + row.nToken + '_LRH">0.00</strong></span>';
+            currrate = '<span><strong class= "' + Exchangeconstant + '_' + row.nToken + '_LR">0.00</strong></span>';
         }
 
         sScripts = sScripts.concat(Exchangeconstant + '.' + row.nToken + ',');
@@ -1520,9 +1535,9 @@ function getOptionChain(data)
 {
    // return false;
     var ExpiryDate = moment(data.dataset.expirydate).format("DD/MM/YYYY");
-    var StockType = GetInstrument(data.dataset.instrument);
+    var StockType = GetInstrumentNumber(data.dataset.instrument);
     var ltpid = data.dataset.exchangeconstants + '_' + data.dataset.token;
-    var LTP = parseFloat($('#' + ltpid + '_LR').text());
+    var LTP = parseFloat($('.' + ltpid + '_LR').text());
 
     var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
 
@@ -1542,7 +1557,7 @@ function getOptionChain(data)
         };
 
         $.ajax({
-            url: gblurl + "DashboardV1/",
+            url: "https://trade.investmentz.com/EasyTradeApi/api/DashboardV1/",
             type: 'GET',
             contentType: 'application/json',
             data: optParam,
@@ -1563,29 +1578,29 @@ function getOptionChain(data)
 function FillOptionChainGrid(data)
 {
     var sScripts = "";
-    var lblScript = "lblScripts";
+    var lblScript = "lblScripts3";
     var token = "tokens"
     var LTP;
     OptionStrikeData = [];
     $.each(data.Result, function (i, row) {
 
         sScripts = sScripts.concat(row.BroadcastConstant + '.' + row.PutToken + ',');
-
-        $('#lblScripts').html(sScripts.substring(0, sScripts.length - 1));
-        $('#lblScripts').html($('#lblScripts').html() + "," + "17.999908,17.999988,5.1")
+ 
+        $('#lblScripts3').html(sScripts.substring(0, sScripts.length - 1));
+        $('#lblScripts3').html($('#lblScripts3').html() + "," + "17.999908,17.999988,5.1")
         tokens.push(row.nToken);
 
-       // reconnectSocketAndSendTokens(lblScript);
+        reconnectSocketAndSendTokens(lblScript);
 
         if (row.BroadcastConstant == 12 || row.BroadcastConstant == 13) {
-            LTP = '<span><strong id= "' + row.BroadcastConstant + '_' + row.PutToken + '_LR">0.0000</strong></span>';
+            LTP = '<span><strong class= "' + row.BroadcastConstant + '_' + row.PutToken + '_LR">0.0000</strong></span>';
         }
         else {
-            LTP = '<span><strong id= "' + row.BroadcastConstant + '_' + row.PutToken + '_LR">0.00</strong></span>';
+            LTP = '<span><strong class= "' + row.BroadcastConstant + '_' + row.PutToken + '_LR">0.00</strong></span>';
         }
 
         OptionStrikeData.push(
-            { cLTP: row.LTP }
+            { cLTP: LTP }
         );
 
     })
@@ -1748,7 +1763,7 @@ function buysellwindow(data)
     }
 
     var ExchangeName = GetExchangeType(nExchangeId);
-    instrumentindex = GetInstrument(data.dataset.instrument);
+    instrumentindex = GetInstrumentNumber(data.dataset.instrument);
     $('#markettype').data('stocktype', instrumentindex);
 
 
@@ -1787,9 +1802,9 @@ function buysellwindow(data)
     if (segmentindex == 'CURR') {
         $("#txtorderprice").attr("step", tickpriceCurrency);
         $("#txtorderprice").attr("min", tickpriceCurrency);
-        $("#txtorderprice").val(parseFloat($('#' + ltpid + '_LR').text()).toFixed(4));
+        $("#txtorderprice").val(parseFloat($('.' + ltpid + '_LR').text()).toFixed(4));
 
-        $("#ltp").text(parseFloat($('#' + ltpid + '_LR').text()).toFixed(4));
+        $("#ltp").text(parseFloat($('.' + ltpid + '_LR').text()).toFixed(4));
         $("#txttrigprice").attr("step", tickpriceCurrency);
         $("#txttrigprice").attr("min", tickpriceCurrency);
 
@@ -1797,10 +1812,10 @@ function buysellwindow(data)
     else {
         $("#txtorderprice").attr("step", tickprice);
         $("#txtorderprice").attr("min", tickprice);
-        $("#txtorderprice").val(parseFloat($('#' + ltpid + '_LR').text()).toFixed(2));
+        $("#txtorderprice").val(parseFloat($('.' + ltpid + '_LR').text()).toFixed(2));
 
-        $("#ltp").text(parseFloat($('#' + ltpid + '_LR').text()).toFixed(2));
-        $("#txtorderprice").val(parseFloat($('#' + ltpid + '_LR').text()).toFixed(2));
+        $("#ltp").text(parseFloat($('.' + ltpid + '_LR').text()).toFixed(2));
+        $("#txtorderprice").val(parseFloat($('.' + ltpid + '_LR').text()).toFixed(2));
     }
 
 
@@ -1808,20 +1823,20 @@ function buysellwindow(data)
         $("#expirydate").html('<option selected="selected" class="service-small">' + formatDate(data.dataset.expirydate, '', "DD MMM YYYY") + '</option>');
     }
 
-    $("#txtorderprice").attr("data-price", parseFloat($('#' + ltpid + '_LR').text()).toFixed(4));
+    $("#txtorderprice").attr("data-price", parseFloat($('.' + ltpid + '_LR').text()).toFixed(4));
 
-    $("#cmbSegment1").val(GetInstrument(data.dataset.instrument));
+    $("#cmbSegment1").val(GetInstrumentNumber(data.dataset.instrument));
 
-    VarMargin1(nExchangeId, data.dataset.token, GetInstrument(data.dataset.instrument));
+    VarMargin1(nExchangeId, data.dataset.token, GetInstrumentNumber(data.dataset.instrument));
 
-    if (GetInstrument(data.dataset.instrument) == 3) {
+    if (GetInstrumentNumber(data.dataset.instrument) == 3) {
 
         var sScript = $("#scriptname").html();
-        GetHolding(sScript);
+        GetClientHolding(sScript);
 
     }
 
-    if (GetInstrument(data.dataset.instrument) == 1 || GetInstrument(data.dataset.instrument) == 2 || GetInstrument(data.dataset.instrument) == 4 || GetInstrument(data.dataset.instrument) == 5) {
+    if (GetInstrumentNumber(data.dataset.instrument) == 1 || GetInstrumentNumber(data.dataset.instrument) == 2 || GetInstrumentNumber(data.dataset.instrument) == 4 || GetInstrumentNumber(data.dataset.instrument) == 5) {
 
         var nToken = $("#scriptname").data("token");
         var CNCMIS = 0;
@@ -1832,10 +1847,10 @@ function buysellwindow(data)
     
     KendoWindow("windowbuysell", 650, 540, buySell, 0, true);
 
-    $("#windowbuysell").closest(".k-window").css({
-        top: 250,
-        left: 200
-    });
+    //$("#windowbuysell").closest(".k-window").css({
+    //    top: 250,
+    //    left: 200
+    //});
 
     
 
@@ -1896,7 +1911,7 @@ function buysellwindow(data)
 
     localStorage.setItem("buysell", data.dataset.buysell);
 
-    if (GetInstrument(data.dataset.instrument) == 3)
+    if (GetInstrumentNumber(data.dataset.instrument) == 3)
     {
         var nToken = $("#scriptname").data("token");
         var nCncMis = 0;
@@ -1909,7 +1924,7 @@ function buysellwindow(data)
         var Exchange = "NSE";
         var nOrderAmt = $("#txtorderprice").val();
 
-        sinstrument = GetInstrument(data.dataset.instrument);
+        sinstrument = GetInstrumentNumber(data.dataset.instrument);
 
         var nqty = $("#txtqty").val();
 
@@ -1923,6 +1938,7 @@ function buysellwindow(data)
    // $(".typeRadio").click();
 
 }
+
 
 $(document).on("click", "#cnc", function (event) {
     $("#scriptname").data("token");
@@ -1947,6 +1963,49 @@ $(document).on("click", "#cnc", function (event) {
     GetNetPositionforFO($("#scriptname").data("token"), 0);
 
 });
+
+
+function GetClientHolding(sScript)
+{
+    var URL = gblurl + "AccoutingV1/";
+    if (gblCTCLtype.toString().toLocaleLowerCase() == "emp" || gblCTCLtype.toString().toLocaleLowerCase() == "ba") {
+        empclientid = $("#cmbClients").val();
+    }
+    else {
+        empclientid = gblnUserId;
+    }
+    if (empclientid == "All") { empclientid = ''; }
+    rowdata = {
+        nAction: 3,
+        sUserid: 3010098,
+        strScript: sScript,
+        nPageIndex: 1,
+        AccountSegment: 0
+    }
+
+    $.ajax({
+        url: URL,
+        type: "get",
+        data: rowdata,
+        dataType: "json",
+        success: function (data) {
+            // console.log(data);
+            if (data.Result != "No Data Found") {
+                $.each(data.Result.Result, function (i, row) {
+                    $("#Hqty").html(row.nQty);
+                    $("#HVal").html(row.nClosingValuation);
+                })
+
+            } else {
+                $("#HVal").html("0");
+                $("#Hqty").html("0");
+            }
+
+        }
+    });
+
+}
+
 
 $('#mis').click(function () {
     $("#scriptname").data("token");
@@ -1990,7 +2049,7 @@ $("#txtqty").change(function () {
     var nToken = $("#scriptname").data("token");
 
 
-    var sinstrument = GetInstrument($('#segmenttype').attr("data-segement"));
+    var sinstrument = GetInstrumentNumber($('#segmenttype').attr("data-segement"));
     var nQty = $("#txtqty").val();
 
     var nCncMis;
@@ -2180,12 +2239,12 @@ function tradebutton()
     $('#btnConfirmOrder').prop("disabled", false);
     $('#btntrade').prop("disabled", true);
 
-    getCTCLID();
+    /*getCTCLID();*/
 
-    //if ((gblCTCLtype.toString().toLocaleLowerCase() == "emp" || gblCTCLtype.toString().toLocaleLowerCase() == "ba") && $("#cmbClients").val() == "All") {
-    //    alert("Please select Client Name");
-    //    return;
-    //}
+    if ((gblCTCLtype.toString().toLocaleLowerCase() == "emp" || gblCTCLtype.toString().toLocaleLowerCase() == "ba") && $("#cmbClients").val() == "All") {
+        alert("Please select Client Name");
+        return;
+    }
 
     var TotalQty, Price, OrderType, TriggerPrice
     TotalQty = $("#txtqty").val();
@@ -2375,12 +2434,13 @@ function SaveRecord() {
         'Source': Source,
         'OrderHandling': CncMis,
         'ExchangeId': ExchangeID,
-        'CTCLId': localStorage.getItem("CTCLId"),//"400072565016",
+        'CTCLId': gblCTCLid,//"400072565016",
         'IsBoiOrder': 0
     });
 
     $.ajax({
-        url: gblurl + "OrderV5/",
+        //url: gblurl + "OrderV5/",
+        url: "https://ctcl.investmentz.com/iCtclServiceT/api/OrderV5/",
         type: 'POST',
         contentType: 'application/json',
         data: NewOrderParams,
@@ -2759,7 +2819,7 @@ function getDepth()
 
     var scrip = topicName.split('.');
 
-    var instrumentindex = GetInstrument(gridFirst.sInstrument);
+    var instrumentindex = GetInstrumentNumber(gridFirst.sInstrument);
 
     getLotSize(scrip[1], instrumentindex);
 

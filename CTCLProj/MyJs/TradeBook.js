@@ -16,7 +16,7 @@
     var nPageIndex = 0;
     var nToken = 0;
     var sScript = '';
-    var sCTCLId = localStorage.getItem("CTCLId");//400072001005;
+    var sCTCLId = gblCTCLid;//400072001005;
     GetApiLoginStatus(6);
     tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId);
 });
@@ -70,7 +70,7 @@ function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToke
         },
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             tradebook1 = [];
             var company = "";
 
@@ -393,7 +393,7 @@ function GetRequiredStockOrMargin12(nStockType, sTradeNo, sDealerCode, sOrderNo,
         data: rowdata,
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             if (data.IsResultSuccess == true) {
                 if ((nBuySell == 2 && nTargetCNCMIS == 1) || (nBuySell == 1 && nTargetCNCMIS == 1) || (nBuySell == 1 && nTargetCNCMIS == 0)) {
                     $("#availMar123").html(data.Result[0].AvailMargin);
@@ -435,7 +435,7 @@ function VarMargin12(nExchangeId, nToken, nstockType) {
         data: rowdata,
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             if (data.IsResultSuccess == true) {
                 $("#varper123").html(data.Result.nVarMarginInPerc + '%');
             } else {
@@ -450,7 +450,7 @@ function VarMargin12(nExchangeId, nToken, nstockType) {
 function Segmentchange() {
 
     var nAction = 6;
-    var sUserId = 869397;
+    var sUserId = $("#txtSelectedClient").val().split('-')[0].trim();;
     var sProCli = 'Cli';
     var sInstrumentName = $("#mraketsegment").val();
     var nPageIndex = 0;
@@ -636,7 +636,7 @@ function GetApiLoginStatus(nAction) {
     });
 }
 
-getCTCLID();
+//getCTCLID();
 if (gblCTCLtype.toString().toLocaleLowerCase() == "ba" || gblCTCLtype.toString().toLocaleLowerCase() == "emp") {
     $("#baimg").css('display', 'inline');
     $("#baimgdiv").addClass('styled-select-new2');
@@ -654,7 +654,7 @@ else {
 
     $('#txtSelectedClient').removeAttr("disabled");
     $('#txtSelectedClient').attr("readonly", true);
-    $('#txtSelectedClient').val($("#lblClientCode").html());
+   // $('#txtSelectedClient').val($("#lblClientCode").html());
     $("#clientprofile").html($("#lblClientCode").html());          //vpg 24042018
 
     $("#cmbclients1").val($("#lblClientCode").html($("#lblClientCode").html()));
