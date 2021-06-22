@@ -116,6 +116,15 @@
     .critical {
         background-color: #fdd;
     }
+
+    .coll-grig-50 {
+        width: 50%;
+        float: left;
+    }
+
+    .clear{
+        clear:both;
+    }
 </style>
 @*<link rel="stylesheet" href="styles/kendo.common.min.css" />
     <link rel="stylesheet" href="styles/kendo.default.min.css" />
@@ -155,26 +164,26 @@
                 @*<p id="time-clock" style="color:#00f">&nbsp;</p>*@
                 <div class="demo-section k-content">
                     <input type="hidden" id="Iratechange" data-symbol="" />
-                    <div>
-                        <input id="watchlistOption" style="width: 15%; font-size: 12px;" />
-                        <input id="watchDrop" style="width: 25%; font-size: 12px;" />
+                    <div class="coll-grig-50" style="margin-bottom:12px;">
+                        <input id="watchlistOption" style="width: 30%; font-size: 12px;" />
+                        <input id="watchDrop" style="font-size: 12px;bottom: 4px;position: relative;" />
                         <button class="btn btnclas" onclick="AddWatchPopUp();"><i class="fa fa-plus iclass"></i></button>
                         <button class="btn btnclas" onclick="DeleteWatch();"><i class="fa fa-trash iclass"></i></button>
                     </div>
-                    <div>
-                        <input id="lstSegment" style="width: 10%; font-size: 12px;" />
+                    <div class="coll-grig-50">
+                        <input id="lstSegment" style="width: 18%; font-size: 12px;" />
                         <input id="lstCashType" style="width: 20%; font-size: 12px;" />
-                        <input type="text" class="scrip-search-box" id="txtsearch" autocomplete="off" />
+                        <input type="text" class="scrip-search-box" id="txtsearch" autocomplete="off" style="width:46% !important; font-size: 14px;  border-radius: 0;  border: 0;" />
                         <div id="divSearch" class="suggestion-wrapper hidden-suggestion-wrapper">
                             <ul id="lstSearch" class="search_database">
                                 <li id="oneli" class="hovered"></li>
                             </ul>
                         </div>
 
-                        <button class="btn btnclas" onclick="AddScripts()"><i class="fa fa-sign-out" style="height: 30px; vertical-align: middle;"></i></button>
+                        <button class="btn btnclas" onclick="AddScripts()" style="margin-top: -4px;"><i class="fa fa-sign-out" style="vertical-align: top; margin-top:-3px;"></i></button>
                     </div>
                 </div>
-                <div id="WatchList" style="height:100%;"></div>
+                <div id="WatchList" class="clear" style="height:100%;"></div>
             </div>
 
     </script>
@@ -191,7 +200,7 @@
                     <label class="depth">Change(%): &nbsp;</label><span style="font-size:10pt;" id="nChangePerc">1.0%</span>&nbsp;&nbsp;&nbsp;&nbsp;
                 </div>
             </div>
-            <div id="users-grid"></div>
+            <div id="users-grid" class="clear" style="height:100%;"></div>
         </div>
     </script>
     @*<script id="users-grid-template2" type="text/x-kendo-template">

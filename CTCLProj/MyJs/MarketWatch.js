@@ -73,7 +73,7 @@ $(document).ready(function () {
     var win = $("#WatchlistSet").kendoWindow({
         width: 300,
         draggable: false,
-        resizable: false,
+        resizable: true,
         visible: false,
         actions: ["Custom", "maximize", "minimize"],
         title: "Market Watch"
@@ -81,16 +81,16 @@ $(document).ready(function () {
 
     $("#WatchlistSet").closest(".k-window").css({
         width: "58.5%",
-        top: "10%",
+        top: "14%",
         left: "1%",
-        height: "52%",
+        height: "48.1%",
 
     });
 
     $("#DepthWindow").kendoWindow({
         width: 300,
         draggable: false,
-        resizable: false,
+        resizable: true,
         visible: false,
         actions: ["Custom", "maximize", "minimize"],
         title: "Market Watch"
@@ -98,16 +98,16 @@ $(document).ready(function () {
 
     $("#DepthWindow").closest(".k-window").css({
         width: "39.5%",
-        top: "10%",
+        top: "14%",
         left: "60%",
-        height: "52%",
+        height: "48.1%",
 
     });
 
     $("#tabWindow").kendoWindow({
         width: 300,
-        draggable: false,
-        resizable: false,
+        draggable: true,
+        resizable: true,
         visible: false,
         actions: ["Custom", "maximize", "minimize"],
         title: ""
@@ -115,14 +115,16 @@ $(document).ready(function () {
 
     $("#tabWindow").closest(".k-window").css({
         width: "98.5%",
-        top: "62.2%",
+        top: "63%",
         left: "1%",
         height: "37%",
 
     });
 
+
     //MainKendoWindow("DepthWindow", 550, 402, 66, 858, "Market Depth");
     //MainKendoWindow("tabWindow", 1385, 275, 471, 29, "");
+
 
     var setofOption = [
         { value: 0, Id: 1, name: "Your Watchlists" },
@@ -1264,10 +1266,10 @@ function FillWatchGrid(data, type)
             multi: true,
             search: true
         },
-        height: 275,
+        height: 220,
         navigatable: true,
         selectable: 'row',
-        scrollable: true,
+       // scrollable: true,
         sortable: true,
         resizable: true,
         change: getDepth,
@@ -1278,7 +1280,7 @@ function FillWatchGrid(data, type)
         columnShow: function (e) {
             // console.log(e.column.field); // displays the field of the hidden column
         },
-        toolbar: ["search"],
+      //  toolbar: ["search"],
         columns: [
             {
                 field: "",
@@ -2931,7 +2933,7 @@ function getDepth()
             multi: true,
             search: true
         },
-        height: 275,
+        height: 200,
         navigatable: true,
         selectable: 'row',
         scrollable: true,

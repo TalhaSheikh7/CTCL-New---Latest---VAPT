@@ -11600,7 +11600,7 @@ kendo-badge-container {
 	padding: .375rem .75rem;
 	width: 100%;
 	min-width: 0;
-	height: calc(1.5em + .75rem);
+	height: calc(15px + 5px);
 	border: 0;
 	outline: 0;
 	box-sizing: border-box;

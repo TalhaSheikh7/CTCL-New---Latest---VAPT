@@ -41,13 +41,14 @@
 
 .btnclas {
     position: relative;
-    bottom: 5px;
+    bottom: 4px;
     height: 9px;
 }
 
 .iclass {
     position: relative;
-    bottom: 6px;
+    bottom: 8px;
+    font-size: 12px;
 }
 
 .btnsub {
