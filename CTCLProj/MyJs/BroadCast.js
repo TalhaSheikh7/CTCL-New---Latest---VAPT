@@ -194,7 +194,7 @@ function ProcessData(bcastData, lblScript) {
                 $("." + SymbolId + "_RateChangePc").css("color", "#01fb01");
             }
             if (SymbolId == "17_999908" || SymbolId == "17_999988" || SymbolId == "5_1") {
-                alert("Yes");
+                
                 $("." + SymbolId + "_RateChange").css("color", "white");
                 $("." + SymbolId + "_RateChangePc").css("color", "white");
             }
@@ -230,7 +230,7 @@ function ProcessData(bcastData, lblScript) {
                 $("." + SymbolId + "_RateChange").css("color", "red");
             }
             if (SymbolId == "17_999908" || SymbolId == "17_999988" || SymbolId == "5_1") {
-                alert("Yes");
+                
                 $("." + SymbolId + "_RateChangePc").css("color", "white");
                 $("." + SymbolId + "_RateChange").css("color", "white");
             }
