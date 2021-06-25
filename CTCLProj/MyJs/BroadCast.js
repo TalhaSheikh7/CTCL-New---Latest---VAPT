@@ -25,7 +25,7 @@ $(document).ready(function () {
 
 
 function sendTokens(lblScript) {
-    //var scr = "#" + lblScript;
+    
     var TokensValues = $('#lblScripts').html() + "," + $('#lblHoldingScripts').html() + "," + $('#lblScripts2').html(); + "," + $('#lblScriptsObook').html() + "," + "17.999908,17.999988,5.1"
     //console.log("tokens.length" + tokens.length);
     if (tokens.length > 0) {
@@ -147,6 +147,8 @@ function ProcessData(bcastData, lblScript) {
             $("." + SymbolId + "_BR").text(parseFloat($("." + SymbolId + "_BR").text()).toFixed(4));
             $("." + SymbolId + "_SR").text(parseFloat($("." + SymbolId + "_SR").text()).toFixed(4));
             $("." + SymbolId + "_ATP").text(parseFloat($("." + SymbolId + "_ATP").text()).toFixed(4));
+
+           // $("." + SymbolId + "_CV").text(parseFloat($("." + SymbolId + "_LR").text() * qty).toFixed(4));
         }
         else {
             $("." + SymbolId + "_LR").text(parseFloat($("." + SymbolId + "_LR").text()).toFixed(2));
@@ -161,6 +163,8 @@ function ProcessData(bcastData, lblScript) {
             $("." + SymbolId + "_BR").text(parseFloat($("." + SymbolId + "_BR").text()).toFixed(2));
             $("." + SymbolId + "_SR").text(parseFloat($("." + SymbolId + "_SR").text()).toFixed(2));
             $("." + SymbolId + "_ATP").text(parseFloat($("." + SymbolId + "_ATP").text()).toFixed(2));
+
+         //   $("." + SymbolId + "_CV").text(parseFloat($("." + SymbolId + "_LR").text() * qty).toFixed(2));
         }
 
         $("." + SymbolId + "_LUD").text(formatDate(Data.LastTradeTime, '', "DD/MM/YYYY"));
@@ -194,9 +198,15 @@ function ProcessData(bcastData, lblScript) {
                 $("." + SymbolId + "_RateChangePc").css("color", "#01fb01");
             }
             if (SymbolId == "17_999908" || SymbolId == "17_999988" || SymbolId == "5_1") {
-                
+
+                $("." + SymbolId + "_nf").css("background-color", "green");
+                $("." + SymbolId + "_nf").css("border-color", "green");
+                $("." + SymbolId + "_nf1").css("background-color", "green");
+                $("." + SymbolId + "_nf1").css("border-color", "green");
+
                 $("." + SymbolId + "_RateChange").css("color", "white");
                 $("." + SymbolId + "_RateChangePc").css("color", "white");
+                $("." + SymbolId + "_IRateChange").attr("src", "../img/icons/up-arrow.png");
             }
         }
         else if (nDifference < 0) {
@@ -230,9 +240,15 @@ function ProcessData(bcastData, lblScript) {
                 $("." + SymbolId + "_RateChange").css("color", "red");
             }
             if (SymbolId == "17_999908" || SymbolId == "17_999988" || SymbolId == "5_1") {
-                
+
+                $("." + SymbolId + "_nf").css("background-color", "red");
+                $("." + SymbolId + "_nf").css("border-color", "red");
+                $("." + SymbolId + "_nf1").css("background-color", "red");
+                $("." + SymbolId + "_nf1").css("border-color", "red");
+
                 $("." + SymbolId + "_RateChangePc").css("color", "white");
                 $("." + SymbolId + "_RateChange").css("color", "white");
+                $("." + SymbolId + "_IRateChange").attr("src", "../img/icons/down-arrow.png");
             }
         }
 

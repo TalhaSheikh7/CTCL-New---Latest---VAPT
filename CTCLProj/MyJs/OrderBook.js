@@ -1,13 +1,5 @@
 ﻿$(document).ready(function () {
 
-
-    $("#tabstrip").kendoTabStrip({
-        animation: {
-            open: {
-                effects: "fadeIn"
-            }
-        }
-    });
     var orderstatus = $("#OStatus").val();
     OrderBook();
     GetOrder(orderstatus);

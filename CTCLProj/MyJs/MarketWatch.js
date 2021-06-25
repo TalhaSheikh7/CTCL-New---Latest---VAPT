@@ -1,7 +1,7 @@
 ﻿var nMarketSegment = 1;
 var intselectedId = 0;
-/*var gblnUserId =  $("#txtSelectedClient").val().split('-')[0].trim();*/
-var gblnUserId = 3010098;
+/*var clientcode =  $("#txtSelectedClient").val().split('-')[0].trim();*/
+var clientcode = $("#txtSelectedClient").val().split('-')[0].trim();
 var pnSourceID = 0;
 var psName = '';
 var nInstrument = 0;
@@ -81,9 +81,10 @@ $(document).ready(function () {
 
     $("#WatchlistSet").closest(".k-window").css({
         width: "58.5%",
-        top: "14%",
+        top: "12%",
         left: "1%",
-        height: "48.1%",
+        height: "44.5%",
+        "z-index": "-1"
 
     });
 
@@ -93,14 +94,15 @@ $(document).ready(function () {
         resizable: true,
         visible: false,
         actions: ["Custom", "maximize", "minimize"],
-        title: "Market Watch"
+        title: "Market Depth"
     }).data("kendoWindow").center().open();
 
     $("#DepthWindow").closest(".k-window").css({
         width: "39.5%",
-        top: "14%",
+        top: "12%",
         left: "60%",
-        height: "48.1%",
+        height: "44.5%",
+        "z-index": "-1"
 
     });
 
@@ -115,12 +117,11 @@ $(document).ready(function () {
 
     $("#tabWindow").closest(".k-window").css({
         width: "98.5%",
-        top: "63%",
+        top: "57%",
         left: "1%",
-        height: "37%",
+        height: "42%",
 
     });
-
 
     //MainKendoWindow("DepthWindow", 550, 402, 66, 858, "Market Depth");
     //MainKendoWindow("tabWindow", 1385, 275, 471, 29, "");
@@ -239,7 +240,7 @@ function GetHoldinWatchData(OptionID)
         URL = gblurl + "AccoutingV1/";
         rowdata = {
             nAction: 3,
-            sUserid: gblnUserId,
+            sUserid: clientcode,
             nPageIndex: 1,
             AccountSegment: 0
         };
@@ -276,7 +277,7 @@ function getExpiredScripDetails()
 {
     var Param = {
         nActionID: ActionID.GetExpiredScrip,
-        UCC: gblnUserId
+        UCC: clientcode
     };
 
     $.ajax({
@@ -332,7 +333,7 @@ $(document).on("click", "#btnConvExpScrip", function (event) {
 
     var UpdateOrderParams = JSON.stringify({
         nAction: 3,
-        UCC: gblnUserId
+        UCC: clientcode
     });
 
     $.ajax({
@@ -534,7 +535,7 @@ $(function () {
                 }
 
                 var Param = {
-                    'userID': gblnUserId,
+                    'userID': clientcode,
                     'stockAction': ActionID.GetScripts,
                     'pageIndex': intPageIndex,
                     'ScriptName': pScript,
@@ -667,7 +668,7 @@ function AddScripts() {
                 var sScripts = $('#lblScripts').val();
                
                 lstWatch.push(objScript);
-                AddWatches(ActionID.AddWatches, intselectedId, psName, gblnUserId, 0, nMarketSegment, pnSourceID, 0, lstWatch);
+                AddWatches(ActionID.AddWatches, intselectedId, psName, clientcode, 0, nMarketSegment, pnSourceID, 0, lstWatch);
             }
             else {
                 if (strmsg == "Select Script to Continue") {
@@ -711,7 +712,7 @@ function AddWatches(pintActionID, pnID, psName, pnCreaterID, pnDefaultFlag, pnEx
                 if (pintActionID == 2) {
 
                   //  KendoWindow("windowforscripaddsuccess", 450, 160, "Delete Scrip", 0);
-                    GetWatches(gblnUserId, intselectedId, nMarketSegment, intPageIndex);
+                    GetWatches(clientcode, intselectedId, nMarketSegment, intPageIndex);
 
                     $('#txtsearch').val('');
                 }
@@ -723,7 +724,7 @@ function AddWatches(pintActionID, pnID, psName, pnCreaterID, pnDefaultFlag, pnEx
                     $('#lblMarketWath').text(psName);
 
                     
-                    GetWatches(gblnUserId, -1, nMarketSegment, intPageIndex);
+                    GetWatches(clientcode, -1, nMarketSegment, intPageIndex);
 
                     $('#txtAddScript').val('');
                 }
@@ -812,7 +813,7 @@ $(document).on("click", "#btnAddNew", function (event) {
 
     strWatchListName = $('#txtAddScript').val();
 
-    AddWatches(1, 0, strWatchListName, gblnUserId, DefaultWatch, nMarketSegment, 1, 0, WatchList);
+    AddWatches(1, 0, strWatchListName, clientcode, DefaultWatch, nMarketSegment, 1, 0, WatchList);
 
 });
 
@@ -874,12 +875,12 @@ function DeleteScripts(pintMarketWatchId, pintScriptId, pintActionId) {
             if (pintActionId == 7) {
                 $("#windowForDeleteScrip").data('kendoWindow').close();
                 DeleteSuccess();
-                GetWatches(gblnUserId, intselectedId, nMarketSegment, intPageIndex);
+                GetWatches(clientcode, intselectedId, nMarketSegment, intPageIndex);
             }
             else {
                 $("#windowForDelete").data('kendoWindow').close();
                 WDeleteSuccess();
-                GetWatches(gblnUserId, nMarketWatchID, nMarketSegment, intPageIndex);
+                GetWatches(clientcode, nMarketWatchID, nMarketSegment, intPageIndex);
 
                 intselectedId = 0;
             }
@@ -946,7 +947,7 @@ function getWatch() {
     nInstrument = $("#lstCashType").val();
     nExchangeId = $("#lstSegment").val();
 
-    GetWatches(gblnUserId, nMarketWatchID, nMarketSegment, intPageIndex);
+    GetWatches(clientcode, nMarketWatchID, nMarketSegment, intPageIndex);
 }
 
 
@@ -1014,7 +1015,7 @@ function GetWatches(nUserId, nMarketWatchID, nMarketSegment, intPageIndex)
                     if (intselectedId == 0) {
                         intselectedId = data.Result[0].nID;
                         $('#lblMarketWath').text(data.Result[0].sName);
-                        GetWatches(gblnUserId, data.Result[0].nID, nMarketSegment, intPageIndex, 0);
+                        GetWatches(clientcode, data.Result[0].nID, nMarketSegment, intPageIndex, 0);
                     }
                 }
             }
@@ -1079,7 +1080,7 @@ function ChangeWatchList() {
         if ($("#watchDrop").val() != 0) {
             $('#lblMarketWath').text($(this).text());
 
-            GetWatches(gblnUserId, intselectedId, nMarketSegment, intPageIndex, 0);
+            GetWatches(clientcode, intselectedId, nMarketSegment, intPageIndex, 0);
         }
     }
 }
@@ -1118,7 +1119,7 @@ function FillWatchGrid(data, type)
     GridColumns = [];
 
     $.each(data, function (i, row) {
-
+        //console.log(data);
         //Close = '<span id="' + row.nExchangeConstants + '_' + row.nToken + '_PC"></span>';
 
         if (row.sInstrument.split("_")[1] == "OPTION" || row.sInstrument.split("_")[1] == "FUTURE") {
@@ -1972,7 +1973,7 @@ function GetClientHolding(sScript)
         empclientid = $("#cmbClients").val();
     }
     else {
-        empclientid = gblnUserId;
+        empclientid = clientcode;
     }
     if (empclientid == "All") { empclientid = ''; }
     rowdata = {
@@ -2125,7 +2126,6 @@ function ShowHide() {
 
 $('.typeRadio').click(function () {
 
-    return false;
     var OrderType = $('input[name="oType"]:checked').val();
     if (OrderType == 1 || OrderType == 11) {
         document.getElementById('Ioc').disabled = false;
@@ -2331,7 +2331,7 @@ function SaveRecord() {
         empclientid = $("#cmbClients").val();
         Source = "C";
     } else {
-        empclientid = gblnUserId;
+        empclientid = clientcode;
         Source = "W";
     }
 
@@ -2788,7 +2788,8 @@ function getDepth()
     var ScripName = "";
     var Instrument = "";
     var Exchange = "";
-
+    var ExchangeConstant = "";
+    var Token = "";
 
     var grid2 = $("#WatchList").data("kendoGrid");
 
@@ -2799,14 +2800,19 @@ function getDepth()
 
     var grid = $("#WatchList").data("kendoGrid");
     var selectedItem = grid.dataItem(grid.select());
-
+    //console.log(selectedItem);
+    //console.log(gridFirst);
     if (selectedItem != null)
     {
+        ExchangeConstant = selectedItem.nExchangeConstants;
+        Token = selectedItem.nToken;
         topicName = selectedItem.nExchangeConstants + '.' + selectedItem.nToken;
         SymbolName = selectedItem.sScript;
         Instrument = selectedItem.sInstrument;
         Exchange = selectedItem.nExchangeID;
     } else {
+        ExchangeConstant = gridFirst.nExchangeConstants;
+        Token = gridFirst.nToken;
         topicName = gridFirst.nExchangeConstants + '.' + gridFirst.nToken;
         SymbolName = gridFirst.sScript;
         Instrument = gridFirst.sInstrument;
@@ -2825,9 +2831,9 @@ function getDepth()
 
     RefreshScriptsLevel2(topicName);
     //reconnectSocketAndSendTokens();
-    var LTP = "<span id='lblLTP'></span>";
-    var Change = "<span id='lblChng'></span>";
-    var PerChange = "<span id='lblPercChange'></span>";
+    var LTP = '<span class= "' + ExchangeConstant + '_' + Token + '_LR"></span>';
+    var Change = '<span class= "' + ExchangeConstant + '_' + Token + '_RateChange"></span>';
+    var PerChange = '<span class= "' + ExchangeConstant + '_' + Token + '_RateChangePc"></span>';
 
     $("#nLTP").html(LTP);
     $("#nChange").html(Change);

@@ -1,5 +1,14 @@
 ﻿$(document).ready(function () {
     GetBcastUrl(6);
+
+    $("#tabstrip").kendoTabStrip({
+        animation: {
+            open: {
+                effects: "fadeIn"
+            }
+        }
+    });
+
     $("#tabstrip1").kendoTabStrip({
         animation: {
             open: {
@@ -239,21 +248,18 @@ function getLotSize(nToken, nstockType) {
                 $("#lblLowLim").html((msg.Result.MinPrice).toFixed(isCd ? 4 : 2));
                 $("#lblUpLim").html((msg.Result.MaxPrice).toFixed(isCd ? 4 : 2));
             }
-            $("#tdISINCode").html('');
-           // $("#spnscriptfullname").html('');
-            //$("#spnscriptcode").html('');
+            $("#sISIN").text('');
+
 
             if (nstockType == 3) {
-                $("#tdISINCode").html(msg.Result.ISINNumber);
-                //$("#spnscriptfullname").html(msg.Result.Description);
-                //$("#spnscriptcode").html(msg.Result.ScriptCode);
+                $("#sISIN").text(msg.Result.ISINNumber);
             }
         }
         else {
             $("#txtqty").val(1);
         }
 
-        $("#sISIN").html(msg.Result.ISINNumber);
+        $("#sISIN").text(msg.Result.ISINNumber);
         $("#lblesttot").text('');
 
         SetEstTotal($("#txtqty").val(), $("#txtorderprice").val());
