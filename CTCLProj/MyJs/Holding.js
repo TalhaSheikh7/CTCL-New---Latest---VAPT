@@ -4,14 +4,18 @@ var nExchangeId1 = 1;
 var instrumentindex = 0;
 
 $(document).ready(function () {
-    getHolding(3, 3010098, 1, 0)
+
 });
 
+$("#HVClick").click(function () {
+    var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
+    getHolding(3, ClientCode, 1, 0)
+})
 
 function getHolding(nAction, sUserID, nPageIndex, nAccountSegment) {
     var nrow = 0;
     $.ajax({
-        url: "https://ctcl.investmentz.com/iCtclServiceT/api/AccoutingV1/",
+        url: "https://ctcl.investmentz.com/iCtclService/api/AccoutingV1/",
         method: "get",
         data: {
             nAction: nAction,

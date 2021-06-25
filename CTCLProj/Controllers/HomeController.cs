@@ -134,20 +134,6 @@ namespace CTCLProj.Controllers
         {
             if (Request.Cookies["LoginId"]?.Value == null && Request.Cookies["SessionId"]?.Value == null)
             {
-                HttpCookie aCookie;
-                string cookieName;
-                int limit = Request.Cookies.Count;
-                for (int i = 0; i < limit; i++)
-                {
-                    cookieName = Request.Cookies[i].Name;
-                    aCookie = new HttpCookie(cookieName);
-                    aCookie.Expires = DateTime.Now.AddDays(-2); // make it expire yesterday 
-                    Response.Cookies.Add(aCookie); // overwrite it
-                }
-                // Code disables caching by browser.
-                Response.Cache.SetCacheability(HttpCacheability.NoCache);
-                Response.Cache.SetExpires(DateTime.UtcNow.AddHours(-24));
-                Response.Cache.SetNoStore();
                 return Json(false, JsonRequestBehavior.AllowGet); ;
             }
 

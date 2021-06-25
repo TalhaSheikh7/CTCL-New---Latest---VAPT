@@ -1,6 +1,6 @@
 ﻿
 //var gblurl = "http://localhost:1610/api/";
-var gblurl = "https://ctcl.investmentz.com/iCtclServiceT/api/";
+var gblurl = "https://ctcl.investmentz.com/iCtclService/api/";
 var gblnUserId;
 var clearClntDetails, saveClntDetails, getClntDetails;
 var gblCTCLid = localStorage.getItem("CTCLId");

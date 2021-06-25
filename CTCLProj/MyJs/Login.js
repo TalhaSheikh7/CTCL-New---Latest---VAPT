@@ -1,7 +1,7 @@
-﻿var Glbvar = "https://ctcluat.investmentz.com/"
-//    var Glbvar ="http://localhost:49180/"
+﻿    var Glbvar = "https://ctcluat.investmentz.com/"
+    //var Glbvar ="http://localhost:49180/"
 $(document).ready(function () {
-    localStorage.setItem("CTCLId", "");
+    //localStorage.setItem("CTCLId", "");
     $("#btnLogin").click(function () {
         var LoginID = $("#txtUid").val();
         var Loginpassword = $("#txtPassWd").val();
@@ -31,7 +31,7 @@ $(document).ready(function () {
 
                 if (strmsg == "Incorrect") {
 
-                    alert(data);
+                
                     $("#anyonepopup").show();
                     $("#commenpopup").html(data)
 
@@ -71,7 +71,9 @@ $(document).ready(function () {
             },
             dataType: "json",
             success: function (data) {
-                alert("Your login ID has been send on your registered Mobile No and Email id.");
+            
+                $("#anyonepopup").show();
+                $("#commenpopup").html("Your login ID has been send on your registered Mobile No and Email id.")
                 //KendoWindow("remaeks", 650, 120, "", 0);
                 //$("#remaeks").closest(".k-window").css({
                 //    top: 350,
@@ -167,13 +169,9 @@ $(document).ready(function () {
 
                 $("#forgetpsdotp").hide();
                 $("#changePWD").show();
-                //KendoWindow("remaeks", 650, 120, "", 0);
-                //$("#remaeks").closest(".k-window").css({
-                //    top: 350,
-                //    left: 200
-                //});
-                //$("#remarkdetails").html(data)
-                alert(MobileNumber);
+                $("#anyonepopup").show();
+                $("#commenpopup").html(data)
+
             },
             error: function (data) {
                 console.log(data);
@@ -209,7 +207,9 @@ $(document).ready(function () {
                 //    left: 200
                 //});
                 //$("#remarkdetails").html(data)
-                alert(MobileNumber);
+                $("#anyonepopup").show();
+                $("#commenpopup").html(data)
+
 
             },
             error: function (data) {
@@ -266,13 +266,9 @@ $(document).ready(function () {
             success: function (data) {
                 var str = data;
                 if (data.sName == null) {
-
-                    //KendoWindow("remaeks", 650, 120, "", 0);
-                    //$("#remaeks").closest(".k-window").css({
-                    //    top: 350,
-                    //    left: 200
-                    //});
-                    alert("Incorrect mPIN")
+                    $("#anyonepopup").show();
+                    $("#commenpopup").html("Incorrect mPIN")
+                
                     //KendoWindow("remaeks", 650, 120, "", 0);
                     //$("#remaeks").closest(".k-window").css({
                     //    top: 350,
@@ -326,6 +322,7 @@ function GetEmpCTCLId(EmpCode) {
             var CTCLID = data.EmpCTCL[0].CTCLID;
 
             localStorage.setItem("CTCLId", CTCLID);
+            localStorage.setItem("CTCLId1", CTCLID);
 
            // alert(CTCLID);
 
@@ -352,6 +349,7 @@ function GetBACTCLId(BACode) {
             console.log(data);
             var CTCLID = "";
             localStorage.setItem("CTCLId", CTCLID);
+            localStorage.setItem("CTCLId1", CTCLID);
             if (data = ! "") {
                 location.href = Glbvar + "Home/Index"
             }

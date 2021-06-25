@@ -124,7 +124,7 @@ $(document).ready(function () {
                     cbClntDetailsFetched(msg);
             });
             GetClients.fail(function (jqXHR, textStatus) {
-                swal("Failed to collect to client details for employee/ba!!");
+                alert("Failed to collect to client details for employee/ba!!");
             });
         }
     }
@@ -157,7 +157,7 @@ $(document).ready(function () {
 
     setSearchTrip = function () {
         loadingSetup(true);
-        var currentLoginId = localStorage.UCC_Code;
+        var currentLoginId = localStorage.getItem("BACode");
         //var currentLoginId = getGlobalVariable(logindIdKey);
         var loginRole = getGlobalVariable(LoginRoleKey, "");
         if (loginRole == "") {
@@ -295,7 +295,7 @@ $(document).ready(function () {
 
                                             // window.location.reload();
                                         }
-                                        window.location.reload();
+                                     //   window.location.reload();
                                     },
                                     error: function (data) {
                                         // console.log(data);

@@ -101,6 +101,10 @@
 
             <input type="text" class="scrip-search-box" style="width: 20%; font-size: 12px;" id="txtSelectedClient" />
             <input type="hidden" id="hdnSelectedClient" />
+              <span class="searchclose"><i class="fa fa-times" aria-hidden="true" id="btnCleanText" style="color:#4285f5;"></i></span>
+                                                        <span class="user-plan" id="hideheadloader">
+                                                            <i class="fa fa-spin fa-spinner fa-lg" id="iLoader"></i>
+                                                        </span>
             <input id="clntSearchType" style="width: 5%; font-size: 12px;" />
         </div>      
     </nav>
@@ -153,12 +157,30 @@
                 dataType: "json",
                 success: function (data) {
                     //console.log(data);
-
                     if (data == false) {
 
-                      //  location.href = common_url + "/Login/Login"
+                     //   location.href = "https://ctcluat.investmentz.com/Login/Login"
 
                     }
+                    var UserType = localStorage.getItem("EmpCTCLtype");
+                    var code = localStorage.getItem("BACode");
+
+                    if (UserType == "Emp") {
+                        setTimeout(function () {
+                            setLoginEmp(code, 'E');
+                            setSearchTrip();
+                         //   var str = $("#txtSelectedClient").val().toString().split('-')[1].trim();
+                          
+                           // $("#txtClientCode").val($("#txtSelectedClient").val().toString().split('-')[0].trim());
+                        }, 10);
+                    }
+                    else {
+                        setTimeout(function () {
+                            setLoginEmp(code, 'B');
+                            setSearchTrip();
+                        }, 10);
+                    }
+                  
                    
                 },
                 error: function (data) {
