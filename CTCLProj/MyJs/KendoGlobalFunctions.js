@@ -304,6 +304,10 @@ function KendoDropDownList(DropId, DropDownData, ValueField, TextField, ChangeFu
 
     var myDropDownList = $("#" + DropId);
 
+    var remoteDropDown  = $("#" + DropId).data("kendoDropDownList");
+
+    remoteDropDown.list.width("auto");
+
     myDropDownList.closest(".k-dropdownlist").css({
         'z-index': 2
     });

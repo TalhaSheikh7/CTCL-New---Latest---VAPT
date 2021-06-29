@@ -139,7 +139,10 @@ public static class GlobalVariables
 
     }
 
-
+    public static string ACMIILBaseURL
+    {
+        get { return ConfigurationManager.AppSettings["ACMApiBaseURL"].ToString(); }
+    }
     static public string FileProdCatHostPath
     {
         get

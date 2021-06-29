@@ -10,7 +10,23 @@ $(document).ready(function () {
             }
         }
     });
-   PositionData();
+
+    var CCC = '';
+    var Name = '';
+
+    var timer1 = setInterval(myFunctionClient, 1000);
+    function myFunctionClient()
+    {
+        if ($("#txtSelectedClient").val() == "" || $("#txtSelectedClient").val() == undefined) {
+
+        } else {
+            clearInterval(timer);
+            CCC = $("#txtSelectedClient").val().toString().split('-')[0].trim();
+            Name = $("#txtSelectedClient").val().toString().split('-')[1].trim();
+        }
+        //PositionData();
+    }
+   
 });
 
 function PositionData() {

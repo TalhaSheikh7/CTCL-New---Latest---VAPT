@@ -20,7 +20,7 @@ function Backoffice() {
 
     $.ajax({
         method: "POST",
-        url: "https://www.investmentz.com/Home/Old_GoToBackReport",
+        url: "https://ctcluat.investmentz.com/Home/Old_GoToBackReport",
         data: {},
         success: function (data) {
             debugger;
