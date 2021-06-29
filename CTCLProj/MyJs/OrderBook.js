@@ -1,13 +1,8 @@
-﻿$(document).ready(function () {
+$(document).ready(function () {
+    var orderstatus = $("#OStatus").val();
+    OrderBook();
+    GetOrder(orderstatus);
 
-
-    $("#tabstrip").kendoTabStrip({
-        animation: {
-            open: {
-                effects: "fadeIn"
-            }
-        }
-    });   
 });
 $("#OCkick").click(function () {
     var orderstatus = "C,M,E,Q,A,X,U,P,O,X,Z";
@@ -633,7 +628,6 @@ $("#OCkick").click(function () {
         });
     }
     else {
-
         //$('#txtSelectedClient').removeAttr("disabled");
         // $('#txtSelectedClient').attr("readonly", true);
         // $('#txtSelectedClient').val($("#lblClientCode").html());

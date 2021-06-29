@@ -53,11 +53,11 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment) {
 
                         if (row.nBroadCastContants == 12 || row.nBroadCastContants == 13) {
                             currrate = '<span><strong class= "' + row.nBroadCastContants + '_' + row.nToken + '_LR">0.0000</strong></span>';
-                            CurrentValue = '<span><strong id= "">' + parseFloat(currrate) * parseFloat(row.nQty); +'</strong></span>';
+                            CurrentValue = '<span><strong class= "' + row.nBroadCastContants + '_' + row.nToken + '_CV">0.00</strong></span>';
                         }
                         else {
                             currrate = '<span><strong class= "' + row.nBroadCastContants + '_' + row.nToken + '_LR">0.00</strong></span>';
-                            CurrentValue = '<span><strong id= "">' + parseFloat(currrate) * parseFloat(row.nQty); +'</strong></span>';
+                            CurrentValue = '<span><strong class= "' + row.nBroadCastContants + '_' + row.nToken + '_CV">0.00</strong></span>';
                         }
 
                         ScripName = 'EQ -' + 'NSE ' + row.sScript;
@@ -78,10 +78,12 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment) {
                         var lblScript = "lblHoldingScripts";
                         var token = "tokens2"
 
-                        $('#lblHoldingScripts').html(sScripts.substring(0, sScripts.length - 1));
-                        $('#lblHoldingScripts').html($('#lblHoldingScripts').html() + "," + "17.999908,17.999988,5.1")
-                        tokens.push(row.nToken);
+                        //var scripQty = parseFloat(row.nQty).toFixed(2);
 
+                        $('#lblHoldingScripts').html(sScripts.substring(0, sScripts.length - 1));
+                        $('#lblHoldingScripts').html($('#lblHoldingScripts').html() + ","+ "17.999908,17.999988,5.1")
+                        tokens.push(row.nToken);
+                        
                         reconnectSocketAndSendTokens(lblScript);
                         //return false;
 
@@ -158,7 +160,7 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment) {
                                     ' data-token = "#= Token #"' +
                                     ' data-exchangeconstants = "#= BroadCastConstant #"' +
                                     ' data-script = "#= ScripName #" onclick="buysellwindow1(this)">' +
-                                    'ADD' +
+                                    'BUY' +
                                     '</button>' +
                                     '<button class="k-button" style="min-width: 30px; background-color:red;" ' +
                                     ' id="#= BroadCastConstant #_#= Token #_sell" title="Buy" ' +
@@ -253,8 +255,8 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment) {
                             {
                                 title: "Current Value",
                                 width: 60,
-                                field: "CurVal",
-                                template: "#= 0 #",
+                                field: "Curr",
+                                template: "#= Curr #",
                                 attributes: {
                                     "class": "holdText"
                                 }
@@ -331,7 +333,7 @@ function buysellwindow1(data) {
 
 
 
-    GetBcastUrl(6);
+    //GetBcastUrl(6);
 
     if ($("#Exchange").attr("src") == "../img/dis-1.png") {
         alert('Due to techical reason you cannot place order now, try after sometime')

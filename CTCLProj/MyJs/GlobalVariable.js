@@ -1,8 +1,11 @@
 ﻿
+var common_url = "http://localhost:49180/"
+//var common_url = https://ctcluat.investmentz.com/
 //var gblurl = "http://localhost:1610/api/";
 var gblurl = "https://ctcl.investmentz.com/iCtclService/api/";
 var gblnUserId;
 var clearClntDetails, saveClntDetails, getClntDetails;
+var gblnUserId = localStorage.getItem("CCID");
 var gblCTCLid = localStorage.getItem("CTCLId");
 var gblCTCLtype = localStorage.getItem("EmpCTCLtype");
 
@@ -10,7 +13,7 @@ var gblCTCLtype = localStorage.getItem("EmpCTCLtype");
 $(document).ready(function () {
     var NameCode = localStorage.getItem("NameCode");
     $("#BANameCode").html(NameCode);
-    
+
 
     clearClntDetails = function () {
         setGlobalVariable("AvailEmpClnts", "");
@@ -34,22 +37,22 @@ $(document).ready(function () {
 });
 
 
-    window.formatDate = function (inputDate, inputDateFormat, outPutFormat) {
-        if (inputDate == "" && inputDateFormat.val() == "")
-            return "";
+window.formatDate = function (inputDate, inputDateFormat, outPutFormat) {
+    if (inputDate == "" && inputDateFormat.val() == "")
+        return "";
+    else {
+        if (inputDate == "NOW")
+            return moment().format(outPutFormat);
         else {
-            if (inputDate == "NOW")
-                return moment().format(outPutFormat);
+            if (inputDateFormat == "") {
+                return moment(inputDate).format(outPutFormat);
+            }
             else {
-                if (inputDateFormat == "") {
-                    return moment(inputDate).format(outPutFormat);
-                }
-                else {
-                    return moment(inputDate, inputDateFormat).format(outPutFormat);
-                }
+                return moment(inputDate, inputDateFormat).format(outPutFormat);
             }
         }
     }
+}
 
 //function getCCID() {
 
@@ -96,15 +99,15 @@ getClntDetails = function (cbClntDetailsFetched) {
         //getCCID();
         var empBaCode = gblnUserId;
         var GetClients = $.ajax(
-        {
-            url: "https://trade.investmentz.com/" + "InvestmentzAPI/api/EmpBaClients/",
-            method: "get",
-            data: {
-                EmpBACode: empBaCode,
-                Option: option
-            },
-            dataType: "json"
-        });
+            {
+                url: "https://trade.investmentz.com/" + "InvestmentzAPI/api/EmpBaClients/",
+                method: "get",
+                data: {
+                    EmpBACode: empBaCode,
+                    Option: option
+                },
+                dataType: "json"
+            });
 
         GetClients.done(function (msg) {
             setGlobalVariable("AvailEmpClnts", LZString.compress(JSON.stringify(msg)));
@@ -210,14 +213,14 @@ getClntInfo = function (cbClntInfoFetched, ctclselectedclient) {
     else {
         var empCode = ctclselectedclient;//gblnUserId;
         var GetClients = $.ajax(
-        {
-            url: gblurl + "URLSecure/",
-            method: "get",
-            data: {
-                UCC: empCode
-            },
-            dataType: "json"
-        });
+            {
+                url: gblurl + "URLSecure/",
+                method: "get",
+                data: {
+                    UCC: empCode
+                },
+                dataType: "json"
+            });
 
         GetClients.done(function (msg) {
             saveClntInfo(JSON.stringify(msg));
@@ -329,9 +332,8 @@ function GetBcastUrl(nAction) {
             if (msg.Result.nLoginStatus == 1) {
                 $("#Exchange").attr("src", "../img/dis-2.png");
                 $("#Exchang1").attr("src", "../img/dis-2.png");
-                
-                if (msg.Result.sAmoMsg.toString().trim() != "")
-                {
+
+                if (msg.Result.sAmoMsg.toString().trim() != "") {
                     alert("This Order will be treated as AMO order, Order Will be Processed on next trading Day.");
                 }
                 savegblBCastUrl(msg.Result.sCtclBroadcastUrl.toString().trim());

@@ -1,4 +1,5 @@
 ﻿using CTCLProj.Class;
+using investmentz.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -139,5 +140,58 @@ namespace CTCLProj.Controllers
 
             return Json(true, JsonRequestBehavior.AllowGet);
         }
+
+        public JsonResult Old_GoToBackReport()
+        {
+            var LoginId = Request.Cookies["LoginId"]?.Value;
+            var sessioncompaire = Request.Cookies["SessionId"]?.Value;
+
+            //var LoginId = "ACM5046";
+            // var sessioncompaire = "24a7d762-1700-4191-b94f-46c22f6f7d09";
+            List<string> AuthorList = new List<string>();
+            AuthorList.Add(LoginId);
+            AuthorList.Add(sessioncompaire);
+            return Json(AuthorList, JsonRequestBehavior.AllowGet);
+        }
+
+        public ActionResult Logout()
+        {
+            var sName = Session[WebUser.SessionName];
+            if (Session[WebUser.SessionName] != null)
+            {
+                WebUser webDetails = (WebUser)(Session[WebUser.SessionName]);
+                Dictionary<string, string> dictLogout = new Dictionary<string, string>();
+                dictLogout.Add("LoginId", webDetails.sLoginId);
+                dictLogout.Add("SessionId", webDetails.sSessionID);
+                dictLogout.Add("ProductID", AcmiilConstants.PRODUCT_WEB);
+                dictLogout.Add("BrowserInfo", RequestingBrowser);
+                dictLogout.Add("DeviceInfo", AcmiilConstants.DEVICES_WEB);
+                dictLogout.Add("IPAdd", ClientIP);
+                dictLogout.Add("SType", AcmiilConstants.SESSION_LOGOUT);
+                AcmiilApiResponse resp = UtilityClass.ExternalApi<AcmiilApiResponse>(GlobalVariables.ACMIILBaseURL, "AcmiilService/Authenticate/SessionManage", dictLogout).Result;
+
+
+            }
+            Session[WebUser.SessionName] = null;
+            Session["KycStatus"] = null;
+            return RedirectToAction("../Login/Login");
+        }
+
+        public string RequestingBrowser
+        {
+            get { return String.Format("{0} v {1}", Request.Browser.Browser, Request.Browser.Version); }
+        }
+
+        public string ClientIP
+        {
+            get
+            {
+                string ipaddress;
+                ipaddress = Request.ServerVariables["HTTP_X_FORWARDED_FOR"];
+                if (ipaddress == "" || ipaddress == null)
+                    ipaddress = Request.ServerVariables["REMOTE_ADDR"];
+                return ipaddress;
+            }
         }
     }
+}

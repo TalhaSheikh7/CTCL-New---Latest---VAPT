@@ -5,7 +5,7 @@ var getGlobalVariable, setGlobalVariable, getClntDetails, clearEmpStorageSmart;
 var setSearchStripReadOnly, setSearchTrip;
 
 //Constants
-var common_url = "http://localhost:49180/"; //comment In Live
+
 //var common_url = "https://ctcluat.investmentz.com/"; //uncomment in Live
 var url_employee_clients_Live = "https://trade.investmentz.com/";
 var gblurl1 = "https://trade.investmentz.com/EasyTradeApi/api/";

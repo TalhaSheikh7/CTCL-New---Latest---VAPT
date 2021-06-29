@@ -49,7 +49,9 @@
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid d-flex justify-content-between p-0">
             <h1 class="navbar-brand d-flex align-items-center">
-                <img src="~/img/investment_logo.png" style="width: 225px; margin-top: -10px;" />
+                <a href="https://www.investmentz.com/explore-products" target="_blank">
+                    <img src="~/img/investment_logo.png" style="width: 225px; margin-top: -10px;" />
+                </a>
             </h1>
             <table border="1" style="width:20%">
                 <tr class="indicesTr">
@@ -58,30 +60,32 @@
                     <th>Sensex</th>
                 </tr>
                 <tr class="indicesTr">
-                    <td id="17_999908_nf">
+                    <td class="17_999908_nf">
                         <span class="17_999908_LR">00000.00</span>
-
+                        <img class="17_999908_IRateChange" style="height: 14px;" src="../img/icons/up-arrow.png" />
                     </td>
-                    <td id="17_999988_nf">
+                    <td class="17_999988_nf">
                         <span class="17_999988_LR">00000.00</span>
+                        <img class="17_999988_IRateChange" style="height: 14px;" src="../img/icons/up-arrow.png" />
                         <span type="hidden" class="17_999988_PC" hidden />
                         <span type="hidden" class="17_999908_PC" hidden />
                     </td>
-                    <td id="5_1_nf">
+                    <td class="5_1_nf">
                         <span class="5_1_LR">00000.00</span>
+                        <img class="5_1_IRateChange" style="height: 14px;" src="../img/icons/up-arrow.png" />
                         <span type="hidden" class="5_1_PC" hidden />
                     </td>
                 </tr>
                 <tr class="indicesTr">
-                    <td id="17_999908_nf1">
+                    <td class="17_999908_nf1">
                         <span class="17_999908_RateChange">0.00</span>
                         <span class="17_999908_RateChangePc">(0.00%)</span>
                     </td>
-                    <td id="17_999988_nf1">
+                    <td class="17_999988_nf1">
                         <span class="17_999988_RateChange">0.00</span>
                         <span class="17_999988_RateChangePc">(0.00%)</span>
                     </td>
-                    <td id="5_1_nf1">
+                    <td class="5_1_nf1">
                         <span class="5_1_RateChange">0.00</span>
                         <span class="5_1_RateChangePc">(0.00%)</span>
                     </td>
@@ -99,13 +103,16 @@
             </span>
             <span id="BANameCode"></span>
 
-            <input type="text" class="scrip-search-box" style="width: 20%; font-size: 12px;" id="txtSelectedClient" />
+            <input type="text" class="scrip-search-box" style="width: 20%; font-size: 12px;" id="txtSelectedClient" autocomplete="off" />
+            
             <input type="hidden" id="hdnSelectedClient" />
               <span class="searchclose"><i class="fa fa-times" aria-hidden="true" id="btnCleanText" style="color:#4285f5;"></i></span>
                                                         <span class="user-plan" id="hideheadloader">
                                                             <i class="fa fa-spin fa-spinner fa-lg" id="iLoader"></i>
                                                         </span>
             <input id="clntSearchType" style="width: 5%; font-size: 12px;" />
+
+            <button><i class="fa fa-power-off" aria-hidden="true" id="btnLogout" onclick="location.href='@Url.Action("Logout", "Home")'"></i></button>
         </div>      
     </nav>
 

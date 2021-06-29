@@ -1,16 +1,14 @@
-﻿    var Glbvar = "https://ctcluat.investmentz.com/"
+var Glbvar = "https://ctcluat.investmentz.com/"
     //var Glbvar ="http://localhost:49180/"
 $(document).ready(function () {
     //localStorage.setItem("CTCLId", "");
     $("#btnLogin").click(function () {
         var LoginID = $("#txtUid").val();
         var Loginpassword = $("#txtPassWd").val();
-
         if (LoginID == "") {
             alert("User id should not be left blank!!")
             return false;
         }
-
         if (Loginpassword == "") {
             alert("Password should not be left blank!!")
             return false;
@@ -28,13 +26,9 @@ $(document).ready(function () {
                 var str = data.split(" ");
                  strmsg = str[0]
               //  alert(strmsg);
-
                 if (strmsg == "Incorrect") {
-
-                
                     $("#anyonepopup").show();
                     $("#commenpopup").html(data)
-
                     //KendoWindow("remaeks", 650, 120, "", 0);
                     //$("#remaeks").closest(".k-window").css({
                     //    top: 350,
@@ -43,7 +37,6 @@ $(document).ready(function () {
                     //$("#remarkdetails").html(data)
                     return false;
                 }
-                
                 if (data == "modMpinValidate")
                 {
                     $("#modMpinValidate").show();
@@ -53,17 +46,14 @@ $(document).ready(function () {
                     $("#flogoutmsg").html(data);
                     strmsg = "";
                 }
-              
             },
             error: function (data) {
                 console.log(data);
             }
         });
     })
-    
     $("#btnForgotLoginid").click(function () {
         var UCC = $("#forgotLoginId").val();
-
         $.ajax({
             url: "http://accountopening.investmentz.co.in/eKYC/api/eKYCMaster/ForgotLogin?Option=FL3&CCC='" + UCC + "'&MobOTP=0",
             type: "GET",
@@ -71,7 +61,6 @@ $(document).ready(function () {
             },
             dataType: "json",
             success: function (data) {
-            
                 $("#anyonepopup").show();
                 $("#commenpopup").html("Your login ID has been send on your registered Mobile No and Email id.")
                 //KendoWindow("remaeks", 650, 120, "", 0);
@@ -86,7 +75,6 @@ $(document).ready(function () {
             }
         });
     })
-
     $("#btnFPwdProceed").click(function () {
         var Loginid = $("#txtFPwdLoginId").val();
         var MobileNumber = $("#txtFPwdMobileNo").val();
@@ -102,22 +90,18 @@ $(document).ready(function () {
                 hFldOtpVisible: hFldOtpVisible,
                 hFldPopupOperation: hFldPopupOperation,
                 hFldOpenPopupId: hFldOpenPopupId
-
             },
             dataType: "json",
             success: function (data) {
                // alert(data);
                 $("#forgetpsdotp").show();
                 $("#clientname").html(data);
-
             },
             error: function (data) {
                 console.log(data);
             }
         });
-
     })
-
     $("#btnCreateId").click(function () {
         var Loginid = $("#txtFPwdLoginId").val();
         var MobileNumber = $("#txtFPwdMobileNo").val();
@@ -127,24 +111,19 @@ $(document).ready(function () {
             url: Glbvar + "Login/btnFPwdProceed_Click",
             type: "GET",
             data: {
-                Loginid: Loginid,   
+                Loginid: Loginid,
                 MobileNumber: MobileNumber,
                 hFldOtpVisible: hFldOtpVisible,
                 hFldPopupOperation: hFldPopupOperation
-
             },
             dataType: "json",
             success: function (data) {
-
             },
             error: function (data) {
                 console.log(data);
             }
         });
-
     })
-
-
     $("#FPWDOTP").click(function () {
         $("#modForgotPwd").hide();
         $("#forgetpsdotp").show();
@@ -162,24 +141,19 @@ $(document).ready(function () {
                 hFldOtpVisible: hFldOtpVisible,
                 hFldPopupOperation: hFldPopupOperation,
                 txtFPwdOTP: txtFPwdOTP
-
             },
             dataType: "json",
             success: function (data) {
-
                 $("#forgetpsdotp").hide();
                 $("#changePWD").show();
                 $("#anyonepopup").show();
                 $("#commenpopup").html(data)
-
             },
             error: function (data) {
                 console.log(data);
             }
         });
     })
-
-
     $("#btnCPSave1").click(function () {
         var Loginid = $("#txtFPwdLoginId").val();
         var txtChangePwd1 = $("#txtChangePwd11").val();
@@ -193,11 +167,9 @@ $(document).ready(function () {
                 txtChangePwd2: txtChangePwd2,
                 hFldOpenPopupId: hFldOpenPopupId,
                 Loginid: Loginid
-
             },
             dataType: "json",
             success: function (data) {
-
                 $("#forgetpsdotp").hide();
                 $("#changePWD").hide();
                // alert(data)
@@ -209,21 +181,15 @@ $(document).ready(function () {
                 //$("#remarkdetails").html(data)
                 $("#anyonepopup").show();
                 $("#commenpopup").html(data)
-
-
             },
             error: function (data) {
                 console.log(data);
             }
         });
     })
-
-
     $("#btnForceLogout1").click(function () {
-
         var LoginID = $("#txtUid").val();
         var Loginpassword = $("#txtPassWd").val();
-
         $.ajax({
             url: Glbvar + "Login/btnForceLogout_Click",
             type: "GET",
@@ -234,12 +200,10 @@ $(document).ready(function () {
             dataType: "json",
             success: function (data) {
              //   alert(data.Data);
-
                 if (data.Data == "modMpinValidate") {
                     $("#modForceLogout").hide();
                     $("#modMpinValidate").show();
                 }
-
                 if (data == "") {
                     $("#modForceLogout").show();
                     $("#flogoutmsg").html(data);
@@ -250,9 +214,7 @@ $(document).ready(function () {
             }
         });
     })
-
     $("#btnVerifyMPin").click(function () {
-
         var txtLoginMPin = $("#txtLoginMPin").val();
         var LoginID = $("#txtUid").val();
         $.ajax({
@@ -268,7 +230,6 @@ $(document).ready(function () {
                 if (data.sName == null) {
                     $("#anyonepopup").show();
                     $("#commenpopup").html("Incorrect mPIN")
-                
                     //KendoWindow("remaeks", 650, 120, "", 0);
                     //$("#remaeks").closest(".k-window").css({
                     //    top: 350,
@@ -277,10 +238,8 @@ $(document).ready(function () {
                    // $("#remarkdetails").html("Incorrect mPIN")
                     return false;
                 }
-      
                 var BAName = data.sName;
                 var BACode = data.sTradingCode;
-                
                 var UserType = data.UserType;
                 var Sessionid = data.Sessionid;
                 var passwordsExpiry = data.passwordsExpiry;
@@ -297,10 +256,6 @@ $(document).ready(function () {
                 else {
                     GetBACTCLId(BACode)
                 }
-
-               
-               
-
             },
             error: function (data) {
                 console.log(data);
@@ -308,7 +263,6 @@ $(document).ready(function () {
         });
     })
 });
-
 function GetEmpCTCLId(EmpCode) {
     $.ajax({
         url: "https://ctcl.investmentz.com/iCtclServiceT/api/URLSecure/?UCC=" + EmpCode +"&UAction=2",
@@ -318,26 +272,19 @@ function GetEmpCTCLId(EmpCode) {
         dataType: "json",
         success: function (data) {
             //console.log(data);
-
             var CTCLID = data.EmpCTCL[0].CTCLID;
-
             localStorage.setItem("CTCLId", CTCLID);
             localStorage.setItem("CTCLId1", CTCLID);
-
            // alert(CTCLID);
-
             if (data = ! "") {
                 location.href = Glbvar + "Home/Index"
             }
-           
         },
         error: function (data) {
             console.log(data);
         }
     });
 }
-
-
 function GetBACTCLId(BACode) {
     $.ajax({
         url: "https://ctcl.investmentz.com/iCtclServiceT/api/BACtclData?CCode=" + BACode + "",

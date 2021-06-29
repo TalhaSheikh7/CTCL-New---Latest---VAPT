@@ -4,16 +4,16 @@ $(document).ready(function () {
     $("#tilelayout").kendoTileLayout({
         containers: [
         {
-            colSpan: 3,
-            rowSpan: 1,
+            colSpan: 0,
+            rowSpan: 0,
             header: {
                 text: "WatchList",
-                Height: 30
+                Height: 0
             },
             bodyTemplate: kendo.template($("#WatchList-template").html())
         }, {
-            colSpan: 2,
-            rowSpan: 1,
+            colSpan: 0,
+            rowSpan: 0,
             header: {
                 text: "Market Depth"
             },
@@ -27,11 +27,11 @@ $(document).ready(function () {
         //    bodyTemplate: kendo.template($("#users-grid-template2").html())
         }],
         gap: {
-            rows: 10
+            rows: 0
         },
-        columns: 5,
-        columnsWidth: 300,
-        rowsHeight: 210,
+        columns: 0,
+        columnsWidth: 0,
+        rowsHeight: 0,
         reorderable: true,
         resizable: true,
         navigatable: true,
@@ -303,6 +303,10 @@ function KendoDropDownList(DropId, DropDownData, ValueField, TextField, ChangeFu
     });
 
     var myDropDownList = $("#" + DropId);
+
+    var remoteDropDown  = $("#" + DropId).data("kendoDropDownList");
+
+    remoteDropDown.list.width("auto");
 
     myDropDownList.closest(".k-dropdownlist").css({
         'z-index': 2

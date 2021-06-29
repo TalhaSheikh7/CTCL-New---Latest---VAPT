@@ -1,5 +1,6 @@
 ﻿$(document).ready(function () {
-    
+    GetBcastUrl(6);
+
     $("#tabstrip").kendoTabStrip({
         animation: {
             open: {
@@ -17,6 +18,50 @@
     });
 });
 
+function GetBcastUrl(nAction) {
+    var GetUrl = $.ajax(
+        {
+            url: gblurl + "AccoutingV1/",
+            method: "get",
+            async: false,
+            data: {
+                nAction: nAction,
+                sUserId: "",
+                nPageIndex: 1,
+                AccountSegment: 0,
+                nExchange: 1
+            },
+            dataType: "json"
+        });
+
+    GetUrl.done(function (msg) {
+
+        if (msg.ResultStatus == 3) {
+            if (msg.Result.nLoginStatus == 1) {
+                $("#Exchange").attr("src", "../img/dis-2.png");
+                $("#Exchang1").attr("src", "../img/dis-2.png");
+
+                if (msg.Result.sAmoMsg.toString().trim() != "") {
+                    alert("This Order will be treated as AMO order, Order Will be Processed on next trading Day.");
+                }
+                savegblBCastUrl(msg.Result.sCtclBroadcastUrl.toString().trim());
+            }
+            else {
+                $("#Exchange").attr("src", "../img/dis-1.png");
+                $("#Exchang1").attr("src", "../img/dis-1.png");
+                $("#amo").html("");
+            }
+        } else {
+            $("#Exchange").attr("src", "../img/dis-1.png");
+            $("#Exchang1").attr("src", "../img/dis-1.png");
+            $("#amo").html("");
+        }
+    });
+
+    GetUrl.fail(function (jqXHR, textStatus) {
+        alert("Request failed: " + textStatus + ' GetOStatus');
+    });
+}
 
 function GetRequiredStockMargin(nCncMis, nToken, Exchange, nOrderAmt, nBuySell, nQty, nSegment) {
     var nStockType;
@@ -203,21 +248,18 @@ function getLotSize(nToken, nstockType) {
                 $("#lblLowLim").html((msg.Result.MinPrice).toFixed(isCd ? 4 : 2));
                 $("#lblUpLim").html((msg.Result.MaxPrice).toFixed(isCd ? 4 : 2));
             }
-            $("#tdISINCode").html('');
-           // $("#spnscriptfullname").html('');
-            //$("#spnscriptcode").html('');
+            $("#sISIN").text('');
+
 
             if (nstockType == 3) {
-                $("#tdISINCode").html(msg.Result.ISINNumber);
-                //$("#spnscriptfullname").html(msg.Result.Description);
-                //$("#spnscriptcode").html(msg.Result.ScriptCode);
+                $("#sISIN").text(msg.Result.ISINNumber);
             }
         }
         else {
             $("#txtqty").val(1);
         }
 
-        $("#sISIN").html(msg.Result.ISINNumber);
+        $("#sISIN").text(msg.Result.ISINNumber);
         $("#lblesttot").text('');
 
         SetEstTotal($("#txtqty").val(), $("#txtorderprice").val());
