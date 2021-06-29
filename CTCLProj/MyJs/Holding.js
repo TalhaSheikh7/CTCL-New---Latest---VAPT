@@ -156,7 +156,7 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment) {
                                     ' data-token = "#= Token #"' +
                                     ' data-exchangeconstants = "#= BroadCastConstant #"' +
                                     ' data-script = "#= ScripName #" onclick="buysellwindow1(this)">' +
-                                    'ADD' +
+                                    'BUY' +
                                     '</button>' +
                                     '<button class="k-button" style="min-width: 30px; background-color:red;" ' +
                                     ' id="#= BroadCastConstant #_#= Token #_sell" title="Buy" ' +

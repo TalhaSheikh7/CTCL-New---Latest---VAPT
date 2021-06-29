@@ -789,7 +789,11 @@ function validateSearch(nInstrument, Script) {
 
 function AddWatchPopUp()
 {
-    KendoWindow("windowForAdd", 450, 230, "Add WatchList", 0, true);
+    if ($("#txtSelectedClient").val().split('-')[0].trim() == "" || $("#txtSelectedClient").val().split('-')[0].trim() == undefined) {
+        alert("Please Select the Client!");
+    } else {
+        KendoWindow("windowForAdd", 450, 230, "Add WatchList", 0, true);
+    }
 }
 
 $(document).on("click", "#btnAddNew", function (event) {
@@ -813,7 +817,7 @@ $(document).on("click", "#btnAddNew", function (event) {
 
     strWatchListName = $('#txtAddScript').val();
 
-    AddWatches(1, 0, strWatchListName, clientcode, DefaultWatch, nMarketSegment, 1, 0, WatchList);
+    AddWatches(1, 0, strWatchListName, gblnUserId, DefaultWatch, nMarketSegment, 1, 0, WatchList);
 
 });
 
@@ -1002,7 +1006,7 @@ function GetWatches(nUserId, nMarketWatchID, nMarketSegment, intPageIndex)
         url: "https://ctcl.investmentz.com/iCtclServiceT/api/WatchListV2/",
         method: "get",
         data: {
-            pnUserId: 3010098,
+            pnUserId: gblnUserId,
             pnMarketWatchID: nMarketWatchID,
             pnMarketSegment: nMarketSegment,
             pintPageIndex: intPageIndex
@@ -1036,9 +1040,10 @@ function GetWatches(nUserId, nMarketWatchID, nMarketSegment, intPageIndex)
 
             if (data.Result[0].nScriptCount != 0)
             {
-                FillWatchGrid(data.Result[0].lstWatches, "Main")
+                FillWatchGrid(data.Result[0].lstWatches, "Main");
             } else {
-                GridColumns = [];
+                FillWatchGrid(0, "Main")
+                //GridColumns = [];
             }
 
             WatchlistSet(watchlistName)
@@ -1070,13 +1075,13 @@ function ChangeWatchList() {
     intselectedId = $("#watchDrop").val();
 
     if ($("#watchlistOption").val() == 2) {
-        console.log("Yes");
+        //console.log("Yes");
         if ($("#watchDrop").val() != 0 && $("#watchDrop").val() != -1) {
             DefaultWatchlist($("#watchDrop").val(), 2)
         }
     }
     else {
-        console.log("No");
+        //console.log("No");
         if ($("#watchDrop").val() != 0) {
             $('#lblMarketWath').text($(this).text());
 
@@ -1118,142 +1123,145 @@ function FillWatchGrid(data, type)
     var LTT;
     GridColumns = [];
 
-    $.each(data, function (i, row) {
-        //console.log(data);
-        //Close = '<span id="' + row.nExchangeConstants + '_' + row.nToken + '_PC"></span>';
+    if (data == 0) {
+        GridColumns = [];
+    } else {
+        $.each(data, function (i, row) {
+            //console.log(data);
+            //Close = '<span id="' + row.nExchangeConstants + '_' + row.nToken + '_PC"></span>';
 
-        if (row.sInstrument.split("_")[1] == "OPTION" || row.sInstrument.split("_")[1] == "FUTURE") {
-            tempinst = row.sInstrument;
-        } else {
-            tempinst = row.sInstrument.split("_")[0];
-        }
+            if (row.sInstrument.split("_")[1] == "OPTION" || row.sInstrument.split("_")[1] == "FUTURE") {
+                tempinst = row.sInstrument;
+            } else {
+                tempinst = row.sInstrument.split("_")[0];
+            }
 
-        if (type == "Main") {
-            ExchangeId = row.nExchangeID;
-            DetailId = row.nDetailId;
-            Exchangeconstant = row.nExchangeConstants;
-            ExpiryDate = row.dExpiryDate;
-            strExp = tempinst == "CASH" ? '' : row.dExpiryDate;
-            strExp = tempinst == "CASH" ? '' : formatDate(row.dExpiryDate, '', "DD/MM/YYYY");
-        } else {
-            ExchangeId = row.nExchangeId;
-            DetailId = "";
-            Exchangeconstant = row.nBroadCastContants;
-            ExpiryDate = "";
-            strExp = tempinst == "CASH" ? '' : "";
-            strExp = tempinst == "CASH" ? '' : formatDate("", '', "DD/MM/YYYY");
-        }
-        
+            if (type == "Main") {
+                ExchangeId = row.nExchangeID;
+                DetailId = row.nDetailId;
+                Exchangeconstant = row.nExchangeConstants;
+                ExpiryDate = row.dExpiryDate;
+                strExp = tempinst == "CASH" ? '' : row.dExpiryDate;
+                strExp = tempinst == "CASH" ? '' : formatDate(row.dExpiryDate, '', "DD/MM/YYYY");
+            } else {
+                ExchangeId = row.nExchangeId;
+                DetailId = "";
+                Exchangeconstant = row.nBroadCastContants;
+                ExpiryDate = "";
+                strExp = tempinst == "CASH" ? '' : "";
+                strExp = tempinst == "CASH" ? '' : formatDate("", '', "DD/MM/YYYY");
+            }
+            
 
 
-        if (parseFloat(row.nStrike) > 0) {
-            if (tempinst == "CURRENCY_OPTION") {
-                vstrprice = parseFloat(row.nStrike).toFixed(4);
-                CP = row.sCP;
+            if (parseFloat(row.nStrike) > 0) {
+                if (tempinst == "CURRENCY_OPTION") {
+                    vstrprice = parseFloat(row.nStrike).toFixed(4);
+                    CP = row.sCP;
+                }
+                else {
+                    vstrprice = parseFloat(row.nStrike).toFixed(2);
+                    CP = row.sCP;
+                }
             }
             else {
-                vstrprice = parseFloat(row.nStrike).toFixed(2);
-                CP = row.sCP;
+                vstrprice = '';
             }
-        }
-        else {
-            vstrprice = '';
-        }
 
-        var ScripName = "";
+            var ScripName = "";
 
-        if (tempinst == "CASH") {
-            ScripName = row.sInstrument.split("_")[1] + '- ' + GetExchangeType(ExchangeId) + '\xa0\xa0' + row.sScript;
-        } else if (tempinst == "CASH_FUTURE" || tempinst == "INDEX_OPTION") {
-            ScripName = row.sInstrument.split("_")[1] + '- ' + GetExchangeType(ExchangeId) + '\xa0\xa0' + row.sScript + '\xa0\xa0' + row.dExpiryDate;
-        } else if (tempinst == "CASH_OPTION" || tempinst == "INDEX_FUTURE") {
-            ScripName = row.sInstrument.split("_")[1] + '- ' + GetExchangeType(ExchangeId) + '\xa0\xa0' + row.sScript + '\xa0\xa0' + row.nStrike + '\xa0\xa0' + row.dExpiryDate;
-        }
+            if (tempinst == "CASH") {
+                ScripName = row.sInstrument.split("_")[1] + '- ' + GetExchangeType(ExchangeId) + '\xa0\xa0' + row.sScript;
+            } else if (tempinst == "CASH_FUTURE" || tempinst == "INDEX_OPTION") {
+                ScripName = row.sInstrument.split("_")[1] + '- ' + GetExchangeType(ExchangeId) + '\xa0\xa0' + row.sScript + '\xa0\xa0' + row.dExpiryDate;
+            } else if (tempinst == "CASH_OPTION" || tempinst == "INDEX_FUTURE") {
+                ScripName = row.sInstrument.split("_")[1] + '- ' + GetExchangeType(ExchangeId) + '\xa0\xa0' + row.sScript + '\xa0\xa0' + row.nStrike + '\xa0\xa0' + row.dExpiryDate;
+            }
 
-        //PC = '<span><strong id= "' + row.nExchangeConstants + '_' + row.nToken + '_PC">0.0000</strong></span>';
-        if (Exchangeconstant == 12 || Exchangeconstant == 13) {
-            currrate = '<span><strong class= "' + Exchangeconstant + '_' + row.nToken + '_LR">0.0000</strong></span>';
-        }
-        else {
-            currrate = '<span><strong class= "' + Exchangeconstant + '_' + row.nToken + '_LR">0.00</strong></span>';
-        }
+            //PC = '<span><strong id= "' + row.nExchangeConstants + '_' + row.nToken + '_PC">0.0000</strong></span>';
+            if (Exchangeconstant == 12 || Exchangeconstant == 13) {
+                currrate = '<span><strong class= "' + Exchangeconstant + '_' + row.nToken + '_LR">0.0000</strong></span>';
+            }
+            else {
+                currrate = '<span><strong class= "' + Exchangeconstant + '_' + row.nToken + '_LR">0.00</strong></span>';
+            }
 
-        sScripts = sScripts.concat(Exchangeconstant + '.' + row.nToken + ',');
-        nExchange = '<span><strong>' + GetExchangeType(ExchangeId) + '</strong></span>';
-        //scrip = '<span>' + row.sScript + ' ' + row.sInstrument + ' -NSE</span>';
-        RateChange = '<span style="backgound-color:red;"><strong class="' + Exchangeconstant + '_' + row.nToken + '_RateChange"></strong</span>';
-        ChangePerc = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_RateChangePc"></strong</span>';
-        High = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_H"></strong</span>';
-        Low = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_L"></strong</span>';
+            sScripts = sScripts.concat(Exchangeconstant + '.' + row.nToken + ',');
+            nExchange = '<span><strong>' + GetExchangeType(ExchangeId) + '</strong></span>';
+            //scrip = '<span>' + row.sScript + ' ' + row.sInstrument + ' -NSE</span>';
+            RateChange = '<span style="backgound-color:red;"><strong class="' + Exchangeconstant + '_' + row.nToken + '_RateChange"></strong</span>';
+            ChangePerc = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_RateChangePc"></strong</span>';
+            High = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_H"></strong</span>';
+            Low = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_L"></strong</span>';
 
-        Open = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_O"></strong</span>';
-        Close = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_PC"></strong</span>';
+            Open = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_O"></strong</span>';
+            Close = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_PC"></strong</span>';
 
-        BuyQty = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_BQ"></strong</span>';
-        BuyPrice = '<span class="num-qty1"><strong class="' + Exchangeconstant + '_' + row.nToken + '_SR"></strong</span>';
-        SellQty = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_SQ"></strong</span>';
-        SellPrice = '<span class="num-qty2"><strong class="' + Exchangeconstant + '_' + row.nToken + '_BR"></strong</span>';
-        LTQ = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_LQ"></strong</span>';
-        LTD = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_LUD"></strong</span>';
-        LTT = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_LUDT"></strong</span>';
-        TotalQty = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_TQ"></strong</span>';
-        ATP = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_ATP"></strong</span>';
-        OpenInt = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_OI"></strong</span>';
+            BuyQty = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_BQ"></strong</span>';
+            BuyPrice = '<span class="num-qty1"><strong class="' + Exchangeconstant + '_' + row.nToken + '_SR"></strong</span>';
+            SellQty = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_SQ"></strong</span>';
+            SellPrice = '<span class="num-qty2"><strong class="' + Exchangeconstant + '_' + row.nToken + '_BR"></strong</span>';
+            LTQ = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_LQ"></strong</span>';
+            LTD = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_LUD"></strong</span>';
+            LTT = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_LUDT"></strong</span>';
+            TotalQty = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_TQ"></strong</span>';
+            ATP = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_ATP"></strong</span>';
+            OpenInt = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_OI"></strong</span>';
 
-        GridColumns.push({
-            nExchangeConstants: Exchangeconstant,
-            nToken: row.nToken,
-            nExchangeID: ExchangeId,
-            nScriptID: row.nScriptID,
-            sPriceStatus: row.sPriceStatus,
-            nMarketWatchID: row.nMktWatchID,
-            nMktWatchID: row.nMktWatchID,
-            sInstrument: row.sInstrument,
-            nStrike: row.nStrike,
-            sCP: row.sCP,
-            dExpiryDate: ExpiryDate,
-            nWatchIndex: row.nWatchIndex,
-            sScript: row.sScript,
-            sScripId: DetailId,
-            Scrip: ScripName,
-            LTP: currrate,
-            Change: RateChange,
-            changeperc: ChangePerc,
-            Open: Open,
-            High: High,
-            Low: Low,
-            PrevClose: Close,
-            Instrument: row.sInstrument,
-            Expiry: strExp,
-            Strike: vstrprice,
-            CallPut: CP,
-            BuyQty: BuyQty,
-            BuyPrice: BuyPrice,
-            SellQty: SellQty,
-            SellPrice: SellPrice,
-            LTQ: LTQ,
-            LTD: LTD,
-            LTT: LTT,
-            TotalQty: TotalQty,
-            ATP: ATP,
-            OpenInt: OpenInt,
-            Exchange: nExchange,
+            GridColumns.push({
+                nExchangeConstants: Exchangeconstant,
+                nToken: row.nToken,
+                nExchangeID: ExchangeId,
+                nScriptID: row.nScriptID,
+                sPriceStatus: row.sPriceStatus,
+                nMarketWatchID: row.nMktWatchID,
+                nMktWatchID: row.nMktWatchID,
+                sInstrument: row.sInstrument,
+                nStrike: row.nStrike,
+                sCP: row.sCP,
+                dExpiryDate: ExpiryDate,
+                nWatchIndex: row.nWatchIndex,
+                sScript: row.sScript,
+                sScripId: DetailId,
+                Scrip: ScripName,
+                LTP: currrate,
+                Change: RateChange,
+                changeperc: ChangePerc,
+                Open: Open,
+                High: High,
+                Low: Low,
+                PrevClose: Close,
+                Instrument: row.sInstrument,
+                Expiry: strExp,
+                Strike: vstrprice,
+                CallPut: CP,
+                BuyQty: BuyQty,
+                BuyPrice: BuyPrice,
+                SellQty: SellQty,
+                SellPrice: SellPrice,
+                LTQ: LTQ,
+                LTD: LTD,
+                LTT: LTT,
+                TotalQty: TotalQty,
+                ATP: ATP,
+                OpenInt: OpenInt,
+                Exchange: nExchange,
+            });
+            if (blnBroadCastFlag == true) {
+                CloseSocket();//Close and open
+            }
+
+            var lblScript = "lblScripts";
+            var token = "tokens"
+           
+            $('#lblScripts').html(sScripts.substring(0, sScripts.length - 1));
+            $('#lblScripts').html($('#lblScripts').html() + "," + "17.999908,17.999988,5.1")
+            tokens.push(row.nToken);
+
+            reconnectSocketAndSendTokens(lblScript);
+
         });
-        if (blnBroadCastFlag == true) {
-            CloseSocket();//Close and open
-        }
-
-        var lblScript = "lblScripts";
-        var token = "tokens"
-       
-        $('#lblScripts').html(sScripts.substring(0, sScripts.length - 1));
-        $('#lblScripts').html($('#lblScripts').html() + "," + "17.999908,17.999988,5.1")
-        tokens.push(row.nToken);
-
-        reconnectSocketAndSendTokens(lblScript);
-
-    });
-
+    }
     //debugger;
     //reconnectSocketAndSendTokens("lblScripts");
 
@@ -1281,6 +1289,7 @@ function FillWatchGrid(data, type)
         columnShow: function (e) {
             // console.log(e.column.field); // displays the field of the hidden column
         },
+        noRecords: true,
       //  toolbar: ["search"],
         columns: [
             {
@@ -1523,8 +1532,7 @@ function FillWatchGrid(data, type)
             }, 1);
         }
     });
-
-            getDepth();
+    getDepth();
 }
 
 //$(document).on("click", "#btnbuy", function (event)
@@ -2795,138 +2803,143 @@ function getDepth()
 
     var gridFirst = grid2.dataSource.options.data[0];
 
-
-    DepthColumns = [];
-
-    var grid = $("#WatchList").data("kendoGrid");
-    var selectedItem = grid.dataItem(grid.select());
-    //console.log(selectedItem);
-    //console.log(gridFirst);
-    if (selectedItem != null)
-    {
-        ExchangeConstant = selectedItem.nExchangeConstants;
-        Token = selectedItem.nToken;
-        topicName = selectedItem.nExchangeConstants + '.' + selectedItem.nToken;
-        SymbolName = selectedItem.sScript;
-        Instrument = selectedItem.sInstrument;
-        Exchange = selectedItem.nExchangeID;
+    if (grid2.dataSource.options.data.length == 0) {
+        DepthColumns = [];
     } else {
-        ExchangeConstant = gridFirst.nExchangeConstants;
-        Token = gridFirst.nToken;
-        topicName = gridFirst.nExchangeConstants + '.' + gridFirst.nToken;
-        SymbolName = gridFirst.sScript;
-        Instrument = gridFirst.sInstrument;
-        Exchange = gridFirst.nExchangeID;
+        DepthColumns = [];
+
+        var grid = $("#WatchList").data("kendoGrid");
+        var selectedItem = grid.dataItem(grid.select());
+        //console.log(selectedItem);
+        //console.log(gridFirst);
+        if (selectedItem != null) {
+            ExchangeConstant = selectedItem.nExchangeConstants;
+            Token = selectedItem.nToken;
+            topicName = selectedItem.nExchangeConstants + '.' + selectedItem.nToken;
+            SymbolName = selectedItem.sScript;
+            Instrument = selectedItem.sInstrument;
+            Exchange = selectedItem.nExchangeID;
+        } else {
+            ExchangeConstant = gridFirst.nExchangeConstants;
+            Token = gridFirst.nToken;
+            topicName = gridFirst.nExchangeConstants + '.' + gridFirst.nToken;
+            SymbolName = gridFirst.sScript;
+            Instrument = gridFirst.sInstrument;
+            Exchange = gridFirst.nExchangeID;
+        }
+
+        ScripName = Instrument + '- ' + GetExchangeType(Exchange) + '\xa0\xa0' + SymbolName;
+
+        $("#sScripName").html(ScripName);
+
+        var scrip = topicName.split('.');
+
+        var instrumentindex = GetInstrumentNumber(gridFirst.sInstrument);
+
+        getLotSize(scrip[1], instrumentindex);
+
+        RefreshScriptsLevel2(topicName);
+        //reconnectSocketAndSendTokens();
+        var LTP = '<span class= "' + ExchangeConstant + '_' + Token + '_LR"></span>';
+        var Change = '<span class= "' + ExchangeConstant + '_' + Token + '_RateChange"></span>';
+        var PerChange = '<span class= "' + ExchangeConstant + '_' + Token + '_RateChangePc"></span>';
+
+        $("#nLTP").html(LTP);
+        $("#nChange").html(Change);
+        $("#nChangePerc").html(PerChange);
+
+        var BidQty1 = "<span id='lblTopBidQty1'></span>";
+        var BidQty2 = "<span id='lblTopBidQty2'></span>";
+        var BidQty3 = "<span id='lblTopBidQty3'></span>";
+        var BidQty4 = "<span id='lblTopBidQty4'></span>";
+        var BidQty5 = "<span id='lblTopBidQty5'></span>";
+
+        var BidPrice1 = "<span id='lblTopBidRate1'></span>";
+        var BidPrice2 = "<span id='lblTopBidRate2'></span>";
+        var BidPrice3 = "<span id='lblTopBidRate3'></span>";
+        var BidPrice4 = "<span id='lblTopBidRate4'></span>";
+        var BidPrice5 = "<span id='lblTopBidRate5'></span>";
+
+        var AskPrice1 = "<span id='lblTopAskRate1'></span>";
+        var AskPrice2 = "<span id='lblTopAskRate2'></span>";
+        var AskPrice3 = "<span id='lblTopAskRate3'></span>";
+        var AskPrice4 = "<span id='lblTopAskRate4'></span>";
+        var AskPrice5 = "<span id='lblTopAskRate5'></span>";
+
+        var AskQty1 = "<span id='lblTopAskQty1'></span>";
+        var AskQty2 = "<span id='lblTopAskQty2'></span>";
+        var AskQty3 = "<span id='lblTopAskQty3'></span>";
+        var AskQty4 = "<span id='lblTopAskQty4'></span>";
+        var AskQty5 = "<span id='lblTopAskQty5'></span>";
+
+        var tot = "<span id='' class='depth2'>Total Qty</span>";
+        var BidPrice = "<span id='lblTopBidQtyTotal'></span>";;
+        var AskPrice = "<span id='' class='depth2'>Total Qty</span>";
+        var AskQty = "<span id='lblTopAskQtyTotal'></span>";
+
+        var OILable = "<span id='' class='depth2'>OI</span>";
+        var OI = "<span id='lblOI'></span>";
+        var OIChangeLable = "<span id='' class='depth2'>OI Change</span>";
+        var OIChange = "<span id='lblOI'>N/A</span>";
+
+        var lableAvgPrice = "<span id='' class='depth2'>Avg Price</span>";
+        var AvgPrice = "<span id='lblAP'></span>";
+        var lableminAvgPrice = "<span id='' class='depth2'>30 Min Avg Price</span>";
+        var TminAvg = "<span id='lblMAP'></span>";
+
+        var lableTotalValue = "<span id='' class='depth2'>Total Value</span>";
+        var TotalValue = "<span id='lbltotalvalue'></span>";
+        var lableVolume = "<span id='' class='depth2'>Volume</span>";
+        var Volume = "<span id='lblVolume'></span>";
+
+        var lableOpen = "<span id='' class='depth2'>OPEN</span>";
+        var Open = "<span id='lblOpen'></span>";
+        var lableHigh = "<span id='' class='depth2'>HIGH</span>";
+
+        var High = "<span id='lblHigh'></span>";
+        var labelLow = "<span id='' class='depth2'>LOW</span>";
+        var Low = "<span id='lblLow'></span>";
+        var lableHigh52 = "<span id='' class='depth2'>52 WK HIGH</span>";
+        var High52Week = "<span id='lblHigh52'></span>";
+        var lableLowCkt = "<span id='' class='depth2'>LOW CKT LIM</span>";
+        var LowCKTLIM = "<span id='lblLowLim'></span>";
+
+        var lableClose = "<span id='' class='depth2'>CLOSE (LTP)</span>";
+        var Close = "<span id='lblClose'></span>";
+        var lablePrevClose = "<span id='' class='depth2'>PREV CLOSE</span>";
+        var PrevClose = "<span id='lblPrevClose'></span>";
+        var lableChange = "<span id='' class='depth2'>CHANGE</span>";
+        var Change = "<span id='lblChange'></span>";
+        var lableLow52 = "<span id='' class='depth2'>52 WK LOW</span>";
+        var Low52Week = "<span id='lblLow52'></span>";
+        var lableUppCKT = "<span id='' class='depth2'>UPP CKT LIM</span>";
+        var UppCKTLIM = "<span id='lblUpLim'></span>";
+
+        DepthColumns.push(
+            { BidQty: BidQty1, BidPrice: BidPrice1, AskPrice: AskPrice1, AskQty: AskQty1 },
+            { BidQty: BidQty2, BidPrice: BidPrice2, AskPrice: AskPrice2, AskQty: AskQty2 },
+            { BidQty: BidQty3, BidPrice: BidPrice3, AskPrice: AskPrice3, AskQty: AskQty3 },
+            { BidQty: BidQty4, BidPrice: BidPrice4, AskPrice: AskPrice4, AskQty: AskQty4 },
+            { BidQty: BidQty5, BidPrice: BidPrice5, AskPrice: AskPrice5, AskQty: AskQty5 },
+            { BidQty: "-", BidPrice: "-", AskPrice: "-", AskQty: "-" },
+
+            { BidQty: tot, BidPrice: BidPrice, AskPrice: AskPrice, AskQty: AskQty },
+            { BidQty: OILable, BidPrice: OI, AskPrice: OIChangeLable, AskQty: OIChange },
+            { BidQty: lableAvgPrice, BidPrice: AvgPrice, AskPrice: lableminAvgPrice, AskQty: TminAvg },
+            { BidQty: lableTotalValue, BidPrice: TotalValue, AskPrice: lableVolume, AskQty: Volume },
+            { BidQty: "-", BidPrice: "-", AskPrice: "-", AskQty: "-" },
+
+            { BidQty: lableOpen, BidPrice: Open, AskPrice: lableClose, AskQty: Close },
+            { BidQty: lableHigh, BidPrice: High, AskPrice: lablePrevClose, AskQty: PrevClose },
+            { BidQty: labelLow, BidPrice: Low, AskPrice: lableChange, AskQty: Change },
+            { BidQty: lableHigh52, BidPrice: High52Week, AskPrice: lableLow52, AskQty: Low52Week },
+            { BidQty: lableLowCkt, BidPrice: LowCKTLIM, AskPrice: lableUppCKT, AskQty: UppCKTLIM }
+
+        );
     }
     
-    ScripName = Instrument + '- ' + GetExchangeType(Exchange) + '\xa0\xa0' + SymbolName;
 
-    $("#sScripName").html(ScripName);
-
-    var scrip = topicName.split('.');
-
-    var instrumentindex = GetInstrumentNumber(gridFirst.sInstrument);
-
-    getLotSize(scrip[1], instrumentindex);
-
-    RefreshScriptsLevel2(topicName);
-    //reconnectSocketAndSendTokens();
-    var LTP = '<span class= "' + ExchangeConstant + '_' + Token + '_LR"></span>';
-    var Change = '<span class= "' + ExchangeConstant + '_' + Token + '_RateChange"></span>';
-    var PerChange = '<span class= "' + ExchangeConstant + '_' + Token + '_RateChangePc"></span>';
-
-    $("#nLTP").html(LTP);
-    $("#nChange").html(Change);
-    $("#nChangePerc").html(PerChange);
-
-    var BidQty1 = "<span id='lblTopBidQty1'></span>";
-    var BidQty2 = "<span id='lblTopBidQty2'></span>";
-    var BidQty3 = "<span id='lblTopBidQty3'></span>";
-    var BidQty4 = "<span id='lblTopBidQty4'></span>";
-    var BidQty5 = "<span id='lblTopBidQty5'></span>";
-
-    var BidPrice1 = "<span id='lblTopBidRate1'></span>";
-    var BidPrice2 = "<span id='lblTopBidRate2'></span>";
-    var BidPrice3 = "<span id='lblTopBidRate3'></span>";
-    var BidPrice4 = "<span id='lblTopBidRate4'></span>";
-    var BidPrice5 = "<span id='lblTopBidRate5'></span>";
-
-    var AskPrice1 = "<span id='lblTopAskRate1'></span>";
-    var AskPrice2 = "<span id='lblTopAskRate2'></span>";
-    var AskPrice3 = "<span id='lblTopAskRate3'></span>";
-    var AskPrice4 = "<span id='lblTopAskRate4'></span>";
-    var AskPrice5 = "<span id='lblTopAskRate5'></span>";
-
-    var AskQty1 = "<span id='lblTopAskQty1'></span>";
-    var AskQty2 = "<span id='lblTopAskQty2'></span>";
-    var AskQty3 = "<span id='lblTopAskQty3'></span>";
-    var AskQty4 = "<span id='lblTopAskQty4'></span>";
-    var AskQty5 = "<span id='lblTopAskQty5'></span>";
-
-    var tot = "<span id='' class='depth2'>Total Qty</span>";
-    var BidPrice = "<span id='lblTopBidQtyTotal'></span>";;
-    var AskPrice = "<span id='' class='depth2'>Total Qty</span>";
-    var AskQty = "<span id='lblTopAskQtyTotal'></span>";
-
-    var OILable = "<span id='' class='depth2'>OI</span>";
-    var OI = "<span id='lblOI'></span>";
-    var OIChangeLable = "<span id='' class='depth2'>OI Change</span>";
-    var OIChange = "<span id='lblOI'>N/A</span>";
-
-    var lableAvgPrice = "<span id='' class='depth2'>Avg Price</span>";
-    var AvgPrice = "<span id='lblAP'></span>";
-    var lableminAvgPrice = "<span id='' class='depth2'>30 Min Avg Price</span>";
-    var TminAvg = "<span id='lblMAP'></span>";
-
-    var lableTotalValue = "<span id='' class='depth2'>Total Value</span>";
-    var TotalValue = "<span id='lbltotalvalue'></span>";
-    var lableVolume = "<span id='' class='depth2'>Volume</span>";
-    var Volume = "<span id='lblVolume'></span>";
-
-    var lableOpen = "<span id='' class='depth2'>OPEN</span>";
-    var Open = "<span id='lblOpen'></span>";
-    var lableHigh = "<span id='' class='depth2'>HIGH</span>";
     
-    var High = "<span id='lblHigh'></span>";
-    var labelLow = "<span id='' class='depth2'>LOW</span>";
-    var Low = "<span id='lblLow'></span>";
-    var lableHigh52 = "<span id='' class='depth2'>52 WK HIGH</span>";
-    var High52Week = "<span id='lblHigh52'></span>";
-    var lableLowCkt = "<span id='' class='depth2'>LOW CKT LIM</span>";
-    var LowCKTLIM = "<span id='lblLowLim'></span>";
-
-    var lableClose = "<span id='' class='depth2'>CLOSE (LTP)</span>";
-    var Close = "<span id='lblClose'></span>";
-    var lablePrevClose = "<span id='' class='depth2'>PREV CLOSE</span>";
-    var PrevClose = "<span id='lblPrevClose'></span>";
-    var lableChange = "<span id='' class='depth2'>CHANGE</span>";
-    var Change = "<span id='lblChange'></span>";
-    var lableLow52 = "<span id='' class='depth2'>52 WK LOW</span>";
-    var Low52Week = "<span id='lblLow52'></span>";
-    var lableUppCKT = "<span id='' class='depth2'>UPP CKT LIM</span>";
-    var UppCKTLIM = "<span id='lblUpLim'></span>";
-
-    DepthColumns.push(
-        { BidQty: BidQty1, BidPrice: BidPrice1, AskPrice: AskPrice1, AskQty: AskQty1 },
-        { BidQty: BidQty2, BidPrice: BidPrice2, AskPrice: AskPrice2, AskQty: AskQty2 },
-        { BidQty: BidQty3, BidPrice: BidPrice3, AskPrice: AskPrice3, AskQty: AskQty3 },
-        { BidQty: BidQty4, BidPrice: BidPrice4, AskPrice: AskPrice4, AskQty: AskQty4 },
-        { BidQty: BidQty5, BidPrice: BidPrice5, AskPrice: AskPrice5, AskQty: AskQty5 },
-        { BidQty: "-", BidPrice: "-", AskPrice: "-", AskQty: "-" },
-
-        { BidQty: tot, BidPrice: BidPrice, AskPrice: AskPrice, AskQty: AskQty },
-        { BidQty: OILable, BidPrice: OI, AskPrice: OIChangeLable, AskQty: OIChange },
-        { BidQty: lableAvgPrice, BidPrice: AvgPrice, AskPrice: lableminAvgPrice, AskQty: TminAvg },
-        { BidQty: lableTotalValue, BidPrice: TotalValue, AskPrice: lableVolume, AskQty: Volume },
-        { BidQty: "-", BidPrice: "-", AskPrice: "-", AskQty: "-" },
-
-        { BidQty: lableOpen, BidPrice: Open, AskPrice: lableClose, AskQty: Close },
-        { BidQty: lableHigh, BidPrice: High, AskPrice: lablePrevClose, AskQty: PrevClose },
-        { BidQty: labelLow, BidPrice: Low, AskPrice: lableChange, AskQty: Change },
-        { BidQty: lableHigh52, BidPrice: High52Week, AskPrice: lableLow52, AskQty: Low52Week },
-        { BidQty: lableLowCkt, BidPrice: LowCKTLIM, AskPrice: lableUppCKT, AskQty: UppCKTLIM }
-        
-    );
 
 
     $("#users-grid").kendoGrid({
@@ -2939,7 +2952,6 @@ function getDepth()
             multi: true,
             search: true
         },
-        height: 200,
         navigatable: true,
         selectable: 'row',
         scrollable: true,

@@ -24,7 +24,7 @@ $(document).ready(function () {
             CCC = $("#txtSelectedClient").val().toString().split('-')[0].trim();
             Name = $("#txtSelectedClient").val().toString().split('-')[1].trim();
         }
-        PositionData();
+        //PositionData();
     }
    
 });

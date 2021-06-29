@@ -1076,12 +1076,12 @@
 
             //vpg on 28012018
             //>>>>>>>
-            $("#txtUid").keyup(function (event) {
-                if (event.keyCode === 13) {
-                    //$("#btnLogin").click();
-                    $("#txtPassWd").focus();
-                }
-            });
+            //$("#txtUid").keyup(function (event) {
+            //    if (event.keyCode === 13) {
+            //        //$("#btnLogin").click();
+            //        $("#txtPassWd").focus();
+            //    }
+            //});
 
             var url = window.location.href;
             if (url.indexOf("trade.investmentz") == -1) {
@@ -1325,15 +1325,11 @@
         <div class="container-fluid">
             <h2></h2>
             <form method="post" action="" id="form1">
-                <!-- START : Notification request popup -->
                 <div class="modal" id="modNotificationPermission" tabindex="-1" role="dialog" aria-labelledby="modNotificationPermissionLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <span onclick="document.getElementById('modSessionTerminate').style.display='none'" class="close" title="Close">×</span>
-                                @*<button type="button" class="close" data-dismiss="modal">
-                            <span class="closespan" aria-hidden="true">&times;</span><span class="sr-only">Close</span>
-                        </button>*@
                                 <h4 class="modal-title2" id="modNotificationPermissionLabel">Notification Permission</h4>
                             </div>
                             <div class="modal-body" style="padding: 15px 0 5px 0 !important;">
@@ -1356,16 +1352,12 @@
                         </div>
                     </div>
                 </div>
-                <!-- END : Notification request popup -->
-                <!-- START : SESSION-TERMINATE POPUP HVB  09/07/2020 -->
+                </form>
                 <div class="modal" id="modSessionTerminate" tabindex="-1" role="dialog" aria-labelledby="modSessionTerminateLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
                                 <span onclick="document.getElementById('modSessionTerminate').style.display='none'" class="close" title="Close">×</span>
-                                @*<button type="button" class="close" data-dismiss="modal">
-                            <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                        </button>*@
                                 <h4 class="modal-title2" id="modSessionTerminateLabel">Session terminated</h4>
                             </div>
                             <div class="modal-body" style="padding: 15px 0 5px 0 !important;">
@@ -1412,7 +1404,7 @@
                                             <label class="float-label">Login Id</label>	<a id="btnForgotLogin" style="cursor:pointer; color:#fff;font-size: 12px;font-weight: 600; float:right;"> Forgot your Login?</a>
                                         </div>
                                         <div class="floating-label">
-                                            <input name="txtPassWd" id="txtPassWd" class="floating-input active" placeholder=" " autocomplete="off" type="password" style="color:#fff !important;" />
+                                            <input name="txtPassWd" id="txtPassWd" class="floating-input active"  placeholder=" " autocomplete="off" type="password" style="color:#fff !important;" />
                                             <span toggle="#txtPassWd" class="fa fa-fw fa-eye field-icon toggle-password" style="color: #fff;position: absolute;right: 14px;top: 11px;cursor: pointer;font-size: 16px;"></span>
 
                                             <span class="highlight"></span>
@@ -1443,7 +1435,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-12 text-center">
-                                        <a href="#" target="_blank" style="cursor:pointer; color:#fff;font-size: 16px;font-weight: bold;">Login Help</a>
+                                        <a href="~/Login Help File.pdf" target="_blank" style="cursor:pointer; color:#fff;font-size: 16px;font-weight: bold;">Login Help</a>
                                     </div>
                                 </div>
                             </div>
@@ -1802,7 +1794,7 @@
                                                     <div class="col-sm-5" style="padding:0;">
                                                         <input name="txtLoginMPin" type="password" autocomplete="off" maxlength="4" id="txtLoginMPin" class="popup_input no-spinners" />
                                                     </div>
-                                                    <div class="col-sm-7" style="padding: 4px 20px;">
+                                                    <div class="col-sm-7" style="padding: 4px 37px;">
                                                         <a id="btnForgotMpin" style="color:#f00;" href="javascript:__doPostBack(&#39;btnForgotMpin&#39;,&#39;&#39;)">Forgot M-Pin?</a>
                                                     </div>
                                                 </div>

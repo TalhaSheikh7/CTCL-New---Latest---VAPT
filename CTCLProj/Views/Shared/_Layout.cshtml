@@ -49,7 +49,9 @@
     <nav class="navbar navbar-dark bg-dark">
         <div class="container-fluid d-flex justify-content-between p-0">
             <h1 class="navbar-brand d-flex align-items-center">
-                <img src="~/img/investment_logo.png" style="width: 225px; margin-top: -10px;" />
+                <a href="https://www.investmentz.com/explore-products" target="_blank">
+                    <img src="~/img/investment_logo.png" style="width: 225px; margin-top: -10px;" />
+                </a>
             </h1>
             <table border="1" style="width:20%">
                 <tr class="indicesTr">
@@ -102,8 +104,11 @@
             <span id="BANameCode"></span>
 
             <input type="text" class="scrip-search-box" style="width: 20%; font-size: 12px;" id="txtSelectedClient" autocomplete="off" />
+            
             <input type="hidden" id="hdnSelectedClient" />
             <input id="clntSearchType" style="width: 5%; font-size: 12px;" />
+
+            <button><i class="fa fa-power-off" aria-hidden="true" id="btnLogout" onclick="location.href='@Url.Action("Logout", "Home")'"></i></button>
         </div>      
     </nav>
 
