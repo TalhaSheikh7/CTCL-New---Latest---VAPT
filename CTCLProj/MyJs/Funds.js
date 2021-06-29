@@ -5,17 +5,19 @@ var HoldingDataColumns = [];
 
 $(document).ready(function () {
 
-    //var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
-    var ClientCode = 5014669;
+
+
+    
+});
+$("#FClick").click(function () {
+    var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
+    //var ClientCode = 5014669;
     GetHoldingDetails(3, ClientCode, 1, 0);
     GetAccountDetails(ClientCode, 8, 1, 0);
     GetHeaderDetails(ClientCode, 10, 1, 0);
     GetOthertDetails(ClientCode, 9, 1, 0);
     GetRunLedTransDetails(ClientCode, 11, 1, 0);
-
-    
-});
-
+})
 function Backoffice() {
 
     $.ajax({
@@ -38,7 +40,7 @@ function Backoffice() {
 function GetHoldingDetails(nAction, sUserID, nPageIndex, nAccountSegment)
 {
     var valuation = 0;
-
+    HoldingDataColumns = [];
     kendo.ui.progress($("#holdingData"), true);
     $.ajax({
         url: "https://ctcl.investmentz.com/iCtclService/api/AccoutingV1/",
@@ -52,7 +54,7 @@ function GetHoldingDetails(nAction, sUserID, nPageIndex, nAccountSegment)
         dataType: "json",
         success: function (data) {
             //console.log(data);
-            HoldingColumns = [];
+            
             $("#curHolding").html(Intl.NumberFormat('en-IN').format(parseFloat(valuation).toFixed(2)))
             if (data.ResultStatus != 3) {
                 
@@ -61,7 +63,7 @@ function GetHoldingDetails(nAction, sUserID, nPageIndex, nAccountSegment)
                     valuation = data.Result.Result[0].nClosingValuationCumalative;
                     $("#curHolding").html(Intl.NumberFormat('en-IN').format(parseFloat(valuation).toFixed(2)));
 
-                    HoldingColumns = [];
+                    HoldingDataColumns = [];
                     var ISIN = "";
                     var ScripName = "";
                     var YesterDayPrice = "";
@@ -86,7 +88,7 @@ function GetHoldingDetails(nAction, sUserID, nPageIndex, nAccountSegment)
                         //reconnectSocketAndSendTokens(lblScript, token);
                     });
                 } else {
-                    HoldingColumns = [];
+                    HoldingDataColumns = [];
                 }
              }
                 $("#holdingData").kendoGrid({

@@ -25,8 +25,9 @@ $(document).ready(function () {
 
 
 function sendTokens(lblScript) {
-    
-    var TokensValues = $('#lblScripts').html() + "," + $('#lblHoldingScripts').html() + "," + $('#lblScripts2').html(); + "," + $('#lblScriptsObook').html() + "," + "17.999908,17.999988,5.1"
+
+    var TokensValues = $('#lblScripts').html() + "," + $('#lblHoldingScripts').html() + "," + $('#lblScripts2').html() + "," + $('#lblScriptsObook').html() + "," + "17.999908,17.999988,5.1"
+
     //console.log("tokens.length" + tokens.length);
     if (tokens.length > 0) {
         setTimeout(function () {
@@ -95,7 +96,7 @@ function ProcessData(bcastData, lblScript) {
     
         var nPerChange = 0;
         var nDifference = 0;
-
+    
         $("." + SymbolId + "_LR").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
         $("." + SymbolId + "_LRH").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
         $("." + SymbolId + "_LTP").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));

@@ -12,14 +12,29 @@ $(document).ready(function () {
     var dDateRange2 = "";
     var LoginCode = localStorage.getItem("BACode");
     Gettradealert("4", "", norderId, "1", "0", sorderStatus, dDateRange1, dDateRange2);
-    Notification(norderAction, LoginCode, norderId, "1", "0", sorderStatus, dDateRange1, dDateRange2);
+  
+});
 
+
+$("#NClick_A").click(function () {
+    var norderAction = 5;
+    var suserID = gblnUserId;
+    var norderId = -1;
+    var sorderStatus = "";
+    var dDateRange1 = "";
+    var dDateRange2 = "";
+    var LoginCode = localStorage.getItem("BACode");
+    Notification(norderAction, LoginCode, norderId, "1", "0", sorderStatus, dDateRange1, dDateRange2);
+})
+$("#RClick_A").click(function () {
     var norderAction = 2;
     var dDateRange1 = "";
     var dDateRange2 = "";
     npageIndexNew = 1;
     GetResearchCall(norderAction, 1, dDateRange1, dDateRange2);
+})
 
+$("#EClick_A").click(function () {
     manageWsData("", 3, true);
 
     //  manageWsData("", 3, true);
@@ -32,9 +47,8 @@ $(document).ready(function () {
     nOrderSegment = 0;
     OrderId = -1;
     var LoginCode = localStorage.getItem("BACode");
-    GetCorpActions(norderAction, LoginCode, OrderId, "1", nOrderSegment, sorderStatus, dDateRange1, dDateRange2);
-});
-
+    GetCorpActions(norderAction, LoginCode, OrderId, "1", nOrderSegment, sOrderStatus, dDateRange1, dDateRange2);
+})
 function gotSystemMessage(Msg, Time) {
 
     if (datafalse == false) {
