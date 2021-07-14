@@ -458,11 +458,13 @@ namespace CTCLProj.Controllers
 
                                         }
                                         //else
-                                        else if (hFldPopupOperation == "FLOGIN") //Added by hvb on 07/11/2017 for forgot mpin
+                                        else if (hFldPopupOperation == "FLOGIN")
                                         {
+
                                         }
-                                        else
+                                        else if(hFldPopupOperation == "FMPIN")
                                         {
+
                                         }
                                         break;
                                     default:
@@ -588,6 +590,47 @@ namespace CTCLProj.Controllers
             MobileNumber = txtFPwdOTP = "";
             hFldOtpVisible = "F";
         }
+
+        public JsonResult btnCMPinSave_Click(string txtmPin1, string txtmPin2, string hFldOpenPopupId, string Loginid, string hFldOldwPwdCp = "")
+        {
+            string successmsg = "";
+            bool successtype = false;
+            if (client == null)
+                client = new AuthenticateService();
+            try
+            {
+                string sError = "";
+                AuthResponse Response = client.ValidateMPIN(Loginid, txtmPin1, "C");
+
+                if (Convert.ToInt32(Response.RespCode) != 1)
+                    sError = Response.RespMessage;
+
+                if (sError == "")
+                {
+                    hFldOpenPopupId = GlobalVariables.POPUP_SUCCESS1;
+
+                    successmsg = "You have successfully changed your <br/>  M-Pin. Please enter new M-Pin <br/>  to continue with login.";
+                    successtype = true;
+                }
+                else
+                {
+                    successmsg = sError;
+                    successtype = false;
+                }
+            }
+            catch (Exception exError)
+            {
+
+                long pLngErr = -1;
+                if (exError.GetBaseException() is System.Data.SqlClient.SqlException)
+                    pLngErr = ((System.Data.SqlClient.SqlException)exError.GetBaseException()).Number;
+                pLngErr = ReportError("btnCMPinSave_Click", "Login", pLngErr, exError.GetBaseException().GetType().ToString(), exError.Message, exError.StackTrace);
+            }
+
+            var result = new { data = successtype, data2 = successmsg };
+            return Json(result, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult btnCPSave_Click(string txtChangePwd1, string txtChangePwd2, string hFldOpenPopupId, string Loginid, string hFldOldwPwdCp = "")
         {
             string successmsg = "";

@@ -294,6 +294,11 @@ function KendoDropDownList(DropId, DropDownData, ValueField, TextField, ChangeFu
         cascadeFrom: casccade,
         change: ChangeFunctionName,
         index: index,
+        select: function (e) {
+            if (e.dataItem.isDeleted) {
+                e.preventDefault();
+            }
+        },
         animation: {
             close: {
                 effects: "zoom:out",

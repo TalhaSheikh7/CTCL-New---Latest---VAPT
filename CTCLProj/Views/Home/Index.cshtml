@@ -174,7 +174,7 @@
                     <div class="coll-grig-50">
                         <input id="lstSegment" style="width: 18%; font-size: 12px;" />
                         <input id="lstCashType" style="width: 20%; font-size: 12px;" />
-                        <input type="text" class="scrip-search-box" id="txtsearch" autocomplete="off" style="width:46% !important; font-size: 14px;  border-radius: 0;  border: 0;" />
+                        <input type="text" class="scrip-search-box" id="txtsearch" autocomplete="off" style="width:46% !important; font-size: 14px;  border-radius: 1;  border: 0;" />
                         <div id="divSearch" class="suggestion-wrapper hidden-suggestion-wrapper">
                             <ul id="lstSearch" class="search_database">
                                 <li id="oneli" class="hovered"></li>
@@ -212,22 +212,22 @@
     <div id="tabWindow">
         <div id="tabstrip">
             <ul>
-                <li  class="k-state-active">
+                <li class="k-state-active" id="tBook">
                     TradeBook
                 </li>
-                <li id="OCkick">
+                <li id="oBook">
                     OrderBook
                 </li>
-                <li id="NPClick">
+                <li id="nPosition">
                     Net Position
                 </li>
-                <li id="HVClick">
+                <li id="hValuation">
                     Holding Valuation
                 </li>
-                <li>
+                <li id="aLog">
                     Activity Log
                 </li>
-                <li id="FClick">
+                <li id="nFunds">
                     Funds
                 </li>
             </ul>
@@ -290,7 +290,9 @@
 
                 <div id="modifycancel" style="display:none; text-align:center">
                     <div class="popup_panel">
-                        <div style="font-size: 14px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="font-weight: 600; float:left; font-size: 14px; text-align: left; color: #ccc;"><span id="buysellO"></span> <span id="scripO"></span><span> x </span><span id="qytO"></span></span> <span class="pull-right"><span style="text-align:left; font-size: 16px;" id="LoginIDNameO"></span></span></div>
+
+                        <div style="font-size: 14px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="font-weight: 600; float:left; font-size: 14px; text-align: left; color: #ccc;"><span id="buysell"></span> <span id="scrip"></span><span> x </span><span id="qyt"></span></span> <span class="pull-right"><span style="text-align:left; font-size: 16px;" id="NameCodeData"></span></span></div>
+
 
                         <div style="font-size: 13px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="color: #ccc; width: 175px;float: left;">LTP : ₹<span id="ltprice"></span></span>  <span style="width: 175px;float: left;">Position(Net Wise)</span><span style="width: 175px;float: left;">Holdings : <span id="Oholdings"> </span></span></div>
                         <div style="padding: 5px 0;clear: both;;">
@@ -525,7 +527,9 @@
                         <div>
                             <div id="Notificationgrid" style="height:100%;"></div>
                         </div>
-
+                        <div id="researchbuysell" style="display:none; text-align:center">
+                            <div class="popup_panel">
+                                <div style="font-size: 14px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="font-weight: 600; float:left; font-size: 14px; text-align: left; color: #ccc;"><span id="buysell"></span> <span id="scrip"></span><span> x </span><span id="qyt"></span></span> <span class="pull-right"><span style="text-align:left; font-size: 16px;" id="NameCodeData1"></span></span></div>
                         <div>
                             <div id="NotificationgridReseaarchcall" style="height:100%;"></div>
                             <div id="remaeks" style="display:none; text-align:center">
@@ -869,7 +873,7 @@
         <input type="hidden" id="cmbSegment1" />
         <input type="hidden" id="Select2" />
         <div style="font-size: 16px;">
-            ACM4850 - Darshan Bhatt
+            <span id="NameCodeData2"></span>
             <span class="pull-right">
                 <span>
                     <img id="Broadcast" src="../img/dis-2.png"> B
@@ -940,7 +944,7 @@
                                         </tr>
                                         <tr>
                                             <td style="padding: 0 10px; font-size: 13px; color: #ccc;">
-                                                <input type="number" class="inpulvalue" id="txtqty" step="0" min="0" data-oldvalue="" data-qty='' data-lotsize='' value="1" style="border: 0 !important; background: transparent !important; color: #fff !important;" />
+                                                <input type="number" class="inpulvalue" id="txtqty" step="0" min="0" tabindex="1" data-oldvalue="" data-qty='' data-lotsize='' value="1" style="border: 0 !important; background: transparent !important; color: #fff !important;" />
                                             </td>
                                         </tr>
                                     </table>
@@ -963,7 +967,7 @@
                                         </tr>
                                         <tr>
                                             <td style="padding: 0 10px; font-size: 13px; color: #ccc;">
-                                                <input type="text" class="inpulvalue" id="txtorderprice" step="0" min="0" data-oldvalue="" data-price="" data-tickprice="" value="0" style="border: 0 !important; background: transparent !important; color: #fff !important;" />
+                                                <input type="number" class="inpulvalue numberonly" id="txtorderprice" tabindex="2" step="0" min="0" data-oldvalue="" data-price="" data-tickprice="" value="0" style="border: 0 !important; background: transparent !important; color: #fff !important;" />
                                             </td>
                                         </tr>
                                     </table>
@@ -985,7 +989,7 @@
                                         </tr>
                                         <tr>
                                             <td style="padding: 0 10px; font-size: 13px; color: #ccc;">
-                                                <input type="text" class="inpulvalue" id="txttrigprice" step="0" min="0" data-oldvalue="" data-price="" value="0" style="border: 0 !important; background: transparent !important; color: #fff !important;" />
+                                                <input type="number" class="inpulvalue numberonly" id="txttrigprice" step="0" min="0" data-oldvalue="" data-price="" value="0" style="border: 0 !important; background: transparent !important; color: #fff !important;" />
                                             </td>
                                         </tr>
                                     </table>
@@ -1018,7 +1022,7 @@
                             </tr>
                             <tr>
                                 <td style="padding: 0 10px; font-size: 13px; color: #ccc;">
-                                    <input type="number" class="inpulvalue" id="txtdisclosedqty" step="1" min="0" value="" style="border: 0 !important; background: transparent !important; color: #fff !important;" />
+                                    <input type="number" class="inpulvalue numberonly" id="txtdisclosedqty" step="1" min="0" value="5" style="border: 0 !important; background: transparent !important; color: #fff !important;" />
                                 </td>
                             </tr>
                         </table>
@@ -1108,7 +1112,7 @@
                                     <table style="width:100%;">
                                         <tr>
                                             <td style="padding: 5px 10px; text-align: right;">
-                                                <button class="btn btn-buy" id="btntrade" onclick="tradebutton();">Buy</button>
+                                                <button class="btn btn-buy" id="btntrade" tabindex="3" onclick="tradebutton();">Buy</button>
                                             </td>
                                             <td style="padding: 5px 10px;text-align: left;">
                                                 <button class="btn btn-cancel" id="btncancelbuysell">Cancel</button>

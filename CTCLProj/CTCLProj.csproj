@@ -492,6 +492,7 @@
     <Content Include="Content\kendo\2021.1.224\Uniform\sprite_2x.png" />
     <Content Include="Content\kendo\2021.1.224\Uniform\sprite_kpi.png" />
     <Content Include="Content\kendo\2021.1.224\Uniform\sprite_kpi_2x.png" />
+    <Content Include="Content\SweetAlert.css" />
     <Content Include="Global.asax" />
     <Content Include="Images\200.png" />
     <Content Include="img\account-balance.svg" />
@@ -689,6 +690,7 @@
     <Content Include="MyJs\NetPosition.js" />
     <Content Include="MyJs\Notification.js" />
     <Content Include="MyJs\OrderBook.js" />
+    <Content Include="MyJs\SweetAlert.js" />
     <Content Include="MyJs\TradeBook.js" />
     <Content Include="packages.config" />
     <Content Include="Scripts\bootstrap.bundle.js" />

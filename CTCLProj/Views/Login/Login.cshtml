@@ -28,6 +28,9 @@
     <script src="~/MyJs/GlobalVariable.js"></script>
     <script src="~/MyJs/lz-string.js"></script>
     <script src="~/Scripts/jquery.autocomplete.min.js"></script>
+    <script src="~/MyJs/SweetAlert.js"></script>
+    <link href="~/Content/SweetAlert.css" rel="stylesheet" />
+
     <style>
         .error-detail {
             display: block;
@@ -1095,7 +1098,12 @@
                 }
             });
 
-
+            document.getElementById("txtLoginMPin").addEventListener("keypress", function (evt)
+            {
+                if (evt.which < 48 || evt.which > 57) {
+                    evt.preventDefault();
+                }
+            });
 
             var duration = 500;
 
@@ -1205,7 +1213,7 @@
                 $('#txtFPwdLoginId').attr('autocomplete', 'off');//vpg 020118
                 $('#txtFPwdMobileNo').attr('autocomplete', 'off');//vpg 020118
 
-
+                $("#changeType").val('pwd');
 
                 $('#hFldPopupOperation').val('FPWD');
                 $('#modForgotPwdLabel').html('Forgot Password');
@@ -1252,28 +1260,7 @@
                 $('#txtFPwdLoginId').focus();//19042018 vpg
             });
 
-            //Added by hvb on 07/11/2017 for forgot mpin
-            $('#btnForgotMpin').click(function () {
-                $('#hFldPopupOperation').val('FMPIN');
-                $('#modForgotPwdLabel').html('Forgot M-Pin');
-                $('#lblForgotpwdUid').html('Login Id');
-                $('#hFldOpenPopupId').val('modForgotPwd');
-
-                $('#txtFPwdLoginId').val('');
-                $('#txtFPwdMobileNo').val('');
-
-                $('#divOtpBlock').css('display', 'none');
-                $('#txtFPwdOTP').val('');
-                $('#lblFPwdError').html('');
-                $('#hFldOtpVisible').val('F');
-
-                //$('#lblCMpinError').val(''); //added by vpg on 05012018 to clear previous message
-                $(this).closest(".modal").hide();
-
-
-                //Commented by hvb on 03/01/2018 as this popup is now opened from server side.
-                //OpenPopuptfromHiddenField("");
-            });
+            
 
             $("#btnLogoutNo").click(function () {
                 $('#txtUid').focus();
@@ -1473,9 +1460,9 @@
                                             </div>
                                             <div class="row" id="mobilerow">
                                                 <div class="floating-label" style="margin-bottom: 15px !important;">
-                                                    <input name="txtFPwdMobileNo" type="text" autocomplete="off" maxlength="15" id="txtFPwdMobileNo" class="floating-input" placeholder=" " /> <span class="highlight"></span>
+                                                    <input name="txtFPwdMobileNo" type="text" autocomplete="off" maxlength="10" id="txtFPwdMobileNo" onkeypress="return isNumberKey(event);" class="floating-input" placeholder=" " /> <span class="highlight"></span>
                                                     <span class="bar"></span>
-                                                    <label class="new-field">Regd. Mobile No.</label> <span id="txthiddenMobNo" class="popup_input no-spinners" TextMode="Number" MaxLength="15"></span>
+                                                    <label class="new-field">Regd. Mobile No.</label> <span id="txthiddenMobNo" class="popup_input no-spinners" TextMode="Number" MaxLength="10"></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -1518,6 +1505,7 @@
                                     <h4 class="modal-title2" id="modForgotPwdLabel">Forgot Password</h4>
                                 </div>
                                 <div class="modal-body">
+                                    <input type="hidden" id="changeType" />
                                     <div class="container-fluid">
                                         <div id="WelcomeMsg" class="row">
 
@@ -1526,7 +1514,7 @@
                                             <span id="clientMessage" style="color:#fff !important;">Please enter the <big><strong>OTP</strong></big> sent to your registered mobile number.</span><br><br>
 
                                         </div>
-                                        <div id="loginrow" hidden="hidden">
+                                        @*<div id="loginrow" hidden="hidden">
 
                                             <div class="row">
                                                 <div class="floating-label" style="margin-bottom: 15px !important;">
@@ -1551,7 +1539,7 @@
                                                     <span id="txthiddenMobNo" class="popup_input no-spinners" textmode="Number" maxlength="15"></span>
                                                 </div>
                                             </div>
-                                        </div>
+                                        </div>*@
                                         <div class="row" style="padding-top: 8px; padding-bottom: 8px; display: block;" id="divOtpBlock">
                                             <input type="hidden" name="hFldOtpVisible" id="hFldOtpVisible" value="T">
 
@@ -1594,8 +1582,8 @@
                                         <div id="WelcomeMsgcp">
                                             <span id="clientWelcomecp" class="succes-title">Welcome</span>
                                             <span id="clientnamecp"></span>
-                                            <br />	<span id="clientMessagecp">Please create a new password to continue with your</span>
-                                            <br /> <span id="clientMessagecp1">login id "</span>
+                                            <br />	<span id="clientMessagecp">Please create a new password to continue</span>
+                                            <br /> <span id="clientMessagecp1"></span>
                                             <span id="lblLoginIdCp">Rajesh</span>  <span>"</span>
                                             <br />
                                         </div>
@@ -1791,11 +1779,12 @@
                                             <br />
                                             <div class="container-fluid">
                                                 <div class="row">
-                                                    <div class="col-sm-5" style="padding:0;">
+                                                    <div class="col-sm-6" style="padding:0;">
                                                         <input name="txtLoginMPin" type="password" autocomplete="off" maxlength="4" id="txtLoginMPin" class="popup_input no-spinners" />
+                                                        <i class="fa password-viewer fa-eye" style="color: white;position: absolute;right: 3px;top: 10px;cursor: pointer;"></i>
                                                     </div>
-                                                    <div class="col-sm-7" style="padding: 4px 37px;">
-                                                        <a id="btnForgotMpin" style="color:#f00;" href="javascript:__doPostBack(&#39;btnForgotMpin&#39;,&#39;&#39;)">Forgot M-Pin?</a>
+                                                    <div class="col-sm-6">
+                                                        <a id="btnForgotMpin" style="color:#f00;">Forgot M-Pin?</a>
                                                     </div>
                                                 </div>
                                                 <div class="row"></div>
@@ -1831,8 +1820,8 @@
                                     <div class="container-fluid">
                                         <div id="Div1" class="row">
                                             <span id="Span1">Hi</span>
-                                            <span id="lblLoginIdCMpin">Rajesh</span> 	<span id="Span2">Please create a new M-pin to continue with your</span>
-                                            <br /> <span>login id "<span id="clientnameMpin"></span>"</span>
+                                            <span id="lblLoginIdCMpin"></span> 	<span id="Span2">Please create a new M-pin to continue</span>
+                                            <br /> <span>login id "<span id="clientnameMpin"></span></span>
                                             <br />
                                         </div>
                                         <div class="row">
@@ -2001,14 +1990,5 @@
 <script src="~/MyJs/Login.js"></script>
 
 <script>
-    $(".toggle-password").click(function () {
-
-        $(this).toggleClass("fa-eye fa-eye-slash");
-        var input = $($(this).attr("toggle"));
-        if (input.attr("type") == "password") {
-            input.attr("type", "text");
-        } else {
-            input.attr("type", "password");
-        }
-    });
+    
 </script>
