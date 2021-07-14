@@ -141,6 +141,7 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Cliemtsearchcss\ClientSaechcss.css" />
     <Content Include="Content\autocomplete.css" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />

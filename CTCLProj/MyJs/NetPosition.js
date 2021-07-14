@@ -11,6 +11,7 @@ $(document).ready(function () {
         }
     });
 
+
     var CCC = '';
     var Name = '';
 
@@ -26,56 +27,55 @@ $(document).ready(function () {
         }
         //PositionData();
     }
-   
 });
-
-function PositionData() {
-    var Marketsegment =
-[
-  { value: "1", Id: "1", name: "ALL" },
-  { value: "2", Id: "2", name: "CM" },
-  { value: "3", Id: "3", name: "FO" },
-  { value: "4", Id: "4", name: "CD" }
-];
-
-    $("#drpMarketSelection").kendoDropDownList({
-        dataSource: Marketsegment,
-        dataValueField: "Id",
-        dataTextField: "name",
-        change: '',
-        animation: {
-            close: {
-                effects: "zoom:out",
-                duration: 200
-            }
-        }
-    });
-    var Netwisedaywise =
- [
- { value: "1", Id: "1", name: "Net Wise" },
- { value: "2", Id: "2", name: "Day wise" }
- ]
-
-    $("#dtrange").kendoDropDownList({
-        dataSource: Netwisedaywise,
-        dataValueField: "Id",
-        dataTextField: "name",
-        change: '',
-        animation: {
-            close: {
-                effects: "zoom:out",
-                duration: 200
-            }
-        }
-    });
-    var marketsegment = $("#drpMarketSelection").val();
+$("#NPClick").click(function () {
     var strdtrange = "";
-    if ($('#dtrange').val() == 2) {
-        strdtrange = 'Only Today';
-    } else if ($('#dtrange').val() == 1) {
-        strdtrange = 'Till Today';
-    }
-    GetNetPositionReport(marketsegment, strdtrange);
+    var strInst = 1
+
+    strdtrange = 'Till Today';
+    GetNetPositionReport(strInst, strdtrange);
+})
+function PositionData() {
+//    var Marketsegment =
+//[
+//  { value: "1", Id: "1", name: "ALL" },
+//  { value: "2", Id: "2", name: "CM" },
+//  { value: "3", Id: "3", name: "FO" },
+//  { value: "4", Id: "4", name: "CD" }
+//];
+
+//    $("#drpMarketSelection").kendoDropDownList({
+//        dataSource: Marketsegment,
+//        dataValueField: "Id",
+//        dataTextField: "name",
+//        change: '',
+//        animation: {
+//            close: {
+//                effects: "zoom:out",
+//                duration: 200
+//            }
+//        }
+//    });
+//    var Netwisedaywise =
+// [
+// { value: "1", Id: "1", name: "Net Wise" },
+// { value: "2", Id: "2", name: "Day wise" }
+// ]
+
+//    $("#dtrange").kendoDropDownList({
+//        dataSource: Netwisedaywise,
+//        dataValueField: "Id",
+//        dataTextField: "name",
+//        change: '',
+//        animation: {
+//            close: {
+//                effects: "zoom:out",
+//                duration: 200
+//            }
+//        }
+//    });
+   // var marketsegment = $("#drpMarketSelection").val();
+  
 }
 
 function GetNetPositionReport(strInst, strdtrange) {
@@ -91,31 +91,20 @@ function GetNetPositionReport(strInst, strdtrange) {
         }
     }
 
-    if ($("#drpMarketSelection").val() == "1") {
-        var InsName = "ALL"
-    }
-    else if($("#drpMarketSelection").val() == "2"){
-        var InsName = "CM"
-    }
-    else if($("#drpMarketSelection").val() == "3"){
-        var InsName = "FO"
-    }
-    else if($("#drpMarketSelection").val() == "4"){
-        var InsName = "CD"
-    }
+
     //strdtrange = $('#dtrange').find(":selected").text(); //$('#dtrange').find(":selected").text();
-    strInst = $('#drpMarketSelection').find(":selected").text(); //$('#drpMarketSelection').find(":selected").text();
+    strInst = $('#drpMarketSelection').find(":selected").text(); 
     if (strdtrange == "") { strdtrange = "Only Today"; }
     var nAction = 5;
     var sUserID = 0;
     var nPageIndex = 1;
-    var sdtrange = strdtrange;  //dtrange.val(); //"Only Today"
+    var sdtrange = strdtrange;  
     var sAccCD = '';//$("#cmbClients").val(); //gblnUserId
     var nToken = -1;
     var sFromDate = "2010/01/29"
     var sTillDate = "";
     var sProCli = "Cli";
-    var sInstrumentName = InsName;
+    var sInstrumentName = "ALL";
 
     if (gblCTCLtype.toString().toLocaleLowerCase() == "emp" || gblCTCLtype.toString().toLocaleLowerCase() == "ba") {
         empclientid = $("#cmbClients").val();
@@ -148,8 +137,8 @@ function GetNetPositionReport(strInst, strdtrange) {
             sdtrange: sdtrange,
             sAccCD: ClientCode,//sAccCD,
             sProCli: sProCli,
-            sInstrumentName: sInstrumentName.toUpperCase(),
-            sCTCLId: gblCTCLid//localStorage.getItem("CTCLId")//""
+            sInstrumentName: sInstrumentName,
+            sCTCLId: ""//localStorage.getItem("CTCLId")//""
         },
         type: "json"
     });
