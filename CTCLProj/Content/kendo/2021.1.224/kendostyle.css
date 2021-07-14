@@ -67,8 +67,9 @@ ul {
     bottom: 5px;
     border-radius: 30px;
     text-transform: uppercase;
-    font-weight: bold; 
+    font-weight: bold;
     color: #0007ff;
+    padding: 0 10px;
 }
 
 .demo-section p {
@@ -399,13 +400,13 @@ popup_panel .slider.round:before {
 .depth{
     font-size: 12px;
     color: red;
-    font-weight: 500 !important;
+    font-weight: 600 !important;
 }
 
 .depth2{
     font-size: 10px;
     color: red;
-    font-weight: 500 !important;
+    font-weight: 600 !important;
 }
 
 .holdText{
@@ -501,4 +502,49 @@ popup_panel .slider.round:before {
 
 .k-toolbar .k-icon {
     font-size: 18px;
+}
+
+.k-dropdown .k-dropdown-wrap.k-state-hover, .k-dropdown .k-dropdown-wrap:hover, .k-dropdowntree .k-dropdown-wrap.k-state-hover, .k-dropdowntree .k-dropdown-wrap:hover {
+    color: #fff !important;
+    border-color: #343a40 !important;
+    background-color: #343a40 !important;
+}
+
+.k-filter-row .k-dropdown-operator {
+    right: 25px !important;
+}
+
+span.k-widget.k-dropdown.k-dropdown-operator {
+    position: absolute;
+    top: 5px;
+}
+
+span.k-icon.k-i-filter {
+    bottom: 4px;
+}
+
+.navbar-dark .fa.fa-times {
+    position: relative;
+    z-index: 999;
+    right: 40px;
+    top: -5px;
+    color: #000;
+}
+
+.k-list.k-reset{
+    position:relative;
+    z-index:11;
+}
+
+:focus-visible {
+    outline: -webkit-focus-ring-color auto 0px !important;
+}
+
+.k-window{
+    z-index:1;
+}
+
+.btn:focus, .btn:hover {
+    text-decoration: none;
+    background-color: #71d059 !important;
 }

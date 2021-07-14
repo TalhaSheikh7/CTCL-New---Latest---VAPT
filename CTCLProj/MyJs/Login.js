@@ -5,8 +5,51 @@ $(document).ready(function () {
     
 });
 
+$(".toggle-password").click(function () {
+
+    $(this).toggleClass("fa-eye fa-eye-slash");
+    var input = $($(this).attr("toggle"));
+    if (input.attr("type") == "password") {
+        input.attr("type", "text");
+    } else {
+        input.attr("type", "password");
+    }
+});
+
+$('.password-viewer').click(function () {
+    if ($(this).hasClass('fa-eye')) {
+        $(this).removeClass('fa-eye').addClass('fa-eye-slash');
+        $('#txtLoginMPin').attr('type', 'text');
+    } else {
+        $(this).removeClass('fa-eye-slash').addClass('fa-eye'); $('#txtLoginMPin').attr('type', 'password');
+    }
+});
+
+$("#forgotLoginId").keydown(function (e) {
+    var k = e.which;
+    var ok = k >= 65 && k <= 90 || // A-Z
+        k >= 96 && k <= 105 || // a-z
+        k >= 35 && k <= 40 || // arrows
+        k == 8 || // Backspaces
+        (!e.shiftKey && k >= 48 && k <= 57); // 0-9
+
+
+    if (!ok) {
+        e.preventDefault();
+    }
+});
+
+function isNumberKey(evt) {
+    var charCode = (evt.which) ? evt.which : evt.keyCode
+    return !(charCode > 31 && (charCode < 48 || charCode > 57));
+}
+
 $("#btnForgotLoginid").click(function () {
     var UCC = $("#forgotLoginId").val();
+    if (UCC == "" || UCC == undefined) {
+        swal("Please Enter Your ClientCode!");
+        return false;
+    }
 
     $.ajax({
         url: "http://accountopening.investmentz.co.in/eKYC/api/eKYCMaster/ForgotLogin?Option=FL3&CCC='" + UCC + "'&MobOTP=0",
@@ -15,7 +58,14 @@ $("#btnForgotLoginid").click(function () {
         },
         dataType: "json",
         success: function (data) {
-            alert("Your login ID has been send on your registered Mobile No and Email id.");
+            console.log(data.ForgotLogin[0].RespMessage);
+            if (data.ForgotLogin[0].Response == 1)
+            {
+                swal("Your login ID has been send on your registered Mobile No and Email id.");
+            } else if(data.ForgotLogin[0].Response == 0) {
+                swal("Something Went Wrong!")
+            }
+            
             //KendoWindow("remaeks", 650, 120, "", 0);
             //$("#remaeks").closest(".k-window").css({
             //    top: 350,
@@ -35,8 +85,14 @@ $("#btnFPwdProceed").click(function () {
     var hFldOtpVisible = "F";//$('#hFldOtpVisible').val('F');
     var hFldPopupOperation = "FPWD";//$('#hFldPopupOperation').val('FPWD');
     var hFldOpenPopupId = "modForgotPwd";
+
+    if (MobileNumber.length < 10 || MobileNumber.length > 10) {
+        swal("Mobile Number Should be off 10 digit");
+        return false;
+    }
+
     $.ajax({
-        url: Glbvar + "Login/btnFPwdProceed_Click",
+        url: common_url + "Login/btnFPwdProceed_Click",
         type: "GET",
         data: {
             Loginid: Loginid,
@@ -92,7 +148,16 @@ $("#FPWDOTP").click(function () {
     var Loginid = $("#txtFPwdLoginId").val();
     var MobileNumber = $("#txtFPwdMobileNo").val();
     var hFldOtpVisible = "T";//$("#hFldOtpVisible").val("F");
-    var hFldPopupOperation = "FPWD"//$("#hFldPopupOperation").val("FLOGIN");
+
+    if ($("#changeType").val() == "pwd") {
+        var hFldPopupOperation = "FPWD";
+    } else if ($("#changeType").val() == "mPin") {
+        var hFldPopupOperation = "FMPIN";
+    } else {
+
+    }
+
+
     var txtFPwdOTP = $("#txtFPwdOTP1").val();
     $.ajax({
         url: common_url + "Login/btnFPwdProceed_Click",
@@ -109,20 +174,84 @@ $("#FPWDOTP").click(function () {
         success: function (data) {
 
             $("#forgetpsdotp").hide();
-            $("#changePWD").show();
+            if ($("#changeType").val() == "pwd") {
+                $("#changePWD").show();
+            } else if ($("#changeType").val() == "mPin") {
+                $("#modChangeMpin").show()
+            } else {
+
+            }
+
             //KendoWindow("remaeks", 650, 120, "", 0);
             //$("#remaeks").closest(".k-window").css({
             //    top: 350,
             //    left: 200
             //});
             //$("#remarkdetails").html(data)
-            alert(MobileNumber);
+            // alert(MobileNumber);
         },
         error: function (data) {
             console.log(data);
         }
     });
-})
+});
+
+$("#txtChangemPin1, #txtChangemPin2").keypress(function (event) {
+    return /\d/.test(String.fromCharCode(event.keyCode));
+});
+
+$("#btnCMPinSave").click(function () {
+    var Loginid = $("#txtFPwdLoginId").val();
+    var txtmPin1 = $("#txtChangemPin1").val();
+    var txtmPin2 = $("#txtChangemPin2").val();
+    
+    var hFldOpenPopupId = "modChangeMpin";
+
+    if (txtmPin1 == "") {
+        swal("m-Pin Should Not Be Blank!");
+        return false;
+    } else if (txtmPin2 == "") {
+        swal("Re-enter m-Pin Should Not Be Blank!");
+        return false;
+    } else if ($("#txtChangemPin1").val().length != 4) {
+        swal("m-Pin should be of 4 digits only!");
+        return false;
+    } else if (txtmPin1.includes(" ")) {
+        swal("m-Pin should not contain blank space!");
+        return false;
+    } else if (txtmPin1 != txtmPin2) {
+        swal("Entered m-Pin should match with re-typed m-Pin!");
+        return false;
+    } else {
+        $.ajax({
+            url: common_url + "Login/btnCMPinSave_Click",
+            type: "GET",
+            data: {
+                txtmPin1: txtmPin1,
+                txtmPin2: txtmPin2,
+                hFldOpenPopupId: hFldOpenPopupId,
+                Loginid: "tsheikh7"
+            },
+            dataType: "json",
+            success: function (data) {
+                if (data.data == true) {
+                    swal({
+                        title: "Done!",
+                        text: "You have successfully changed your M-Pin. Please login to continue.!",
+                        type: "success"
+                    }).then(function () {
+                        location.reload();
+                    });
+                } else {
+                    swal(data.data2);
+                }
+            },
+            error: function (data) {
+
+            }
+        });
+    }
+});
 
 $("#btnCPSave1").click(function () {
     var Loginid = $("#txtFPwdLoginId").val();
@@ -196,6 +325,11 @@ $("#btnVerifyMPin").click(function () {
 
     var txtLoginMPin = $("#txtLoginMPin").val();
     var LoginID = $("#txtUid").val();
+
+    if (txtLoginMPin == "" || txtLoginMPin == undefined) {
+        swal("Please Enter Your M-pin");
+        return false;
+    }
     $.ajax({
         url: common_url + "Login/btnCancelMPinVerification_Click",
         type: "GET",
@@ -247,7 +381,24 @@ $("#btnVerifyMPin").click(function () {
             console.log(data);
         }
     });
-})
+});
+
+$('#btnForgotMpin').click(function () {
+    $('#hFldPopupOperation').val('FMPIN');
+    $('#modForgotPwdLabel').html('Forgot M-Pin');
+    $('#lblForgotpwdUid').html('Login Id');
+    $('#hFldOpenPopupId').val('modForgotPwd');
+    $("#changeType").val('mPin');
+    $('#txtFPwdLoginId').val('');
+    $('#txtFPwdMobileNo').val('');
+
+    $('#divOtpBlock').css('display', 'none');
+    $('#txtFPwdOTP').val('');
+    $('#lblFPwdError').html('');
+    $('#hFldOtpVisible').val('F');
+    $("#modForgotPwd").toggle();
+    $(this).closest(".modal").hide();
+});
 
 const textbox = document.getElementById("txtPassWd");
 textbox.addEventListener("keypress", function onEvent(event) {

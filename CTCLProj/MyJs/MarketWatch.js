@@ -75,7 +75,7 @@ $(document).ready(function () {
         draggable: true,
         resizable: true,
         visible: false,
-        actions: ["Custom", "maximize", "minimize"],
+        actions: ["maximize", "minimize"],
         title: "Market Watch"
     }).data("kendoWindow").center().open();
 
@@ -93,7 +93,7 @@ $(document).ready(function () {
         draggable: true,
         resizable: true,
         visible: false,
-        actions: ["Custom", "maximize", "minimize"],
+        actions: ["maximize", "minimize"],
         title: "Market Depth"
     }).data("kendoWindow").center().open();
 
@@ -930,11 +930,11 @@ function getWatch() {
 
     // array of all models
     var ScripType = [
-        { value: 3, name: "CASH", Id: 1 },
-        { value: 0, name: "Market Segment", Id: 1 },
-        
+/*        { value: 10, name: "Market Segment", Id: 2, isDeleted: true },*/
         { value: 3, name: "CASH", Id: 2 },
-        { value: 0, name: "Market Segment", Id: 2 },
+
+        //{ value: 0, name: "Market Segment", Id: 1, isDeleted: true },
+        { value: 3, name: "CASH", Id: 1 },
         { value: 8, name: "CASH (BE)", Id: 1 },
         { value: 9, name: "CASH (SM)", Id: 1 },
         { value: 4, name: "CASH/FUTURE", Id: 1 },
@@ -945,8 +945,35 @@ function getWatch() {
         { value: 7, name: "CURRENCY/OPTION", Id: 1 }
     ];
 
+
     KendoDropDownList("lstSegment", Exchange, "Id", "name", ExchangeChange, false, "", 0);
-    KendoDropDownList("lstCashType", ScripType, "value", "name", CashTypeChange, false, "lstSegment", 0);
+    //KendoDropDownList("lstCashType", ScripType, "value", "name", CashTypeChange, false, "lstSegment", 2);
+
+    $("#lstCashType").kendoDropDownList({
+        dataSource: ScripType,
+        dataValueField: "value",
+        dataTextField: "name",
+        headerTemplate: '<div><u>Market Segment</u></div>',
+        autobind: false,
+        cascadeFrom: "lstSegment",
+        change: CashTypeChange,
+        index: 0,
+        select: function (e) {
+            if (e.dataItem.isDeleted) {
+                e.preventDefault();
+            }
+        },
+        animation: {
+            close: {
+                effects: "zoom:out",
+                duration: 200
+            }
+        }
+    });
+
+    var remoteDropDown = $("#lstCashType").data("kendoDropDownList");
+
+    remoteDropDown.list.width("auto");
 
     nInstrument = $("#lstCashType").val();
     nExchangeId = $("#lstSegment").val();
@@ -954,6 +981,9 @@ function getWatch() {
     GetWatches(clientcode, nMarketWatchID, nMarketSegment, intPageIndex);
 }
 
+function ExchangeChange() {
+    nExchangeId = $("#lstSegment").val();
+};
 
 function CashTypeChange() {
     nInstrument = $("#lstCashType").val();
@@ -1092,7 +1122,6 @@ function ChangeWatchList() {
 
 function FillWatchGrid(data, type)
 {
-    //console.log(data);
     //return false;
     //var scrip = "";
     //var button = "";
@@ -1127,7 +1156,7 @@ function FillWatchGrid(data, type)
         GridColumns = [];
     } else {
         $.each(data, function (i, row) {
-            //console.log(data);
+            
             //Close = '<span id="' + row.nExchangeConstants + '_' + row.nToken + '_PC"></span>';
 
             if (row.sInstrument.split("_")[1] == "OPTION" || row.sInstrument.split("_")[1] == "FUTURE") {
@@ -1171,7 +1200,7 @@ function FillWatchGrid(data, type)
             var ScripName = "";
 
             if (tempinst == "CASH") {
-                ScripName = row.sInstrument.split("_")[1] + '- ' + GetExchangeType(ExchangeId) + '\xa0\xa0' + row.sScript;
+                ScripName = row.sInstrument + '- ' + GetExchangeType(ExchangeId) + '\xa0\xa0' + row.sScript;
             } else if (tempinst == "CASH_FUTURE" || tempinst == "INDEX_OPTION") {
                 ScripName = row.sInstrument.split("_")[1] + '- ' + GetExchangeType(ExchangeId) + '\xa0\xa0' + row.sScript + '\xa0\xa0' + row.dExpiryDate;
             } else if (tempinst == "CASH_OPTION" || tempinst == "INDEX_FUTURE") {
@@ -1299,32 +1328,32 @@ function FillWatchGrid(data, type)
                 template: '<button class="k-button" style="min-width: 30px; background-color:green;" ' +
                     ' id="#= nExchangeConstants #_#= nToken #_buy" title="Buy" ' +
                     ' data-buysell="1" data-exchangeid = "#= nExchangeID #"' +
-                    ' data-script-id = "#= nScriptID #"' +
+                    ' data-scriptid = "#= nScriptID #"' +
                     ' data-priceStatus  = "#= sPriceStatus #"' +
-                    ' data-marketwatch-id  = "#= nMktWatchID #"' +
+                    ' data-marketwatchid  = "#= nMktWatchID #"' +
                     ' data-instrument = "#= sInstrument #"' +
                     ' data-strike = "#= nStrike #"' +
                     ' data-cp = "#= sCP #"' +
                     ' data-expirydate = "#= dExpiryDate #"' +
                     ' data-token = "#= nToken #"' +
                     ' data-exchangeconstants = "#= nExchangeConstants #"' +
-                    ' data-watch-index = "#= nWatchIndex #"' +
+                    ' data-watchindex = "#= nWatchIndex #"' +
                     ' data-script = "#= sScript #" onclick="buysellwindow(this)">' +
                     '<i class="fa fa-plus"></i>' +
                     '</button>' +
                     '<button class="k-button" style="min-width: 30px; background-color:red;" ' +
                     ' id="#= nExchangeConstants #_#= nToken #_sell" title="Sell" ' +
                     ' data-buysell="2" data-exchangeid = "#= nExchangeID #"' +
-                    ' data-script-id = "#= nScriptID #"' +
+                    ' data-scriptid = "#= nScriptID #"' +
                     ' data-priceStatus  = "#= sPriceStatus #"' +
-                    ' data-marketwatch-id  = "#= nMktWatchID #"' +
+                    ' data-marketwatchid  = "#= nMktWatchID #"' +
                     ' data-instrument = "#= sInstrument #"' +
                     ' data-strike = "#= nStrike #"' +
                     ' data-cp = "#= sCP #"' +
                     ' data-expirydate = "#= dExpiryDate #"' +
                     ' data-token = "#= nToken #"' +
                     ' data-exchangeconstants = "#= nExchangeConstants #"' +
-                    ' data-watch-index = "#= nWatchIndex #"' +
+                    ' data-watchindex = "#= nWatchIndex #"' +
                     ' data-script = "#= sScript #" onclick="buysellwindow(this)">' +
                     '<i class="fa fa-minus"></i>' +
                     '</button>' +
@@ -1374,6 +1403,7 @@ function FillWatchGrid(data, type)
             {
                 title: "LTP",
                 field: "LTP",
+                filterable: false,
                 width: 70,
                 template: "#= LTP #",
                 attributes: {
@@ -1384,6 +1414,7 @@ function FillWatchGrid(data, type)
                 title: "Change",
                 width: 90,
                 field: "Change",
+                filterable: false,
                 template: "#= Change #",
                 attributes: {
                     "class": "",
@@ -1394,6 +1425,7 @@ function FillWatchGrid(data, type)
                 title: "%Change",
                 width: 100,
                 field: "changeperc",
+                filterable: false,
                 template: "#= changeperc #",
                 attributes: {
                     "class": "",
@@ -1403,18 +1435,21 @@ function FillWatchGrid(data, type)
             {
                 title: "Open",
                 field: "Open",
+                filterable: false,
                 width: 80,
                 template: "#= Open #"
             },
             {
                 title: "High",
                 field: "High",
+                filterable: false,
                 width: 80,
                 template: "#= High #"
             },
             {
                 title: "Low",
                 field: "Low",
+                filterable: false,
                 width: 80,
                 template: "#= Low #"
             },
@@ -1422,12 +1457,14 @@ function FillWatchGrid(data, type)
             {
                 title: "Prev. Close",
                 field: "PrevClose",
+                filterable: false,
                 width: 110,
                 template: "#= PrevClose #"
             },
             {
                 title: "Instrument",
                 field: "Instrument",
+                filterable: false,
                 width: 110,
                 hidden: true,
                 template: "#= Instrument #"
@@ -1437,6 +1474,7 @@ function FillWatchGrid(data, type)
                 title: "Expiry",
                 width: 85,
                 field: "Expiry",
+                filterable: false,
                 hidden: true,
                 template: "#= Expiry #"
                 // template: "#= change + ' <br/> ' + changeperc #"
@@ -1445,6 +1483,7 @@ function FillWatchGrid(data, type)
                 title: "Strike",
                 width: 85,
                 field: "Strike",
+                filterable: false,
                 hidden: true,
                 template: "#= Strike #"
             },
@@ -1452,6 +1491,7 @@ function FillWatchGrid(data, type)
                 title: "Call/Put",
                 width: 95,
                 field: "CallPut",
+                filterable: false,
                 hidden: true,
                 template: "#= CallPut #"
             },
@@ -1459,60 +1499,70 @@ function FillWatchGrid(data, type)
                 title: "Buy Qty",
                 width: 100,
                 field: "BuyQty",
+                filterable: false,
                 hidden: true,
                 template: "#= BuyQty #"
             },
             {
                 title: "Buy Price",
                 field: "BuyPrice",
+                filterable: false,
                 width: 100,
                 hidden: true
             },
             {
                 title: "Sell Qty",
                 field: "SellQty",
+                filterable: false,
                 width: 95,
                 hidden: true
             },
             {
                 title: "Sell Price",
                 field: "SellPrice",
+                filterable: false,
                 width: 100,
                 hidden: true
             },
             {
                 title: "LTQ",
                 field: "LTQ",
+                filterable: false,
                 width: 80,
                 hidden: true
             },
             {
                 title: "LTD",
                 field: "LTD",
+                filterable: false,
                 width: 80,
                 hidden: true
             },
             {
                 title: "LTT",
                 field: "LTT",
+                filterable: false,
                 width: 80,
                 hidden: true
             },
             {
                 title: "Total Qty",
                 field: "TotalQty",
+                filterable: false,
                 width: 100,
                 hidden: true
             },
             {
                 title: "ATP",
                 field: "ATP",
+                filterable: false,
                 width: 80,
                 hidden: true
             },
             {
                 title: "Open Int.",
                 field: "OpenInt",
+                filterable: false,
                 width: 100,
                 hidden: true
             },
@@ -1701,23 +1751,97 @@ function FillOptionChainGrid(data)
     });
 }
 
-function buysellwindow(data)
+var inputBox = document.getElementById("txtdisclosedqty");
+var inputBox1 = document.getElementById("txttrigprice");
+var inputBox2 = document.getElementById("txtorderprice");
+
+var invalidChars = [
+    "-",
+    "+",
+    "e",
+];
+
+inputBox.addEventListener("keydown", function (e) {
+    if (invalidChars.includes(e.key)) {
+        e.preventDefault();
+    }
+});
+
+inputBox1.addEventListener("keydown", function (e) {
+    if (invalidChars.includes(e.key)) {
+        e.preventDefault();
+    }
+});
+
+inputBox2.addEventListener("keydown", function (e) {
+    if (invalidChars.includes(e.key)) {
+        e.preventDefault();
+    }
+});
+
+function buysellwindow(data, Type="")
 {
+    var ExchangeConstant, ExpiryDate, ExchangeID, MarketWatchID, MktWatchID, sScriptID, Strike, Token;
+    var WatchIndex, CP, Instrument, PriceStatus, nScripId, Script, BuySell;
 
-    if (data.dataset.buysell == 1) {
-        $("#radio-one").prop("checked", true);
-        document.querySelector('#btntrade').innerHTML = 'BUY';
-        $("#btntrade").css("background-color", "#4987ee")
-        localStorage.setItem("BuySell", "Buy");
+    if (Type == 'S' || Type == 'B') {
+        ExchangeConstant = data.nExchangeConstants;
+        ExpiryDate = data.dExpiryDate;
+        ExchangeID = data.nExchangeID;
+        MarketWatchID = data.nMarketWatchID;
+        Strike = data.nStrike;
+        Token = data.nToken;
+        WatchIndex = data.nWatchIndex;
+        CP = data.sCP;
+        Instrument = data.sInstrument;
+        PriceStatus = data.sPriceStatus;
+        nScripId = data.sScripId
+        Script = data.sScript;
 
-    } else if (data.dataset.buysell == 2) {
-        $("#radio-two").prop("checked", true);
-        document.querySelector('#btntrade').innerHTML = 'SELL';
-        $("#btntrade").css("background-color", "#ca2222")
-        localStorage.setItem("BuySell", "Sell");
+        if (Type == 'B') {
+            BuySell = 1;
+            $("#radio-one").prop("checked", true);
+            document.querySelector('#btntrade').innerHTML = 'BUY';
+            $("#btntrade").css("background-color", "#4987ee")
+            localStorage.setItem("BuySell", "Buy");
+        } else if (Type == 'S') {
+            BuySell = 2;
+            $("#radio-two").prop("checked", true);
+            document.querySelector('#btntrade').innerHTML = 'SELL';
+            $("#btntrade").css("background-color", "#ca2222")
+            localStorage.setItem("BuySell", "Sell");
+        }
+
+    } else {
+
+        ExchangeConstant = data.dataset.exchangeconstants;
+        ExpiryDate = data.dataset.expirydate;
+        ExchangeID = data.dataset.exchangeid;
+        MarketWatchID = data.dataset.marketwatchid;
+        Strike = data.dataset.strike;
+        Token = data.dataset.token;
+        WatchIndex = data.dataset.watchindex;
+        CP = data.dataset.cp;
+        Instrument = data.dataset.instrument;
+        PriceStatus = data.dataset.pricestatus;
+        nScripId = data.dataset.scriptid;
+        Script = data.dataset.script;
+        BuySell = data.dataset.buysell;
+
+        if (data.dataset.buysell == 1) {
+            $("#radio-one").prop("checked", true);
+            document.querySelector('#btntrade').innerHTML = 'BUY';
+            $("#btntrade").css("background-color", "#4987ee")
+            localStorage.setItem("BuySell", "Buy");
+
+        } else if (data.dataset.buysell == 2) {
+            $("#radio-two").prop("checked", true);
+            document.querySelector('#btntrade').innerHTML = 'SELL';
+            $("#btntrade").css("background-color", "#ca2222")
+            localStorage.setItem("BuySell", "Sell");
+        }
     }
 
-   // GetBcastUrl(6);
 
     if ($("#Exchange").attr("src") == "../img/dis-1.png") {
         alert('Due to techical reason you cannot place order now, try after sometime')
@@ -1726,11 +1850,11 @@ function buysellwindow(data)
 
     $('#btntrade').prop("disabled", false);
 
-    $("#Iratechange").attr('data-symbol', data.dataset.exchangeconstants + '_' + data.dataset.token);
+    $("#Iratechange").attr('data-symbol', ExchangeConstant + '_' + Token);
 
-    var ltpid = data.dataset.exchangeconstants + '_' + data.dataset.token;
-    var pricechangeid = data.dataset.exchangeconstants + '_' + data.dataset.token;
-    topicName = data.dataset.exchangeconstants + '.' + data.dataset.token;
+    var ltpid = ExchangeConstant + '_' + Token;
+    var pricechangeid = ExchangeConstant + '_' + Token;
+    topicName = ExchangeConstant + '.' + Token;
 
     //getDepth();
     
@@ -1743,24 +1867,24 @@ function buysellwindow(data)
 
     var buySell = "";
     
-    if (data.dataset.buysell == 1)
+    if (BuySell == 1)
     {
         buySell = "Buy";
-    } else if (data.dataset.buysell == 2)
+    } else if (BuySell == 2)
     {
         buySell = "Sell";
     }
 
     $("#sellbuy").text(buySell);
-    $("#scriptname").text(data.dataset.script);
-    $('#scriptname').data('token', data.dataset.token);
-    $('#scriptname').attr('data-buysell', data.dataset.buysell);
+    $("#scriptname").text(Script);
+    $('#scriptname').data('token', Token);
+    $('#scriptname').attr('data-buysell', BuySell);
     //$('#scriptname1').attr('data-buysell', data.dataset.buysell);
-    $('#scriptname').data('ExchangeID', data.dataset.exchangeid);
+    $('#scriptname').data('ExchangeID', ExchangeID);
     //$('#scriptname1').html(data.dataset.script);
     //$('#scriptname1').data('token', data.dataset.token);
 
-    nExchangeId = data.dataset.exchangeid;
+    nExchangeId = ExchangeID;
 
     if (nExchangeId == 2) {
         $('#Select2').val('BSE');
@@ -1772,17 +1896,17 @@ function buysellwindow(data)
     }
 
     var ExchangeName = GetExchangeType(nExchangeId);
-    instrumentindex = GetInstrumentNumber(data.dataset.instrument);
+    instrumentindex = GetInstrumentNumber(Instrument);
     $('#markettype').data('stocktype', instrumentindex);
 
 
-    $("#optStrike").html('<option selected="selected" class="service-small">' + data.dataset.strike + '</option>');
+    $("#optStrike").html('<option selected="selected" class="service-small">' + Strike + '</option>');
 
-    if (data.dataset.cp == "C") {
+    if (CP == "C") {
         
         $("#optCallPut").html('<option selected="selected" class="service-small">CE</option>');
     }
-    else if (data.dataset.cp == "P") {
+    else if (CP == "P") {
         
         $("#optCallPut").html('<option selected="selected" class="service-small">PE</option>');
     }
@@ -1828,24 +1952,24 @@ function buysellwindow(data)
     }
 
 
-    if (data.dataset.expirydate != "") {
-        $("#expirydate").html('<option selected="selected" class="service-small">' + formatDate(data.dataset.expirydate, '', "DD MMM YYYY") + '</option>');
+    if (ExpiryDate != "") {
+        $("#expirydate").html('<option selected="selected" class="service-small">' + formatDate(ExpiryDate, '', "DD MMM YYYY") + '</option>');
     }
 
     $("#txtorderprice").attr("data-price", parseFloat($('.' + ltpid + '_LR').text()).toFixed(4));
 
-    $("#cmbSegment1").val(GetInstrumentNumber(data.dataset.instrument));
+    $("#cmbSegment1").val(GetInstrumentNumber(Instrument));
 
-    VarMargin1(nExchangeId, data.dataset.token, GetInstrumentNumber(data.dataset.instrument));
+    VarMargin1(nExchangeId, Token, GetInstrumentNumber(Instrument));
 
-    if (GetInstrumentNumber(data.dataset.instrument) == 3) {
+    if (GetInstrumentNumber(Instrument) == 3) {
 
         var sScript = $("#scriptname").html();
         GetClientHolding(sScript);
 
     }
 
-    if (GetInstrumentNumber(data.dataset.instrument) == 1 || GetInstrumentNumber(data.dataset.instrument) == 2 || GetInstrumentNumber(data.dataset.instrument) == 4 || GetInstrumentNumber(data.dataset.instrument) == 5) {
+    if (GetInstrumentNumber(Instrument) == 1 || GetInstrumentNumber(Instrument) == 2 || GetInstrumentNumber(Instrument) == 4 || GetInstrumentNumber(Instrument) == 5) {
 
         var nToken = $("#scriptname").data("token");
         var CNCMIS = 0;
@@ -1856,6 +1980,7 @@ function buysellwindow(data)
     
     KendoWindow("windowbuysell", 650, 540, buySell, 0, true);
 
+    $('#txtqty').focus();
     //$("#windowbuysell").closest(".k-window").css({
     //    top: 250,
     //    left: 200
@@ -1885,7 +2010,7 @@ function buysellwindow(data)
         SetEstTotal($("#txtqty").val(), $("#txtorderprice").val());
     }
 
-    getLotSize(data.dataset.token, instrumentindex);
+    getLotSize(Token, instrumentindex);
 
     if ($('input[name="oType"]:checked').val() == 1 || $('input[name="oType"]:checked').val() == 11) {
         document.getElementById('Ioc').disabled = false;
@@ -1918,9 +2043,9 @@ function buysellwindow(data)
         document.getElementById('txtdisclosedqty').disabled = true;
     }
 
-    localStorage.setItem("buysell", data.dataset.buysell);
+    localStorage.setItem("buysell", BuySell);
 
-    if (GetInstrumentNumber(data.dataset.instrument) == 3)
+    if (GetInstrumentNumber(Instrument) == 3)
     {
         var nToken = $("#scriptname").data("token");
         var nCncMis = 0;
@@ -1933,12 +2058,12 @@ function buysellwindow(data)
         var Exchange = "NSE";
         var nOrderAmt = $("#txtorderprice").val();
 
-        sinstrument = GetInstrumentNumber(data.dataset.instrument);
+        sinstrument = GetInstrumentNumber(Instrument);
 
         var nqty = $("#txtqty").val();
 
         var segment = $("#cmbSegment1").val();
-        var buyorsell = data.dataset.buysell;
+        var buyorsell = BuySell;
 
         GetRequiredStockMargin(nCncMis, nToken, Exchange, nOrderAmt, buyorsell, nqty, segment);
         
@@ -2223,11 +2348,6 @@ $("#Ioc").keyup(function (e) {
         return;
     }
 });
-
-function ExchangeChange()
-{
-    nExchangeId = $("#lstSegment").val();   
-};
 
 $(document).on("click", "#btncancelbuysell", function (event) {
 
@@ -3031,17 +3151,106 @@ function getgrid2()
 }
 
 $(document).keydown(function (e) {
-
     if (e.which == 112 && isCtrl == false) {
-        alert("Yes");
+        buySellShortcut("B");
+        e.preventDefault();
+    } else if (e.which == 113 && isCtrl == false) {
+        buySellShortcut("S");
+        e.preventDefault();
+    } else if (e.which == 122 && isCtrl == false) {
+        $("#nPosition").click();
+        e.preventDefault();
+    } else if (e.which == 120 && isCtrl == false) {
+        $("#hValuation").click();
+        e.preventDefault();
+    } else if (e.which == 119 && isCtrl == false) {
+        $("#tBook").click();
         e.preventDefault();
     }
+
     if (e.which == 113 && isCtrl == false) {
-        alert("No");
-        
+        $("#ScriptSearch").click();
+
+        $("#scriptname").attr('data-buysell', '2');
+        $("#scriptname1").attr('data-buysell', '2');
+        setsellactive();
 
         e.preventDefault();
         return;
     }
 
+    if (e.which == 17) {
+        isCtrl = true;
+    }
+    if (e.which == 16) {
+        isShift = true;
+    }
+    if (e.which == 18) {
+        isAlt = true;
+    }
+
+    if (e.which == 87 && isAlt == true) { //vpg 27062018 alt + W to show for Scrip selection
+        $("#Select3").focus();
+
+        //var x = document.createEvent('MouseEvents');
+        //x.initMouseEvent("mouseclick");
+        //$("#Select3")[0].dispatchEvent(x);
+
+        e.preventDefault();
+        isAlt = false;
+        return;
+
+    }
+
+    if (e.which == 27 && isCtrl == false) {
+
+        if ($("#modDeleteWatch").css('display') != 'none') {
+            $("#modDeleteWatch").toggle();
+        }
+        else if ($("#SearchHelp").css('display') != 'none') {
+            $("#SearchHelp").toggle();
+        }
+        else if ($("#modBuySell").css('display') != 'none') {
+            $("#modBuySell").toggle();
+        }
+        else if ($("#WipModal").css('display') != 'none') {
+            $("#WipModal").toggle();
+        }
+        else if ($("#modpasswrodExpired").css('display') != 'none') {
+            $("#modpasswrodExpired").toggle();
+        }
+        else if ($("#modScriptDepth").css('display') != 'none') {
+            $("#modScriptDepth").toggle();
+        }
+        else if ($("#showimagediv").css('display') != 'none') {
+            $("#showimagediv").toggle();
+        }
+
+
+        if ($("#myModal2").css('display') != 'none') {
+            $("#myModal2").toggle();
+        }
+
+        $('.submenu[style="display: table-row;"]').click();
+
+        $('#txtsearch').val('');
+        $('#divSearch').removeClass("suggestion-wrapper");
+        $('#divSearch').addClass("suggestion-wrapper hidden-suggestion-wrapper");
+    }
+
+
 });
+
+function buySellShortcut(buysell)
+{
+    var data = $("#WatchList").data('kendoGrid');
+    var selectedItem = data.dataItem(data.select());
+    var datarow;
+    if (selectedItem == null) {
+        datarow = data.dataSource.options.data[0]
+    } else {
+        datarow = selectedItem;
+    }
+
+    buysellwindow(datarow, buysell);
+}
