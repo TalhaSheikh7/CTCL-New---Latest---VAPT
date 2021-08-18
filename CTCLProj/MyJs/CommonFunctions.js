@@ -18,6 +18,20 @@
     });
 });
 
+function floatSafeModulusQty(val, step, segment) {
+    var x = parseFloat(val.toString()) - (step);
+    return parseFloat(x);
+}
+
+function floatSafeModulus(val, step) {
+    var valDecCount = (val.toString().split('.')[1] || '').length;
+    var stepDecCount = (step.toString().split('.')[1] || '').length;
+    var decCount = valDecCount > stepDecCount ? valDecCount : stepDecCount;
+    var valInt = parseInt(val.toFixed(decCount).replace('.', ''));
+    var stepInt = parseInt(step.toFixed(decCount).replace('.', ''));
+    return (valInt % stepInt) / Math.pow(10, decCount);
+}
+
 function GetBcastUrl(nAction) {
     var GetUrl = $.ajax(
         {
@@ -131,7 +145,7 @@ function GetRequiredStockMargin(nCncMis, nToken, Exchange, nOrderAmt, nBuySell, 
         data: rowdata,
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             if (data.IsResultSuccess == true) {
                 if (nBuySell == 1) {
                     $("#availMargin").html(data.Result[0].AvailMargin);
@@ -152,9 +166,146 @@ function GetRequiredStockMargin(nCncMis, nToken, Exchange, nOrderAmt, nBuySell, 
 
             } else {
 
-                $("#varmarper").val("0%");
+               // $("#varmarper").val("0%");
             }
 
+        }
+    });
+
+}
+
+
+function GetRequiredStockOrMargin(nCncMis, nToken, Exchange, nOrderAmt, nBuySell, nQty, nSegment, noid, pageid, idList)
+{
+
+    var nStockType;
+    if (nQty == -1) {
+        if (pageid == 1) {
+            nQty = $("#txtqty").val();
+        } else if (pageid == 2) {
+            nQty = $("#tradeqty1").val();
+        }
+    }
+
+    if (nBuySell == 2) {
+        if ((nSegment == 3 || nSegment == 8 || nSegment == 9) && nCncMis == 0) {
+            document.getElementById(idList.key3).innerHTML = 'REQUIRED STOCK';
+            document.getElementById(idList.key1).innerHTML = 'AVAILABLE/STOCK';
+            document.getElementById(idList.key5).innerHTML = 'EXCESS STOCK';
+        }
+        else {
+            document.getElementById(idList.key3).innerHTML = 'REQUIRED MARGINN';
+            document.getElementById(idList.key1).innerHTML = 'AVAILABLE/MARGIN';
+            document.getElementById(idList.key5).innerHTML = 'EXCESS MARGIN';
+        }
+
+    } else if (nBuySell == 1) {
+        document.getElementById(idList.key3).innerHTML = 'REQUIRED MARGINN';
+        document.getElementById(idList.key1).innerHTML = 'AVAILABLE/MARGIN';
+        document.getElementById(idList.key5).innerHTML = 'EXCESS MARGIN';
+    }
+
+
+    var nBuySell;
+    //if (nBuySell == 5)
+    //{
+    //    nBuySell = localStorage.getItem("buysell");
+    //}
+
+    //if ($("#btnbuy").hasClass("active")) {
+    //    nBuySell = 1;
+    //} else if ($("#btnsell").hasClass("active")) {
+    //    nBuySell = 2;
+    //}
+
+    if (nSegment == 3 || nSegment == 8 || nSegment == 9) {
+        nStockType = 3;
+    } else {
+        nStockType = nSegment;
+    }
+
+    //var nQty = $("#txtqty").val();
+
+    var nExchangeId = 0;
+    //var nBuySell = 0;
+    //var nOrderAmt = $("#txtorderprice").val();
+    var nUserId = $("#txtSelectedClient").val().toString().split('-')[0].trim(); //localStorage.getItem("UserId");
+    var nOrderId = "";
+    var nMarketRate;
+    if (pageid == 1) {
+        nMarketRate = parseFloat($("#ltp").text());
+    } else if (pageid == 2) {
+        nMarketRate = parseFloat($("#ltprice1").text())
+    }
+
+    
+    // alert(nMarketRate);
+
+
+    if (Exchange == "NSE") {
+        nExchangeId = 1;
+
+    } else if (Exchange == "BSE") {
+        nExchangeId = 2;
+    }
+
+    //if ($(this).attr("data-buysell") == 1) {
+    //    nBuySell = 1;
+    //}
+    //else if ($(this).attr("data-buysell") == 2) {
+    //    nBuySell = 2;
+    //}
+    nOrderId = noid;
+    //var URL = "http://localhost:1610/api/OrderV5/";
+    var URL = gblurl + "OrderV5/";
+
+    var rowdata = {
+        nCncMis: nCncMis,
+        nStockType: nStockType,
+        nToken: nToken,
+        nExchangeId: nExchangeId,
+        nUserId: nUserId,
+        nOrderId: nOrderId,
+        nOrderAmt: parseFloat(nOrderAmt),
+        nMarketRate: parseFloat(nMarketRate),
+        nBuySell: nBuySell,
+        nQty: nQty
+    }
+
+    $.ajax({
+        url: URL,
+        type: "get",
+        data: rowdata,
+        dataType: "json",
+        success: function (data) {
+            //console.log(data);
+            if (data.IsResultSuccess == true) {
+                if (nBuySell == 1) {
+                    $("#" + idList.key2).html(data.Result[0].AvailMargin);
+                    $("#" + idList.key4).html(data.Result[0].RequiredMargin);
+                    $("#" + idList.key6).html(data.Result[0].RequiredExtraMargin);
+                } else if (nBuySell == 2) {
+                    if (nCncMis == 0) {
+                        $("#" + idList.key2).html(data.Result[0].AvailStock);
+                        $("#" + idList.key4).html(data.Result[0].RequiredStock);
+                        $("#" + idList.key6).html(data.Result[0].RequiredExtraStock);
+                    }
+                    else {
+                        $("#" + idList.key2).html(data.Result[0].AvailMargin);
+                        $("#" + idList.key4).html(data.Result[0].RequiredMargin);
+                        $("#" + idList.key6).html(data.Result[0].RequiredExtraMargin);
+                    }
+
+                }
+
+            } else {
+
+                //$("#varper").val("0%");
+            }
+
+        },
+        error: function (data) {
+            console.log(data);
         }
     });
 

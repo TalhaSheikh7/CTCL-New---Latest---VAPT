@@ -44,8 +44,6 @@
         -------------------------------*/
 
         .login-body {
-            /*CHanged bg by Anjali on 6/2/18*/
-            /*background: #0f1938 url("../img/easytrade.svg") no-repeat fixed;*/
             background: #0f1938 url("../img/login_bg.svg") no-repeat fixed;
             background-size: cover;
             width: 100%;
@@ -53,18 +51,9 @@
         }
 
         .form-signin {
-            /*max-width: 370px;*/
             min-width: 400px;
-            /*changed by Anjali on 2_11_17*/
-            /*margin-top:150px;*/
-            /*changed by Anjali on 5_02_18*/
-            /*margin-top:120px;*/
             margin-top: 170px;
-            /*    margin: 100px auto;*/
             border-right: 1px solid #999 !important;
-            /*background: #fff;
-            border-radius: 5px;
-            -webkit-border-radius: 5px;*/
             min-height: 290px !important;
         }
 
@@ -80,8 +69,6 @@
             font-size: 40px;
             color: #fff;
             position: absolute;
-            /*changed by Anjali on 2_11_17*/
-            /*top: 120px;*/
             top: 100px;
             left: 0;
             text-align: center;
@@ -94,8 +81,6 @@
             font-size: 20px;
             color: #bcc1c1 !important;
             position: absolute;
-            /*changed by Anjali on 2_11_17*/
-            /*top: 160px;*/
             top: 140px;
             left: 0;
             text-align: center;
@@ -104,23 +89,12 @@
         }
 
         .form-signin .checkbox {
-            /*margin-bottom: 14px;*/
             font-size: 12px;
             font-weight: normal;
-            /*color:#40b767;*/
-            /*color:#E6552E;*/
             color: #fff;
             font-weight: normal;
             font-family: easytradezFontbold;
-            /*Commented by Anjali on 27/10/17 for proper alignment*/
-            /*width: 85%;*/
-            /*Commented by hvb on 04/Oct/2017 to set relative location*/
-            /*position: absolute;
-            top:160px;
-            left: 20px;*/
             position: relative;
-            /*top:2px;
-            left: 38px;*/
             top: -30px;
             left: 38px;
         }
@@ -145,14 +119,10 @@
             }
 
         .form-signin .btn-login {
-            /*background: #40b770;*/
             background: #E6552E;
             border-radius: 50px;
             color: #fff;
-            /*    text-transform: uppercase;*/
             font-weight: normal;
-            /*font-family: 'Open Sans', sans-serif;*/
-            /*font-family: easytradezFontbold;*/
             margin: 30px 0 5px;
             padding: 3px;
             -webkit-transition: all 0.3s;
@@ -163,7 +133,6 @@
         }
 
             .form-signin .btn-login:hover {
-                /*background: #6FC;*/
                 background: #E6552E;
                 -webkit-transition: all 0.3s;
                 -moz-transition: all 0.3s;
@@ -179,8 +148,6 @@
 
         .form-signin a,
         .form-signin a:hover {
-            /*color: #6bc5a4;*/
-            /*color: #E6552E;*/
             color: #fff;
         }
 
@@ -198,31 +165,17 @@
         }
 
         .registration {
-            /*edited by Anjali on 27/10/17*/
             color: #c7c7c7;
             position: absolute;
-            /*top:250px;*/
             top: 170px !important;
             padding-left: 5px;
             text-align: left;
         }
-        /*new code start*/
 
         .group {
             position: relative;
             margin-bottom: 45px;
         }
-        /*input 				{
-          font-size:18px;
-          padding:10px 10px 10px 5px;
-          display:block;
-          width:300px;
-          border:none;
-          border-bottom:1px solid #ffffff;
-          background-color:transparent !important;
-          color:#fff;
-        }*/
-
         .text_box {
             font-size: 17px;
             padding: 10px 10px 3px 5px;
@@ -238,22 +191,7 @@
         input:focus {
             outline: none;
         }
-        /* LABEL ======================================= */
 
-        /*label :not (.checkbox)*/
-
-        /*label			 {
-          color:#fff;
-          font-size:15px;
-          font-weight:normal;
-          position:absolute;
-          pointer-events:none;
-          left:5px;
-          top:18px;
-          transition:0.2s ease all;
-          -moz-transition:0.2s ease all;
-          -webkit-transition:0.2s ease all;
-        }*/
 
         .float-label {
             color: #fff;
@@ -268,17 +206,6 @@
             -moz-transition: 0.2s ease all;
             -webkit-transition: 0.2s ease all;
         }
-        /* active state */
-
-        /*input:focus ~ label, input:valid ~ label 		{
-          top:-10px;
-          font-size:11px;
-          color:#40b767;
-          border-bottom-color:#000000 !important;
-
-        }*/
-
-        /* BOTTOM BARS ================================= */
 
         .bar {
             position: relative;
@@ -305,7 +232,6 @@
             .bar:after {
                 right: 50%;
             }
-        /* active state */
 
         input:focus ~ .bar:before,
         input:focus ~ .bar:after {
@@ -327,10 +253,6 @@
             -moz-animation: inputHighlighter 0.3s ease;
             animation: inputHighlighter 0.3s ease;
         }
-
-        /*new code end*/
-
-        /*added by anjali on 12/10/17*/
 
         .text_box1 {
             font-size: 17px;
@@ -360,7 +282,6 @@
             border: none;
             border-bottom: 1px solid #eee;
         }
-            /*Edited by Anjali on 21/2/18 to remove blue line on focus*/
 
             .floating-input:focus,
             .floating-select:focus {
@@ -385,10 +306,8 @@
         .floating-input:not(:placeholder-shown) ~ label {
             top: -15px;
             font-size: 12px;
-            /*color:#40b767;*/
             color: #fff;
         }
-        /* active state */
 
         input:focus ~ label,
         input:valid ~ label {
@@ -397,7 +316,6 @@
             color: #fff;
             border-bottom-color: #000000 !important;
         }
-        /*added by anjali on 17/10/17*/
 
         .modal-title2 {
             color: #fff !important;
@@ -405,10 +323,6 @@
             text-align: left;
             font-weight: 900;
         }
-        /*.modal-header {
-            padding-bottom: 0px !important;
-            border-bottom: 1px solid #4f5095!important;
-        }*/
 
         .left_title {
             color: #4f5095 !important;
@@ -444,11 +358,9 @@
         }
 
         .modal-content {
-            /* Bootstrap sets the size of the modal in the modal-dialog class, we need to inherit it */
             width: 400px;
             padding: 10px 25px;
             height: inherit;
-            /* To center horizontally */
             margin: 0 auto;
             background-color: #FFF;
             position: relative;
@@ -466,7 +378,6 @@
         .lable_style {
             padding-top: 7px;
         }
-        /*added by hvb on 26/oct/2017 for success popup*/
 
         .sucess-body {
             text-align: center;
@@ -482,10 +393,8 @@
                 font-weight: bold;
                 color: green;
                 margin-top: 3px;
-                /*font-family:Calibri,Verdana;*/
                 font-family: easytradezFontbold;
             }
-        /*Added by hvb on 27/oct/2017 as it's required to show some difference between error and message*/
 
         .error-popup-label {
             color: red;
@@ -496,19 +405,12 @@
             color: orange;
             font-size: 14px;
             font-weight: bold;
-            /*font-family: verdana;*/
             font-family: easytradezFontbold;
         }
-        /*addeded by Anjali on 27/10/17 for responsive alignment*/
 
         .panel {
             margin-bottom: -180px !important;
         }
-        /*CssClass="popup_input no-spinners"*/
-
-        /*added by anjali on 30/10/17*/
-
-        /* hide up/down arrows ("spinners") on input fields marked type="number" */
 
         .no-spinners {
             -moz-appearance: textfield;
@@ -667,7 +569,6 @@
             border-top: 0px solid #e5e5e5 !important;
             background: #ffffff;
             padding: 0 0 7px 0 !important;
-            /*edited by ANjali on 21/2/18*/
             margin-top: 0px;
         }
 
@@ -677,8 +578,7 @@
             /*font-family: easytradezFontbold;*/
             font-size: 15px;
             font-weight: 600;
-            color: #767676 !important;
-            /*color: white !important;*/
+            color: #ffffff !important;
         }
 
         .butt_cancel {
@@ -1385,13 +1285,13 @@
                                     </div>
                                     <div class="col-md-12">
                                         <div class="floating-label">
-                                            <input name="txtUid" id="txtUid" class="floating-input" type="text" placeholder=" " autocomplete="off" style="color:#fff !important;" />
+                                            <input name="txtUid" id="txtUid" class="floating-input" type="text" placeholder=" " autocomplete="off" style="color:#fff !important;" onkeypress="return event.charCode != 32" />
                                             <span class="highlight"></span>
                                             <span class="bar"></span>
                                             <label class="float-label">Login Id</label>	<a id="btnForgotLogin" style="cursor:pointer; color:#fff;font-size: 12px;font-weight: 600; float:right;"> Forgot your Login?</a>
                                         </div>
                                         <div class="floating-label">
-                                            <input name="txtPassWd" id="txtPassWd" class="floating-input active"  placeholder=" " autocomplete="off" type="password" style="color:#fff !important;" />
+                                            <input name="txtPassWd" id="txtPassWd" class="floating-input active"  placeholder=" " autocomplete="off" type="password" style="color:#fff !important;" onkeypress="return event.charCode != 32" />
                                             <span toggle="#txtPassWd" class="fa fa-fw fa-eye field-icon toggle-password" style="color: #fff;position: absolute;right: 14px;top: 11px;cursor: pointer;font-size: 16px;"></span>
 
                                             <span class="highlight"></span>
@@ -1978,7 +1878,7 @@
                 </div>
                 <!-- Modal for force logout end here -->
 
-            </form>
+            @*</form>*@
             <div id="remaeks" style="display:none; text-align:center">
                 <span id="remarkdetails"></span>
             </div>

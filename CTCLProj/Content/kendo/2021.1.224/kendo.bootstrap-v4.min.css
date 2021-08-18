@@ -22807,7 +22807,7 @@ li.k-item.k-drag-clue {
 }
 
 .k-menu:not(.k-context-menu)>.k-item>.k-state-active {
-	color: rgba(33, 37, 41, .9)
+	color: rgb(255 255 255);
 }
 
 .k-menu:not(.k-context-menu)>.k-item.k-state-focused,

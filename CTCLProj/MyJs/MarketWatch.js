@@ -33,6 +33,15 @@ var nHoldingWatchID = -1;
 var idleState = false;
 var idleTimer = null;
 
+var idList = {
+    'key1': 'availMarText',
+    'key2': 'availMargin',
+    'key3': 'reqMarText',
+    'key4': 'reqMargin',
+    'key5': 'excessMarText',
+    'key6': 'excessMargin'
+};
+
 var ScriptDetails = function (sScript, sPriceStatus, pnScriptID, psInstrument, pnStrike, psCP, pdExpiryDate, pnToken,
                                pnExchangeConstants, pnWatchIndex, pnMktWatchID, pnDetailId, pdCreatedDate, pdModifiedDate) {
     this.sScript = sScript;
@@ -69,9 +78,12 @@ $(document).ready(function () {
     getWatch();
 
     //MainKendoWindow("WatchlistSet", 824, 435, 66, 30, "WatchList");
+    var mWidth;
 
-    var win = $("#WatchlistSet").kendoWindow({
-        width: 300,
+
+    $("#WatchlistSet").kendoWindow({
+        width: "58.50%",
+        height: "44.50%",
         draggable: true,
         resizable: true,
         visible: false,
@@ -80,16 +92,14 @@ $(document).ready(function () {
     }).data("kendoWindow").center().open();
 
     $("#WatchlistSet").closest(".k-window").css({
-        width: "58.5%",
         top: "12%",
         left: "1%",
-        height: "44.5%",
         "z-index": "-1"
-
     });
 
     $("#DepthWindow").kendoWindow({
-        width: 300,
+        width: "39.5%",
+        height: "44.5%",
         draggable: true,
         resizable: true,
         visible: false,
@@ -98,29 +108,24 @@ $(document).ready(function () {
     }).data("kendoWindow").center().open();
 
     $("#DepthWindow").closest(".k-window").css({
-        width: "39.5%",
         top: "12%",
         left: "60%",
-        height: "44.5%",
         "z-index": "-1"
-
     });
 
     $("#tabWindow").kendoWindow({
-        width: 300,
+        width: "98.5%",
+        height: "42%",
         draggable: true,
         resizable: true,
         visible: false,
-        actions: ["Custom", "maximize", "minimize"],
+        actions: ["maximize", "minimize"],
         title: ""
     }).data("kendoWindow").center().open();
 
     $("#tabWindow").closest(".k-window").css({
-        width: "98.5%",
         top: "57%",
         left: "1%",
-        height: "42%",
-
     });
 
     //MainKendoWindow("DepthWindow", 550, 402, 66, 858, "Market Depth");
@@ -1033,7 +1038,7 @@ function GetWatches(nUserId, nMarketWatchID, nMarketSegment, intPageIndex)
 
    var ClientCode= $("#txtSelectedClient").val().split('-')[0].trim();
     $.ajax({
-        url: "https://ctcl.investmentz.com/iCtclServiceT/api/WatchListV2/",
+        url: "https://ctcl.investmentz.com/iCtclService/api/WatchListV2/",
         method: "get",
         data: {
             pnUserId: gblnUserId,
@@ -1324,7 +1329,7 @@ function FillWatchGrid(data, type)
             {
                 field: "",
                 width: 220,
-                title: "",
+                title: "Actions",
                 template: '<button class="k-button" style="min-width: 30px; background-color:green;" ' +
                     ' id="#= nExchangeConstants #_#= nToken #_buy" title="Buy" ' +
                     ' data-buysell="1" data-exchangeid = "#= nExchangeID #"' +
@@ -1781,6 +1786,15 @@ inputBox2.addEventListener("keydown", function (e) {
 
 function buysellwindow(data, Type="")
 {
+    if (gblCTCLtype.toString().toLocaleLowerCase() == "emp" && $("#cmbClients").val() == "All") {
+        KendoWindow("ClientSelection", 450, 110, "", 0, true);
+        return;
+    }
+    if (gblCTCLtype.toString().toLocaleLowerCase() == "emp" && $("#txtSelectedClient").val() == "") {
+        KendoWindow("ClientSelection", 450, 110, "", 0, true);
+        return;
+    }
+
     var ExchangeConstant, ExpiryDate, ExchangeID, MarketWatchID, MktWatchID, sScriptID, Strike, Token;
     var WatchIndex, CP, Instrument, PriceStatus, nScripId, Script, BuySell;
 
@@ -1797,7 +1811,7 @@ function buysellwindow(data, Type="")
         PriceStatus = data.sPriceStatus;
         nScripId = data.sScripId
         Script = data.sScript;
-
+        
         if (Type == 'B') {
             BuySell = 1;
             $("#radio-one").prop("checked", true);
@@ -1811,7 +1825,7 @@ function buysellwindow(data, Type="")
             $("#btntrade").css("background-color", "#ca2222")
             localStorage.setItem("BuySell", "Sell");
         }
-
+        
     } else {
 
         ExchangeConstant = data.dataset.exchangeconstants;
@@ -1827,7 +1841,7 @@ function buysellwindow(data, Type="")
         nScripId = data.dataset.scriptid;
         Script = data.dataset.script;
         BuySell = data.dataset.buysell;
-
+        
         if (data.dataset.buysell == 1) {
             $("#radio-one").prop("checked", true);
             document.querySelector('#btntrade').innerHTML = 'BUY';
@@ -1865,17 +1879,17 @@ function buysellwindow(data, Type="")
     $("#txttrigprice").val('');
     $("#txtdisclosedqty").val('');
 
-    var buySell = "";
+    var buyorSell = "";
     
     if (BuySell == 1)
     {
-        buySell = "Buy";
+        buyorSell = "Buy";
     } else if (BuySell == 2)
     {
-        buySell = "Sell";
+        buyorSell = "Sell";
     }
 
-    $("#sellbuy").text(buySell);
+    $("#sellbuy").text(buyorSell);
     $("#scriptname").text(Script);
     $('#scriptname').data('token', Token);
     $('#scriptname').attr('data-buysell', BuySell);
@@ -1977,10 +1991,10 @@ function buysellwindow(data, Type="")
     }
 
     ShowHide();
-    
-    KendoWindow("windowbuysell", 650, 540, buySell, 0, true);
 
-    $('#txtqty').focus();
+    KendoWindow("windowbuysell", 650, 540, buyorSell, 0, true);
+
+    //$('#txtqty').focus();
     //$("#windowbuysell").closest(".k-window").css({
     //    top: 250,
     //    left: 200
@@ -2042,7 +2056,7 @@ function buysellwindow(data, Type="")
 
         document.getElementById('txtdisclosedqty').disabled = true;
     }
-
+    
     localStorage.setItem("buysell", BuySell);
 
     if (GetInstrumentNumber(Instrument) == 3)
@@ -2063,9 +2077,9 @@ function buysellwindow(data, Type="")
         var nqty = $("#txtqty").val();
 
         var segment = $("#cmbSegment1").val();
-        var buyorsell = BuySell;
+        
 
-        GetRequiredStockMargin(nCncMis, nToken, Exchange, nOrderAmt, buyorsell, nqty, segment);
+        GetRequiredStockOrMargin(nCncMis, nToken, Exchange, nOrderAmt, BuySell, nqty, segment, '', 1, idList);
         
     }
 
@@ -2091,7 +2105,7 @@ $(document).on("click", "#cnc", function (event) {
     
     var nOrderAmt = $("#txtorderprice").val();
 
-    GetRequiredStockOrMargin(0, $("#scriptname").data("token"), Exchange, nOrderAmt, nBuySell, nQty, $("#cmbSegment1").val());
+    GetRequiredStockOrMargin(0, $("#scriptname").data("token"), Exchange, nOrderAmt, nBuySell, nQty, $("#cmbSegment1").val(), '', 1, idList);
 
     GetNetPositionDetails($("#scriptname").data("token"), $("#markettype").data("stocktype"), 0);
     GetNetPositionforFO($("#scriptname").data("token"), 0);
@@ -2157,7 +2171,7 @@ $('#mis').click(function () {
 
     var nOrderAmt = $("#txtorderprice").val();
     
-    GetRequiredStockOrMargin(1, $("#scriptname").data("token"), Exchange, nOrderAmt, nBuySell, nQty, $("#cmbSegment1").val());
+    GetRequiredStockOrMargin(1, $("#scriptname").data("token"), Exchange, nOrderAmt, nBuySell, nQty, $("#cmbSegment1").val(), '', 1, idList);
 
     GetNetPositionDetails($("#scriptname").data("token"), $("#markettype").data("stocktype"), 1);
     GetNetPositionforFO($("#scriptname").data("token"), 1);
@@ -2193,22 +2207,17 @@ $("#txtqty").change(function () {
         nCncMis = 1;
     }
 
-    var nBuySell;
-    if ($("#btnbuy").hasClass("active")) {
-        nBuySell = 1;
-    } else if ($("#btnsell").hasClass("active")) {
-        nBuySell = 2;
-    }
+    var nBuySell = $('#scriptname').attr('data-buysell');
+    
+    
 
     var nOrderNo = $('#scriptname').data('orderid');
 
     var Exchange = $("#Select2").val();
 
     var nOrderAmt = $("#txtorderprice").val();
-
-    //GetRequiredStockOrMargin(nCncMis, $("#scriptname").data("token"), Exchange, nOrderAmt, nBuySell, nQty, $("#cmbSegment1").val());
-
-
+    
+    GetRequiredStockOrMargin(nCncMis, $("#scriptname").data("token"), Exchange, nOrderAmt, nBuySell, nQty, $("#cmbSegment1").val(), '', 1, idList);
 
     SetEstTotal($("#txtqty").val(), $("#txtorderprice").val());
 });
@@ -2256,6 +2265,31 @@ function ShowHide() {
 //    $('.typeRadio').click();
 //    SetEstTotal($("#txtqty").val(), $("#txtorderprice").val());
 //});
+
+$('input[type=radio][name=oType]').on('change', function () {
+
+    if ($(this).val() == 11 || $(this).val() == 1)
+    {
+        document.getElementById('Ioc').disabled = false;
+        document.getElementById('txttrigprice').disabled = true;
+        $("#txtdisclosedqty").val('0');
+        document.getElementById('txtdisclosedqty').disabled = false;
+
+    } else if ($(this).val() == 3 || $(this).val() == 12)
+    {
+        document.getElementById('Ioc').disabled = true;
+        document.getElementById('txttrigprice').disabled = false;
+        DayClick();
+        if ($(this).val() == 12)
+        {
+            $("#trtxtdisclosedqty").invisible = true;
+            $("#txtdisclosedqty").val('');
+            document.getElementById('txtdisclosedqty').disabled = true;
+        }
+        $("#txtdisclosedqty").val('');
+        document.getElementById('txtdisclosedqty').disabled = true;
+    }
+});
 
 $('.typeRadio').click(function () {
 
@@ -2369,7 +2403,11 @@ function tradebutton()
 
     /*getCTCLID();*/
 
-    if ((gblCTCLtype.toString().toLocaleLowerCase() == "emp" || gblCTCLtype.toString().toLocaleLowerCase() == "ba") && $("#cmbClients").val() == "All") {
+    if ((gblCTCLtype.toString().toLocaleLowerCase() == "emp" && $("#cmbClients").val() == "All")) {
+        alert("Please select Client Name");
+        return false;
+    }
+    if (gblCTCLtype.toString().toLocaleLowerCase() == "emp" && $("#txtSelectedClient").val() == "") {
         alert("Please select Client Name");
         return;
     }
@@ -2567,8 +2605,8 @@ function SaveRecord() {
     });
 
     $.ajax({
-        //url: gblurl + "OrderV5/",
-        url: "https://ctcl.investmentz.com/iCtclServiceT/api/OrderV5/",
+        url: gblurl + "OrderV5/",
+        //url: "https://ctcl.investmentz.com/iCtclServiceT/api/OrderV5/",
         type: 'POST',
         contentType: 'application/json',
         data: NewOrderParams,
@@ -2968,71 +3006,71 @@ function getDepth()
         $("#nChange").html(Change);
         $("#nChangePerc").html(PerChange);
 
-        var BidQty1 = "<span id='lblTopBidQty1'></span>";
-        var BidQty2 = "<span id='lblTopBidQty2'></span>";
-        var BidQty3 = "<span id='lblTopBidQty3'></span>";
-        var BidQty4 = "<span id='lblTopBidQty4'></span>";
-        var BidQty5 = "<span id='lblTopBidQty5'></span>";
+        var BidQty1 = "<span id='lblTopBidQty1' style='color: red;'></span>";
+        var BidQty2 = "<span id='lblTopBidQty2' style='color: red;'></span>";
+        var BidQty3 = "<span id='lblTopBidQty3' style='color: red;'></span>";
+        var BidQty4 = "<span id='lblTopBidQty4' style='color: red;'></span>";
+        var BidQty5 = "<span id='lblTopBidQty5' style='color: red;'></span>";
 
-        var BidPrice1 = "<span id='lblTopBidRate1'></span>";
-        var BidPrice2 = "<span id='lblTopBidRate2'></span>";
-        var BidPrice3 = "<span id='lblTopBidRate3'></span>";
-        var BidPrice4 = "<span id='lblTopBidRate4'></span>";
-        var BidPrice5 = "<span id='lblTopBidRate5'></span>";
+        var BidPrice1 = "<span id='lblTopBidRate1' style='color: red;'></span>";
+        var BidPrice2 = "<span id='lblTopBidRate2' style='color: red;'></span>";
+        var BidPrice3 = "<span id='lblTopBidRate3' style='color: red;'></span>";
+        var BidPrice4 = "<span id='lblTopBidRate4' style='color: red;'></span>";
+        var BidPrice5 = "<span id='lblTopBidRate5' style='color: red;'></span>";
 
-        var AskPrice1 = "<span id='lblTopAskRate1'></span>";
-        var AskPrice2 = "<span id='lblTopAskRate2'></span>";
-        var AskPrice3 = "<span id='lblTopAskRate3'></span>";
-        var AskPrice4 = "<span id='lblTopAskRate4'></span>";
-        var AskPrice5 = "<span id='lblTopAskRate5'></span>";
+        var AskPrice1 = "<span id='lblTopAskRate1' style='color: #26ff26;'></span>";
+        var AskPrice2 = "<span id='lblTopAskRate2' style='color: #26ff26;'></span>";
+        var AskPrice3 = "<span id='lblTopAskRate3' style='color: #26ff26;'></span>";
+        var AskPrice4 = "<span id='lblTopAskRate4' style='color: #26ff26;'></span>";
+        var AskPrice5 = "<span id='lblTopAskRate5' style='color: #26ff26;'></span>";
 
-        var AskQty1 = "<span id='lblTopAskQty1'></span>";
-        var AskQty2 = "<span id='lblTopAskQty2'></span>";
-        var AskQty3 = "<span id='lblTopAskQty3'></span>";
-        var AskQty4 = "<span id='lblTopAskQty4'></span>";
-        var AskQty5 = "<span id='lblTopAskQty5'></span>";
+        var AskQty1 = "<span id='lblTopAskQty1' style='color: #26ff26;'></span>";
+        var AskQty2 = "<span id='lblTopAskQty2' style='color: #26ff26;'></span>";
+        var AskQty3 = "<span id='lblTopAskQty3' style='color: #26ff26;'></span>";
+        var AskQty4 = "<span id='lblTopAskQty4' style='color: #26ff26;'></span>";
+        var AskQty5 = "<span id='lblTopAskQty5' style='color: #26ff26;'></span>";
 
-        var tot = "<span id='' class='depth2'>Total Qty</span>";
+        var tot = "<span id=''>Total Qty</span>";
         var BidPrice = "<span id='lblTopBidQtyTotal'></span>";;
-        var AskPrice = "<span id='' class='depth2'>Total Qty</span>";
+        var AskPrice = "<span id=''>Total Qty</span>";
         var AskQty = "<span id='lblTopAskQtyTotal'></span>";
 
-        var OILable = "<span id='' class='depth2'>OI</span>";
+        var OILable = "<span id=''>OI</span>";
         var OI = "<span id='lblOI'></span>";
-        var OIChangeLable = "<span id='' class='depth2'>OI Change</span>";
+        var OIChangeLable = "<span id=''>OI Change</span>";
         var OIChange = "<span id='lblOI'>N/A</span>";
 
-        var lableAvgPrice = "<span id='' class='depth2'>Avg Price</span>";
+        var lableAvgPrice = "<span id=''>Avg Price</span>";
         var AvgPrice = "<span id='lblAP'></span>";
-        var lableminAvgPrice = "<span id='' class='depth2'>30 Min Avg Price</span>";
+        var lableminAvgPrice = "<span id=''>30 Min Avg Price</span>";
         var TminAvg = "<span id='lblMAP'></span>";
 
-        var lableTotalValue = "<span id='' class='depth2'>Total Value</span>";
+        var lableTotalValue = "<span id=''>Total Value</span>";
         var TotalValue = "<span id='lbltotalvalue'></span>";
-        var lableVolume = "<span id='' class='depth2'>Volume</span>";
+        var lableVolume = "<span id=''>Volume</span>";
         var Volume = "<span id='lblVolume'></span>";
 
-        var lableOpen = "<span id='' class='depth2'>OPEN</span>";
+        var lableOpen = "<span id=''>OPEN</span>";
         var Open = "<span id='lblOpen'></span>";
-        var lableHigh = "<span id='' class='depth2'>HIGH</span>";
+        var lableHigh = "<span id=''>HIGH</span>";
 
         var High = "<span id='lblHigh'></span>";
-        var labelLow = "<span id='' class='depth2'>LOW</span>";
+        var labelLow = "<span id=''>LOW</span>";
         var Low = "<span id='lblLow'></span>";
-        var lableHigh52 = "<span id='' class='depth2'>52 WK HIGH</span>";
+        var lableHigh52 = "<span id=''>52 WK HIGH</span>";
         var High52Week = "<span id='lblHigh52'></span>";
-        var lableLowCkt = "<span id='' class='depth2'>LOW CKT LIM</span>";
+        var lableLowCkt = "<span id=''>LOW CKT LIM</span>";
         var LowCKTLIM = "<span id='lblLowLim'></span>";
 
-        var lableClose = "<span id='' class='depth2'>CLOSE (LTP)</span>";
+        var lableClose = "<span id=''>CLOSE (LTP)</span>";
         var Close = "<span id='lblClose'></span>";
-        var lablePrevClose = "<span id='' class='depth2'>PREV CLOSE</span>";
+        var lablePrevClose = "<span id=''>PREV CLOSE</span>";
         var PrevClose = "<span id='lblPrevClose'></span>";
-        var lableChange = "<span id='' class='depth2'>CHANGE</span>";
+        var lableChange = "<span id=''>CHANGE</span>";
         var Change = "<span id='lblChange'></span>";
-        var lableLow52 = "<span id='' class='depth2'>52 WK LOW</span>";
+        var lableLow52 = "<span id=''>52 WK LOW</span>";
         var Low52Week = "<span id='lblLow52'></span>";
-        var lableUppCKT = "<span id='' class='depth2'>UPP CKT LIM</span>";
+        var lableUppCKT = "<span id=''>UPP CKT LIM</span>";
         var UppCKTLIM = "<span id='lblUpLim'></span>";
 
         DepthColumns.push(
@@ -3067,10 +3105,6 @@ function getDepth()
         dataSource: {
             data: DepthColumns
             //pageSize: 10 // specifying the pagesize inside the datasource fixed my problem (Nan-Nan of 1 items)
-        },
-        filterable: {
-            multi: true,
-            search: true
         },
         navigatable: true,
         selectable: 'row',
@@ -3202,33 +3236,41 @@ $(document).keydown(function (e) {
 
     }
 
-    if (e.which == 27 && isCtrl == false) {
-
-        if ($("#modDeleteWatch").css('display') != 'none') {
-            $("#modDeleteWatch").toggle();
-        }
-        else if ($("#SearchHelp").css('display') != 'none') {
-            $("#SearchHelp").toggle();
-        }
-        else if ($("#modBuySell").css('display') != 'none') {
-            $("#modBuySell").toggle();
-        }
-        else if ($("#WipModal").css('display') != 'none') {
-            $("#WipModal").toggle();
-        }
-        else if ($("#modpasswrodExpired").css('display') != 'none') {
-            $("#modpasswrodExpired").toggle();
-        }
-        else if ($("#modScriptDepth").css('display') != 'none') {
-            $("#modScriptDepth").toggle();
-        }
-        else if ($("#showimagediv").css('display') != 'none') {
-            $("#showimagediv").toggle();
+    if (e.which == 27) {
+        if ($("#myModalnt").is(":visible") == true) {
+            $("#myModalnt").data("kendoWindow").close();
         }
 
+        if ($("#modDeleteWatch").is(":visible") == true) {
+            $("#modDeleteWatch").data("kendoWindow").close();
+        }
 
-        if ($("#myModal2").css('display') != 'none') {
-            $("#myModal2").toggle();
+        if ($("#SearchHelp").is(":visible") == true) {
+            $("#SearchHelp").data("kendoWindow").close();
+        }
+
+        if ($("#windowbuysell").is(":visible") == true) {
+            $("#windowbuysell").data("kendoWindow").close();
+        }
+
+        if ($("#WipModal").is(":visible") == true) {
+            $("#WipModal").data("kendoWindow").close();
+        }
+
+        if ($("#modpasswrodExpired").is(":visible") == true) {
+            $("#modpasswrodExpired").data("kendoWindow").close();
+        }
+
+        if ($("#modScriptDepth").is(":visible") == true) {
+            $("#modScriptDepth").data("kendoWindow").close();
+        }
+
+        if ($("#showimagediv").is(":visible") == true) {
+            $("#showimagediv").data("kendoWindow").close();
+        }
+
+        if ($("#myModal2").is(":visible") == true) {
+            $("#myModal2").data("kendoWindow").close();
         }
 
         $('.submenu[style="display: table-row;"]').click();

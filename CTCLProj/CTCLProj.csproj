@@ -56,6 +56,7 @@
       <Private>True</Private>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.ComponentModel.Composition" />
     <Reference Include="System.Data" />
     <Reference Include="System.Data.Entity" />
     <Reference Include="System.Drawing" />
@@ -124,6 +125,7 @@
     <Compile Include="Controllers\GridController.cs" />
     <Compile Include="Controllers\HomeController.cs" />
     <Compile Include="Controllers\LoginController.cs" />
+    <Compile Include="Controllers\SettingsController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -678,6 +680,7 @@
     <Content Include="MyJs\CommonFunctions.js" />
     <Content Include="MyJs\firebase.js" />
     <Content Include="MyJs\Funds.js" />
+    <Content Include="MyJs\GetSettings.js" />
     <Content Include="MyJs\GlobalVariable.js" />
     <Content Include="MyJs\Holding.js" />
     <Content Include="MyJs\jquery.autocomplete.min.js" />
@@ -689,6 +692,7 @@
     <Content Include="MyJs\NetPosition.js" />
     <Content Include="MyJs\Notification.js" />
     <Content Include="MyJs\OrderBook.js" />
+    <Content Include="MyJs\SettingManager.js" />
     <Content Include="MyJs\SweetAlert.js" />
     <Content Include="MyJs\TradeBook.js" />
     <Content Include="packages.config" />
@@ -1193,6 +1197,7 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="App_Data\" />
+    <Folder Include="Views\Settings\" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Scripts\jquery-3.3.1.slim.min.map" />

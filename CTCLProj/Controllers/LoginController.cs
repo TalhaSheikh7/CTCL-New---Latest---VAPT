@@ -367,26 +367,7 @@ namespace CTCLProj.Controllers
         {
             get { return String.Format("{0} v {1}", Request.Browser.Browser, Request.Browser.Version); }
         }
-        public static long ReportError(string pStrMethodName, string pStrClassName, long pLngErrorNumber, string pStrErrorType, string pStrDescription, string pStrStackTrace)
-        {
-            try
-            {
-                string mStrConnection = GlobalVariables.SqlConnectionFO;
-                DataTable dtErrorLog = SqlHelper.ReadTable("SP_GetErrorReportNumber", mStrConnection, true,
-                                                              SqlHelper.AddInParam("@vCharMethodName", SqlDbType.VarChar, pStrMethodName),
-                                                              SqlHelper.AddInParam("@vCharClassName", SqlDbType.VarChar, pStrClassName), // This is name of your class where method is....Change this accordingly.
-                                                              SqlHelper.AddInParam("@bIntErrorNumber", SqlDbType.BigInt, pLngErrorNumber),
-                                                              SqlHelper.AddInParam("@vCharErrorType", SqlDbType.VarChar, pStrErrorType),
-                                                              SqlHelper.AddInParam("@vCharDescription", SqlDbType.VarChar, pStrDescription),
-                                                              SqlHelper.AddInParam("@vCharStackTrace", SqlDbType.VarChar, pStrStackTrace));
-                return Convert.ToInt64(dtErrorLog.Rows[0][0]);
-            }
-            catch (Exception exErr)
-            {
-                System.Console.WriteLine(exErr.Message);
-                return -1000;
-            }
-        }
+        
         private void OpenChangePasswordPopup(string sUserID, string sOldPassword, string sChagePwdMessage)
         {
             //hFldOpenPopupId.Value = POPUP_CHANGEPWD;
@@ -797,11 +778,33 @@ namespace CTCLProj.Controllers
             return Json(clientdetails, JsonRequestBehavior.AllowGet);
         }
 
+        public static long ReportError(string pStrMethodName, string pStrClassName, long pLngErrorNumber, string pStrErrorType, string pStrDescription, string pStrStackTrace)
+        {
+            try
+            {
+                string mStrConnection = GlobalVariables.SqlConnectionFO;
+                DataTable dtErrorLog = SqlHelper.ReadTable("SP_GetErrorReportNumber", mStrConnection, true,
+                                                              SqlHelper.AddInParam("@vCharMethodName", SqlDbType.VarChar, pStrMethodName),
+                                                              SqlHelper.AddInParam("@vCharClassName", SqlDbType.VarChar, pStrClassName), // This is name of your class where method is....Change this accordingly.
+                                                              SqlHelper.AddInParam("@bIntErrorNumber", SqlDbType.BigInt, pLngErrorNumber),
+                                                              SqlHelper.AddInParam("@vCharErrorType", SqlDbType.VarChar, pStrErrorType),
+                                                              SqlHelper.AddInParam("@vCharDescription", SqlDbType.VarChar, pStrDescription),
+                                                              SqlHelper.AddInParam("@vCharStackTrace", SqlDbType.VarChar, pStrStackTrace));
+                return Convert.ToInt64(dtErrorLog.Rows[0][0]);
+            }
+            catch (Exception exErr)
+            {
+                System.Console.WriteLine(exErr.Message);
+                return -1000;
+            }
+        }
+
         const int MIN_PASSOWRD_LENGTH = 8;
         const int MAX_PASSOWRD_LENGTH = 15;
         public static System.Web.HttpContext Current { get; set; }
         public HttpResponse Response1 { get; }
 
+        
         public class clientssdata
         {
             public string sName { get; set; }

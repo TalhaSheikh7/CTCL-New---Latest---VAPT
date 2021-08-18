@@ -40,6 +40,7 @@
     <script src="~/MyJs/BOISettings.js"></script>
     <script src="~/Scripts/jquery.autocomplete.min.js"></script>
     <script src="~/MyJs/ClientSearch.js"></script>
+    <script src="~/MyJs/SettingManager.js"></script>
 </head>
 <body class="k-content">
     <input type="hidden" id="cmbClients" value="All" />
@@ -106,6 +107,7 @@
             <input type="text" class="scrip-search-box" style="width: 20%; font-size: 12px;" id="txtSelectedClient" placeholder="Search By Code" autocomplete="off" />
             <i class="fa fa-times" id="btnCleanText"></i>
             <input type="hidden" id="hdnSelectedClient" />
+            <button><i class="fa fa-floppy-o" aria-hidden="true" id="btnSave"></i></button>
             <input id="clntSearchType" style="width: 5%; font-size: 12px;" />
 
             <button><i class="fa fa-power-off" aria-hidden="true" id="btnLogout" onclick="location.href='@Url.Action("Logout", "Home")'"></i></button>
@@ -125,11 +127,14 @@
     <script>
         var theme = [];
         $(document).ready(function () {
+           // alert(sessionStorage.getItem("MyId"));
+
+          //themeChange(sessionStorage.getItem("ThemeColor"))
             theme = [
-                { value: "kendo.metroblack.min", Id: 4, name: "Metro-Black" },
-                { value: "kendo.black.min", Id: 1, name: "Black" },
-                { value: "kendo.blueopal.min", Id: 2, name: "Opal" },
-                { value: "kendo.highcontrast.min", Id: 3, name: "HighContrast" },
+                { value: "kendo.metroblack.min", Id: 0, name: "Metro-Black" },
+                { value: "kendo.blueopal.min", Id: 1, name: "Opal" },
+                { value: "kendo.highcontrast.min", Id: 2, name: "HighContrast" },
+                { value: "kendo.black.min", Id: 3, name: "Black" },
                 { value: "kendo.Moonlight.min", Id: 4, name: "Moonlight" },
             ];
 
@@ -138,9 +143,42 @@
                 { value: "C", name: "Code" }
             ];
 
-            KendoDropDownList("colorDrop", theme, "value", "name", themeChange, false, "", 0);
+            //KendoDropDownList("colorDrop", theme, "value", "name", themeChange, false, "", 0);
+
+            $("#colorDrop").kendoDropDownList({
+                dataSource: theme,
+                dataValueField: "value",
+                dataTextField: "name",
+                change: function (e) {
+                    console.log(this);
+                    var value = $("#colorDrop").data("kendoDropDownList").dataItem($("#colorDrop").data("kendoDropDownList").select()).Id;
+                    //alert(value);
+                    themeChange(value);
+                    // Use the value of the widget
+                },
+                index: 0,
+                animation: {
+                    close: {
+                        effects: "zoom:out",
+                        duration: 200
+                    }
+                }
+            });
+
+            var myDropDownList = $("#colorDrop");
+
+            var remoteDropDown = $("#colorDrop").data("kendoDropDownList");
+
+            remoteDropDown.list.width("auto");
+
+            myDropDownList.closest(".k-dropdownlist").css({
+                'z-index': 2
+            });
+//---------
 
             KendoDropDownList("clntSearchType", Searchtype, "value", "name", "", false, "", 1);
+
+           // themeChange(sessionStorage.getItem("ThemeColor"));
 
             $("#responsive-panel").kendoResponsivePanel({
                 breakpoint: 768,
@@ -172,9 +210,10 @@
                     console.log(data);
                 }
             });
-
-
+            
         });
+
+        
 
         $(document).on("change", "#clntSearchType", function (event) {
             if ($(this).val() == "C") {
@@ -187,22 +226,53 @@
             }
         });
 
-        function themeChange()
-        {
-            var localStr = $("#colorDrop").val()
-            var cssLink = $('<link href="../Content/kendo/2021.1.224/' + localStr + '.css" type="text/css" rel="Stylesheet"/>');
-            $("head").append(cssLink);
+        function themeChange(ncolor = "") {
+
+            var localStr = "";
+            var cssLink = "";
 
 
-            if ($("link.ui-theme").size() > 3) {
-                $("link.ui-theme:first").remove();
+            if (ncolor != '' || ncolor == undefined || ncolor == null) {
+                var Id = $("#colorDrop").data("kendoDropDownList").dataItem($("#colorDrop").data("kendoDropDownList").select()).Id;
+                if (ncolor == 0)
+                {
+                    localStr = "kendo.metroblack.min";
+                } else if (ncolor == 1)
+                {
+                    localStr = "kendo.blueopal.min";
+                } else if (ncolor == 2)
+                {
+                    localStr = "kendo.highcontrast.min";
+                } else if (ncolor == 3)
+                {
+                    localStr = "kendo.black.min";
+                } else if (ncolor == 4)
+                {
+                    localStr = "kendo.Moonlight.min";
+                }
+
+                sessionStorage.setItem("ThemeColor", ncolor);
+
+                cssLink = $('<link href="../Content/kendo/2021.1.224/' + localStr + '.css" type="text/css" rel="Stylesheet"/>');
+                $("head").append(cssLink);
+
+                if ($("link.ui-theme").length > 3) {
+                   $("link.ui-theme:first").remove();
+                }
+                $("#colorDrop").data('kendoDropDownList').value(localStr);
+            } else {
+                localStr = $("#colorDrop").val();
+                cssLink = $('<link href="../Content/kendo/2021.1.224/' + localStr + '.css" type="text/css" rel="Stylesheet"/>');
+                $("head").append(cssLink);
+                
+                //if ($("link.ui-theme").size() > 3) {
+                //    $("link.ui-theme:first").remove();
+                //}
             }
-        }
 
-        function onclick(e) {
-            $("#responsive-panel").getKendoResponsivePanel().toggle();
         }
 
     </script>
 </body>
 </html>
+<script src="~/MyJs/GetSettings.js"></script>
