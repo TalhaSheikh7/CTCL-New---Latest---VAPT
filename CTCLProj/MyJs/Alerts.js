@@ -2,6 +2,16 @@
 var Getresearch = [];
 var Gettrade = [];
 var Exchangemessage = [];
+
+var idList = {
+    'key1': 'availMarText',
+    'key2': 'availMargin',
+    'key3': 'reqMarText',
+    'key4': 'reqMargin',
+    'key5': 'excessMarText',
+    'key6': 'excessMargin'
+};
+
 $(document).ready(function () {
 
     var norderAction = 5;
@@ -558,6 +568,10 @@ function Gettradealert(norderAction, suserID, norderId, npageindex, nOrderSegmen
                     serverPaging: true,
                     serverFiltering: true,
                     toolbar: ["search", "excel", "pdf"],
+                    excel: {
+                        allPages: true
+                    },
+                    excelExport: exportGridWithTemplatesContent,
                     filterable: {
                         mode: "row"
                     },
@@ -626,6 +640,47 @@ function Gettradealert(norderAction, suserID, norderId, npageindex, nOrderSegmen
     });
 }
 
+function exportGridWithTemplatesContent(e) {
+    var data = e.data;
+    var gridColumns = e.sender.columns;
+    var sheet = e.workbook.sheets[0];
+    var visibleGridColumns = [];
+    var columnTemplates = [];
+    var dataItem;
+    // Create element to generate templates in.
+    var elem = document.createElement('div');
+
+    // Get a list of visible columns
+    for (var i = 0; i < gridColumns.length; i++) {
+        if (!gridColumns[i].hidden) {
+            visibleGridColumns.push(gridColumns[i]);
+        }
+    }
+
+    // Create a collection of the column templates, together with the current column index
+    for (var i = 0; i < visibleGridColumns.length; i++) {
+        if (visibleGridColumns[i].template) {
+            columnTemplates.push({ cellIndex: i, template: kendo.template(visibleGridColumns[i].template) });
+        }
+    }
+
+    // Traverse all exported rows.
+    for (var i = 1; i < sheet.rows.length; i++) {
+        var row = sheet.rows[i];
+        // Traverse the column templates and apply them for each row at the stored column position.
+
+        // Get the data item corresponding to the current row.
+        var dataItem = data[i - 1];
+        for (var j = 0; j < columnTemplates.length; j++) {
+            var columnTemplate = columnTemplates[j];
+            // Generate the template content for the current cell.
+            elem.innerHTML = columnTemplate.template(dataItem);
+            if (row.cells[columnTemplate.cellIndex] != undefined)
+                // Output the text content of the templated cell into the exported cell.
+                row.cells[columnTemplate.cellIndex].value = elem.textContent || elem.innerText || "";
+        }
+    }
+}
 
 
 function GetCorpActions(norderAction, suserID, norderId, npageindex, nOrderSegment, sorderStatus, dDateRange1, dDateRange2) {
@@ -714,18 +769,28 @@ function remarkclick(data) {
 }
 
 function Researchbuysell(data) {
+
+    if (gblCTCLtype.toString().toLocaleLowerCase() == "emp" && $("#cmbClients").val() == "All") {
+        KendoWindow("ClientSelection", 450, 110, "", 0, true);
+        return false;
+    }
+    if (gblCTCLtype.toString().toLocaleLowerCase() == "emp" && $("#txtSelectedClient").val() == "") {
+        KendoWindow("ClientSelection", 450, 110, "", 0, true);
+        return false;
+    }
+
     var sScripts = "";
     var currrate = "";
-    KendoWindow("researchbuysell", 650, 360, "Order", 0);
+    KendoWindow("researchbuysell", 650, 370, "Order", 0);
     $("#researchbuysell").closest(".k-window").css({
-        top: 350,
-        left: 200
+        top: 220,
+        left: 340
     });
     $("#tradeprice1").val("0.00")
     $("#marketorder1").attr('checked', 'checked');
     var buysell = data.dataset.buysell;
     localStorage.setItem("buysell1", buysell);
-
+    
     if (buysell == "BUY") {
         var buysellreq = 1
         $("#Buyordersearch").show();
@@ -748,7 +813,7 @@ function Researchbuysell(data) {
     localStorage.setItem("sExpiry", sExpiry);
     var vstrike = data.dataset.vstrike
     localStorage.setItem("vstrike", vstrike);
-
+    
     var sCallPut = data.dataset.scallput;
     localStorage.setItem("sCallPut", sCallPut);
     if (nconstant == 12 || nconstant == 13) {
@@ -757,25 +822,25 @@ function Researchbuysell(data) {
     else {
         currrate = '<span><strong id= "' + nconstant + '_' + ntoken + '_LR">0.0000</strong></span>';
     }
-
+    
     sScripts = sScripts + nconstant + '.' + ntoken + ','
     if (blnBroadCastFlag == true) {
         CloseSocket();//Close and open
     }
     var lblScript = "lblScripts2";
-
+    
     $('#lblScripts2').html(sScripts.substring(0, sScripts.length - 1));
     $('#lblScripts2').html($('#lblScripts2').html() + "," + "17.999908,17.999988,5.1")
     reconnectSocketAndSendTokens(lblScript);
-
+    
     $("#ltprice1").html(currrate);
-
+    
     var minqty = data.dataset.nminqty
     $("#tradeqty1").val(minqty)
     var stocktype = data.dataset.ssegment
     VarMargin1(1, ntoken, stocktype)
-
-
+    
+    
     var CncMis = 0;//set
     if ($('#ONRML1').is(':checked')) {
         CncMis = 0;
@@ -798,13 +863,13 @@ function Researchbuysell(data) {
         var ntoken = localStorage.getItem("ntoken");
         var ltpid = nconstant1 + "_" + ntoken
         var price = parseFloat($("#" + ltpid + "_LR").text()).toFixed(2)
-
+    
     }
     else if ($('#limitorder1').is(':checked')) {
         var price = $("#tradeprice1").val();
     }
     else if ($('#stoplossmarket1').is(':checked')) {
-
+    
         var nconstant1 = localStorage.getItem("nconstant");
         var ntoken = localStorage.getItem("ntoken");
         var ltpid = nconstant1 + "_" + ntoken
@@ -814,8 +879,7 @@ function Researchbuysell(data) {
         var price = $("#tradeprice1").val();
     }
     var OrderNo = 0;
-    GetRequiredStockOrMargin1(nCncMis, ntoken, ExchangeName, price, buysellreq, Qty, CallTypeorder, OrderNo);
-
+    GetRequiredStockOrMargin(nCncMis, ntoken, ExchangeName, price, buysellreq, Qty, CallTypeorder, OrderNo, 2, idList);
 }
 
 
@@ -844,7 +908,7 @@ $("#stoplossmarket1").click(function () {
     var ltp = parseFloat($("#" + ltpid + "_LR").text()).toFixed(2)
     //  $("#ltprice").html(ltp);
     $("#tradeprice1").val(ltp);
-})
+});
 
 
 $("#Buyordersearch").click(function () {
@@ -1002,7 +1066,7 @@ function changeQty1() {
     var Qty = $("#tradeqty1").val();
     var stocktype = localStorage.getItem("CallTypeorder");
     var OrderNo = 0;
-    GetRequiredStockOrMargin1(nCncMis, token, ExchangeName, price, buysellreq, Qty, stocktype, OrderNo);
+    GetRequiredStockOrMargin(nCncMis, token, ExchangeName, price, buysellreq, Qty, stocktype, OrderNo, 2);
 }
 function changeprice1() {
     var CncMis = 0;//set
@@ -1025,150 +1089,8 @@ function changeprice1() {
     var Qty = $("#tradeqty1").val();
     var stocktype = GetInstrument(localStorage.getItem("CallTypeorder"));
     var OrderNo = 0;
-    GetRequiredStockOrMargin1(nCncMis, token, ExchangeName, price, buysell, Qty, stocktype, OrderNo);
+    GetRequiredStockOrMargin(nCncMis, token, ExchangeName, price, buysell, Qty, stocktype, OrderNo, 2);
 }
-
-
-
-
-function VarMargin1(nExchangeId, nToken, nstockType) {
-    var URL = "https://ctcl.investmentz.com/iCtclService/api/ScriptV1/";
-    var rowdata = {
-        'stockAction': 4,
-        'pageIndex': parseInt(nToken),
-        'ScriptType': parseInt(nstockType),
-        'userID': 0,
-        'ScriptName': '',
-        'ExchangeId': nExchangeId,
-        'Expiry': null,
-        'CP': null,
-        'Strike': 0
-    }
-
-    $.ajax({
-        url: URL,
-        type: "get",
-        data: rowdata,
-        dataType: "json",
-        success: function (data) {
-            //console.log(data);
-            if (data.IsResultSuccess == true) {
-                $("#varper2").html(data.Result.nVarMarginInPerc + '%');
-            } else {
-                $("#varper2").html("0%");
-            }
-        },
-        error: function (data) {
-            console.log(data);
-        }
-    });
-}
-
-function GetRequiredStockOrMargin1(nCncMis, nToken, Exchange, nOrderAmt, nBuySell, nQty, nSegment, noid) //vpg added segement and removed sInstrument 14/07/2020 
-{
-    var nStockType;
-    if (nQty == -1) {
-        nQty = $("#txtqty").val();
-    }
-
-    if (nBuySell == 2) {
-        if ((nSegment == 3 || nSegment == 8 || nSegment == 9) && nCncMis == 0) {
-            document.getElementById('reqMarText').innerHTML = 'REQUIRED STOCK';
-            document.getElementById('availMarText').innerHTML = 'AVAILABLE/STOCK';
-            document.getElementById('excessMarText').innerHTML = 'EXCESS STOCK';
-        }
-        else {
-            document.getElementById('reqMarText').innerHTML = 'REQUIRED MARGIN';
-            document.getElementById('availMarText').innerHTML = 'AVAILABLE/MARGIN';
-            document.getElementById('excessMarText').innerHTML = 'EXCESS MARGIN';
-        }
-
-    } else if (nBuySell == 1) {
-        document.getElementById('reqMarText').innerHTML = 'REQUIRED MARGIN';
-        document.getElementById('availMarText').innerHTML = 'AVAILABLE/MARGIN';
-        document.getElementById('excessMarText').innerHTML = 'EXCESS MARGIN';
-    }
-
-
-    var nBuySell;
-    if (nSegment == 3 || nSegment == 8 || nSegment == 9) {
-        nStockType = 3;
-    } else {
-        nStockType = nSegment;
-    }
-    var nExchangeId = 0;
-
-    var nUserId = "869397";
-    var nOrderId = "";
-    // var nMarketRate = parseFloat($("#ltprice").text())
-    var nconstant1 = localStorage.getItem("nconstant");
-    var ntoken = localStorage.getItem("ntoken");
-    var ltpid = nconstant1 + "_" + ntoken
-    var ltp = parseFloat($("#" + ltpid + "_LR").text()).toFixed(2)
-    var nMarketRate = ltp;
-    if (Exchange == "NSE") {
-        nExchangeId = 1;
-
-    } else if (Exchange == "BSE") {
-        nExchangeId = 2;
-    }
-
-    nOrderId = noid;
-    //var URL = "http://localhost:1610/api/OrderV5/";
-    var URL = gblurl + "OrderV5/";
-
-    var rowdata = {
-        nCncMis: nCncMis,
-        nStockType: nStockType,
-        nToken: nToken,
-        nExchangeId: nExchangeId,
-        nUserId: nUserId,
-        nOrderId: nOrderId,
-        nOrderAmt: parseFloat(nOrderAmt),
-        nMarketRate: parseFloat(nMarketRate),
-        nBuySell: nBuySell,
-        nQty: nQty
-    }
-
-    $.ajax({
-        url: URL,
-        type: "get",
-        data: rowdata,
-        dataType: "json",
-        success: function (data) {
-            //console.log(data);
-            if (data.IsResultSuccess == true) {
-                if (nBuySell == 1) {
-                    $("#availMar2").html(data.Result[0].AvailMargin);
-                    $("#reqMar2").html(data.Result[0].RequiredMargin);
-                    $("#excessMar2").html(data.Result[0].RequiredExtraMargin);
-                } else if (nBuySell == 2) {
-                    if (nCncMis == 0) {
-                        $("#availMar2").html(data.Result[0].AvailStock);
-                        $("#reqMar2").html(data.Result[0].RequiredStock);
-                        $("#excessMar2").html(data.Result[0].RequiredExtraStock);
-                    }
-                    else {
-                        $("#availMar2").html(data.Result[0].AvailMargin);
-                        $("#reqMar2").html(data.Result[0].RequiredMargin);
-                        $("#excessMar2").html(data.Result[0].RequiredExtraMargin);
-                    }
-
-                }
-
-            } else {
-
-                $("#varper").val("0%");
-            }
-
-        },
-        error: function (data) {
-            console.log(data);
-        }
-    });
-
-}
-
 
 $("#ONRML1").click(function () {
 
@@ -1218,7 +1140,7 @@ $("#ONRML1").click(function () {
     var Qty = $("#tradeqty1").val();
     var stocktype = localStorage.getItem("CallTypeorder");
     var OrderNo = 0;
-    GetRequiredStockOrMargin1(nCncMis, token, ExchangeName, price, buysellreq, Qty, stocktype, OrderNo);
+    GetRequiredStockOrMargin(nCncMis, token, ExchangeName, price, buysellreq, Qty, stocktype, OrderNo, 2);
 })
 $("#OMIS1").click(function () {
     var CncMis = 0;//set
@@ -1267,5 +1189,14 @@ $("#OMIS1").click(function () {
     var Qty = $("#tradeqty1").val();
     var stocktype = localStorage.getItem("CallTypeorder");
     var OrderNo = 0;
-    GetRequiredStockOrMargin1(nCncMis, token, ExchangeName, price, buysellreq, Qty, stocktype, OrderNo);
-})
+    GetRequiredStockOrMargin(nCncMis, token, ExchangeName, price, buysellreq, Qty, stocktype, OrderNo, 2);
+});
+
+$(document).keydown(function (e) {
+
+    if (e.which == 27 && isCtrl == false) {
+        if ($("#researchbuysell").is(":visible") == true) {
+            $("#researchbuysell").data("kendoWindow").close();
+        }
+    }
+});

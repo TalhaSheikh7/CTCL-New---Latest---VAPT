@@ -147,19 +147,7 @@ function GetStringInstrumentForDisplay(ninstrument) {
     return constval;
 }
 
-function floatSafeModulus(val, step) {
-    var valDecCount = (val.toString().split('.')[1] || '').length;
-    var stepDecCount = (step.toString().split('.')[1] || '').length;
-    var decCount = valDecCount > stepDecCount ? valDecCount : stepDecCount;
-    var valInt = parseInt(val.toFixed(decCount).replace('.', ''));
-    var stepInt = parseInt(step.toFixed(decCount).replace('.', ''));
-    return (valInt % stepInt) / Math.pow(10, decCount);
-}
 
-function floatSafeModulusQty(val, step, segment) {
-    var x = parseFloat(val.toString()) - (step);
-    return parseFloat(x);
-}
 
 function floatSafeModulus1(val, step, segment) {
     var x = parseFloat(val.toString()) - (step);

@@ -21,7 +21,7 @@ $(document).ready(function () {
         if ($("#txtSelectedClient").val() == "" || $("#txtSelectedClient").val() == undefined) {
 
         } else {
-            clearInterval(timer);
+            clearInterval(timer1);
             CCC = $("#txtSelectedClient").val().toString().split('-')[0].trim();
             Name = $("#txtSelectedClient").val().toString().split('-')[1].trim();
         }

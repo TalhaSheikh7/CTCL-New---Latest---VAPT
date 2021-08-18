@@ -134,7 +134,7 @@ public static class GlobalVariables
     {
         get
         {
-            return ConfigurationManager.ConnectionStrings["SqlCon"].ConnectionString;
+            return ConfigurationManager.ConnectionStrings["SQLConn"].ConnectionString;
         }
 
     }

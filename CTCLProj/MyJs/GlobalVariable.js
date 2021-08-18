@@ -1,6 +1,6 @@
 ﻿
-//var common_url = "http://localhost:49180/"
-var common_url = https://ctcluat.investmentz.com/
+var common_url = "http://localhost:49180/"
+//var common_url = https://ctcluat.investmentz.com/
 //var gblurl = "http://localhost:1610/api/";
 var gblurl = "https://ctcl.investmentz.com/iCtclService/api/";
 var gblnUserId;
@@ -9,14 +9,13 @@ var gblnUserId = localStorage.getItem("CCID");
 var gblCTCLid = localStorage.getItem("CTCLId");
 var gblCTCLtype = localStorage.getItem("EmpCTCLtype");
 
-
 $(document).ready(function () {
     var NameCode = localStorage.getItem("NameCode");
     $("#BANameCode").html(NameCode);
 
     $("#NameCodeData").html(NameCode);
     $("#NameCodeData1").html(NameCode);
-    $("#NameCodeData2").html(NameCode);
+    //$("#NameCodeData2").html(NameCode);
 
     clearClntDetails = function () {
         setGlobalVariable("AvailEmpClnts", "");

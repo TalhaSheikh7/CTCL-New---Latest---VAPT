@@ -1,6 +1,7 @@
 
 $(document).ready(function () {
     localStorage.setItem("CTCLId", "");
+    localStorage.setItem("EmpCTCLtype", "");
     
     
 });
@@ -357,6 +358,8 @@ $("#btnVerifyMPin").click(function () {
                 return false;
             }
 
+            //getSettings(data.sTradingCode, data.UserType);
+
             var BAName = data.sName;
             var BACode = data.sTradingCode;
 
@@ -437,7 +440,7 @@ $("#btnLogin").click(function () {
 
             if (strmsg == "Incorrect") {
 
-                alert(data);
+                
                 $("#anyonepopup").show();
                 $("#commenpopup").html(data)
 

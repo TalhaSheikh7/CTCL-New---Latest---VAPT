@@ -50,37 +50,25 @@ function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToke
     //      { value: "CD", Id: "CD", name: "CD" }
     //];
 
-
-    //$("#mraketsegment").kendoDropDownList({
-    //    dataSource: MarketSegmentchange,
-    //    dataValueField: "Id",
-    //    dataTextField: "name",
-    //    change: Segmentchange,
-    //    animation: {
-    //        close: {
-    //            effects: "zoom:out",
-    //            duration: 200
-    //        }
-    //    }
-    //});
+    KendoDropDownList("mraketsegment", MarketSegmentchange, "Id", "name", Segmentchange, false, "", 0);
 
     var i = 0;
     var arr = new Array();
     var strDisplay = '';
+    var rowdata = {
+        nAction: nAction,
+        sUserID: sUserId,
+        sProCli: sProCli,
+        sInstrumentName: sInstrumentName,
+        nPageIndex: nPageIndex,
+        nToken: nToken,
+        sScript: sScript,
+        sCTCLId: sCTCLId
+    };
     $.ajax({
         url: "https://ctcl.investmentz.com/iCtclService/api/ReportsV2/",
         method: "get",
-        data: {
-            nAction: nAction,
-            sUserID: sUserId,
-            sProCli: sProCli,
-            sInstrumentName: sInstrumentName,
-            nPageIndex: nPageIndex,
-            nToken: nToken,
-            sScript: sScript,
-            sCTCLId: sCTCLId
-
-        },
+        data: rowdata,
         dataType: "json",
         success: function (data) {
             //console.log(data);
@@ -148,6 +136,8 @@ function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToke
 
               
             }
+
+            KendoDropDownList("marketscript", MarketExchange, "Id", "Name", ChangeScript, false, "", 0);
               //$("#marketscript").kendoDropDownList({
               //      dataSource: MarketExchange,
               //      dataValueField: "Id",
@@ -218,6 +208,10 @@ function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToke
                         title: "Trade price", width: 80,
                         field: "TradePRICETIME",
                         hidden: "true"
+                    },
+                    {
+                        title: "Order Type", width: 80,
+                        field: "BuySell",
                     },
                     {
                         title: "CNC/MIS", width: 80,
@@ -356,12 +350,12 @@ function btnConvert(data) {
     }
     KendoWindow("windowForconvertScrip1", 500, 200, "MIS/CNC Conversion", 0);
     $("#windowForconvertScrip1").closest(".k-window").css({
-        top: 350,
-        left: 200
+        top: 285,
+        left: 445
     });
     VarMargin12(exchangeid, token, stocktype);
     // GetRequiredStockOrMargin(nCncMis, $("#scriptname").data("token"), sExchange, nOrderAmt, nBuySell, nQty, $(this).attr("data-stocktype"), $(this).attr("data-tradeno")); //$(this).attr("data-orderid")
-    GetRequiredStockOrMargin12(stocktype, tradeno, dealercode, orderno, nCncMis, orderid, exchangeid, nBuySell)
+    GetRequiredStockOrMargin12(stocktype, tradeno, dealercode, orderno, nCncMis, orderid, exchangeid, nBuySell);
     //var convertmis = $("#windowForconvertScrip1").data('kendoWindow');
     //convertmis.open();
     //convertmis.center();
@@ -462,29 +456,29 @@ function VarMargin12(nExchangeId, nToken, nstockType) {
 }
 //function Segmentchange() {
 
-//    var nAction = 6;
-//    var sUserId = $("#txtSelectedClient").val().split('-')[0].trim();;
-//    var sProCli = 'Cli';
-//    var sInstrumentName = $("#mraketsegment").val();
-//    var nPageIndex = 0;
-//    var nToken = 0;
-//    var sScript = '';
-//    var sCTCLId = localStorage.getItem("CTCLId");//400072001005;
-//    tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId);
-//};
+    var nAction = 6;
+    var sUserId = $("#txtSelectedClient").val().split('-')[0].trim();
+    var sProCli = 'Cli';
+    var sInstrumentName = $("#mraketsegment").val();
+    var nPageIndex = 0;
+    var nToken = 0;
+    var sScript = '';
+    var sCTCLId = localStorage.getItem("CTCLId");//400072001005;
+    tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId);
+};
 
 
-//function ChangeScript() {
-//    var nAction = 6;
-//    var sUserId = 869397;
-//    var sProCli = 'Cli';
-//    var sInstrumentName = $("#mraketsegment").val();
-//    var nPageIndex = 0;
-//    var nToken = 0;
-//    var sScript = $("marketscript").val();
-//    var sCTCLId = localStorage.getItem("CTCLId");//400072001005;
-//    tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId)
-//}
+function ChangeScript() {
+    var nAction = 6;
+    var sUserId = $("#txtSelectedClient").val().split('-')[0].trim();
+    var sProCli = 'Cli';
+    var sInstrumentName = $("#mraketsegment").val();
+    var nPageIndex = 0;
+    var nToken = 0;
+    var sScript = $("marketscript").val();
+    var sCTCLId = localStorage.getItem("CTCLId");//400072001005;
+    tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId)
+}
 
 $("#btnyes").click(function () {
 
@@ -655,9 +649,15 @@ if (gblCTCLtype.toString().toLocaleLowerCase() == "ba" || gblCTCLtype.toString()
     $("#baimgdiv").addClass('styled-select-new2');
     $("#Img4").css('display', 'inline');
     $('.news').css('display', 'none');
-    $("#cmbCtclSelect").css('display', 'inline');
-    $("#cmbCtclSelect").html('<option value="">All</option>' + '<option value="' + gblCTCLid + '" selected="selected">' + $("#lblClientCode").html() + '</option>');
+   // $("#cmbCtclSelect").css('display', 'inline');
+   // $("#cmbCtclSelect").html('<option value="">All</option>' + '<option value="' + gblCTCLid + '" selected="selected">' + $("#lblClientCode").html() + '</option>');
 
+    var Selection = [
+        { value: 0, Id: 1, name: localStorage.getItem("NameCode") },
+        { value: 1, Id: 2, name: "All" }
+    ];
+
+    KendoDropDownList("selectTrades", Selection, "Id", "name", tWatchSelection, false, "", 0);
     //getClntDetails(function (data) {
 
     //    initAutoComplete(data.EmpBAClientMaster);
@@ -678,7 +678,7 @@ else {
     $("#imgIcon").css("display", "block");
     $("#clntSearchType").css("display", 'none');
     $("#btnCleanText").css("display", 'none');
-    $("#cmbCtclSelect").css('display', 'none');
+    $("#selectTrades").css('display', 'none');
 
     $("#lblBAName").css('display', 'none');
     $("#baimg").css('display', 'none');
@@ -705,6 +705,24 @@ else {
     //>>>> 
 }
 
+
+function tWatchSelection() {
+
+    var sUserId = $("#txtSelectedClient").val().split('-')[0].trim();
+    var sProCli = 'Cli';
+    var sInstrumentName = $("#mraketsegment").val();
+    var nPageIndex = 0;
+    var nToken = 0;
+    var sScript = '';
+
+    if ($("#selectTrades").data("kendoDropDownList").value()) {
+
+    }
+    var sCTCLId = $("#selectTrades").val();
+
+    tradebook(6, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId);
+}
+
 function GetBoiLienSetting() {
     if ($("#hfldBOIYN").val() == "Y") {
         document.getElementById("fgft").style.visibility = "visible";
@@ -725,7 +743,6 @@ function GetBoiLienSetting() {
            dataType: "json"
        });
     success: (function (msg) {
-        alert(msg.ResultStatus)
         if (msg.ResultStatus == 3) {
             if (msg.Result == true) {
                 //$("#FL").attr('checked', true);
