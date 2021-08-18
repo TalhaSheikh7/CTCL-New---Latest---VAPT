@@ -287,19 +287,21 @@
                 </div>
             </div>
             <div>
-                <input id="Omraketsegment" style="width: 12%; font-size: 12px;" />
-                <input id="Omarketscript" style="width: 12%; font-size: 12px;" />
-                <input id="OStatus" />
+                @*<input id="Omraketsegment" style="width: 12%; font-size: 12px;" />
+        <input id="Omarketscript" style="width: 12%; font-size: 12px;" />
+        <input id="OStatus" />*@
                 <div id="OrderBookgrid" style="height:100%;">
                 </div>
 
                 <div id="modifycancel" style="display:none; text-align:center">
                     <div class="popup_panel">
+
                         <div style="font-size: 14px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="font-weight: 600; float:left; font-size: 14px; text-align: left; color: #ccc;"><span id="buysell"></span> <span id="scrip"></span><span> x </span><span id="qyt"></span></span> <span class="pull-right"><span style="text-align:left; font-size: 16px;" id="NameCodeData"></span></span></div>
+
 
                         <div style="font-size: 13px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="color: #ccc; width: 175px;float: left;">LTP : ₹<span id="ltprice"></span></span>  <span style="width: 175px;float: left;">Position(Net Wise)</span><span style="width: 175px;float: left;">Holdings : <span id="Oholdings"> </span></span></div>
                         <div style="padding: 5px 0;clear: both;;">
-                            <table style="width:100%;text-align: left;border-bottom: 1px solid #312f2f;border-top: 1px solid #312f2f;margin: 15px 0;">
+                            <table style="width:100%;text-align: left;boder-bottom: 1px solid #312f2f;border-top: 1px solid #312f2f;margin: 15px 0;">
                                 <tr>
                                     <td>
                                         <table style="width:100%; text-align: left;">
@@ -475,29 +477,32 @@
                         </div>
                     </div>
                 </div>
-            </div>
-            <div>
-
-                <input id="drpMarketSelection" style="width: 12%; font-size: 12px;" />
-                <input id="dtrange" style="width: 12%; font-size: 12px;" />
-                <button id="btnRefresh" style="width: 12%; font-size: 12px;">Refresh</button>
-                <button id="btnsqoff" style="width: 12%; font-size: 12px;">Sq. Off</button>
-                <div id="sqoffpopup" style="display:none; text-align:center">
-
-                    <div id="sqallgrid" style="height:100%;">
+                <div id="modTradeOrderModify" style="display:none; text-align:center">
+                    <div id="modTradeOrderModifyO"></div>
                     </div>
-                    @*  <div class="form-group" style="margin-top: 45px;">*@
-                    <input type="button" onclick="btnSqALL();" id="btnSqlAll" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;" value="OK">
-                    <button id="btncancel" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;">CANCEL</button>
-                    <!--</div>-->
                 </div>
-                <div id="NetPositionGrid" style="height:100%;">
-                </div>
+                <div>
 
-                <td width="22%" class="total-pl">
-                    <img id="pl" src="../img/icons/down-arrow-01.png" width="12px" data-original-title="" title="">
-                    <span class="tp">Today's P/L:</span> <span id="tpcol" class="red_text">&nbsp;&nbsp; <strong id="todaypl"></strong></span>
-                </td>
+                    @*<input id="drpMarketSelection" style="width: 12%; font-size: 12px;" />
+            <input id="dtrange" style="width: 12%; font-size: 12px;" />*@
+                    <button id="btnRefresh" style="width: 12%; font-size: 12px;">Refresh</button>
+                    <button id="btnsqoff" style="width: 12%; font-size: 12px;">Sq. Off</button>
+                    <div id="sqoffpopup" style="display:none; text-align:center">
+
+                        <div id="sqallgrid" style="height:100%;">
+                        </div>
+                        @*  <div class="form-group" style="margin-top: 45px;">*@
+                        <input type="button" onclick="btnSqALL();" id="btnSqlAll" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;" value="OK">
+                        <button id="btncancel" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;">CANCEL</button>
+                        <!--</div>-->
+                    </div>
+                    <div id="NetPositionGrid" style="height:100%;">
+                    </div>
+
+                    <td width="22%" class="total-pl">
+                        <img id="pl" src="../img/icons/down-arrow-01.png" width="12px" data-original-title="" title="">
+                        <span class="tp">Today's P/L:</span> <span id="tpcol" class="red_text">&nbsp;&nbsp; <strong id="todaypl"></strong></span>
+                    </td>
 
 
             </div>
@@ -758,25 +763,25 @@
                                     <a id="viewLedger" class="fundData">View</a>
                                 </td>
 
-                                <td>
+                                    <td>
 
-                                    <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">QUICK REPORTS</a>
-                                </td>
-                                <td>
-                                    <a id="" onclick="Backoffice()" class="fundData">BACKOFFICE REPORTS</a>
-                                </td>
-                                <td>
-                                    <a href="~/Home/FundTransfer" class="fundData" target="_blank">FUND PAYIN</a>
-                                </td>
-                                <td>
-                                    <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">WITHDRAW FUND</a>
-                                </td>
-                            </tr>
-                        </table>
+                                        <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">QUICK REPORTS</a>
+                                    </td>
+                                    <td>
+                                        <a id="" onclick="Backoffice()" class="fundData">BACKOFFICE REPORTS</a>
+                                    </td>
+                                    <td>
+                                        <a href="~/Home/FundTransfer" class="fundData" target="_blank">FUND PAYIN</a>
+                                    </td>
+                                    <td>
+                                        <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">WITHDRAW FUND</a>
+                                    </td>
+                                </tr>
+                            </table>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
     </div>
 </div>
 <div id="windowForAdd" style="display:none">

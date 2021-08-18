@@ -1,4 +1,4 @@
-﻿
+
 $(document).ready(function () {
     localStorage.setItem("CTCLId", "");
     localStorage.setItem("EmpCTCLtype", "");

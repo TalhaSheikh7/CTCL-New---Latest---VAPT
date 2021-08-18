@@ -7,18 +7,31 @@
             }
         }
     });
+    var timer1 = setInterval(myFunctionClient, 2000);
+    function myFunctionClient() {
+        if ($("#txtSelectedClient").val() == "" || $("#txtSelectedClient").val() == undefined) {
 
+        } else {
+            clearInterval(timer1);
+            CCC = $("#txtSelectedClient").val().toString().split('-')[0].trim();
+            Name = $("#txtSelectedClient").val().toString().split('-')[1].trim();
 
-    var nAction = 6;
-    var sUserId = $("#txtSelectedClient").val().split('-')[0].trim(); //gblnUserId;
-    var sProCli = 'Cli';
-    var sInstrumentName = 'All';
-    var nPageIndex = 0;
-    var nToken = 0;
-    var sScript = '';
-    var sCTCLId = gblCTCLid;//400072001005;
-    GetApiLoginStatus(6);
-    tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId);
+        }
+        var nAction = 6;
+        var sUserId = $("#txtSelectedClient").val().split('-')[0].trim(); //gblnUserId;
+        var sProCli = 'Cli';
+        var sInstrumentName = 'All';
+        var nPageIndex = 0;
+        var nToken = 0;
+        var sScript = '';
+        var sCTCLId = gblCTCLid;//400072001005;
+        var CCC = '';
+        var Name = '';
+
+        GetApiLoginStatus(6);
+        tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId);
+    }
+ 
 });
 
 var MarketExchange = [];
@@ -29,13 +42,13 @@ MarketExchange.push({
 script = [];
 function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId) {
 
-    var MarketSegmentchange =
-    [
-          { value: "All", Id: "All", name: "Market Segment" },
-          { value: "CM", Id: "CM", name: "CM" },
-          { value: "FO", Id: "FO", name: "FO" },
-          { value: "CD", Id: "CD", name: "CD" }
-    ];
+    //var MarketSegmentchange =
+    //[
+    //      { value: "All", Id: "All", name: "Market Segment" },
+    //      { value: "CM", Id: "CM", name: "CM" },
+    //      { value: "FO", Id: "FO", name: "FO" },
+    //      { value: "CD", Id: "CD", name: "CD" }
+    //];
 
     KendoDropDownList("mraketsegment", MarketSegmentchange, "Id", "name", Segmentchange, false, "", 0);
 
@@ -87,10 +100,10 @@ function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToke
                     strDisplay = $.trim(row.Script + ' ' + (row.Instrument == "" ? '' : row.Instrument) + '-' + (Exchange == "" ? '' : Exchange) + ' ' + (row.Expiry == "" ? '' : Expiry(row.Type, row.Expiry)));
                     // var Scrip = '<span style="color:red;"> ' + row.Script + ' ' + row.Instrument + '-' + Exchange + '</span>';
                     // alert(strDisplay);
-                    MarketExchange.push({
-                        Id: i,
-                        Name: row.Script.toUpperCase()
-                    })
+                    //MarketExchange.push({
+                    //    Id: i,
+                    //    Name: row.Script.toUpperCase()
+                    //})
 
                     // alert(Scrip);
                     tradebook1.push({
@@ -441,7 +454,7 @@ function VarMargin12(nExchangeId, nToken, nstockType) {
         }
     });
 }
-function Segmentchange() {
+//function Segmentchange() {
 
     var nAction = 6;
     var sUserId = $("#txtSelectedClient").val().split('-')[0].trim();
@@ -652,8 +665,8 @@ if (gblCTCLtype.toString().toLocaleLowerCase() == "ba" || gblCTCLtype.toString()
 }
 else {
 
-    $('#txtSelectedClient').removeAttr("disabled");
-    $('#txtSelectedClient').attr("readonly", true);
+  //  $('#txtSelectedClient').removeAttr("disabled");
+   // $('#txtSelectedClient').attr("readonly", true);
    // $('#txtSelectedClient').val($("#lblClientCode").html());
     $("#clientprofile").html($("#lblClientCode").html());          //vpg 24042018
 
