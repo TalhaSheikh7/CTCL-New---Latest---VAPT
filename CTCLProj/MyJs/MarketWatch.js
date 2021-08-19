@@ -80,6 +80,7 @@ $(document).ready(function () {
     //MainKendoWindow("WatchlistSet", 824, 435, 66, 30, "WatchList");
     var mWidth;
 
+    $("#cmbClients").val('');
 
     $("#WatchlistSet").kendoWindow({
         width: "58.50%",
@@ -840,6 +841,12 @@ $(document).on("click", "#btnDeleteScrip", function (event) {
 
 });
 
+$(document).on("click", "#CancelDelScrip", function (event) {
+
+    $("#windowForDeleteScrip").data("kendoWindow").close();
+
+});
+
 function DeleteWatch()
 {
 
@@ -871,6 +878,12 @@ $('#btnDeleteWatch').click(function () {
     {
         alert("No MarketWatch Selected");
     }
+});
+
+$(document).on("click", "#CancelDelWatch", function (event) {
+
+    $("#windowForDelete").data("kendoWindow").close();
+
 });
 
 function DeleteScripts(pintMarketWatchId, pintScriptId, pintActionId) {
@@ -2279,13 +2292,44 @@ $('input[type=radio][name=oType]').on('change', function () {
     {
         document.getElementById('Ioc').disabled = true;
         document.getElementById('txttrigprice').disabled = false;
-        DayClick();
+        
         if ($(this).val() == 12)
         {
             $("#trtxtdisclosedqty").invisible = true;
             $("#txtdisclosedqty").val('');
             document.getElementById('txtdisclosedqty').disabled = true;
         }
+        $("#txtdisclosedqty").val('');
+        document.getElementById('txtdisclosedqty').disabled = true;
+    }
+
+    if ($('#segmenttype').attr("data-segement") == "CURR") {
+        if ($(this).val() == 1 || $(this).val() == 3) {
+            $("#txtorderprice").val(parseFloat($("#ltp").html()).toFixed(4));
+        } else {
+            $("#txtorderprice").val("0.0000");
+        }
+
+        $("#txttrigprice").val("");
+    } else {
+        if ($(this).val() == 1 || $(this).val() == 3) {
+            $("#txtorderprice").val(parseFloat($("#ltp").html()).toFixed(2));
+        } else {
+            $("#txtorderprice").val("0.0000");
+        }
+        $("#txttrigprice").val("");
+    }
+
+    if ($(this).val() == 11 || $(this).val() == 12) {
+        document.getElementById('txtorderprice').disabled = true;
+        DayClick();
+        document.getElementById('Ioc').disabled = true;
+    } else {
+        document.getElementById('txtorderprice').disabled = false;
+    }
+
+    if ($('#segmenttype').attr("data-segement") == "FUTURE" || $('#segmenttype').attr("data-segement") == "OPTION") {
+        $("#trtxtdisclosedqty").invisible = true;
         $("#txtdisclosedqty").val('');
         document.getElementById('txtdisclosedqty').disabled = true;
     }

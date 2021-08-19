@@ -9,7 +9,7 @@ $(document).ready(function () {
 
     
 });
-$("#FClick").click(function () {
+$("#nFunds").click(function () {
     var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
     //var ClientCode = 5014669;
     GetHoldingDetails(3, ClientCode, 1, 0);

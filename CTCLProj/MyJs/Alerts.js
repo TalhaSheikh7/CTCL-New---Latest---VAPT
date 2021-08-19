@@ -557,6 +557,7 @@ function Gettradealert(norderAction, suserID, norderId, npageindex, nOrderSegmen
                 $("#alerttrade").kendoGrid({
                     dataSource: {
                         data: Gettrade,
+                        pageSize: 15
                     },
                     sortable: true,
                     resizable: true,
