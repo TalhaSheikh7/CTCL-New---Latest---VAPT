@@ -1,6 +1,6 @@
 $(document).ready(function () {
     var orderstatus = $("#OStatus").val();
-    OrderBook();
+   // OrderBook();
     GetOrder(orderstatus);
 
 });
@@ -210,7 +210,10 @@ $("#OCkick").click(function () {
                 //    }
                 //});
                 $("#OrderBookgrid").kendoGrid({
-                    dataSource: OrderBook,
+                    dataSource: {
+                        data: OrderBook,
+                        pageSize: 15
+                    },
                     sortable: true,
                     resizable: true,
                     pageable: true,

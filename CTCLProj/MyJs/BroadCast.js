@@ -544,7 +544,7 @@ function ProcessData2(bcastData) {
 function RefreshScriptsDetail(data) {
     if (ws == null || ws == undefined || ws.readyState != WebSocket.OPEN) {
 
-        ws = new WebSocket(gblBCastUrl);
+        ws = new WebSocket("wss://acmfeed.investmentz.com:7005");
         ws.onopen = function () {
             setTimeout(function () {
                 SendJson = { SeqNo: 9, Action: "req", RType: "MASTER", Topic: data, Body: "" };
@@ -552,7 +552,7 @@ function RefreshScriptsDetail(data) {
             }, 100);
         };
         ws.onmessage = function (evt) {
-            if (JSON.parse(evt.data).Action == "reply") {
+            if (JSON.parse(evt.data).Action == "pub") {
                 //console.log(JSON.stringify(evt.data));
                 fntblshow(evt.data);
             }

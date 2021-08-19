@@ -42,13 +42,13 @@ MarketExchange.push({
 script = [];
 function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId) {
 
-    //var MarketSegmentchange =
-    //[
-    //      { value: "All", Id: "All", name: "Market Segment" },
-    //      { value: "CM", Id: "CM", name: "CM" },
-    //      { value: "FO", Id: "FO", name: "FO" },
-    //      { value: "CD", Id: "CD", name: "CD" }
-    //];
+    var MarketSegmentchange =
+    [
+          { value: "All", Id: "All", name: "Market Segment" },
+          { value: "CM", Id: "CM", name: "CM" },
+          { value: "FO", Id: "FO", name: "FO" },
+          { value: "CD", Id: "CD", name: "CD" }
+    ];
 
     KendoDropDownList("mraketsegment", MarketSegmentchange, "Id", "name", Segmentchange, false, "", 0);
 
@@ -454,7 +454,7 @@ function VarMargin12(nExchangeId, nToken, nstockType) {
         }
     });
 }
-//function Segmentchange() {
+function Segmentchange() {
 
     var nAction = 6;
     var sUserId = $("#txtSelectedClient").val().split('-')[0].trim();

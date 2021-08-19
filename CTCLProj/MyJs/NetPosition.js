@@ -28,7 +28,7 @@ $(document).ready(function () {
         //PositionData();
     }
 });
-$("#NPClick").click(function () {
+$("#nPosition").click(function () {
     var strdtrange = "";
     var strInst = 1
 
@@ -396,6 +396,7 @@ function FillGrid(msg) {
                     //url: "https://demos.telerik.com/kendo-ui/service/Products",
                     //dataType: "jsonp"
                     data: OrderPosition,
+                    pageSize: 15,
                // }
 //},            
             schema: {

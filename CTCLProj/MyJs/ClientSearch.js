@@ -234,6 +234,7 @@ $(document).ready(function () {
 
     // setup autocomplete function pulling from currencies[] array
     function initAutoComplete(datasource) {
+        //console.log(datasource);
         $('#txtSelectedClient').autocomplete({
             lookup: datasource,
             minChars: 3,
@@ -257,7 +258,7 @@ $(document).ready(function () {
                 var dispText = suggestion["CommonClientCode"].toString() + " - " + suggestion["ClientName"];
                 $(this).val(dispText);
                 localStorage.setItem("LoginCode", suggestion["CommonClientCode"].toString());
-
+                $("#cmbClients").val(suggestion["CommonClientCode"]).trigger("change");
                 //$("#hdnSelectedClient").val(suggestion["CommonClientCode"]).trigger("change");
                 $("#hdnSelectedClient").val(dispText).trigger("change"); //commented and mod hvb @ 21/02/2019
                 setGlobalVariable(selectedClntKey, dispText);
