@@ -711,7 +711,7 @@ namespace CTCLProj.Controllers
                         Response.Cookies["LoginId"].Value = mObjUser.sLoginId;
                         Response.Cookies["LoginId"].Expires = DateTime.Now.AddMinutes(45);
 
-                        Response.Cookies["LoginId"].Domain = ".investmentz.com";
+                       // Response.Cookies["LoginId"].Domain = ".investmentz.com";
 
                         Response.Cookies["SessionId"].Value = mObjUser.sSessionID;
                         Response.Cookies["SessionId"].Expires = DateTime.Now.AddMinutes(45);

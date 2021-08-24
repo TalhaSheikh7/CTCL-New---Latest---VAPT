@@ -168,13 +168,13 @@
                 @*<p id="time-clock" style="color:#00f">&nbsp;</p>*@
                 <div class="demo-section k-content">
                     <input type="hidden" id="Iratechange" data-symbol="" />
-                    <div class="coll-grig-50" style="margin-bottom:12px;">
+                    <div class="coll-grig-50" style="width: 45%;">
                         <input id="watchlistOption" style="width: 30%; font-size: 12px;" />
                         <input id="watchDrop" style="font-size: 12px;bottom: 0px;position: relative;" />
                         <button class="btn btnclas" onclick="AddWatchPopUp();"><i class="fa fa-plus iclass"></i></button>
                         <button class="btn btnclas" onclick="DeleteWatch();"><i class="fa fa-trash iclass"></i></button>
                     </div>
-                    <div class="coll-grig-50">
+                    <div class="coll-grig-50" style="width: 55%;">
                         <input id="lstSegment" style="width: 14%; font-size: 12px;" />
                         <input id="lstCashType" style="width: 17%; font-size: 12px;" />
                         <input type="text" class="scrip-search-box" id="txtsearch" autocomplete="off" style="width:46% !important; font-size: 14px;  border-radius: 1;  border: 0;" />
@@ -296,12 +296,24 @@
                 <div id="modifycancel" style="display:none; text-align:center">
                     <div class="popup_panel">
 
-                        <div style="font-size: 14px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="font-weight: 600; float:left; font-size: 14px; text-align: left; color: #ccc;"><span id="buysell"></span> <span id="scrip"></span><span> x </span><span id="qyt"></span></span> <span class="pull-right"><span style="text-align:left; font-size: 16px;" id="NameCodeData"></span></span></div>
+                        <div style="font-size: 14px;text-align: left;color: #ccc;width: 100%;float: left;">
+                            <span style="font-weight: 600; float:left; font-size: 14px; text-align: left; color: #ccc;">
+                                <span id="buysell"></span>
+                                <span id="modscrip"></span>
+                                <span id="qyt"></span>
+                            </span>
+                            <span class="pull-right">
+                                <span style="text-align:left; font-size: 16px;" id="NameCodeData"></span>
+                            </span>
+                        </div>
 
 
-                        <div style="font-size: 13px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="color: #ccc; width: 175px;float: left;">LTP : ₹<span id="ltprice"></span></span>  <span style="width: 175px;float: left;">Position(Net Wise)</span><span style="width: 175px;float: left;">Holdings : <span id="Oholdings"> </span></span></div>
-                        <div style="padding: 5px 0;clear: both;;">
-                            <table style="width:100%;text-align: left;boder-bottom: 1px solid #312f2f;border-top: 1px solid #312f2f;margin: 15px 0;">
+                        <div style="font-size: 13px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="color: #ccc; width: 175px;float: left;">LTP : ₹<span id="ltprice"></span></span>
+                            <span style="width: 175px;float: left;">Position(Net Wise)</span>
+                            <span style="width: 175px;float: left;">Holdings : <span id="Oholdings"></span></span>
+                        </div>
+                        <div style="padding: 5px 0;clear: both;">
+                            <table style="width:100%;text-align: left;border-bottom: 1px solid #312f2f;border-top: 1px solid #312f2f;margin: 15px 0;">
                                 <tr>
                                     <td>
                                         <table style="width:100%; text-align: left;">
@@ -715,12 +727,13 @@
         <span id="markettype" data-stocktype="1" style="display:none;"></span>
         <span id="ltp" data-ltp="" style="display:none;"></span>
         <div style="font-size: 14px;text-align: left;padding: 10px 0;color: #ccc;">
-            <span id="sellbuy"></span>
             <span id="scriptname" data-token="0" data-buysell="0"></span>
             @*<span>22<sup>nd</sup></span>
-                <span>APR 14500 CR x 75 Qty</span>&nbsp;*@
+        <span>APR 14500 CR x 75 Qty</span>&nbsp;*@
             <span id="tdISINCode"></span>
             <span id="segmenttype" data-segement="CASH" style="float: right;" hidden="hidden"></span>
+
+            <span style="padding-left: 7%;" id="Clientnameucc"></span>
         </div>
         <div style="font-size: 13px; text-align: left; color: #ccc;">
             <span style="color: #ccc; width: 175px;float: left;">NFO: ₹17.80</span>

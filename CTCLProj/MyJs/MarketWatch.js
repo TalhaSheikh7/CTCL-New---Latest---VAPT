@@ -2003,6 +2003,10 @@ function buysellwindow(data, Type="")
         GetNetPositionforFO(nToken, CNCMIS);
     }
 
+    var Code = $("#txtSelectedClient").val().split('-')[0].trim();
+    var Name = $("#txtSelectedClient").val().split('-')[1].trim();
+
+    $("#Clientnameucc").html(Name + '(' + Code +')')
     ShowHide();
 
     KendoWindow("windowbuysell", 650, 540, buyorSell, 0, true);

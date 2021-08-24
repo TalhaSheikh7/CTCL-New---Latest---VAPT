@@ -184,6 +184,8 @@ function GetRequiredStockOrMargin(nCncMis, nToken, Exchange, nOrderAmt, nBuySell
             nQty = $("#txtqty").val();
         } else if (pageid == 2) {
             nQty = $("#tradeqty1").val();
+        } else if (pageid == 3) {
+            nQty = $("#tradeqty").val();
         }
     }
 
@@ -236,6 +238,8 @@ function GetRequiredStockOrMargin(nCncMis, nToken, Exchange, nOrderAmt, nBuySell
         nMarketRate = parseFloat($("#ltp").text());
     } else if (pageid == 2) {
         nMarketRate = parseFloat($("#ltprice1").text())
+    } else if (pageid == 3) {
+        nMarketRate = parseFloat($("#ltprice").text())
     }
 
     

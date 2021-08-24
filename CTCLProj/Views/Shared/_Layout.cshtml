@@ -128,6 +128,8 @@
 
     <script>
         var theme = [];
+        var gblurl1 = "http://localhost:49180/";
+        //var gblurl1 = "https://ctcluat.investmentz.com/";
         $(document).ready(function () {
            // alert(sessionStorage.getItem("MyId"));
 
@@ -201,9 +203,7 @@
                 success: function (data) {
                     //console.log(data);
                     if (data == false) {
-
-                     //   location.href = "https://ctcluat.investmentz.com/Login/Login"
-
+                        location.href = gblurl1 + "Login/Login";
                     }
                     var UserType = localStorage.getItem("EmpCTCLtype");
                     var code = localStorage.getItem("BACode");
