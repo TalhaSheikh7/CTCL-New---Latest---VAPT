@@ -1,3 +1,13 @@
+
+var idList1 = {
+    'key1': 'availMarText1',
+    'key2': 'availMar1',
+    'key3': 'reqMarText1',
+    'key4': 'reqMar1',
+    'key5': 'excessMarText1',
+    'key6': 'excessMar1'
+};
+
 $(document).ready(function () {
     var orderstatus = $("#OStatus").val();
    // OrderBook();
@@ -232,9 +242,7 @@ $("#OCkick").click(function () {
                             field: "",
                             width: 25,
                             title: "",
-                            template: "<a class='k-button' onclick='btncancelmodify(this)' style='width: auto; min-width:auto !important;' data-buysell='#= Getbuysell #' data-exchange-id='#= nExchangeID #' data-instrument='#= Instrument #' data-strike='#= strike #' data-cp='#= cp#' data-expiry-date='#= Expiry #' data-token='#= Token #' data-exchange-constants='#= exchangeconstants #' data-ordertype='#= ordertype#' data-orderno='#= OrderNumber #' data-price='#= TradePRICETIME#' data-trgprice='#= TriggerPrice #' data-orderqty='#= Quantity #' data-pendqty='#= Qtypending #' data-discqty='#= DisclosedQty #' data-cncmis='#= CNCMIS #' data-script='#= Script #' data-Scrip='#= Scrip#' data-ExchangeName='#= ExchangeName#' data-ExchangeOrderID='#= ExchangeOrderID#' data-ClientId='#= ClientId#' data-LTP=''>" +
-                                "<i class='fa fa-ellipsis-v' aria-hidden='true'></i>" +
-                                "</a>"
+                            template: "#if(Status != 'REJECTED' && Status != 'CANCELLED') {# <a class='k-button' onclick='btncancelmodify(this)' style='width: auto; min-width:auto !important;' data-buysell='#= Getbuysell #' data-exchange-id='#= nExchangeID #' data-instrument='#= Instrument #' data-strike='#= strike #' data-cp='#= cp#' data-expiry-date='#= Expiry #' data-token='#= Token #' data-exchange-constants='#= exchangeconstants #' data-ordertype='#= ordertype#' data-orderno='#= OrderNumber #' data-price='#= TradePRICETIME#' data-trgprice='#= TriggerPrice #' data-orderqty='#= Quantity #' data-pendqty='#= Qtypending #' data-discqty='#= DisclosedQty #' data-cncmis='#= CNCMIS #' data-script='#= Script #' data-Scrip='#= Scrip#' data-ExchangeName='#= ExchangeName#' data-ExchangeOrderID='#= ExchangeOrderID#' data-ClientId='#= ClientId#' data-LTP=''> <i class='fa fa-ellipsis-v' aria-hidden='true'></i></a>#} else{}#"
 
                         },
                         {
@@ -309,11 +317,8 @@ $("#OCkick").click(function () {
     }
 
     function btncancelmodify(data) {
-        KendoWindow("modifycancel", 650, 360, "MODIFY / CANCEL ORDER", 0);
-        $("#modifycancel").closest(".k-window").css({
-            top: 350,
-            left: 200
-        });
+        $("#modscrip").html(data.dataset.script);
+        
 
         var ltpid = data.dataset.exchangeConstants + "_" + data.dataset.token
         var ltp = parseFloat($("." + ltpid + "_LR").text()).toFixed(2)
@@ -400,9 +405,15 @@ $("#OCkick").click(function () {
             nCncMis = 0;
         }
 
-        GetRequiredStockOrMargin(nCncMis, token, ExchangeName, price, buysell, orderqty, stocktype, orderno);
+        GetRequiredStockOrMargin(nCncMis, token, ExchangeName, price, buysell, orderqty, stocktype, orderno, 3, idList1);
         GetHolding(script)
         GetNetPositionDetails(token, stocktype, 0);
+
+        KendoWindow("modifycancel", 650, 360, "MODIFY / CANCEL ORDER", 0);
+        $("#modifycancel").closest(".k-window").css({
+            top: "25%",
+            left: "30%"
+        });
     }
     $("#ModifyOrder").click(function () {
         var sinstrument = GetInstrument(localStorage.getItem("instrument"));
