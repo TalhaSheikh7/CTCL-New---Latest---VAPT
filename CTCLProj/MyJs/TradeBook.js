@@ -156,7 +156,7 @@ function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToke
                     resizable: true,
                     pageable: true,
                     reorderable: true,
-                    columnMenu: true,
+                    columnMenu: false,
                     noRecords: true,
                     height: 400,
                     serverPaging: true,
@@ -206,8 +206,8 @@ function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToke
                     },
                     {
                         title: "Trade price", width: 80,
-                        field: "TradePRICETIME",
-                        hidden: "true"
+                        field: "TradePRICETIME"
+                        
                     },
                     {
                         title: "Order Type", width: 80,

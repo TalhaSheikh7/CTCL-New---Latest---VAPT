@@ -238,7 +238,7 @@ getClntInfo = function (cbClntInfoFetched, ctclselectedclient) {
 }
 
 function initAutoComplete(datasource) {
-
+    debugger;
     $('#txtSelectedClient').autocomplete({
         lookup: datasource,
         minChars: 3,
