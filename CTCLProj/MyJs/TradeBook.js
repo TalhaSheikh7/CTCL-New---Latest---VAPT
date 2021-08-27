@@ -685,6 +685,7 @@ else {
     $("#Img4").css('display', 'none');
 
     getClntInfo(function (data) {
+         
         hfldBOIYN = "false";
         for (i = 0; i < data.ClientInfo.length; i++) {
             if (data.ClientInfo[i].Segment.toUpperCase() == "CASH") {
@@ -724,6 +725,7 @@ function tWatchSelection() {
 }
 
 function GetBoiLienSetting() {
+     
     if ($("#hfldBOIYN").val() == "Y") {
         document.getElementById("fgft").style.visibility = "visible";
         $("#FL").prop("disabled", false); $("#FL").prop("checked", true);

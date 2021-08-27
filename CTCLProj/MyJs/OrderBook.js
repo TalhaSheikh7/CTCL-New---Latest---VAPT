@@ -9,6 +9,7 @@ var idList1 = {
 };
 
 $(document).ready(function () {
+     
     var orderstatus = $("#OStatus").val();
    // OrderBook();
     GetOrder(orderstatus);

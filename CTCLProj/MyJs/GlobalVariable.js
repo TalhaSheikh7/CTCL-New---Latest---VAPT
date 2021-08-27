@@ -136,6 +136,8 @@ function clearStorage() {
 
 
 $(document).on("change", "#cmbClients", function (event) {
+/*$("#cmbClients").change(function (event) {*/
+     
     $('#hfldUser').val($("#cmbClients").val());
 
     setGlobalVariable("BaClientcode", $("#cmbClients").val());
@@ -145,6 +147,7 @@ $(document).on("change", "#cmbClients", function (event) {
         $("#cmbClients").val(getGlobalVariable("BaClientcode", ""));
 
         getClntInfo(function (data) {
+             
             hfldBOIYN = "false";
             for (i = 0; i < data.ClientInfo.length; i++) {
                 if (data.ClientInfo[i].Segment.toUpperCase() == "CASH") {
@@ -171,6 +174,7 @@ $(document).on("change", "#cmbClients", function (event) {
     }
     else {
         getClntInfo(function (data) {
+             
             hfldBOIYN = "false";
             for (i = 0; i < data.ClientInfo.length; i++) {
                 if (data.ClientInfo[i].Segment.toUpperCase() == "CASH") {
@@ -207,6 +211,7 @@ saveClntInfo = function (clntInfo) {
 };
 
 getClntInfo = function (cbClntInfoFetched, ctclselectedclient) {
+     
     clearClntInfo();
     var data = getGlobalVariable("AvailClnts", "");
     if (data != "" && cbClntInfoFetched != null) {
@@ -238,7 +243,7 @@ getClntInfo = function (cbClntInfoFetched, ctclselectedclient) {
 }
 
 function initAutoComplete(datasource) {
-    debugger;
+     
     $('#txtSelectedClient').autocomplete({
         lookup: datasource,
         minChars: 3,

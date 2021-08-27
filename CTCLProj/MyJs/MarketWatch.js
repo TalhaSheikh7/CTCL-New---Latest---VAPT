@@ -1309,7 +1309,7 @@ function FillWatchGrid(data, type)
 
         });
     }
-    //debugger;
+    // 
     //reconnectSocketAndSendTokens("lblScripts");
 
     $("#WatchList").kendoGrid({
