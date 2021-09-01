@@ -32,6 +32,8 @@ var isShift = false;
 var nHoldingWatchID = -1;
 var idleState = false;
 var idleTimer = null;
+var tokenkey, sScript, gInterval1, gInterval2;
+var cnt = 1;
 
 var idList = {
     'key1': 'availMarText',
@@ -935,8 +937,6 @@ var gridDs = new kendo.data.DataSource({
 });
 
 
-//  $.ajax()
-
 
 function getWatch() {
 
@@ -1140,9 +1140,7 @@ function ChangeWatchList() {
 
 function FillWatchGrid(data, type)
 {
-    //return false;
-    //var scrip = "";
-    //var button = "";
+    
     var ExpiryDate = "";
     var sScripts = "";
     //var scrip2 = "";
@@ -1236,24 +1234,24 @@ function FillWatchGrid(data, type)
             sScripts = sScripts.concat(Exchangeconstant + '.' + row.nToken + ',');
             nExchange = '<span><strong>' + GetExchangeType(ExchangeId) + '</strong></span>';
             //scrip = '<span>' + row.sScript + ' ' + row.sInstrument + ' -NSE</span>';
-            RateChange = '<span style="backgound-color:red;"><strong class="' + Exchangeconstant + '_' + row.nToken + '_RateChange"></strong</span>';
-            ChangePerc = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_RateChangePc"></strong</span>';
-            High = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_H"></strong</span>';
-            Low = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_L"></strong</span>';
+            RateChange = '<span style="backgound-color:red;"><strong class="' + Exchangeconstant + '_' + row.nToken + '_RateChange"></strong></span>';
+            ChangePerc = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_RateChangePc"></strong></span>';
+            High = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_H"></strong></span>';
+            Low = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_L"></strong></span>';
 
-            Open = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_O"></strong</span>';
-            Close = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_PC"></strong</span>';
+            Open = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_O"></strong></span>';
+            Close = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_PC"></strong></span>';
 
-            BuyQty = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_BQ"></strong</span>';
-            BuyPrice = '<span class="num-qty1"><strong class="' + Exchangeconstant + '_' + row.nToken + '_SR"></strong</span>';
-            SellQty = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_SQ"></strong</span>';
-            SellPrice = '<span class="num-qty2"><strong class="' + Exchangeconstant + '_' + row.nToken + '_BR"></strong</span>';
-            LTQ = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_LQ"></strong</span>';
-            LTD = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_LUD"></strong</span>';
-            LTT = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_LUDT"></strong</span>';
-            TotalQty = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_TQ"></strong</span>';
-            ATP = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_ATP"></strong</span>';
-            OpenInt = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_OI"></strong</span>';
+            BuyQty = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_BQ"></strong></span>';
+            BuyPrice = '<span class="num-qty1"><strong class="' + Exchangeconstant + '_' + row.nToken + '_SR"></strong></span>';
+            SellQty = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_SQ"></strong></span>';
+            SellPrice = '<span class="num-qty2"><strong class="' + Exchangeconstant + '_' + row.nToken + '_BR"></strong></span>';
+            LTQ = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_LQ"></strong></span>';
+            LTD = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_LUD"></strong></span>';
+            LTT = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_LUDT"></strong></span>';
+            TotalQty = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_TQ"></strong></span>';
+            ATP = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_ATP"></strong></span>';
+            OpenInt = '<span><strong class="' + Exchangeconstant + '_' + row.nToken + '_OI"></strong></span>';
 
             GridColumns.push({
                 nExchangeConstants: Exchangeconstant,
@@ -1376,9 +1374,29 @@ function FillWatchGrid(data, type)
                     '<i class="fa fa-minus"></i>' +
                     '</button>' +
 
-                    '<button class="k-button" style="min-width: 30px; background-color:white;" title="Chart"> ' +
+                    //by nilesh on 27-05-2021 for showing the chart 
+                    //'<button class="k-button" style="min-width: 30px; background-color:white;" title="Chart"> ' +
+                    //'<i class="fa fa-area-chart facolor"></i>' +
+                    //'</button>' +
+                    
+
+                    '<button class="k-button btnchart" style="min-width: 30px; background-color:white;" ' +
+                    ' id="#= nExchangeConstants #_#= nToken #_sell" title="Chart" ' +
+                    ' data-buysell="2" data-exchangeid = "#= nExchangeID #"' +
+                    ' data-scriptid = "#= nScriptID #"' +
+                    ' data-priceStatus  = "#= sPriceStatus #"' +
+                    ' data-marketwatchid  = "#= nMktWatchID #"' +
+                    ' data-instrument = "#= sInstrument #"' +
+                    ' data-strike = "#= nStrike #"' +
+                    ' data-cp = "#= sCP #"' +
+                    ' data-expirydate = "#= dExpiryDate #"' +
+                    ' data-token = "#= nToken #"' +
+                    ' data-exchangeconstants = "#= nExchangeConstants #"' +
+                    ' data-watchindex = "#= nWatchIndex #"' +
+                    ' data-script = "#= sScript #" > ' +
                     '<i class="fa fa-area-chart facolor"></i>' +
                     '</button>' +
+                    //by nilesh on 27-05-2021 for showing the chart 
 
                     '<button class="k-button" style="min-width: 30px; background-color:white;" title="Opt.Chain" ' +
                     'data-script = "#= sScript #" data-expirydate = "#= dExpiryDate #" ' +
@@ -1552,6 +1570,7 @@ function FillWatchGrid(data, type)
             {
                 title: "LTD",
                 field: "LTD",
+                template: "#= LTD #",
                 filterable: false,
                 width: 80,
                 hidden: true
@@ -1559,6 +1578,7 @@ function FillWatchGrid(data, type)
             {
                 title: "LTT",
                 field: "LTT",
+                template: "#= LTT #",
                 filterable: false,
                 width: 80,
                 hidden: true
@@ -1799,6 +1819,7 @@ inputBox2.addEventListener("keydown", function (e) {
 
 function buysellwindow(data, Type="")
 {
+    debugger;
     if (gblCTCLtype.toString().toLocaleLowerCase() == "emp" && $("#cmbClients").val() == "All") {
         KendoWindow("ClientSelection", 450, 110, "", 0, true);
         return;
@@ -3344,3 +3365,660 @@ function buySellShortcut(buysell)
 
     buysellwindow(datarow, buysell);
 }
+
+// buy nilesh on 30Aug2021 for showoing chart
+
+$(document).on("click", ".btnchart", function (e) {
+    if (gblCTCLtype.toString().toLocaleLowerCase() == "emp" && $("#cmbClients").val() == "All") {
+        KendoWindow("ClientSelection", 450, 110, "", 0, true);
+        return;
+    }
+
+    var Token = $(this).attr("data-exchangeconstants") + '.' + $(this).attr("data-token");
+    var Scriptname = $(this).attr("data-script");
+
+    LoadCharts(Token, Scriptname);
+
+    var time = $(this).attr("data-exchangeconstants") + '_' + $(this).attr("data-token") + '_LUDT';
+    $("#stime").html($("." + time + "").html());
+
+    var ltpid1 = $(this).attr("data-exchangeconstants") + '_' + $(this).attr("data-token");
+
+    var rate = $(this).attr("data-exchangeconstants") + '_' + $(this).attr("data-token") + '_RateChange';
+    var irate = $(this).attr("data-exchangeconstants") + '_' + $(this).attr("data-token") + '_IRateChange';
+    var ltprate = $(this).attr("data-exchangeconstants") + '_' + $(this).attr("data-token") + '_LR';
+    var prate = $(this).attr("data-exchangeconstants") + '_' + $(this).attr("data-token") + '_RateChangePc';
+
+    var ltpid = $(this).attr("data-exchangeconstants") + '_' + $(this).attr("data-token");
+    $("#ltprate").html($("."+ltprate+"").html());
+    $("#plrate").html($("." + ltpid +"_IRateChange").html());
+    $("#mrate").html($("." + rate + "").html());
+    $("#perrate").html($("." + prate + "").html());
+
+
+      
+    if (parseFloat($("#mrate").text().indexOf("-")) != -1) {
+        $("#mrate").css("color", $('.' + ltpid1 + '_RateChange').css('color')); //28082018
+        $("#mrate").css("color", $('.' + ltpid1 + '_RateChange').css('color'));//28082018
+
+    }
+    else {
+        $("#mrate").css("color", $('.' + ltpid1 + '_RateChange').css('color'));//28082018
+        $("#mrate").css("color", $('.' + ltpid1 + '_RateChange').css('color'));//28082018
+    }
+
+    if (parseFloat($("#perrate").text().indexOf("-")) != -1) {
+        $("#perrate").css("color", $('.' + ltpid1 + '_RateChangePc').css('color')); //28082018
+        $("#perrate").css("color", $('.' + ltpid1 + '_RateChangePc').css('color'));//28082018
+
+    }
+    else {
+        $("#perrate").css("color", $('.' + ltpid1 + '_RateChangePc').css('color'));//28082018
+        $("#perrate").css("color", $('.' + ltpid1 + '_RateChangePc').css('color'));//28082018
+    }
+
+    /*if ($('.' + ltpid + '_RateChange').css('color') == "rgb(0, 128, 0)") {*/
+    if ($('.' + ltpid + '_RateChange').css('color') == "rgb(1, 251, 1)") {
+        $('#plrate').attr('class', '');
+        $("#plrate").removeClass("arrows2-d").addClass("arrows2 arrows2-u");
+    }
+    else if ($('.' + ltpid + '_RateChange').css('color') == "rgb(16, 142, 67)") {
+        $('#plrate').attr('class', '');
+        $("#plrate").addClass("arrows2");
+    }
+    else {
+        $('#plrate').attr('class', '');
+        $("#plrate").removeClass("arrows2-u").addClass("arrows2 arrows2-d");
+    }
+
+
+    KendoWindow("Chartswindow", 780, 580, "", 0, true);
+
+});
+
+function tradingViewTime(timeString) //timeString = 2017-11-17 09:34:56
+{
+    var dt = new Date(timeString);
+    //var d1 = (new Date(Date.UTC(dt.getFullYear(), dt.getMonth() + 1, dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()))).getTime();
+    var d1 = (new Date(Date.UTC(dt.getFullYear(), dt.getMonth(), dt.getDate(), dt.getHours(), dt.getMinutes(), dt.getSeconds()))).getTime();
+    return d1 / 1000;
+}
+
+window.formatDate1 = function (inputDate, inputDateFormat, outPutFormat) {
+    if (inputDate == "" && inputDateFormat.val() == "")
+        return "";
+    else {
+        if (inputDate == "NOW")
+            return moment().format(outPutFormat);
+        else {
+            if (inputDateFormat == "") {
+                return moment.utc(inputDate).format(outPutFormat);
+            }
+            else {
+                return moment.utc(inputDate, inputDateFormat).format(outPutFormat);
+            }
+        }
+    }
+}
+
+
+function ToggleCharts() {
+    debugger;
+    if (data1.length > 0) {
+        if ($('#cmbChartType').val() == "1") {
+            $("#chart").html("");
+            var chart = LightweightCharts.createChart(document.getElementById("chart"), {
+                width: 740,
+                height: 400,
+                crosshair: {
+                    mode: LightweightCharts.CrosshairMode.Normal,
+                },
+            });
+
+            var candleSeries = chart.addCandlestickSeries();
+            candleSeries.setData(data1);
+            chart.applyOptions({
+                timeScale: {
+                    rightOffset: 12,
+                    barSpacing: 3,
+                    fixLeftEdge: true,
+                    lockVisibleTimeRangeOnResize: true,
+                    rightBarStaysOnScroll: true,
+                    borderVisible: false,
+                    borderColor: '#fff000',
+                    visible: true,
+                    timeVisible: true,
+                    secondsVisible: true
+                },
+                //},
+                priceScale: {
+                    position: 'right',
+
+                }
+            });
+            //$("tv-lightweight-charts").html(candleSeries);
+            chart.subscribeCrosshairMove(function (param) {
+
+
+                var hoveredData = param.seriesPrices.values().next().value;
+                if (hoveredData == undefined) {
+                    //   $(".legend").css("display", "none");
+                    //  $("#legend").css("display", "none");
+                    if (data1.length > 0) {
+
+
+                        if (data1[data1.length - 1].open.toFixed(2) > data1[data1.length - 1].close.toFixed(2)) {
+                            $(".legend").css("color", "red");
+                            $(".legend-open").css("color", "red");;
+                            $(".legend-close").css("color", "red");
+                            $(".legend-high").css("color", "red");
+                            $(".legend-low").css("color", "red");
+                        }
+                        else if (data1[data1.length - 1].open.toFixed(2) < data1[data1.length - 1].close.toFixed(2)) {
+                            $(".legend").css("color", "green");
+                            $(".legend-open").css("color", "green");;
+                            $(".legend-close").css("color", "green");
+                            $(".legend-high").css("color", "green");
+                            $(".legend-low").css("color", "green");
+                        }
+
+                        $(".legend-open").html(data1[data1.length - 1].open.toFixed(2));
+                        $(".legend-close").html(data1[data1.length - 1].close.toFixed(2));
+                        $(".legend-high").html(data1[data1.length - 1].high.toFixed(2));
+                        $(".legend-low").html(data1[data1.length - 1].low.toFixed(2));
+                    }
+                    else {
+                        $(".legend-open").html("");
+                        $(".legend-close").html("");
+                        $(".legend-high").html("");
+                        $(".legend-low").html("");
+                    }
+
+                }
+                else {
+                    // $(".legend").css("display", "block");
+                    // $("#legend").css("display", "block");
+                    if (hoveredData.open.toFixed(2) > hoveredData.close.toFixed(2)) {
+                        $(".legend").css("color", "red");
+                        $(".legend-open").css("color", "red");;
+                        $(".legend-close").css("color", "red");
+                        $(".legend-high").css("color", "red");
+                        $(".legend-low").css("color", "red");
+                    }
+                    else if (hoveredData.open.toFixed(2) < hoveredData.close.toFixed(2)) {
+                        $(".legend").css("color", "green");
+                        $(".legend-open").css("color", "green");;
+                        $(".legend-close").css("color", "green");
+                        $(".legend-high").css("color", "green");
+                        $(".legend-low").css("color", "green");
+                    }
+                    $(".legend-open").html(hoveredData.open.toFixed(2));
+                    $(".legend-close").html(hoveredData.close.toFixed(2));
+                    $(".legend-high").html(hoveredData.high.toFixed(2));
+                    $(".legend-low").html(hoveredData.low.toFixed(2));
+                }
+            });
+
+            var timeRange = chart.timeScale().getVisibleRange();
+            var timeFrom = 0;
+            var val = 0;
+            val = data1.length * 0.10;
+            val = parseInt(val.toString())
+
+            var range = 40;
+
+            if (data1.length < 40) {
+                range = data1.length * 0.10;
+            }
+
+            timeFrom = data1[data1.length - parseInt(range.toString())].time;
+            chart.timeScale().setVisibleRange({
+                from: timeFrom,//(new Date(Date.UTC(dtToday.getFullYear(), dtToday.getMonth() + 1, dtToday.getDate(), 0, 0, 0, 0))).getTime() / 1000,
+                to: timeRange.to
+            });
+        }
+        else if ($('#cmbChartType').val() == "2") {
+            $("#legend").css("display", "none");
+            var lineData = [];
+            var volumeData = [];
+            for (var i = 0; i < data1.length; i++) {
+                lineData.push({
+                    time: data1[i].time, value: data1[i].high
+                })
+
+            }
+            $("#chart").html("");
+
+
+            var chart = LightweightCharts.createChart(document.getElementById("chart"), {
+                width: 740,
+                height: 400,
+                priceScale: {
+                    scaleMargins: {
+                        top: 0.1,
+                        bottom: 0.1,
+                    },
+                    invertScale: true,
+                },
+            });
+
+            lineSeries = chart.addLineSeries({
+                color: 'rgba(33, 150, 243, 1)',
+                lineWidth: 3,
+            });
+
+
+            lineSeries.setData(lineData);
+            chart.subscribeCrosshairMove(function (param) {
+
+                var hoveredData = param.seriesPrices.values().next().value;
+                if (hoveredData == undefined) {
+                    //  $(".legend").css("display", "none");
+                    $(".legend-open").html("");
+                    $(".legend-close").html("");
+                    $(".legend-high").html("");
+                    $(".legend-low").html("");
+                }
+                else {
+                    //   $(".legend").css("display", "block");
+                    if (hoveredData.open.toFixed(2) > hoveredData.close.toFixed(2)) {
+                        $(".legend").css("color", "red");
+                        $(".legend-open").css("color", "red");;
+                        $(".legend-close").css("color", "red");
+                        $(".legend-high").css("color", "red");
+                        $(".legend-low").css("color", "red");
+                    }
+                    else if (hoveredData.open.toFixed(2) < hoveredData.close.toFixed(2)) {
+                        $(".legend").css("color", "green");
+                        $(".legend-open").css("color", "green");;
+                        $(".legend-close").css("color", "green");
+                        $(".legend-high").css("color", "green");
+                        $(".legend-low").css("color", "green");
+                    }
+                    $(".legend-open").html(hoveredData.open.toFixed(2));
+                    $(".legend-close").html(hoveredData.close.toFixed(2));
+                    $(".legend-high").html(hoveredData.high.toFixed(2));
+                    $(".legend-low").html(hoveredData.low.toFixed(2));
+                }
+            });
+        }
+
+    }
+}
+
+function getdiff(value1, value2, formt) {
+    var lDate = moment().subtract(value1, value2).format(formt);
+    lDate = new Date(lDate);
+    lDate = JSON.stringify(lDate);
+    return lDate;
+}
+
+function charts() {
+    LightweightCharts.createChart(document.getElementById("chart"), {
+        width: 740,
+        height: 400,
+        crosshair: {
+            mode: LightweightCharts.CrosshairMode.Normal,
+        },
+    });
+
+    var candleSeries = chart.addCandlestickSeries();
+    chart.applyOptions({
+        timeScale: {
+            rightOffset: 12,
+            barSpacing: 3,
+            fixLeftEdge: true,
+            lockVisibleTimeRangeOnResize: true,
+            rightBarStaysOnScroll: true,
+            borderVisible: false,
+            borderColor: '#fff000',
+            visible: true,
+            timeVisible: true,
+            secondsVisible: true,
+            tickMarkFormatter: function (timePoint, tickMarkType, locale) {
+                console.log(timePoint, tickMarkType, locale);
+                return String(new Date(timePoint.timestamp * 1000).getUTCFullYear());
+            },
+        },
+        //},
+        priceScale: {
+            position: 'right',
+
+        }
+    });
+    chart.subscribeCrosshairMove(function (param) {
+
+
+        var hoveredData = param.seriesPrices.values().next().value;
+        if (hoveredData == undefined) {
+            //  $(".legend").css("display", "none");
+            $(".legend-open").html("");
+            $(".legend-close").html("");
+            $(".legend-high").html("");
+            $(".legend-low").html("");
+        }
+        else {
+            $(".legend").css("display", "block");
+            if (hoveredData.open.toFixed(2) > hoveredData.close.toFixed(2)) {
+                $(".legend").css("color", "red");
+            }
+            else if (hoveredData.open.toFixed(2) < hoveredData.close.toFixed(2)) {
+                $(".legend").css("color", "green");
+            }
+            $(".legend-open").html(hoveredData.open.toFixed(2));
+            $(".legend-close").html(hoveredData.close.toFixed(2));
+            $(".legend-high").html(hoveredData.high.toFixed(2));
+            $(".legend-low").html(hoveredData.low.toFixed(2));
+        }
+    });
+}
+
+function LoadCharts(Token, Scriptname, interval) {
+    debugger;
+    tokenkey = Token;
+    var ws;
+    $("#chart").html("");
+    $("#scripname").html(Scriptname);
+
+    var gblnChartToken = Token.toString();
+    if (ws == null || ws == undefined || ws.readyState != WebSocket.OPEN) {
+        ws = new WebSocket("wss://" + "foxserver2.com" + ":" + "7001" + "/");
+        // ws = new WebSocket(gblBCastUrl);
+        //alert(ws);
+        ws.onopen = function () {
+            if (interval == undefined) {
+                interval = "15MIN"
+            }
+
+
+            if (interval == "1MIN") {
+                SendJson = { SeqNo: 8, Action: "req", RType: "OHLCV", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":1,\"Bars\":200}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (interval == "5MIN") {
+                SendJson = { SeqNo: 8, Action: "req", RType: "OHLCV", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":5,\"Bars\":200}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (interval == "15MIN") {
+                //var dt = getdiff(1, "days", "YYYY-MM-DD");
+                var dt = getdiff(1, "months", "YYYY-MM-DD");
+                //SendJson = { SeqNo: 8, Action: "req", RType: "OHLCV", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":15,\"Bars\":200}" };
+                //SendJson = { SeqNo: 8, Action: "req", RType: "OHLCV", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":15,\"Bars\":200}" };
+                SendJson = { "SeqNo": 3, "Action": "req", "Topic": gblnChartToken, "RType": "OHLCVFD", "Body": "{\"Period\":\"I\",\"Minutes\":15,\"FromDate\":" + dt + "}" };
+                //SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: { Period: "I", Minutes: 1, FromDate: dt.toString() } };//"{\"Period\":\"I\",\"Minutes\":" + 1 + ",\"FromDate\":" + dt + "}" };
+
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (interval == "30MIN") {
+                SendJson = { SeqNo: 8, Action: "req", RType: "OHLCV", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":30,\"Bars\":200}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (interval == "1H") {
+                SendJson = { SeqNo: 8, Action: "req", RType: "OHLCV", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":60,\"Bars\":200}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (interval == "1D") {
+                SendJson = { SeqNo: 8, Action: "req", RType: "OHLCV", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":1,\"Bars\":1000}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (interval == "1W") {
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%d %b '%y", "week": "%d %b '%y", "month": "%b '%y" };
+                SendJson = { SeqNo: 8, Action: "req", RType: "OHLCV", Topic: gblnChartToken, Body: "{\"Period\":\"D\",\"Minutes\":0,\"Bars\":7}" };
+
+            }
+            else if (interval == "1M") {
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%d %b '%y", "week": "%d %b '%y", "month": "%b '%y" };
+                SendJson = { SeqNo: 8, Action: "req", RType: "OHLCV", Topic: gblnChartToken, Body: "{\"Period\":\"D\",\"Minutes\":5,\"Bars\":200}" };
+
+            }
+
+            ws.send(JSON.stringify(SendJson));
+
+            ws.onmessage = function (evt) {
+                data1 = [];
+                cnt++;
+                var Data = JSON.parse(evt.data).Body;
+                var values = [];
+                var linevalues = [];
+                var array = Data.toString().split('\r\n')
+                var array1 = [];
+                array1 = array1.concat(array);
+
+                for (i = 0; i < array1.length; i++) {
+                    var date;
+                    if (array1[i].split(',')[0] != "") {
+                        date = formatDate1(array1[i].split(',')[0], "YY-MM-DD HH:mm:ss", "MM/DD/YYYY HH:mm:ss");
+                        var dt = formatDate(array1[i].split(',')[0], "YY-MM-DD HH:mm:ss", "MM/DD/YYYY HH:mm:ss");
+                        var dt1 = formatDate(array1[i].split(',')[0], "YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD HH:mm:ss");
+                        linedate = formatDate(array1[i].split(',')[0], "YY-MM-DD", "YYYY-MM-DD");
+                        values.push(
+                            {
+                                TIMESTAMP: new Date(Date.parse(date)),
+                                OPEN: array1[i].split(',')[1],
+                                HIGH: array1[i].split(',')[2],
+                                LOW: array1[i].split(',')[3],
+                                CLOSE: array1[i].split(',')[4],
+                                TURNOVER: array1[i].split(',')[5],
+                                VOLATILITY: 0
+                            })
+
+                        data1.push({
+                            time: tradingViewTime(dt1),//Math.round((new Date(dt)).getTime() / 1000),//new Date(dt).getTime(),//'2018-10-19',
+                            open: parseFloat(array1[i].split(',')[1]),
+                            high: parseFloat(array1[i].split(',')[2]),
+                            low: parseFloat(array1[i].split(',')[3]),
+                            close: parseFloat(array1[i].split(',')[4]),
+                            volume: parseFloat(array1[i].split(',')[5]),
+                        })
+
+                    }
+                }
+
+                ToggleCharts();
+
+                return;
+
+
+            };
+            ws.onerror = function (evt) {
+                alert("Chart Data not coming");
+            };
+            ws.onclose = function () {
+
+            };
+            var chart = charts();
+        }
+    }
+}
+
+$('#interval2').change(function () {
+    debugger;
+    gInterval2 = $(this).val();
+    RefreshChart();
+});
+
+function RefreshChart() {
+    debugger;
+    var dt;
+    var lws;
+    $("#chart").html("<div style='text-align:center'><i class='fa fa-spin fa-spinner'></i><br/>Re-Loading Charts Data ...</div>");
+    var gblnChartToken = tokenkey.toString();
+    if (lws == null || lws == undefined || lws.readyState != WebSocket.OPEN) {
+        lws = new WebSocket("wss://" + "foxserver2.com" + ":" + "7001" + "/");
+
+        lws.onopen = function () {
+            if (gInterval1 == undefined) {
+                gInterval1 = "6Mo"
+            }
+            gInterval2 = $('#interval2').val();
+
+            if (gInterval2 == "1D") {
+                dt = getdiff(1, "days", "YYYY-MM-DD");
+
+                //SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"D\",\"Minutes\":" + 0 + ",\"FromDate\":" + "2010-01-01T18:30:00Z" + "}" };
+                //Req, {"SeqNo":3,"Action":"req","Topic":"17.2885","RType":"OHLCVTD","Body":"{\"Period\":\"D\",\"Minutes\":0,\"ToDate\":\"2020-03-16T18:30:00Z\",\"Bars\":100}"}
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVTD", Topic: gblnChartToken, Body: "{\"Period\":\"D\",\"Minutes\":" + 0 + ",\"ToDate\":" + "2020-03-21T18:30:00Z" + ",\"Bars\":100}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (gInterval2 == "1W") {
+                dt = getdiff(1, "days", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"W\",\"Minutes\":" + 0 + ",\"FromDate\":" + "2010-01-01T18:30:00Z" + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (gInterval2 == "1Mo") {
+                dt = getdiff(1, "days", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"M\",\"Minutes\":" + 0 + ",\"FromDate\":" + "2010-01-01T18:30:00Z" + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+
+            //// Added by ARV on 20-05-2020 for changes as per new falcon data ////////
+
+            else if (gInterval2 == "1") {
+                dt = getdiff(1, "days", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":" + gInterval2 + ",\"FromDate\":" + dt + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (gInterval2 == "5") {
+                dt = getdiff(5, "days", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":" + gInterval2 + ",\"FromDate\":" + dt + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (gInterval2 == "10") {
+                dt = getdiff(1, "months", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":" + gInterval2 + ",\"FromDate\":" + dt + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (gInterval2 == "15") {
+                dt = getdiff(1, "months", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":" + gInterval2 + ",\"FromDate\":" + dt + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (gInterval2 == "30") {
+                dt = getdiff(3, "months", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":" + gInterval2 + ",\"FromDate\":" + dt + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (gInterval2 == "60") {
+                dt = getdiff(6, "months", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":" + gInterval2 + ",\"FromDate\":" + dt + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+
+            //////////////////////////////////////////////////////
+
+            else if (gInterval1 == "6Mo") {
+                dt = getdiff(6, "months", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":" + gInterval2 + ",\"FromDate\":" + dt + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (gInterval1 == "1D") {
+
+                dt = getdiff(1, "days", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":" + gInterval2 + ",\"FromDate\":" + dt + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (gInterval1 == "5D") {
+                dt = getdiff(5, "days", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":" + gInterval2 + ",\"FromDate\":" + dt + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (gInterval1 == "1Mo") {
+                dt = getdiff(1, "months", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":" + gInterval2 + ",\"FromDate\":" + dt + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+
+            else if (gInterval1 == "3Mo") {
+                dt = getdiff(3, "months", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":" + gInterval2 + ",\"FromDate\":" + dt + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+
+            else if (gInterval1 == "5Mo") {
+                dt = getdiff(5, "months", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":" + gInterval2 + ",\"FromDate\":" + dt + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+
+            else if (gInterval1 == "1Yr") {
+                dt = getdiff(1, "years", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":" + gInterval2 + ",\"FromDate\":" + dt + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (gInterval1 == "2Yr") {
+                dt = getdiff(2, "years", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":" + gInterval2 + ",\"FromDate\":" + dt + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+            else if (gInterval1 == "3Yr") {
+                dt = getdiff(3, "years", "YYYY-MM-DD");
+                SendJson = { SeqNo: 3, Action: "req", RType: "OHLCVFD", Topic: gblnChartToken, Body: "{\"Period\":\"I\",\"Minutes\":" + gInterval2 + ",\"FromDate\":" + dt + "}" };
+                TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
+            }
+
+
+            lws.send(JSON.stringify(SendJson));
+
+            lws.onmessage = function (evt) {
+                data1 = [];
+                cnt++;
+                var Data = JSON.parse(evt.data).Body;
+                var values = [];
+
+                var linevalues = [];
+
+                var array = Data.toString().split('\r\n')
+                var array1 = [];
+                array1 = array1.concat(array);
+
+                for (i = 0; i < array1.length; i++) {
+                    var date;
+                    if (array1[i].split(',')[0] != "") {
+
+                        date = formatDate1(array1[i].split(',')[0], "YY-MM-DD HH:mm:ss", "MM/DD/YYYY HH:mm:ss");
+                        var dt = formatDate(array1[i].split(',')[0], "YY-MM-DD HH:mm:ss", "MM/DD/YYYY HH:mm:ss");
+                        var dt1 = formatDate(array1[i].split(',')[0], "YYYY-MM-DD HH:mm:ss", "YYYY-MM-DD HH:mm:ss");
+                        linedate = formatDate(array1[i].split(',')[0], "YY-MM-DD", "YYYY-MM-DD");
+                        values.push(
+                            {
+                                TIMESTAMP: new Date(Date.parse(date)),
+                                OPEN: array1[i].split(',')[1],
+                                HIGH: array1[i].split(',')[2],
+                                LOW: array1[i].split(',')[3],
+                                CLOSE: array1[i].split(',')[4],
+                                TURNOVER: array1[i].split(',')[5],
+                                VOLATILITY: 0
+                            })
+                        //19-12-02 15:18:15
+                        //2017-11-17 09:34:56
+                        data1.push({
+                            time: tradingViewTime(dt1),//Math.round((new Date(dt)).getTime() / 1000),//new Date(dt).getTime(),//'2018-10-19',
+                            open: parseFloat(array1[i].split(',')[1]),
+                            high: parseFloat(array1[i].split(',')[2]),
+                            low: parseFloat(array1[i].split(',')[3]),
+                            close: parseFloat(array1[i].split(',')[4]),
+                            volume: parseFloat(array1[i].split(',')[5]),
+                        })
+                    }
+                }
+
+                ToggleCharts();
+
+                return;
+
+            };
+            lws.onerror = function (evt) {
+                alert("Chart Data not coming");
+            };
+            lws.onclose = function () {
+                //  alert("closed");
+            };
+
+            var chart = charts();
+        }
+    }
+
+
+}
+
+// buy nilesh on 1AUG2021 for showoing chart

@@ -138,6 +138,7 @@
 
 
     <script src="js/kendo.all.min.js"></script>*@
+<script src="~/MyJs/lightweight-charts.standalone.production.js"></script>
 <link href="~/Content/kendo/2021.1.224/kendostyle.css" rel="stylesheet" />
 @*</head>*@
 
@@ -215,7 +216,7 @@
     <div id="tabWindow">
         <div id="tabstrip">
             <ul>
-                <li id="tBook" class="k-state-active" >
+                <li id="tBook" class="k-state-active">
                     TradeBook
                 </li>
                 <li id="oBook">
@@ -288,8 +289,8 @@
             </div>
             <div>
                 @*<input id="Omraketsegment" style="width: 12%; font-size: 12px;" />
-        <input id="Omarketscript" style="width: 12%; font-size: 12px;" />
-        <input id="OStatus" />*@
+                    <input id="Omarketscript" style="width: 12%; font-size: 12px;" />
+                    <input id="OStatus" />*@
                 <div id="OrderBookgrid" style="height:100%;">
                 </div>
 
@@ -308,7 +309,8 @@
                         </div>
 
 
-                        <div style="font-size: 13px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="color: #ccc; width: 175px;float: left;">LTP : ₹<span id="ltprice"></span></span>
+                        <div style="font-size: 13px;text-align: left;color: #ccc;width: 100%;float: left;">
+                            <span style="color: #ccc; width: 175px;float: left;">LTP : ₹<span id="ltprice"></span></span>
                             <span style="width: 175px;float: left;">Position(Net Wise)</span>
                             <span style="width: 175px;float: left;">Holdings : <span id="Oholdings"></span></span>
                         </div>
@@ -491,30 +493,30 @@
                 </div>
                 <div id="modTradeOrderModify" style="display:none; text-align:center">
                     <div id="modTradeOrderModifyO"></div>
-                    </div>
                 </div>
+            </div>
             <div>
 
-                    @*<input id="drpMarketSelection" style="width: 12%; font-size: 12px;" />
-            <input id="dtrange" style="width: 12%; font-size: 12px;" />*@
-                    <button id="btnRefresh" style="width: 12%; font-size: 12px;">Refresh</button>
-                    <button id="btnsqoff" style="width: 12%; font-size: 12px;">Sq. Off</button>
-                    <div id="sqoffpopup" style="display:none; text-align:center">
+                @*<input id="drpMarketSelection" style="width: 12%; font-size: 12px;" />
+                    <input id="dtrange" style="width: 12%; font-size: 12px;" />*@
+                <button id="btnRefresh" style="width: 12%; font-size: 12px;">Refresh</button>
+                <button id="btnsqoff" style="width: 12%; font-size: 12px;">Sq. Off</button>
+                <div id="sqoffpopup" style="display:none; text-align:center">
 
-                        <div id="sqallgrid" style="height:100%;">
-                        </div>
-                        @*  <div class="form-group" style="margin-top: 45px;">*@
-                        <input type="button" onclick="btnSqALL();" id="btnSqlAll" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;" value="OK">
-                        <button id="btncancel" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;">CANCEL</button>
-                        <!--</div>-->
+                    <div id="sqallgrid" style="height:100%;">
                     </div>
-                    <div id="NetPositionGrid" style="height:100%;">
-                    </div>
+                    @*  <div class="form-group" style="margin-top: 45px;">*@
+                    <input type="button" onclick="btnSqALL();" id="btnSqlAll" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;" value="OK">
+                    <button id="btncancel" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;">CANCEL</button>
+                    <!--</div>-->
+                </div>
+                <div id="NetPositionGrid" style="height:100%;">
+                </div>
 
-                    <td width="22%" class="total-pl">
-                        <img id="pl" src="../img/icons/down-arrow-01.png" width="12px" data-original-title="" title="">
-                        <span class="tp">Today's P/L:</span> <span id="tpcol" class="red_text">&nbsp;&nbsp; <strong id="todaypl"></strong></span>
-                    </td>
+                <td width="22%" class="total-pl">
+                    <img id="pl" src="../img/icons/down-arrow-01.png" width="12px" data-original-title="" title="">
+                    <span class="tp">Today's P/L:</span> <span id="tpcol" class="red_text">&nbsp;&nbsp; <strong id="todaypl"></strong></span>
+                </td>
 
 
             </div>
@@ -589,25 +591,25 @@
                                     <a id="viewLedger" class="fundData">View</a>
                                 </td>
 
-                                    <td>
+                                <td>
 
-                                        <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">QUICK REPORTS</a>
-                                    </td>
-                                    <td>
-                                        <a id="" onclick="Backoffice()" class="fundData">BACKOFFICE REPORTS</a>
-                                    </td>
-                                    <td>
-                                        <a href="~/Home/FundTransfer" class="fundData" target="_blank">FUND PAYIN</a>
-                                    </td>
-                                    <td>
-                                        <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">WITHDRAW FUND</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+                                    <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">QUICK REPORTS</a>
+                                </td>
+                                <td>
+                                    <a id="" onclick="Backoffice()" class="fundData">BACKOFFICE REPORTS</a>
+                                </td>
+                                <td>
+                                    <a href="~/Home/FundTransfer" class="fundData" target="_blank">FUND PAYIN</a>
+                                </td>
+                                <td>
+                                    <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">WITHDRAW FUND</a>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 </div>
 <div id="windowForAdd" style="display:none">
@@ -729,7 +731,7 @@
         <div style="font-size: 14px;text-align: left;padding: 10px 0;color: #ccc;">
             <span id="scriptname" data-token="0" data-buysell="0"></span>
             @*<span>22<sup>nd</sup></span>
-        <span>APR 14500 CR x 75 Qty</span>&nbsp;*@
+                <span>APR 14500 CR x 75 Qty</span>&nbsp;*@
             <span id="tdISINCode"></span>
             <span id="segmenttype" data-segement="CASH" style="float: right;" hidden="hidden"></span>
 
@@ -1195,6 +1197,97 @@
     @*<input ID="hfldUser" type="text" hidden />*@
 </div>
 
+
+<div id="Chartswindow" style="display:none; text-align:center">
+    <div class="popup_panel">
+        <span id="markettype" data-stocktype="1" style="display:none;"></span>
+        <span id="ltp" data-ltp="" style="display:none;"></span>
+        <div style="font-size: 13px; text-align: left; color: #ccc;">
+            <div class="row">
+                <div class="col-md-2">
+                    <select id="cmbChartType">
+                        <option value="1">CandleStick Chart</option>
+                    </select>
+                </div>
+                <div class="col-md-2">
+                    <select id="interval2">
+                        <option value="1">1 Min</option>
+                        <option value="5">5 Min</option>
+                        <option value="10">10 Min</option>
+                        <option value="15" selected="selected">15 Min</option>
+                        <option value="30">30 Min</option>
+                        <option value="60">1 Hr</option>
+                        @*<option value="" disabled="disabled">----------------</option>
+                        <option value="1D">1 D</option>
+                        <option value="1W">1 W</option>
+                        <option value="1Mo">1 Mo</option>*@
+                    </select>
+                </div>
+
+                <div class="col-md-2 pd-top text-right">
+                    <span id="scripname" style="font-size: 20px; font-weight:600"></span>
+                    <span  id="ltprate"></span>
+                </div>
+                <div class="col-md-1 pd-tops">
+                    <span id="ltprate"></span>
+                </div>
+                <div class="col-md-2 pd-top">
+
+                    <span class="arrows" style="margin-top: 1px;" id="plrate"></span>
+                    <span class="sare-color"><strong id="mrate"></strong></span>
+                    <span class="sare-color"  id="perrate"></span>
+                    <span style="float: right; font-size: 18px; color: #f60; font-weight: 800; margin-right: 20px;">
+                        <span id="stime"></span>
+                    </span>
+                </div>
+
+
+                <div class="col-md-2 pd-top pull-right">
+                    <span style="margin: 17px 15px 10px 0;font-size: 18px;color: #f60;font-weight: 800;">
+                        <span id="stime"></span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div style="font-size: 13px; text-align: left; color: #ccc;">
+            <div style="font-size: 13px; text-align: left; color: #ccc;">
+                <div class="">
+                    <div id="legend" class="pull-left">
+                        <span style="margin-right: 3px;">
+                            <sub style="color: #FFFFFF; bottom: 0 !important; font-size: 15px;">O</sub>
+                            <sub style="color: #f00; bottom: 0 !important; font-size: 15px;" class="legend-open">0</sub>
+                        </span>
+                        <span style="margin-right: 3px;">
+                            <sub style="color: #FFFFFF; bottom: 0 !important; font-size: 15px; ">H</sub>
+                            <sub style="color: #f00; bottom: 0 !important; font-size: 15px;" class="legend-high">0</sub>
+                        </span>
+                        <span style="margin-right: 3px;">
+                            <sub style="color: #FFFFFF; bottom: 0 !important; font-size: 15px;">L</sub>
+                            <sub style="color: #f00; bottom: 0 !important; font-size: 15px;" class="legend-low">0</sub>
+                        </span>
+                        <span style="margin-right: 3px;">
+                            <sub style="color: #FFFFFF; bottom: 0 !important; font-size: 15px;">C</sub>
+                            <sub style="color: #f00; bottom: 0 !important; font-size: 15px;" class="legend-close">0</sub>
+                            <sub style="color: #f00; bottom: 0 !important; font-size: 15px;"></sub>
+                        </span>
+                    </div>
+
+                    <div class="pull-right" style="font-size: 16px; margin-right: 10px;">
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div style="padding: 5px 0;clear: both;">
+            <div id="chart">
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
 <div id="fundSummary" style="display:none">
     <div id="headerset" style="height:100%;"></div>
 </div>
@@ -1268,9 +1361,31 @@
     </div>
 </div>
 
-@*</body>
-    </html>*@
 
+<script type="text/javascript">
+
+
+    function drawChart() {
+
+        var data = google.visualization.arrayToDataTable([
+            ['Task', 'Hours per Day'],
+            ['Work', 11],
+            ['Eat', 2],
+            ['Commute', 2],
+            ['Watch TV', 2],
+            ['Sleep', 7]
+        ]);
+
+        var options = {
+            title: 'My Daily Activities'
+
+        };
+
+        var chart = new google.visualization.PieChart(document.getElementById('piechart'));
+
+        chart.draw(data, options);
+    }
+</script>
 <script src="~/MyJs/MarketWatch.js"></script>
 <script src="~/MyJs/TradeBook.js"></script>
 <script src="~/MyJs/Holding.js"></script>

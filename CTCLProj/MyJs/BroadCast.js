@@ -68,7 +68,6 @@ function reconnectSocketAndSendTokens(lblScript) {
 }
 
 function ProcessData(bcastData, lblScript) {
-    //alert(Qty);
     var Data = JSON.parse(JSON.parse(bcastData).Body);
 
     var SymbolId = '';

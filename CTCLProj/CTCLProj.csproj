@@ -686,6 +686,7 @@
     <Content Include="MyJs\Holding.js" />
     <Content Include="MyJs\jquery.autocomplete.min.js" />
     <Content Include="MyJs\KendoGlobalFunctions.js" />
+    <Content Include="MyJs\lightweight-charts.standalone.production.js" />
     <Content Include="MyJs\Login.js" />
     <Content Include="MyJs\lz-string.js" />
     <Content Include="MyJs\MarketWatch.js" />
