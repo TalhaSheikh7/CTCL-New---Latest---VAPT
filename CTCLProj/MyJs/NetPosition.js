@@ -352,9 +352,9 @@ function FillGrid(msg) {
                 MISCNC: CNCMIS,
                 Scrip: strDisplay,
                 NetQty: row.NetQty,
-                Netavg: Netavg,
-                LTP: currrate,
-                MTOM: NetM2M,
+                Netavg: $("<div/>").html(Netavg).text(),
+                LTP: $("<div/>").html(currrate).text(),
+                MTOM: $("<div/>").html(NetM2M).text() ,
                 Exchange: Exchange,
                 Token: row.Token,
                 ExchangeBroadcastConstant: row.ExchangeBroadcastConstant,
@@ -444,13 +444,13 @@ function FillGrid(msg) {
             title: "Net Qty",
             field: "NetQty",
             width: 166,
-            footerTemplate: "Total: <span id='footerPlaceholder1'>#=getTotalNetQty()#</span>"
+            footerTemplate: "Total: #=getTotalNetQty()#"
         },
         {
             title: "Net avg", 
             field: "Netavg",
             template: "#= Netavg #",
-            footerTemplate: "Total: <span id='footerPlaceholder'>#=getTotalNetAvg()#</span>"
+            footerTemplate: "Total:#=getTotalNetAvg()#"
         },
         {
             title: "LTP",

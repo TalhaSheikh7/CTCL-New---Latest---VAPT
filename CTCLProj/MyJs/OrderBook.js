@@ -9,6 +9,7 @@ var idList1 = {
 };
 
 $(document).ready(function () {
+     
     var orderstatus = $("#OStatus").val();
    // OrderBook();
     GetOrder(orderstatus);
@@ -228,7 +229,7 @@ $("#OCkick").click(function () {
                     resizable: true,
                     pageable: true,
                     reorderable: true,
-                    columnMenu: true,
+                    columnMenu: false,
                     noRecords: true,
                     height: 400,
                     serverPaging: true,
@@ -236,6 +237,9 @@ $("#OCkick").click(function () {
                     toolbar: ["search", "excel", "pdf"],
                     filterable: {
                         mode: "row"
+                    },
+                    pdf: {
+                        fileName: "OrderBook.pdf"
                     },
                     columns: [
                         {
@@ -252,16 +256,16 @@ $("#OCkick").click(function () {
                         }, {
                             title: "Order Time", width: 80,
                             field: "OrderTime",
-                            hidden: "true"
+                          /*  hidden: true*/
                         },
                         {
                             title: "Scrip", width: 100,
                             field: "Scrip"
                         },
                         {
-                            title: "BuySell",
+                            title: "BuySell", width: 100,
                             field: "BuySell",
-                            hidden: "true"
+                          /*  hidden: true*/
                         },
                         {
                             title: "Quantity", width: 80,
@@ -286,12 +290,12 @@ $("#OCkick").click(function () {
                         {
                             title: "Trade price", width: 80,
                             field: "TradePRICETIME",
-                            hidden: "true"
+                       /*     hidden: true*/
                         },
                         {
                             title: "CNC/MIS", width: 80,
                             field: "CNCMIS",
-                            hidden: "true"
+                         /*   hidden: true*/
                         },
                         {
                             title: "Status", width: 80,

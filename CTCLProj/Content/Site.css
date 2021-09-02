@@ -95,3 +95,27 @@ p .k-button {
     font-size: 10px;
     height: 15px;
 }
+
+.arrows2-d {
+    background-position-y: -56px !important;
+}
+
+.arrows2 {
+    width: 16px;
+    display: block;
+    height: 25px;
+    overflow: hidden;
+    float: left;
+    background-image: url(../img/icons/arrows_spike.png);
+    background-repeat: no-repeat;
+    background-position-y: 30px;
+}
+
+.arrows2-u {
+    background-position-y: 0px !important;
+}
+
+.sare-color {
+    color: #108e43;
+    font-weight: 400;
+}

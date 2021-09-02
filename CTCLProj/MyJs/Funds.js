@@ -25,7 +25,7 @@ function Backoffice() {
         url: "https://ctcluat.investmentz.com/Home/Old_GoToBackReport",
         data: {},
         success: function (data) {
-            debugger;
+             
             //console.log(data)
             // window.open('https://web.investmentz.com/BackOfficeReport/?LoginId=ACM5046&SessionId=5badbe41-7193-4ca9-91af-1574a9761c99&Bacode=RC115', '_blank');
             window.open('https://web.investmentz.com/BackOfficeReport/?LoginId=' + data[0] + '&SessionId=' + data[1] + '&Bacode=RC115', '_blank');

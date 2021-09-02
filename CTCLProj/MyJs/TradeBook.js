@@ -159,7 +159,7 @@ function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToke
                     resizable: true,
                     pageable: true,
                     reorderable: true,
-                    columnMenu: true,
+                    columnMenu: false,
                     noRecords: true,
                     height: 400,
                     serverPaging: true,
@@ -209,8 +209,8 @@ function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToke
                     },
                     {
                         title: "Trade price", width: 80,
-                        field: "TradePRICETIME",
-                        hidden: "true"
+                        field: "TradePRICETIME"
+                        
                     },
                     {
                         title: "Order Type", width: 80,
@@ -694,6 +694,7 @@ else {
     $("#Img4").css('display', 'none');
 
     getClntInfo(function (data) {
+         
         hfldBOIYN = "false";
         for (i = 0; i < data.ClientInfo.length; i++) {
             if (data.ClientInfo[i].Segment.toUpperCase() == "CASH") {
@@ -733,6 +734,7 @@ function tWatchSelection() {
 }
 
 function GetBoiLienSetting() {
+     
     if ($("#hfldBOIYN").val() == "Y") {
         document.getElementById("fgft").style.visibility = "visible";
         $("#FL").prop("disabled", false); $("#FL").prop("checked", true);

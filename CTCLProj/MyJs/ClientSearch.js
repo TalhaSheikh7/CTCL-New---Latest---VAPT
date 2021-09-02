@@ -68,6 +68,7 @@ $(document).ready(function () {
 
     $("#txtSelectedClient").on("change keyup paste", clearStorage);
     function clearStorage() {
+         
         if ($("#txtSelectedClient").val() == "") {
             $("#hdnSelectedClient").val("").trigger("change");
             setGlobalVariable(selectedClntKey, "");
@@ -234,6 +235,7 @@ $(document).ready(function () {
 
     // setup autocomplete function pulling from currencies[] array
     function initAutoComplete(datasource) {
+         
         //console.log(datasource);
         $('#txtSelectedClient').autocomplete({
             lookup: datasource,
@@ -267,7 +269,7 @@ $(document).ready(function () {
                 if (dispText != "" && dispText != null && dispText != undefined) {
                     var clientcode1 = $("#txtSelectedClient").val().split('-')[0].trim();
                     localStorage.setItem("_ClientCode", clientcode1);
-                    window.location.reload();
+                   // window.location.reload();
                     $.ajax({
                         type: "GET",
                         url: common_url + "/Home/clientcheck",
