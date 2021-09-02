@@ -396,108 +396,122 @@ namespace CTCLProj.Controllers
 
                 ClientName = GetClientName(strLoginId);
 
-
-                string strTemp = "";
-
-                if (strLoginId == "")
-                    strLoginId = hFldFPwdLoginId;
-
-                if (hFldPopupOperation == "FLOGIN")
+                if(ClientName == "Incorrect User")
                 {
-                    strTemp = ValidateLogin(strLoginId, null, 1);
+                    
                 }
                 else
                 {
-                    strTemp = ValidateLogin(strLoginId, null);
-                }
+                    string strTemp = "";
 
-                if (strTemp == "")
-                {
-                    if (MobileNumber == "")
+                    if (strLoginId == "")
+                        strLoginId = hFldFPwdLoginId;
+
+                    if (hFldPopupOperation == "FLOGIN")
                     {
-                        strTemp = "Mobile no. should not be left blank!!";
-                    }
-                    else if (MobileNumber.All(char.IsDigit) && MobileNumber.Length <= 15 && MobileNumber.Length >= 10)
-                    {
-                        strTemp = "";
-                        if (hFldOtpVisible == "T")
-                        {
-                            if (txtFPwdOTP.Trim() == "")
-                            {
-                                strTemp = "Otp should not be left blank!!";
-                            }
-                            else if (txtFPwdOTP.All(char.IsDigit))
-                            {
-                                resp = client.ChangePassword("FP2", strLoginId, "", txtFPwdOTP);
-                                switch (Convert.ToInt32(resp.RespCode))
-                                {
-                                    case 1:
-                                        if (hFldPopupOperation == "FPWD")
-                                        {
-                                            ResetForgotPassword("", "", strLoginId, MobileNumber);
-                                            OpenChangePasswordPopup(strLoginId, null, "");
-
-                                        }
-                                        //else
-                                        else if (hFldPopupOperation == "FLOGIN")
-                                        {
-
-                                        }
-                                        else if(hFldPopupOperation == "FMPIN")
-                                        {
-
-                                        }
-                                        break;
-                                    default:
-                                        break;
-                                }
-                            }
-                            else
-                            {
-                                strTemp = String.Format("{0} is not in valid format!!", MobileNumber);
-                            }
-
-                        }
-                        else
-                        {
-
-                            if (hFldPopupOperation == "FLOGIN")
-                                resp = client.CreateLoginId(strLoginId, "", "", "", "");
-                            else
-                                resp = new AuthResponse() { RespCode = "1", RespMessage = "For forgot password above check is not required!!" };
-
-                            if (resp.RespCode == "1")
-                            {
-                                resp = client.ChangePassword("FP1", strLoginId, "", MobileNumber);
-                                switch (Convert.ToInt32(resp.RespCode))
-                                {
-                                    case 1:
-                                        //Success sent otp
-                                        hFldOtpVisible = "T";
-
-                                        break;
-
-                                    default:
-                                        //Error in otp
-                                        hFldOtpVisible = "F";
-                                        break;
-                                }
-                            }
-                            else
-                            {
-                                //Error in otp
-                                hFldOtpVisible = "F";
-
-                            }
-                        }
+                        strTemp = ValidateLogin(strLoginId, null, 1);
                     }
                     else
-                        strTemp = String.Format("{0} is not valid mobile number!!", MobileNumber);
-                }
-                if (strTemp != "")
-                {
+                    {
+                        strTemp = ValidateLogin(strLoginId, null);
+                    }
 
+                    if (strTemp == "")
+                    {
+                        if (MobileNumber == "")
+                        {
+                            strTemp = "Mobile no. should not be left blank!!";
+                        }
+                        else if (MobileNumber.All(char.IsDigit) && MobileNumber.Length <= 15 && MobileNumber.Length >= 10)
+                        {
+                            strTemp = "";
+                            if (hFldOtpVisible == "T")
+                            {
+                                if (txtFPwdOTP.Trim() == "")
+                                {
+                                    strTemp = "Otp should not be left blank!!";
+                                }
+                                else if (txtFPwdOTP.All(char.IsDigit))
+                                {
+                                    resp = client.ChangePassword("FP2", strLoginId, "", txtFPwdOTP);
+                                    switch (Convert.ToInt32(resp.RespCode))
+                                    {
+                                        case 1:
+                                            if (hFldPopupOperation == "FPWD")
+                                            {
+                                                ResetForgotPassword("", "", strLoginId, MobileNumber);
+                                                OpenChangePasswordPopup(strLoginId, null, "");
+
+                                            }
+                                            //else
+                                            else if (hFldPopupOperation == "FLOGIN")
+                                            {
+
+                                            }
+                                            else if (hFldPopupOperation == "FMPIN")
+                                            {
+
+                                            }
+                                            break;
+                                        default:
+                                            break;
+                                    }
+                                }
+                                else
+                                {
+                                    strTemp = String.Format("{0} is not in valid format!!", MobileNumber);
+                                }
+
+                            }
+                            else
+                            {
+
+                                if (hFldPopupOperation == "FLOGIN")
+                                    resp = client.CreateLoginId(strLoginId, "", "", "", "");
+                                else
+                                    resp = new AuthResponse() { RespCode = "1", RespMessage = "For forgot password above check is not required!!" };
+
+                                if (resp.RespCode == "1")
+                                {
+                                    resp = client.ChangePassword("FP1", strLoginId, "", MobileNumber);
+                                    if(resp.RespCode == "0")
+                                    {
+                                        ClientName = "Wrong Number";
+                                    }
+                                    else
+                                    {
+                                        switch (Convert.ToInt32(resp.RespCode))
+                                        {
+                                            case 1:
+                                                //Success sent otp
+                                                hFldOtpVisible = "T";
+
+                                                break;
+
+                                            default:
+                                                //Error in otp
+                                                hFldOtpVisible = "F";
+                                                break;
+                                        }
+                                    }    
+                                }
+                                else
+                                {
+                                    //Error in otp
+                                    hFldOtpVisible = "F";
+
+                                }
+                            }
+                        }
+                        else
+                            strTemp = String.Format("{0} is not valid mobile number!!", MobileNumber);
+                    }
+                    if (strTemp != "")
+                    {
+
+                    }
                 }
+
             }
             catch (Exception exError)
             {
@@ -515,7 +529,11 @@ namespace CTCLProj.Controllers
             List<ClientInfo> mLstclientInfos = new AcmiilApiServices().GetClientInfo(UID);
             if (mLstclientInfos.Count >= 1)
             {
-                if (mLstclientInfos[0].Status == 0)
+                if(mLstclientInfos[0].ResponseMessage == "Incorrect User")
+                {
+                    return mLstclientInfos[0].ResponseMessage;
+                }
+                else if (mLstclientInfos[0].Status == 0)
                     return "";
                 else
                     return mLstclientInfos[0].ClientName;

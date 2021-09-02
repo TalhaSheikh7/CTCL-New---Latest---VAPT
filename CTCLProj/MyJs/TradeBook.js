@@ -151,7 +151,10 @@ function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToke
               //      }
               //  });
                 $("#tradebookgrid").kendoGrid({
-                    dataSource: tradebook1,
+                    dataSource: {
+                        data: tradebook1,
+                        pageSize: 15,
+                    },
                     sortable: true,
                     resizable: true,
                     pageable: true,
@@ -331,11 +334,11 @@ function btnConvert(data) {
     var nCncMis = 0;
     if (cncmis == "0") {
         cncmis = "CNC TO MIS";
-        nCncMis = 1;
+        nCncMis = 0;
     }
     else {
         cncmis = "MIS TO CNC";
-    nCncMis = 0;
+        nCncMis = 1;
      }
     $("#msgyn").html("Are you sure want to convert : " + script + " From " + cncmis + " ?");
     var sExchange = "";
@@ -355,7 +358,8 @@ function btnConvert(data) {
     });
     VarMargin12(exchangeid, token, stocktype);
     // GetRequiredStockOrMargin(nCncMis, $("#scriptname").data("token"), sExchange, nOrderAmt, nBuySell, nQty, $(this).attr("data-stocktype"), $(this).attr("data-tradeno")); //$(this).attr("data-orderid")
-    GetRequiredStockOrMargin12(stocktype, tradeno, dealercode, orderno, nCncMis, orderid, exchangeid, nBuySell);
+    GetRequiredStockOrMargin12(stocktype, tradeno, dealercode, ordernumber, nCncMis, orderid, exchangeid, nBuySell);
+
     //var convertmis = $("#windowForconvertScrip1").data('kendoWindow');
     //convertmis.open();
     //convertmis.center();
@@ -480,6 +484,10 @@ function ChangeScript() {
     tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId)
 }
 
+$("#btnno").click(function () {
+    $("#windowForconvertScrip1").data("kendoWindow").close();
+});
+
 $("#btnyes").click(function () {
 
     var clientcode = $('#hfldUser').val();
@@ -501,24 +509,25 @@ $("#btnyes").click(function () {
     if ($("#FL").is(':checked') && $("#hfldBOIYN").val() == "Y" && Math.ceil($("#excessMar").html()) > 0) {
         if ($("#excessMarText").html() == "EXCESS MARGIN") {
             LeanAmount(clientcode, clientcode,
-                        2,
-                        Math.ceil($("#excessMar").html()),
-                        '', function () {
-                            ConvertOrder(StockType, TradeNo, DealerCode, OrderNo, CNCMIS, OrderId, Exchange)
-                        }); //call back function - saverecord function inside Leanamount - so after leanamount executes saverecord will execute
+                2,
+                Math.ceil($("#excessMar").html()),
+                '', function () {
+                    ConvertOrder(StockType, TradeNo, DealerCode, OrderNo, CNCMIS, OrderId, Exchange)
+                }); //call back function - saverecord function inside Leanamount - so after leanamount executes saverecord will execute
         }
         else {
             LeanAmount(clientcode, clientcode, 3, $("#excessMar").html(),
-                       $(this).attr("isin"),
-                       function () {
-                           ConvertOrder(StockType, TradeNo, DealerCode, OrderNo, CNCMIS, OrderId, Exchange)
-                       });
+                $(this).attr("isin"),
+                function () {
+                    ConvertOrder(StockType, TradeNo, DealerCode, OrderNo, CNCMIS, OrderId, Exchange)
+                });
         }
     }
     else {
         ConvertOrder(StockType, TradeNo, DealerCode, OrderNo, CNCMIS, OrderId, Exchange)
     }
-})
+});
+
 function LeanAmount(psLoginId, psUCC, pnTranType, pnTranAmount, psIsin, cbOnDone) {
 
     $("#BoiModal").show(); //to show 
@@ -754,7 +763,6 @@ function GetBoiLienSetting() {
             }
         }
         else {
-            //$("#FL").attr('checked', false);
             $("#FL").prop("disabled", true); $("#FL").prop("checked", false);
         }
     });
@@ -790,45 +798,34 @@ function ConvertOrder(nStockType, sTradeNo, sDealerCode, sOrderNo, nCNCMIS, nOrd
                 'nOrderId': nOrderId
             }
         })
-
-
-        //    ,
-        //type: "json"
     });
 
     ConvertOrder.done(function (msg) {
         if (msg.ResultStatus == 3) {
-
-           // $('#modconvertorder').modal('hide');
-
-          //  $('#displayrms').html('<strong>' + msg.Result + '</strong>');
-            alert(msg.Result);
-         //   $('#modrmsvalidation').modal('show');
-
-
             setTimeout(function () {
                 var nAction = 6;
-                var sUserId = $("#txtSelectedClient").val().split('-')[0].trim(); //gblnUserId;
+                var sUserId = $("#txtSelectedClient").val().split('-')[0].trim();
                 var sProCli = 'Cli';
                 var sInstrumentName = 'All';
                 var nPageIndex = 0;
                 var nToken = 0;
                 var sScript = '';
-                var sCTCLId = localStorage.getItem("CTCLId");//400072001005;
+                var sCTCLId = localStorage.getItem("CTCLId");
                 tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId);
             }, 100);
 
         }
         else {
-            $('#modconvertorder').modal('hide');
-            $('#displayrms').html("Failed : " + msg.Result);
-            $('#modrmsvalidation').modal('show');
+            $("#windowForconvertScrip1").data("kendoWindow").close();
+            $('#cnvrtmsg').html("Failed : " + msg.Result);
+            KendoWindow("ConverorderMsg", 450, 110, "CNC To MIS", 1, true);
         }
     });
 
     ConvertOrder.fail(function (jqXHR, textStatus) {
+        $("#windowForconvertScrip1").data("kendoWindow").close();
         alert("Request failed: " + textStatus + 'ConvertOrder');
-        $('#displayrms').html("Failed : " + textStatus);
-        $('#modrmsvalidation').modal('show');
+        $('#cnvrtmsg').html("Failed : " + textStatus);
+        KendoWindow("ConverorderMsg", 450, 110, "CNC To MIS", 1, true);
     });
 }

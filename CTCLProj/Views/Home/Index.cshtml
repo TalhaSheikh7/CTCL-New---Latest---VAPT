@@ -144,6 +144,7 @@
 <label id="lblScripts" style="display:none;"></label>
 <label id="lblScripts2" style="display:none;"></label>
 <label id="lblScripts3" style="display:none;"></label>
+<label id="lblScripts4" style="display:none;"></label>
 <label id="lblScriptsObook" style="display:none;"></label>
 <label id="lblHoldingScripts" style="display:none;"></label>
 <label id="lblMarketWath" style="display: none;"></label>
@@ -168,16 +169,15 @@
                 @*<p id="time-clock" style="color:#00f">&nbsp;</p>*@
                 <div class="demo-section k-content">
                     <input type="hidden" id="Iratechange" data-symbol="" />
-                    <div class="coll-grig-50" style="width: 45%;">
-                        <input id="watchlistOption" style="width: 30%; font-size: 12px;" />
-                        <input id="watchDrop" style="font-size: 12px;bottom: 0px;position: relative;" />
+                    <div class="">
+                        <input id="watchlistOption" style="width: 15%; font-size: 12px;" />
+                        <input id="watchDrop" style="font-size: 12px;bottom: 0px;position: relative; width: 12%;" />
                         <button class="btn btnclas" onclick="AddWatchPopUp();"><i class="fa fa-plus iclass"></i></button>
-                        <button class="btn btnclas" onclick="DeleteWatch();"><i class="fa fa-trash iclass"></i></button>
-                    </div>
-                    <div class="coll-grig-50" style="width: 55%;">
-                        <input id="lstSegment" style="width: 14%; font-size: 12px;" />
+                        <button class="btn btnclas" onclick="DeleteWatch();" style="margin-right: 5%;"><i class="fa fa-trash iclass"></i></button>
+
+                        <input id="lstSegment" style="width: 7%; font-size: 12px;" />
                         <input id="lstCashType" style="width: 17%; font-size: 12px;" />
-                        <input type="text" class="scrip-search-box" id="txtsearch" autocomplete="off" style="width:46% !important; font-size: 14px;  border-radius: 1;  border: 0;" />
+                        <input type="text" class="scrip-search-box" id="txtsearch" autocomplete="off" style="width:22% !important; font-size: 14px;  border-radius: 1;  border: 0;" />
                         <div id="divSearch" class="suggestion-wrapper hidden-suggestion-wrapper">
                             <ul id="lstSearch" class="search_database">
                                 <li id="oneli" class="hovered"></li>
@@ -215,7 +215,7 @@
     <div id="tabWindow">
         <div id="tabstrip">
             <ul>
-                <li id="tBook" class="k-state-active" >
+                <li id="tBook">
                     TradeBook
                 </li>
                 <li id="oBook">
@@ -227,7 +227,7 @@
                 <li id="hValuation">
                     Holding Valuation
                 </li>
-                <li id="aLog">
+                <li id="aLog" class="k-state-active">
                     Activity Log
                 </li>
                 <li id="nFunds">
@@ -242,18 +242,18 @@
                 <div id="tradebookgrid" style="height:100%;">
                 </div>
                 <div id="windowForconvertScrip1" style="display:none">
-                    <h8 id="msgyn"></h8>
-                    <table style="width: 100%;">
+                    <h8 id="msgyn" style="font-size: 14pt;"></h8>
+                    <table style="width: 100%; margin-top: 16px;">
                         <tr>
                             <td style="padding-right: 10px; border-right: 1px solid #ccc;">
                                 <table style="width: 100%;">
                                     <tr>
-                                        <td style="text-align: left; padding-bottom: 5px; font-weight: bold; padding-left: 7px;" id="availMarText123">AVAILABLE/MARGIN</td>
-                                        <td style="text-align: right; padding-bottom: 5px; font-weight: bold; " id="availMar123">0000</td>
+                                        <td style="text-align: left; padding-bottom: 5px; font-weight: 400; padding-left: 7px;" id="availMarText123">AVAILABLE/MARGIN</td>
+                                        <td style="text-align: right; padding-bottom: 5px; font-weight: 400; " id="availMar123">0000</td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: left; font-weight: bold;  padding-left: 7px;" id="reqMarText123">REQUIRED MARGIN</td>
-                                        <td style="text-align: right; font-weight: bold;  " id="reqMar123">0000</td>
+                                        <td style="text-align: left; font-weight: 400; padding-left: 7px;" id="reqMarText123">REQUIRED MARGIN</td>
+                                        <td style="text-align: right; font-weight: 400; " id="reqMar123">0000</td>
                                     </tr>
                                 </table>
 
@@ -261,12 +261,12 @@
                             <td style="padding-left: 10px;">
                                 <table style="width: 100%;">
                                     <tr>
-                                        <td style="text-align: left; padding-bottom: 5px; font-weight: bold;">VAR/FDMR %</td>
-                                        <td style="text-align: right; padding-bottom: 5px; font-weight: bold; padding-right: 7px;" id="varper123"></td>
+                                        <td style="text-align: left; padding-bottom: 5px; font-weight: 400;">VAR/FDMR %</td>
+                                        <td style="text-align: right; padding-bottom: 5px; font-weight: 400; padding-right: 7px;" id="varper123"></td>
                                     </tr>
                                     <tr>
-                                        <td style="text-align: left; font-weight: bold;" id="excessMarText123">EXCESS MARGIN</td>
-                                        <td style="text-align: right; font-weight: bold; padding-right: 7px;" id="excessMar123"></td>
+                                        <td style="text-align: left; font-weight: 400;" id="excessMarText123">EXCESS MARGIN</td>
+                                        <td style="text-align: right; font-weight: 400; padding-right: 7px;" id="excessMar123"></td>
                                     </tr>
                                 </table>
 
@@ -276,10 +276,9 @@
 
                     <tr>
                         <td colspan="3" style="text-align: center; padding-bottom: 20px;">
-
-                            <button id="btnyes" type="button" class="k-primary btnsub" style="margin-top:14px; margin-left:92px;" data-script-id="" data-marketwatch-id="">Yes</button>
+                            <button id="btnyes" type="button" class="k-primary btnsub" style="margin-left: 35%;" data-script-id="" data-marketwatch-id="">Yes</button>
                             &nbsp;&nbsp;&nbsp;&nbsp;
-                            <button id="btnno" type="button" class="k-primary btnsub" style="margin-top:14px; margin-left:31px;">No</button>
+                            <button id="btnno" type="button" class="k-primary btnsub">No</button>
 
                         </td>
                     </tr>
@@ -383,7 +382,7 @@
                                                 <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Discolsed QTY.</td>
                                             </tr>
                                             <tr>
-                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="text" idvalue="0" class="inpulvalue" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
+                                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="text" id="txtdisclosedqty1" value="0" class="inpulvalue" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
                                             </tr>
                                         </table>
                                     </td>
@@ -590,11 +589,10 @@
                                 </td>
 
                                     <td>
-
-                                        <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">QUICK REPORTS</a>
+                                        <a href="https://www.investmentz.com/QRReports/ConNote" class="fundData" target="_blank">QUICK REPORTS</a>
                                     </td>
                                     <td>
-                                        <a id="" onclick="Backoffice()" class="fundData">BACKOFFICE REPORTS</a>
+                                        <a id="BOReport" onclick="Backoffice()" class="fundData">BACKOFFICE REPORTS</a>
                                     </td>
                                     <td>
                                         <a href="~/Home/FundTransfer" class="fundData" target="_blank">FUND PAYIN</a>
@@ -672,6 +670,10 @@
     <h5>Please Select Client To Continue!</h5>
 </div>
 
+<div id="ConverorderMsg" style="display:none; text-align:center">
+    <h5 id="cnvrtmsg"></h5>
+</div>
+
 <div id="modrmsvalidation" style="display:none; text-align:center">
     <div style="text-align: center">
         <h5>
@@ -722,6 +724,14 @@
                         <label for="radio-two">SELL</label>
                     </div>
                 </span>
+                @*<span class="form" id="myForm1">
+                    <div class="switch-field">
+                        <input type="radio" id="NSE" name="exchange" value="NSE" checked />
+                        <label for="NSE">NSE</label>
+                        <input type="radio" id="BSE" name="exchange" value="BSE" />
+                        <label for="BSE">BSE</label>
+                    </div>
+                </span>*@
             </span>
         </div>
         <span id="markettype" data-stocktype="1" style="display:none;"></span>
@@ -729,7 +739,7 @@
         <div style="font-size: 14px;text-align: left;padding: 10px 0;color: #ccc;">
             <span id="scriptname" data-token="0" data-buysell="0"></span>
             @*<span>22<sup>nd</sup></span>
-        <span>APR 14500 CR x 75 Qty</span>&nbsp;*@
+            <span>APR 14500 CR x 75 Qty</span>&nbsp;*@
             <span id="tdISINCode"></span>
             <span id="segmenttype" data-segement="CASH" style="float: right;" hidden="hidden"></span>
 
@@ -762,7 +772,8 @@
                 </table>
             </div>
         </div>
-        <div style="padding: 5px 0;clear: both;;">
+
+        <div style="padding: 5px 0;clear: both;">
             <table style="width:100%; text-align: left;">
                 <tr>
                     <td>
@@ -963,11 +974,22 @@
                 </tr>
             </table>
         </div>
+
+        <div style="padding: 5px 0;clear: both;">
+            <span id="amomsg"></span>
+        </div>
     </div>
 </div>
 <div id="researchbuysell" style="display:none; text-align:center">
     <div class="popup_panel">
-        <div style="font-size: 14px;text-align: left;color: #ccc;width: 100%;float: left;"><span style="font-weight: 600; float:left; font-size: 14px; text-align: left; color: #ccc;"><span id="buysell"></span> <span id="scrip"></span><span> x </span><span id="qyt"></span></span> <span class="pull-right"><span style="text-align:left; font-size: 16px;" id="NameCodeData1"></span></span></div>
+        <div style="font-size: 14px;text-align: left;color: #ccc;width: 100%;float: left;">
+            <span style="font-weight: 600; float:left; font-size: 14px; text-align: left; color: #ccc;">
+                <span id="buysell"></span>
+                <span id="scripname"></span>
+                <span id="qyt"></span>
+            </span>
+            <span style="padding-left: 20%;" id="NameCodeData1"></span>
+        </div>
 
         <div style="font-size: 13px;text-align: left;color: #ccc;width: 100%;float: left;">
             <span style="color: #ccc; width: 175px;float: left;">LTP : ₹<span id="ltprice1"></span></span>
@@ -978,7 +1000,7 @@
                     <td>
                         <table style="width:100%; text-align: left;">
                             <tr>
-                                <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="OMIS1" type="radio" name="name" class="radionew" /> Intraday MIS</td>
+                                <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="ONRML1" type="radio" class="radionew" name="name" checked /> Overnight NRML/CNC</td>
                             </tr>
                             <tr>
                                 <td>
@@ -997,7 +1019,7 @@
                     <td>
                         <table style="width:100%; text-align: left;">
                             <tr>
-                                <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="ONRML1" type="radio" class="radionew" name="name" checked /> Overnight NRML/CNC</td>
+                                <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="OMIS1" type="radio" name="name" class="radionew" /> Intraday MIS</td>
                             </tr>
                             <tr>
                                 <td>
@@ -1026,7 +1048,7 @@
                                             <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Trigger Price</td>
                                         </tr>
                                         <tr>
-                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="text" id="triggerprice1" class="inpulvalue" value="0" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
+                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="number" id="triggerprice1" class="inpulvalue" value="0" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
                                         </tr>
                                     </table>
                                 </td>
@@ -1043,7 +1065,7 @@
                                 <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Discolsed QTY.</td>
                             </tr>
                             <tr>
-                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="text" idvalue="0" class="inpulvalue" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
+                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="number" idvalue="0" class="inpulvalue" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
                             </tr>
                         </table>
                     </td>
@@ -1149,7 +1171,7 @@
         </div>
     </div>
 </div>
-<div id="windowForconvertScrip" style="display:none">
+<!--<div id="windowForconvertScrip" style="display:none">
     <h8 id="msgyn"></h8>
     <table style="width: 100%;">
         <tr>
@@ -1191,9 +1213,9 @@
 
             </td>
         </tr>
-    </table>
+    </table>-->
     @*<input ID="hfldUser" type="text" hidden />*@
-</div>
+<!--</div>-->
 
 <div id="fundSummary" style="display:none">
     <div id="headerset" style="height:100%;"></div>

@@ -56,19 +56,19 @@ function GetBcastUrl(nAction) {
                 $("#Exchang1").attr("src", "../img/dis-2.png");
 
                 if (msg.Result.sAmoMsg.toString().trim() != "") {
-                    alert("This Order will be treated as AMO order, Order Will be Processed on next trading Day.");
+                    $("#amomsg").html("This Order will be treated as AMO Order, Order Will be Processed on next trading Day.");
                 }
                 savegblBCastUrl(msg.Result.sCtclBroadcastUrl.toString().trim());
             }
             else {
                 $("#Exchange").attr("src", "../img/dis-1.png");
                 $("#Exchang1").attr("src", "../img/dis-1.png");
-                $("#amo").html("");
+                $("#amomsg").html("");
             }
         } else {
             $("#Exchange").attr("src", "../img/dis-1.png");
             $("#Exchang1").attr("src", "../img/dis-1.png");
-            $("#amo").html("");
+            $("#amomsg").html("");
         }
     });
 
@@ -186,6 +186,8 @@ function GetRequiredStockOrMargin(nCncMis, nToken, Exchange, nOrderAmt, nBuySell
             nQty = $("#tradeqty1").val();
         } else if (pageid == 3) {
             nQty = $("#tradeqty").val();
+        } else if (pageid == 4) {
+            nQty = '';
         }
     }
 
@@ -237,9 +239,11 @@ function GetRequiredStockOrMargin(nCncMis, nToken, Exchange, nOrderAmt, nBuySell
     if (pageid == 1) {
         nMarketRate = parseFloat($("#ltp").text());
     } else if (pageid == 2) {
-        nMarketRate = parseFloat($("#ltprice1").text())
+        nMarketRate = parseFloat($("#ltprice1").text());
     } else if (pageid == 3) {
-        nMarketRate = parseFloat($("#ltprice").text())
+        nMarketRate = parseFloat($("#ltprice").text());
+    } else if (pageid == 4) {
+        nMarketRate = '';
     }
 
     
@@ -459,7 +463,7 @@ function SetEstTotal(Qty, price) {
     }
 }
 
-function VarMargin1(nExchangeId, nToken, nstockType) {
+function VarMargin1(nExchangeId, nToken, nstockType, id) {
     var URL = gblurl + "ScriptV1/";
 
     var rowdata = {
@@ -482,10 +486,10 @@ function VarMargin1(nExchangeId, nToken, nstockType) {
         success: function (data) {
             //console.log(data);
             if (data.IsResultSuccess == true) {
-                $("#varmarper").html(data.Result.nVarMarginInPerc + '%');
+                $("#" + id).html(data.Result.nVarMarginInPerc + '%');
 
             } else {
-                $("#varmarper").html("0%");
+                $("#" + id).html("0%");
             }
         }
     });

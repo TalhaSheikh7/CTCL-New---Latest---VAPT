@@ -34,7 +34,7 @@ $(document).ready(function () {
 
 
 
-    GetBcastUrl(6);
+    //GetBcastUrl(6);
     //getCTCLID();
 });
 
@@ -336,19 +336,19 @@ function GetBcastUrl(nAction) {
                 $("#Exchang1").attr("src", "../img/dis-2.png");
 
                 if (msg.Result.sAmoMsg.toString().trim() != "") {
-                    alert("This Order will be treated as AMO order, Order Will be Processed on next trading Day.");
+                    $("#amomsg").html("This Order will be treated as AMO order, Order Will be Processed on next trading Day.");
                 }
                 savegblBCastUrl(msg.Result.sCtclBroadcastUrl.toString().trim());
             }
             else {
                 $("#Exchange").attr("src", "../img/dis-1.png");
                 $("#Exchang1").attr("src", "../img/dis-1.png");
-                $("#amo").html("");
+                $("#amomsg").html("");
             }
         } else {
             $("#Exchange").attr("src", "../img/dis-1.png");
             $("#Exchang1").attr("src", "../img/dis-1.png");
-            $("#amo").html("");
+            $("#amomsg").html("");
         }
     });
 

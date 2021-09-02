@@ -318,7 +318,6 @@ $("#OCkick").click(function () {
 
     function btncancelmodify(data) {
         $("#modscrip").html(data.dataset.script);
-        
 
         var ltpid = data.dataset.exchangeConstants + "_" + data.dataset.token
         var ltp = parseFloat($("." + ltpid + "_LR").text()).toFixed(2)
@@ -360,7 +359,7 @@ $("#OCkick").click(function () {
         $("#tradeqty").val(orderqty);
         $("#tradeprice").val(price);
         $("#triggerprice").val(trgprice);
-
+        $("#txtdisclosedqty1").val(discqty)
         if (cncmis == "CNC/NORMAL") {
             document.getElementById("ONRML").checked = true;
             OCNCMIS = '0';
@@ -426,7 +425,7 @@ $("#OCkick").click(function () {
         var StockType = sinstrument;//get it here  OrderType
         var OrderType = localStorage.getItem("ordertype");
         var TriggerPrice = parseFloat($("#triggerprice").val());
-        var DQ = parseInt($("#txtdisclosedqty").val());
+        var DQ = parseInt($("#txtdisclosedqty1").val());
         var MarketPrice = $("#ltp").text();//parseInt($("#ltp").data("ltp"));
         var Source = "W";
         var CTCLId = localStorage.getItem("CTCLId");//"400072001005";//localStorage.getItem("EmpCTCLid");
@@ -463,7 +462,7 @@ $("#OCkick").click(function () {
         else {
             NewBOIFlag = 0;
         }
-
+        var segmenttype = localStorage.getItem("instrument");
         var UpdateOrderParams = JSON.stringify({
             'orderId': orderId,
             'StockType': StockType,
@@ -476,10 +475,9 @@ $("#OCkick").click(function () {
             //'Source': "W",
             'Source': "C",
             'OrderHandling': CncMis,
-            'ExchangeId': ExchangeID,  //Added by PSN on 19/03/2018 for BSE
-            //'IsBoiOrder': ($("#hfldBOIYN").val().toString() == "Y").toString()
+            'ExchangeId': ExchangeID,
             'IsBoiOrder': NewBOIFlag,
-            'CTCLId': CTCLId, //Added hvb @ 17/11/2020 //modified by Talha @ 11/12/2020
+            'CTCLId': CTCLId,
 
         });
 
@@ -510,15 +508,16 @@ $("#OCkick").click(function () {
                     return;
                 }
                 else if (JSON.parse(data.responseText).ResultStatus == 3) {
-
+                    $("#modifycancel").data("kendoWindow").close();
                     if (ExchangeID == 1) {
-                        successstring = '<h2 style="color: #999; font-weight: 500;font-size:50px">YOUR ORDER TO' + BUYSELL + '<br>' + sScript + '(' + segmenttype + ')<br><b>' + $("#tradeqty").val().toString() + 'SHARES @ ₹' + $("#tradeprice").val() + '</b><br> IS UPDATED SUCCESSFULLY</h2>';
+                        successstring = '<h2 style="color: #999; font-weight: 500;font-size:17px">YOUR ORDER TO' + BUYSELL + '<br>' + sScript + '(' + segmenttype + ')<br><b>' + $("#tradeqty").val().toString() + 'SHARES @ ₹' + $("#tradeprice").val() + '</b><br> IS UPDATED SUCCESSFULLY</h2>';
                     }
                     else {
-                        successstring = '<h2 style="color: #999; font-weight: 500;font-size:50px">YOUR ORDER TO' + BUYSELL + '<br>' + sScript + '(' + segmenttype + ')<br><b>' + $("#tradeqty").val() + 'SHARES @ ₹' + $("#tradeprice").val() + '</b><br> IS UPDATED SUCCESSFULLY</h2>';
+                        successstring = '<h2 style="color: #999; font-weight: 500;font-size:17px">YOUR ORDER TO' + BUYSELL + '<br>' + sScript + '(' + segmenttype + ')<br><b>' + $("#tradeqty").val() + 'SHARES @ ₹' + $("#tradeprice").val() + '</b><br> IS UPDATED SUCCESSFULLY</h2>';
                     }
 
-                    alert("YOUR ORDER IS UPDATED SUCCESSFULLY")
+                    $('#successmsg').html("YOUR ORDER IS UPDATED SUCCESSFULLY");
+                    KendoWindow("myModalnt", 450, 150, "Order", 0, true);
                     var orderstatus = "C,M,E,Q,A,X,U,P,O,X,Z";
                     // OrderBook();
                     GetOrder(orderstatus);
@@ -575,6 +574,14 @@ $("#OCkick").click(function () {
         var sScript = localStorage.getItem("script");
         var segmenttype = segmenttype;
         var ExchangeName = localStorage.getItem("ExchangeName");
+        var BuySell = localStorage.getItem("buysell");
+
+        if (BuySell == "1") {
+            BuySell = "Buy"
+        }
+        else {
+            BuySell = "Sell"
+        }
         var NewBOIFlag = "0";
         var CTCLId = localStorage.getItem("CTCLId");//"400072001005";
 
@@ -584,47 +591,39 @@ $("#OCkick").click(function () {
         else {
             NewBOIFlag = 0;
         }
-        $.ajax(
+        var segmenttype = localStorage.getItem("instrument");
+
+        var CANCELORDER = $.ajax(
             {
                 url: gblurl + "OrderV5/?OrderId=" + porderId + "&StockType=" + StockType + "&Source=" + pSource + "&ExchangeId=" + ExchangeID + "&IsBoiOrder=" + NewBOIFlag.toString() + "&CTCLId=" + CTCLId,
-
                 method: "DELETE",
                 contentType: "application/json",
             });
 
-        success: (function (msg) {
-
+        CANCELORDER.done(function (msg) {
             if (ExchangeID == 1) {
-                successstring = '<h2 style="color: #999; font-weight: 500;font-size:50px">YOUR ORDER TO' + TradeAction + '<br>' + sScript + '(' + segmenttype + ')<br><b>' + $("#txtqty").val().toString() + 'SHARES @ ₹' + $("#txtorderprice").val().toString() + '</b><br> IS CANCELLED SUCCESSFULLY</h2>';
+                successstring = '<h2 style="color: #999; font-weight: 500;font-size:17px">YOUR ORDER TO' + BuySell + '<br>' + sScript + ' (' + segmenttype + ')<br><b>' + $("#txtqty").val().toString() + 'SHARES @ ₹' + $("#txtorderprice").val().toString() + '</b><br> IS CANCELLED SUCCESSFULLY</h2>';
             }
             else {
-                successstring = '<h2 style="color: #999; font-weight: 500;font-size:50px">YOUR ORDER TO' + TradeAction + '<br>' + sScript + '(' + segmenttype + ')<br><b>' + $("#txtqty").val().toString() + 'SHARES @ ₹' + $("#txtorderprice").val().toString() + '</b><br> IS CANCELLED SUCCESSFULLY</h2>';
+                successstring = '<h2 style="color: #999; font-weight: 500;font-size:17px">YOUR ORDER TO' + BuySell + '<br>' + sScript + ' (' + segmenttype + ')<br><b>' + $("#txtqty").val().toString() + 'SHARES @ ₹' + $("#txtorderprice").val().toString() + '</b><br> IS CANCELLED SUCCESSFULLY</h2>';
             }
-            $('#successmsg1').html(successstring);
 
-            alert(successstring)
+                $("#modifycancel").data("kendoWindow").close();
+                $('#successmsg').html(successstring);
+                KendoWindow("myModalnt", 450, 150, "Order", 0, true);
 
-
-            $("#modTradeOrderCancelled").show();//Modified by PSN on 10/05/2018 
-
-            //$("#modTradeOrderModify").show().delay(1000).fadeOut();
-
-            $("#modBuySell").delay(1000).fadeOut(100, function () {
+                $("#modBuySell").delay(1000).fadeOut(100, function () {
             });
-
-            // $("#modBuySell").hide().delay(1000).fadeOut(); //added by vpg on 06012018 to close buysell popover 
-
             $('#btnLoadMore').removeClass("btn-load-more-hidden").addClass("btn-load-more");
 
             var orderstatus = "C,M,E,Q,A,X,U,P,O,X,Z";
-            // OrderBook();
             GetOrder(orderstatus);
-            //GetOrder('C,M,E,Q,A');
         });
 
-        error: (function (xhr, textstatus) {
+        CANCELORDER.fail(function (msg) {
             alert('Error While Deleting' + textstatus + 'DeleteOrders');
         });
+
     })
 
     //getCTCLID();
@@ -808,7 +807,6 @@ $("#OCkick").click(function () {
             data: rowdata,
             dataType: "json",
             success: function (data) {
-                console.log(data);
                 if (data.IsResultSuccess == true) {
                     $("#varper1").html(data.Result.nVarMarginInPerc + '%');
                 } else {
