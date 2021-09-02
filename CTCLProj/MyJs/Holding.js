@@ -7,7 +7,7 @@ $(document).ready(function () {
 
 });
 
-$("#HVClick").click(function () {
+$("#hValuation").click(function () {
     var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
     getHolding(3, ClientCode, 1, 0)
 })
@@ -303,18 +303,6 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment) {
     });
 }
 
-$('input[type=radio][name=switch]').change(function () {
-    if (this.value == 'buy') {
-        document.querySelector('#btntrade').innerHTML = 'BUY';
-        $("#btntrade").css("background-color", "#4987ee");
-        localStorage.setItem("BuySell", "Buy");
-    }
-    else if (this.value == 'sell') {
-        document.querySelector('#btntrade').innerHTML = 'SELL';
-        $("#btntrade").css("background-color", "#ca2222");
-        localStorage.setItem("BuySell", "Sell");
-    }
-});
 
 function buysellwindow1(data) {
 

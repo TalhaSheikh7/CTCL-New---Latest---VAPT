@@ -1526,10 +1526,10 @@ function FillWatchGrid(data, type)
             {
                 title: "Call/Put",
                 width: 95,
-                field: "CallPut",
+                field: "sCP",
                 filterable: false,
                 hidden: true,
-                template: "#= CallPut #"
+                template: "#= sCP #"
             },
             {
                 title: "Buy Qty",
@@ -1858,6 +1858,7 @@ function buysellwindow(data, Type="")
             document.querySelector('#btntrade').innerHTML = 'SELL';
             $("#btntrade").css("background-color", "#ca2222")
             localStorage.setItem("BuySell", "Sell");
+            $('#amount').attr('datamin', '1000');
         }
         
     } else {
@@ -2008,7 +2009,7 @@ function buysellwindow(data, Type="")
 
     $("#cmbSegment1").val(GetInstrumentNumber(Instrument));
 
-    VarMargin1(nExchangeId, Token, GetInstrumentNumber(Instrument));
+    VarMargin1(nExchangeId, Token, GetInstrumentNumber(Instrument), 'varmarper');
 
     if (GetInstrumentNumber(Instrument) == 3) {
 
@@ -2125,6 +2126,31 @@ function buysellwindow(data, Type="")
 
 }
 
+
+$('input[type=radio][name=switch]').change(function () {
+    if (this.value == 'buy') {
+        document.querySelector('#btntrade').innerHTML = 'BUY';
+        $("#btntrade").css("background-color", "#4987ee");
+        localStorage.setItem("BuySell", "Buy");
+        $("#scriptname").attr("data-buysell", '1');
+    }
+    else if (this.value == 'sell') {
+        document.querySelector('#btntrade').innerHTML = 'SELL';
+        $("#btntrade").css("background-color", "#ca2222");
+        localStorage.setItem("BuySell", "Sell");
+        $("#scriptname").attr("data-buysell", '2');
+    }
+});
+
+//$('input[type=radio][name=exchange]').change(function () {
+//    if (this.value == 'NSE') {
+//        $('#scriptname').data('ExchangeID', "1");
+//    }
+//    else if (this.value == 'BSE') {
+
+//        $('#scriptname').data('ExchangeID', "2");
+//    }
+//});
 
 $(document).on("click", "#cnc", function (event) {
     $("#scriptname").data("token");

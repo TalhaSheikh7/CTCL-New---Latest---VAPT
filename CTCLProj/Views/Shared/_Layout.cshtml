@@ -106,10 +106,14 @@
 
             <input type="text" class="scrip-search-box" style="width: 20%; font-size: 12px;" id="txtSelectedClient" placeholder="Search By Code" autocomplete="off" />
             <input type="hidden" id="hdnSelectedClient" />
-              <span class="searchclose"><i class="fa fa-times" aria-hidden="true" id="btnCleanText"></i></span>
-                                                        <span class="user-plan" id="hideheadloader">
-                                                            <i class="fa fa-spin fa-spinner fa-lg" id="iLoader"></i>
-                                                        </span>
+
+             <span class="searchclose">
+                <i class="fa fa-times" aria-hidden="true" id="btnCleanText"></i>
+             </span>
+             <span class="user-plan" id="hideheadloader">
+                 <i class="fa fa-spin fa-spinner fa-lg" id="iLoader"></i>
+             </span>
+
             <input id="clntSearchType" style="width: 5%; font-size: 12px;" />
 
             <button><i class="fa fa-power-off" aria-hidden="true" id="btnLogout" onclick="location.href='@Url.Action("Logout", "Home")'"></i></button>
@@ -142,11 +146,6 @@
                 { value: "kendo.Moonlight.min", Id: 4, name: "Moonlight" },
             ];
 
-            var Searchtype = [
-                { value: "N", name: "Name" },
-                { value: "C", name: "Code" }
-            ];
-
             //KendoDropDownList("colorDrop", theme, "value", "name", themeChange, false, "", 0);
 
             $("#colorDrop").kendoDropDownList({
@@ -169,6 +168,18 @@
                 }
             });
 
+            var Searchtype = [
+                { value: "C", name: "Code" },
+                { value: "N", name: "Name" }
+            ];
+
+            $("#clntSearchType").kendoDropDownList({
+                dataTextField: "name",
+                dataValueField: "value",
+                dataSource: Searchtype,
+                index: 0
+            });
+
             var myDropDownList = $("#colorDrop");
 
             var remoteDropDown = $("#colorDrop").data("kendoDropDownList");
@@ -179,8 +190,8 @@
                 'z-index': 2
             });
 //---------
-
-            KendoDropDownList("clntSearchType", Searchtype, "value", "name", "", false, "", 1);
+            //KendoDropDownList(DropId, DropDownData, ValueField, TextField, ChangeFunctionName, autobind, casccade, index)
+            //KendoDropDownList("clntSearchType123", Searchtype, "value", "name", "", false, "", 1);
 
            // themeChange(sessionStorage.getItem("ThemeColor"));
 
@@ -235,16 +246,16 @@
 
         
 
-        $(document).on("change", "#clntSearchType", function (event) {
-            if ($(this).val() == "C") {
-                $('#txtSelectedClient').attr("placeholder", "Search by code");
-                $("#cmbclients1").val("");
-            }
-            else {
-                $('#txtSelectedClient').attr("placeholder", "Search by name");
-                $("#cmbclients1").val("");
-            }
-        });
+        //$(document).on("change", "#clntSearchType123", function (event) {
+        //    if ($(this).val() == "C") {
+        //        $('#txtSelectedClient').attr("placeholder", "Search by code");
+        //        $("#cmbclients1").val("");
+        //    }
+        //    else {
+        //        $('#txtSelectedClient').attr("placeholder", "Search by name");
+        //        $("#cmbclients1").val("");
+        //    }
+        //});
 
         function themeChange(ncolor = "") {
 

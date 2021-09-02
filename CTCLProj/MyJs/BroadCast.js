@@ -26,7 +26,8 @@ $(document).ready(function () {
 
 function sendTokens(lblScript) {
 
-    var TokensValues = $('#lblScripts').html() + "," + $('#lblHoldingScripts').html() + "," + $('#lblScripts2').html() + "," + $('#lblScriptsObook').html() + "," + "17.999908,17.999988,5.1"
+    var TokensValues = $('#lblScripts').html() + "," + $('#lblHoldingScripts').html() + "," + $('#lblScripts2').html() + "," + $('#lblScripts3').html() + "," + $('#lblScripts4').html() + "," + $('#lblScriptsObook').html() + "," + "17.999908,17.999988,5.1"
+
 
     //console.log("tokens.length" + tokens.length);
     if (tokens.length > 0) {

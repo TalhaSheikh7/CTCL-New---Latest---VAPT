@@ -105,10 +105,25 @@ $("#btnFPwdProceed").click(function () {
         },
         dataType: "json",
         success: function (data) {
-            // alert(data);
-            $("#forgetpsdotp").show();
-            $("#clientname").html(data);
-
+            if (data == "Incorrect User") {
+                $("#txtFPwdLoginId").val('');
+                $("#txtFPwdMobileNo").val('');
+                //$("#modForgotPwd").hide();
+                $("#anyonepopup").show();
+                $("#commenpopup").html(data)
+                return false;
+            } else if (data == "Wrong Number") {
+                $("#txtFPwdLoginId").val('');
+                $("#txtFPwdMobileNo").val('');
+                //$("#modForgotPwd").hide();
+                $("#anyonepopup").show();
+                $("#commenpopup").html("Number does not match with registered mobile number.");
+                return false;
+            }
+            else {
+                $("#forgetpsdotp").show();
+                $("#clientname").html(data);
+            }
         },
         error: function (data) {
             console.log(data);

@@ -3,13 +3,13 @@ var Getresearch = [];
 var Gettrade = [];
 var Exchangemessage = [];
 
-var idList = {
-    'key1': 'availMarText',
-    'key2': 'availMargin',
-    'key3': 'reqMarText',
-    'key4': 'reqMargin',
-    'key5': 'excessMarText',
-    'key6': 'excessMargin'
+var idList4 = {
+    'key1': 'availMarText2',
+    'key2': 'availMar2',
+    'key3': 'reqMarText2',
+    'key4': 'reqMar2',
+    'key5': 'excessMarText2',
+    'key6': 'excessMar2'
 };
 
 $(document).ready(function () {
@@ -217,6 +217,9 @@ function GetResearchCall(norderAction, npageindex, dDateRange1, dDateRange2) {
         success: function (data) {
             //console.log(data)
             var company = "";
+            var currrate = "";
+
+            var sScripts = "";
 
             var datafalse = data.Result.Result;
             if (datafalse == false) {
@@ -316,15 +319,27 @@ function GetResearchCall(norderAction, npageindex, dDateRange1, dDateRange2) {
                         closetype = '<span style = "font-weight: bolder;"><strong>Open</strong></span>';
                         closeRemark = '';
                     }
+
+                    if (row.nConstant == 12 || row.nConstant == 13) {
+                        currrate = '<span><strong class= "' + row.nConstant + '_' + row.nToken + '_LR">0.0000</strong></span>';
+                    }
+                    else {
+                        currrate = '<span><strong class= "' + row.nConstant + '_' + row.nToken + '_LR">0.0000</strong></span>';
+                    }
+
+
+
                     Getresearch.push({
                         buysell: buysell,
                         buyselltd: buyselltd,
                         sScrip: row.sScrip,
                         callType: vv,
                         vInstrument: vInstrument,
+                        InsNumber: row.sSegment,
                         sExpiry: row.sExpiry,
                         vstrike: vstrike,
                         sCallPut: row.sCallPut,
+                        LTP: currrate,
                         PriceFrom: parseFloat(row.PriceFrom).toFixed(2),
                         PriceUpto: parseFloat(row.PriceUpto).toFixed(2),
                         stoploss: parseFloat(row.StopLoss).toFixed(2),
@@ -342,11 +357,24 @@ function GetResearchCall(norderAction, npageindex, dDateRange1, dDateRange2) {
                         CallTypeorder: row.CallType,
                         sSegment: row.sSegment
                     });
+
+                    sScripts = sScripts.concat(row.nConstant + '.' + row.nToken + ',');
+
+                    if (blnBroadCastFlag == true) {
+                        CloseSocket();
+                    }
+                    var lblScript = "lblScripts3";
+
+                    $('#lblScripts3').html(sScripts.substring(0, sScripts.length - 1));
+                    $('#lblScripts3').html($('#lblScripts3').html() + "," + "17.999908,17.999988,5.1")
+                    reconnectSocketAndSendTokens(lblScript);
+
                 });
 
                 $("#NotificationgridReseaarchcall").kendoGrid({
                     dataSource: {
                         data: Getresearch,
+                        pageSize:20
                     },
                     sortable: true,
                     resizable: true,
@@ -364,10 +392,10 @@ function GetResearchCall(norderAction, npageindex, dDateRange1, dDateRange2) {
 
                     columns: [
                           {
-                              field: "BYU/SELL",
+                              field: "BUY/SELL",
                               width: 50,
                               title: "",
-                              template: "<a class='k-button' onclick='Researchbuysell(this)'  style='width: auto; min-width:auto !important;' data-buysell='#= buysell #' data-nToken='#= nToken#' data-nConstant='#= nConstant#' data-vInstrument='#= vInstrument#' data-nMinQty='#= nMinQty#' data-CallTypeorder='#= CallTypeorder#' data-sScrip='#= sScrip#' data-sExpiry='#= sExpiry#' data-vstrike='#= vstrike#' data-sCallPut='#= sCallPut#' data-sSegment='#= sSegment#'>" +
+                              template: "<a class='k-button' onclick='Researchbuysell(this)'  style='width: auto; min-width:auto !important;' data-buysell='#= buysell #' data-nToken='#= nToken#' data-nConstant='#= nConstant#' data-insnumber='#= InsNumber#' data-vInstrument='#= vInstrument#' data-nMinQty='#= nMinQty#' data-CallTypeorder='#= CallTypeorder#' data-sScrip='#= sScrip#' data-sExpiry='#= sExpiry#' data-vstrike='#= vstrike#' data-sCallPut='#= sCallPut#' data-sSegment='#= sSegment#'>" +
                                           "<i class='fa fa-ellipsis-v' aria-hidden='true'></i>" +
                                         "</a>"
 
@@ -386,106 +414,113 @@ function GetResearchCall(norderAction, npageindex, dDateRange1, dDateRange2) {
                               //  template: "#= buysell + ' <br/> ' + buyselltd #"
 
                           },
-                    {
-                        title: "Scrip",
-                        field: "sScrip",
-                        width: 100,
-                        //template: "#= sScrip + ' <br/> ' + callType #"
-                    },
-                    {
-                        title: "Call Type",
-                        field: "callType",
-                        width: 210,
-                        // template: "#= sScrip + ' <br/> ' + callType #"
-                    },
-                    {
-                        title: "Instrument ",
-                        field: " vInstrument",
-                        width: 130,
-                        //  template: "#= vInstrument + ' <br/> ' + sExpiry #"
-                    },
-                    {
-                        title: "Expiry ",
-                        field: " sExpiry",
-                        width: 130,
-                        //template: "#= vInstrument + ' <br/> ' + sExpiry #"
-                    },
-                    {
-                        title: "Strike Price",
-                        field: "vstrike",
-                        width: 80,
-                        //  template: "#= vstrike + ' <br/> ' + sCallPut #"
+                            {
+                                title: "Scrip",
+                                field: "sScrip",
+                                width: 100,
+                                //template: "#= sScrip + ' <br/> ' + callType #"
+                            },
+                            {
+                                title: "Call Type",
+                                field: "callType",
+                                width: 210,
+                                // template: "#= sScrip + ' <br/> ' + callType #"
+                            },
+                            {
+                                title: "Instrument ",
+                                field: " vInstrument",
+                                width: 130,
+                                //  template: "#= vInstrument + ' <br/> ' + sExpiry #"
+                            },
+                            {
+                                title: "LTP",
+                                field: " LTP",
+                                template: "#= LTP #",
+                                width: 130,
+                                //  template: "#= vInstrument + ' <br/> ' + sExpiry #"
+                            },
+                            {
+                                title: "Expiry ",
+                                field: " sExpiry",
+                                width: 130,
+                                //template: "#= vInstrument + ' <br/> ' + sExpiry #"
+                            },
+                            {
+                                title: "Strike Price",
+                                field: "vstrike",
+                                width: 80,
+                                //  template: "#= vstrike + ' <br/> ' + sCallPut #"
 
-                    },
-                    {
-                        title: "Call Put",
-                        field: "sCallPut",
-                        width: 80,
-                        //  template: "#= vstrike + ' <br/> ' + sCallPut #"
+                            },
+                            {
+                                title: "Call Put",
+                                field: "sCallPut",
+                                width: 80,
+                                //  template: "#= vstrike + ' <br/> ' + sCallPut #"
 
-                    },
-                    {
-                        title: "Price",
-                        field: "PriceFrom",
-                        width: 80,
-                        //emplate: "#= PriceFrom + ' <br/> ' + PriceUpto #"
+                            },
+                            {
+                                title: "Price",
+                                field: "PriceFrom",
+                                width: 80,
+                                //emplate: "#= PriceFrom + ' <br/> ' + PriceUpto #"
 
-                    },
-                     {
-                         title: "PriceUpto",
-                         field: "PriceUpto",
-                         width: 80,
-                         //    template: "#= PriceFrom + ' <br/> ' + PriceUpto #"
+                            },
+                             {
+                                 title: "PriceUpto",
+                                 field: "PriceUpto",
+                                 width: 80,
+                                 //    template: "#= PriceFrom + ' <br/> ' + PriceUpto #"
 
-                     },
-                    {
-                        title: "Stop Loss",
-                        field: "stoploss",
-                        width: 80,
-                        //template: "#= stoploss + ' <br/> ' + Tprice #"
-                    },
-                     {
-                         title: "Target Price",
-                         field: "Tprice",
-                         width: 80,
-                         //  template: "#= stoploss + ' <br/> ' + Tprice #"
-                     },
-                     {
-                         title: "Call Date",
-                         field: "CallDate",
-                         width: 100,
-                         //  template: "#= CallDate + ' <br/> ' + TargetDate #"
-                     },
-                    {
-                        title: "Target Date",
-                        field: "TargetDate",
-                        width: 100,
-                        //  template: "#= CallDate + ' <br/> ' + TargetDate #"
-                    },
-                    {
-                        title: "Exp. Return Value ",
-                        field: "ExpRet",
-                        width: 90,
-                        //  template: "#= ExpRet + ' <br/> ' + ExpRetPercent #"
-                    },
-                    {
-                        title: "Exp.Return %",
-                        field: "ExpRetPercent",
-                        width: 90,
+                             },
+                            {
+                                title: "Stop Loss",
+                                field: "stoploss",
+                                width: 80,
+                                //template: "#= stoploss + ' <br/> ' + Tprice #"
+                            },
+                             {
+                                 title: "Target Price",
+                                 field: "Tprice",
+                                 width: 80,
+                                 //  template: "#= stoploss + ' <br/> ' + Tprice #"
+                             },
+                             {
+                                 title: "Call Date",
+                                 field: "CallDate",
+                                 width: 100,
+                                 //  template: "#= CallDate + ' <br/> ' + TargetDate #"
+                             },
+                            {
+                                title: "Target Date",
+                                field: "TargetDate",
+                                width: 100,
+                                //  template: "#= CallDate + ' <br/> ' + TargetDate #"
+                            },
+                            {
+                                title: "Exp. Return Value ",
+                                field: "ExpRet",
+                                width: 90,
+                                //  template: "#= ExpRet + ' <br/> ' + ExpRetPercent #"
+                            },
+                            {
+                                title: "Exp.Return %",
+                                field: "ExpRetPercent",
+                                width: 90,
 
-                    },
-                    {
-                        title: "Duration",
-                        field: "Duration",
-                        width: 80,
+                            },
+                            {
+                                title: "Duration",
+                                field: "Duration",
+                                width: 80,
 
-                    },
-                    {
-                        title: "Call Status",
-                        field: "closetype",
-                        template: "#=closetype #",
-                        width: 110,
-                    }
+                            },
+                            {
+                                title: "Call Status",
+                                field: "closetype",
+                                template: "#=closetype #",
+                                width: 110,
+                            }
 
                     ]
                 });
@@ -780,8 +815,13 @@ function Researchbuysell(data) {
         return false;
     }
 
-    var sScripts = "";
-    var currrate = "";
+    $("#scripname").html(data.dataset.sscrip);
+
+    var Code = $("#txtSelectedClient").val().split('-')[0].trim();
+    var Name = $("#txtSelectedClient").val().split('-')[1].trim();
+
+    $("#NameCodeData1").html(Name + '(' + Code + ')')
+
     KendoWindow("researchbuysell", 650, 370, "Order", 0);
     $("#researchbuysell").closest(".k-window").css({
         top: 220,
@@ -802,6 +842,7 @@ function Researchbuysell(data) {
         $("#Sellordersearch").show();
         $("#Buyordersearch").hide();
     }
+
     var nconstant = data.dataset.nconstant;
     localStorage.setItem("nconstant", nconstant);
     var ntoken = data.dataset.ntoken;
@@ -817,30 +858,22 @@ function Researchbuysell(data) {
     
     var sCallPut = data.dataset.scallput;
     localStorage.setItem("sCallPut", sCallPut);
-    if (nconstant == 12 || nconstant == 13) {
-        currrate = '<span><strong id= "' + nconstant + '_' + ntoken + '_LR">0.0000</strong></span>';
+
+    var ltpid = nconstant + '_' + ntoken;
+
+    $("#ltprice1").html(parseFloat($('.' + ltpid + '_LR').text()).toFixed(2))
+    $("#tradeprice1").val(parseFloat($('.' + ltpid + '_LR').text()).toFixed(2));
+
+    var minqty, stocktype;
+
+    if (data.dataset.insnumber != 3) {
+        minqty = data.dataset.nminqty;
+        $("#tradeqty1").val(minqty);
+    } else {
+        $("#tradeqty1").val('1');
     }
-    else {
-        currrate = '<span><strong id= "' + nconstant + '_' + ntoken + '_LR">0.0000</strong></span>';
-    }
-    
-    sScripts = sScripts + nconstant + '.' + ntoken + ','
-    if (blnBroadCastFlag == true) {
-        CloseSocket();//Close and open
-    }
-    var lblScript = "lblScripts2";
-    
-    $('#lblScripts2').html(sScripts.substring(0, sScripts.length - 1));
-    $('#lblScripts2').html($('#lblScripts2').html() + "," + "17.999908,17.999988,5.1")
-    reconnectSocketAndSendTokens(lblScript);
-    
-    $("#ltprice1").html(currrate);
-    
-    var minqty = data.dataset.nminqty
-    $("#tradeqty1").val(minqty)
-    var stocktype = data.dataset.ssegment
-    VarMargin1(1, ntoken, stocktype)
-    
+    stocktype = data.dataset.ssegment;
+    VarMargin1(1, ntoken, stocktype, 'varper2')
     
     var CncMis = 0;//set
     if ($('#ONRML1').is(':checked')) {
@@ -849,21 +882,21 @@ function Researchbuysell(data) {
     else if ($('#OMIS1').is(':checked')) {
         CncMis = 1;
     }
-    if (CncMis == "0") {
-        nCncMis = 1;
-    }
-    else {
-        nCncMis = 0;
-    }
+    //if (CncMis == "0") {
+    //    nCncMis = 1;
+    //}
+    //else {
+    //    nCncMis = 0;
+    //}
     var ExchangeName = 'NSE';
     var price = $("#tradeprice1").val();
     var Qty = $("#tradeqty1").val();
-    var CncMis = 0;//set
+    //var CncMis = 0;//set
     if ($('#marketorder1').is(':checked')) {
         var nconstant1 = localStorage.getItem("nconstant");
         var ntoken = localStorage.getItem("ntoken");
         var ltpid = nconstant1 + "_" + ntoken
-        var price = parseFloat($("#" + ltpid + "_LR").text()).toFixed(2)
+        var price = parseFloat($("." + ltpid + "_LR").text()).toFixed(2)
     
     }
     else if ($('#limitorder1').is(':checked')) {
@@ -874,13 +907,13 @@ function Researchbuysell(data) {
         var nconstant1 = localStorage.getItem("nconstant");
         var ntoken = localStorage.getItem("ntoken");
         var ltpid = nconstant1 + "_" + ntoken
-        var price = parseFloat($("#" + ltpid + "_LR").text()).toFixed(2)
+        var price = parseFloat($("." + ltpid + "_LR").text()).toFixed(2)
     }
     else if ($('#stoploss1').is(':checked')) {
         var price = $("#tradeprice1").val();
     }
     var OrderNo = 0;
-    GetRequiredStockOrMargin(nCncMis, ntoken, ExchangeName, price, buysellreq, Qty, CallTypeorder, OrderNo, 2, idList);
+    GetRequiredStockOrMargin(CncMis, ntoken, ExchangeName, price, buysellreq, Qty, CallTypeorder, OrderNo, 2, idList4);
 }
 
 
@@ -889,7 +922,7 @@ $("#limitorder1").click(function () {
     var nconstant1 = localStorage.getItem("nconstant");
     var ntoken = localStorage.getItem("ntoken");
     var ltpid = nconstant1 + "_" + ntoken
-    var ltp = parseFloat($("#" + ltpid + "_LR").text()).toFixed(2)
+    var ltp = parseFloat($("." + ltpid + "_LR").text()).toFixed(2)
     //  $("#ltprice").html(ltp);
     $("#tradeprice1").val(ltp);
 })
@@ -906,7 +939,7 @@ $("#stoplossmarket1").click(function () {
     var nconstant1 = localStorage.getItem("nconstant");
     var ntoken = localStorage.getItem("ntoken");
     var ltpid = nconstant1 + "_" + ntoken
-    var ltp = parseFloat($("#" + ltpid + "_LR").text()).toFixed(2)
+    var ltp = parseFloat($("." + ltpid + "_LR").text()).toFixed(2)
     //  $("#ltprice").html(ltp);
     $("#tradeprice1").val(ltp);
 });
@@ -927,7 +960,7 @@ $("#Buyordersearch").click(function () {
     var nconstant1 = localStorage.getItem("nconstant");
     var ntoken = localStorage.getItem("ntoken");
     var ltpid = nconstant1 + "_" + ntoken
-    var ltp = parseFloat($("#" + ltpid + "_LR").text()).toFixed(2)
+    var ltp = parseFloat($("." + ltpid + "_LR").text()).toFixed(2)
     var nMarketRate = ltp;
     var nQty = $("#tradeqty1").val();
     var buysell = localStorage.getItem("buysell1");
