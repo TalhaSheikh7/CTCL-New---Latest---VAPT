@@ -23,12 +23,16 @@ $(document).ready(function () {
 
 });
 
+function CloseSocket() {
+    blnBroadCastFlag = false;
+    ws.close();
+    return false;
+}
 
 function sendTokens(lblScript) {
 
-    var TokensValues = $('#lblScripts').html() + "," + $('#lblHoldingScripts').html() + "," + $('#lblScripts2').html() + "," + $('#lblScripts3').html() + "," + $('#lblScripts4').html() + "," + $('#lblScriptsObook').html() + "," + "17.999908,17.999988,5.1"
-
-
+    //var TokensValues = $('#lblScripts').html() + "," + $('#lblHoldingScripts').html() + "," + $('#lblScripts2').html() + "," + $('#lblScripts3').html() + "," + $('#lblScripts4').html() + "," + $('#lblScriptsObook').html() + "," + "17.999908,17.999988,5.1"
+    var TokensValues = $('#lblScripts').html();
     //console.log("tokens.length" + tokens.length);
     if (tokens.length > 0) {
         setTimeout(function () {
@@ -45,11 +49,16 @@ function sendTokens(lblScript) {
 function reconnectSocketAndSendTokens(lblScript) {
 
     var scriplblName = lblScript;
-
-    if (ws == null || ws == undefined || ws.readyState != WebSocket.OPEN) {
+    var TokensValues = $('#lblScripts').html() + "," + $('#lblHoldingScripts').html() + "," + $('#lblScripts2').html() + "," + $('#lblScripts3').html() + "," + $('#lblScripts4').html() + "," + $('#lblScriptsObook').html() + "," + "17.999908,17.999988,5.1"
+    if (ws == null || ws == undefined || ws.readyState != WebSocket.OPEN || ws.readyState != WebSocket.CONNECTING) {
         ws = new WebSocket(gblBCastUrl);
+        blnBroadCastFlag = true;
         ws.onopen = function () {
-            sendTokens(scriplblName);
+            setTimeout(function () {
+                SendJson = { SeqNo: 1, Action: "sub.add.topics", RType: "O1", Topic: "", Body: TokensValues };
+                ws.send(JSON.stringify(SendJson));
+            }, 100);
+            //sendTokens(scriplblName);
         };
         ws.onmessage = function (evt) {
             ProcessData(evt.data, lblScript);
@@ -97,7 +106,7 @@ function ProcessData(bcastData, lblScript) {
         var nPerChange = 0;
         var nDifference = 0;
     
-        $("." + SymbolId + "_LR").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
+        $("." + SymbolId + "_LR").html(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
         $("." + SymbolId + "_LRH").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
         $("." + SymbolId + "_LTP").text(Data.Last / ((startsWith(Data.SymbolKey, '12.') || startsWith(Data.SymbolKey, '13.')) == false ? 100 : 10000));
 
@@ -136,7 +145,7 @@ function ProcessData(bcastData, lblScript) {
         $("." + SymbolId + "_ATP").text(atp);
 
         if (startsWith(Data.SymbolKey, '12.') == true || startsWith(Data.SymbolKey, '13.') == true) {
-            $("." + SymbolId + "_LR").text(parseFloat($("." + SymbolId + "_LR").text()).toFixed(4));
+            $("." + SymbolId + "_LR").text(parseFloat($("." + SymbolId + "_LR").html()).toFixed(4));
             $("." + SymbolId + "_LRH").text(parseFloat($("." + SymbolId + "_LRH").text()).toFixed(4));
             $("." + SymbolId + "_H").text(parseFloat($("." + SymbolId + "_H").text()).toFixed(4));
             $("." + SymbolId + "_L").text(parseFloat($("." + SymbolId + "_L").text()).toFixed(4));
@@ -152,7 +161,7 @@ function ProcessData(bcastData, lblScript) {
            // $("." + SymbolId + "_CV").text(parseFloat($("." + SymbolId + "_LR").text() * qty).toFixed(4));
         }
         else {
-            $("." + SymbolId + "_LR").text(parseFloat($("." + SymbolId + "_LR").text()).toFixed(2));
+            $("." + SymbolId + "_LR").text(parseFloat($("." + SymbolId + "_LR").html()).toFixed(2));
             $("." + SymbolId + "_LRH").text(parseFloat($("." + SymbolId + "_LRH").text()).toFixed(2));
             $("." + SymbolId + "_H").text(parseFloat($("." + SymbolId + "_H").text()).toFixed(2));
             $("." + SymbolId + "_L").text(parseFloat($("." + SymbolId + "_L").text()).toFixed(2));
@@ -496,11 +505,11 @@ function ProcessData2(bcastData) {
 
         $("#lblClose").html((Data.Last / (isCd ? 10000 : 100)).toFixed(isCd ? 4 : 2));
 
-        if (rateread == false) {
+        //if (rateread == false) {
 
-            $("#txtorderprice").val((Data.Last / (isCd ? 10000 : 100)).toFixed(isCd ? 4 : 2)).trigger('change');
-            rateread = true;
-        }
+        //    $("#txtorderprice").val((Data.Last / (isCd ? 10000 : 100)).toFixed(isCd ? 4 : 2)).trigger('change');
+        //    rateread = true;
+        //}
 
         $("#lblPrevClose").html((Data.PClose / (isCd ? 10000 : 100)).toFixed(isCd ? 4 : 2));
         $("#script_rate1").html((0 / (isCd ? 10000 : 100)).toFixed(isCd ? 4 : 2));
@@ -581,42 +590,6 @@ function savegblBCastUrl(url) {
 
 function getGblBCastUrl() {
     return window.localStorage.getItem("BroadcastUrl");
-}
-
-function GetBcastUrl(nAction) {
-    var GetUrl = $.ajax(
-        {
-            url: gblurl + "AccoutingV1/",
-            method: "get",
-            async: false,
-            data: {
-                nAction: nAction,
-                sUserId: "",
-                nPageIndex: 1,
-                AccountSegment: 0,
-                nExchange: 1
-            },
-            dataType: "json"
-        });
-
-    GetUrl.done(function (msg) {
-
-        if (msg.ResultStatus == 3) {
-            if (msg.Result.nLoginStatus == 1) {
-                savegblBCastUrl(msg.Result.sIbtBroadcastUrl.toString().trim());
-            }
-            else {
-                // no broadcast.
-            }
-        } else {
-            //??
-        }
-
-    });
-
-    GetUrl.fail(function (jqXHR, textStatus) {
-        alert("Request failed: " + textStatus + ' GetOStatus');
-    });
 }
 
 function resetServerHbListener() {

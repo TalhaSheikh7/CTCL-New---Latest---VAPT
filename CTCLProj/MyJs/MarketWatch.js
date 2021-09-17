@@ -144,6 +144,37 @@ $(document).ready(function () {
 
     getExpiredScripDetails();
     //getgrid2();
+
+    if (gblCTCLtype.toString().toLocaleLowerCase() == "emp" || gblCTCLtype.toString().toLocaleLowerCase() == "ba") {
+        $("#cmbClients").val(getGlobalVariable("BaClientcode", ""));
+
+        getClntInfo(function (data) {
+
+            hfldBOIYN = "false";
+            for (i = 0; i < data.ClientInfo.length; i++) {
+                if (data.ClientInfo[i].Segment.toUpperCase() == "CASH") {
+                    $("#hfldBOIYN").val(data.ClientInfo[i].BOIFlag);
+
+                    if ($("#hfldBOIYN").val() == "Y") {
+                        //$("#txtSelectedClient1").css('color', 'Blue');
+                        //$("#txtSelectedClient1").css('font-weight', 'bold');
+                        $("#txtSelectedClient").css('color', 'Blue');
+                        $("#txtSelectedClient").css('font-weight', 'bold');
+                        GetBoiLienSetting();
+                    }
+                    else {
+                        //$("#txtSelectedClient1").css('color', 'Black');
+                        //$("#txtSelectedClient1").css('font-weight', 'normal');
+                        $("#txtSelectedClient").css('color', 'Black');
+                        $("#txtSelectedClient").css('font-weight', 'normal');
+                    }
+                    
+                    break;
+                }
+            }
+        }, $("#cmbClients").val());
+
+    }
 });
 
 
@@ -750,6 +781,11 @@ function AddWatches(pintActionID, pnID, psName, pnCreaterID, pnDefaultFlag, pnEx
         }
     });
 };
+
+$(document).on("click", "#CancelWatch", function (event) {
+    $("#windowForAdd").data('kendoWindow').close();
+});
+
 
 var notification = $("#notification").kendoNotification({
     position: {
@@ -1819,7 +1855,8 @@ inputBox2.addEventListener("keydown", function (e) {
 
 function buysellwindow(data, Type="")
 {
-    debugger;
+    GetBcastUrl(6);
+
     if (gblCTCLtype.toString().toLocaleLowerCase() == "emp" && $("#cmbClients").val() == "All") {
         KendoWindow("ClientSelection", 450, 110, "", 0, true);
         return;
@@ -2026,6 +2063,7 @@ function buysellwindow(data, Type="")
     }
 
     var Code = $("#txtSelectedClient").val().split('-')[0].trim();
+    var Code = $("#txtSelectedClient").val().split('-')[0].trim();
     var Name = $("#txtSelectedClient").val().split('-')[1].trim();
 
     $("#Clientnameucc").html(Name + '(' + Code +')')
@@ -2107,8 +2145,8 @@ function buysellwindow(data, Type="")
         } else if ($("#mis").is(":checked")) {
             nCncMis = 1;
         }
-        //var Exchange = $("#Select2").val();
-        var Exchange = "NSE";
+        var Exchange = $("#Select2").val();
+        //var Exchange = "NSE";
         var nOrderAmt = $("#txtorderprice").val();
 
         sinstrument = GetInstrumentNumber(Instrument);
@@ -2128,17 +2166,33 @@ function buysellwindow(data, Type="")
 
 
 $('input[type=radio][name=switch]').change(function () {
+    var CNCMIS, Token, Exch, OrderAmount, Qty, Segment;
+    if ($("#cnc").is(":checked")) {
+        CNCMIS = 0;
+    } else if ($("#mis").is(":checked")) {
+        CNCMIS = 1;
+    }
+
+    Token = $("#scriptname").data("token");
+    Exch = $("#Select2").val();
+    OrderAmount = $("#txtorderprice").val();
+    Qty = $("#txtqty").val();
+    Segment = $("#cmbSegment1").val();
     if (this.value == 'buy') {
         document.querySelector('#btntrade').innerHTML = 'BUY';
         $("#btntrade").css("background-color", "#4987ee");
         localStorage.setItem("BuySell", "Buy");
         $("#scriptname").attr("data-buysell", '1');
+
+        GetRequiredStockOrMargin(CNCMIS, Token, Exch, OrderAmount, 1, Qty, Segment, '', 1, idList);
     }
     else if (this.value == 'sell') {
         document.querySelector('#btntrade').innerHTML = 'SELL';
         $("#btntrade").css("background-color", "#ca2222");
         localStorage.setItem("BuySell", "Sell");
         $("#scriptname").attr("data-buysell", '2');
+
+        GetRequiredStockOrMargin(CNCMIS, Token, Exch, OrderAmount, 2, Qty, Segment, '', 1, idList);
     }
 });
 
@@ -2244,7 +2298,7 @@ $('#mis').click(function () {
 
 
 $("#txtqty").change(function () {
-    
+    alert("qty");
     if ($("#txtqty").val() == 0)
     {
         $("#txtqty").val($("#txtqty").attr("min"));
@@ -2282,6 +2336,60 @@ $("#txtqty").change(function () {
     var nOrderAmt = $("#txtorderprice").val();
     
     GetRequiredStockOrMargin(nCncMis, $("#scriptname").data("token"), Exchange, nOrderAmt, nBuySell, nQty, $("#cmbSegment1").val(), '', 1, idList);
+
+    SetEstTotal($("#txtqty").val(), $("#txtorderprice").val());
+});
+
+$("#tetetete").change(function () {
+    alert("yes");
+    var Price = $("#txtorderprice").val();
+    if ($('#segmenttype').attr("data-segement") == "CURR") {
+
+        safe = floatSafeModulus(parseFloat(Price), parseFloat(tickpriceCurrency));
+    }
+    else {
+
+        safe = floatSafeModulus(parseFloat(Price), parseFloat(tickprice));
+    }
+
+    if (safe != 0) {
+        Price = $("#txtorderprice").val();
+        $("#txtorderprice").val(floatSafeModulus1(parseFloat(Price), parseFloat(safe), $('#segmenttype').attr("data-segement")));
+    }
+
+    if ($('#segmenttype').attr("data-segement") == "CURR") {
+        if ($("#txtorderprice").val() < 0) { $("#txtorderprice").val(tickpriceCurrency) }
+        $("#txtorderprice").val(parseFloat($("#txtorderprice").val()).toFixed(4));
+    }
+    else {
+        if ($("#txtorderprice").val() < 0) { $("#txtorderprice").val(tickprice) }
+        $("#txtorderprice").val(parseFloat($("#txtorderprice").val()).toFixed(2));
+    }
+
+    var nToken = $("#scriptname").data("token");
+    var sinstrument = GetInstrument($('#segmenttype').attr("data-segement"));
+    var nQty = $("#txtqty").val();
+
+    var nCncMis, nBuySell;
+    if ($("#cnc").is(":checked")) {
+        nCncMis = 0;
+    } else if ($("#mis").is(":checked")) {
+        nCncMis = 1;
+    }
+
+    if ($("input[type='radio'][name='switch']:checked").val() == "buy") {
+        nBuySell = 1;
+    } else if ($("input[type='radio'][name='switch']:checked").val() == "sell   ") {
+        nBuySell = 2;
+    }
+
+    var ExchangeType = $("#segmenttype").text();
+
+    var Exchange = ExchangeType.split(',')[0];
+
+    var nOrderAmt = parseFloat(Price).toFixed(2);
+
+    GetRequiredStockOrMargin(nCncMis, nToken, Exchange, nOrderAmt, nBuySell, nQty, $("#cmbSegment1").val(), '', 1, idList);
 
     SetEstTotal($("#txtqty").val(), $("#txtorderprice").val());
 });
@@ -2576,10 +2684,94 @@ function tradebutton()
         }
     }
 
-    SaveRecord();
-
+    if ($("#hfldBOIYN").val().toString() && $("input[type='radio'][name='lien']:checked").val() == "On" && Math.ceil($("#excessMargin").html()) > 0)
+    {
+        if ($("#excessMarText").html() == "EXCESS MARGIN")
+        {
+            BOILeanAmount(gblnUserId, $("#cmbClients").val(), 2, Math.ceil($("#excessMargin").html()), '', SaveRecord);
+        } else
+        {
+            BOILeanAmount(gblnUserId, $("#cmbClients").val(), 3, $("#excessMargin").html(), $("#tdISINCode").html(), SaveRecord);
+        }
+    } else
+    {
+        SaveRecord();
+    }
 }
 
+
+function BOILeanAmount(psLoginId, psUCC, pnTranType, pnTranAmount, psIsin, cbOnDone) {
+
+    KendoWindow("BoiModal", 450, 250, "Bank Of India Lean/Unlean", 0, true);
+
+    var LeanAmountParam = JSON.stringify(
+        {
+            'LoginID': psLoginId,
+            'UCC': psUCC,
+            'TransactType': pnTranType,
+            'TransactValue': pnTranAmount,
+            'ISIN': psIsin
+        });
+
+    $.ajax({
+        url: gblurl + "BOIAccountV1/",
+        type: 'POST',
+        contentType: 'application/json',
+        data: LeanAmountParam,
+        dataType: "json",
+        success: function (data) {
+            if (data.ResultStatus == 3) {
+                $("#lienResult").css("display", "block");
+
+                if ($("#excessMarText").html() == "EXCESS MARGIN") {
+                    $("#BoiLienHead").html("Fund Block Processed");
+                    $("#LienAmt").html("Blocking Rs. " + pnTranAmount);
+                } else {
+                    $("#BoiLienHead").html("Stock Block Processed");
+                    $("#LienAmt").html("Blocking Qty. " + pnTranAmount);
+                }
+
+                $("#LienAmtResult").html("Succeed");
+                $("#checkUncheck").attr("src", "../img/check2.png");
+
+                setTimeout(function () {
+                    $("#BoiModal").hide();
+
+                    if (cbOnDone != null && cbOnDone != undefined)
+                        cbOnDone();
+
+                }, 5000);
+
+            } else {
+                $("#lienResult").css("display", "block");
+
+                if ($("#excessMarText").html() == "EXCESS MARGIN") {
+                    $("#BoiLienHead").html("Fund Block Processed");
+                    $("#LienAmt").html("Blocking Rs. " + pnTranAmount);
+                }
+                else {
+                    $("#BoiLienHead").html("Stock Block Processed");
+                    $("#LienAmt").html("Blocking Qty. " + pnTranAmount);
+                }
+
+                $("#LienAmtResult").html("Failed");
+                $("#checkUncheck").attr("src", "../img/uncheck2.png")
+
+                setTimeout(function () {
+                    $("#BoiModal").hide();
+
+                    if (cbOnDone != null && cbOnDone != undefined)
+                        cbOnDone();
+                }, 5000);
+            }
+        },
+        error: function (data) {
+            alert("Request failed: " + textStatus + ' PostLeanAmount');
+            if (cbOnDone != null && cbOnDone != undefined)
+                cbOnDone();
+        }
+    })
+}
 //$(document).on("click", "#btntrade1", function (event) {
  
 //});
@@ -2612,7 +2804,7 @@ function SaveRecord() {
     var CP = '';
     var Strike = 0;
     
-    var OrderType = parseInt($("#ordertype").val());
+    var OrderType = parseInt($('input[name="oType"]:checked').val());
     var TriggerPrice = parseFloat($("#txttrigprice").val());
     var DQ = parseInt($("#txtdisclosedqty").val());
     var MarketPrice = $("#ltp").text();
@@ -2627,10 +2819,10 @@ function SaveRecord() {
     }
 
     if (ExchangeID == 1) {
-        successstring = '<h1>YOUR ORDER TO ' + buysellstring + '<br>' + sScript + '(' + $("#segmenttype").html() + ')<br><b>' + $("#txtqty").val().toString() + 'SHARES @ ₹' + $("#txtorderprice").val().toString() + '</b><br> WAS PLACED</h1>';
+        successstring = '<h1>YOUR ORDER TO ' + buysellstring + '<br>' + sScript + '(' + $("#segmenttype").html() + ')<br><b>' + $("#txtqty").val().toString() + ' SHARES @ ₹' + $("#txtorderprice").val().toString() + '</b><br> WAS PLACED</h1>';
     }
     else {
-        successstring = '<h1>YOUR ORDER TO ' + buysellstring + '<br>' + sScript + '(' + $("#segmenttype").html() + ')<br><b>' + $("#txtqty").val().toString() + 'SHARES @ ₹' + $("#txtorderprice").val().toString() + '</b><br> WAS PLACED</h1>';
+        successstring = '<h1>YOUR ORDER TO ' + buysellstring + '<br>' + sScript + '(' + $("#segmenttype").html() + ')<br><b>' + $("#txtqty").val().toString() + ' SHARES @ ₹' + $("#txtorderprice").val().toString() + '</b><br> WAS PLACED</h1>';
     }
 
     $('#successmsg').html(successstring);
@@ -2687,7 +2879,7 @@ function SaveRecord() {
         'Expiry': Expiry,
         'CP': CP,
         'Strike': Strike,
-        'OrderType': 1,
+        'OrderType': OrderType,
         'TriggerPrice': TriggerPrice,
         'DayIoc': DayIoc,
         'DQ': DQ,
@@ -3740,11 +3932,10 @@ function charts() {
 }
 
 function LoadCharts(Token, Scriptname, interval) {
-    debugger;
     tokenkey = Token;
     var ws;
     $("#chart").html("");
-    $("#scripname").html(Scriptname);
+    $("#chartscripname").html(Scriptname);
 
     var gblnChartToken = Token.toString();
     if (ws == null || ws == undefined || ws.readyState != WebSocket.OPEN) {
@@ -3897,7 +4088,6 @@ function RefreshChart() {
                 TFormat = { "min": "%H:%m:%s", "hrs": "%d %b '%y", "day": "%X", "week": "%d %b '%y", "month": "%b '%y" };
             }
 
-            //// Added by ARV on 20-05-2020 for changes as per new falcon data ////////
 
             else if (gInterval2 == "1") {
                 dt = getdiff(1, "days", "YYYY-MM-DD");

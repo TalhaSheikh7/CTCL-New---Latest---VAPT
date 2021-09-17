@@ -805,7 +805,7 @@ function remarkclick(data) {
 }
 
 function Researchbuysell(data) {
-
+    
     if (gblCTCLtype.toString().toLocaleLowerCase() == "emp" && $("#cmbClients").val() == "All") {
         KendoWindow("ClientSelection", 450, 110, "", 0, true);
         return false;
@@ -828,7 +828,7 @@ function Researchbuysell(data) {
         left: 340
     });
     $("#tradeprice1").val("0.00")
-    $("#marketorder1").attr('checked', 'checked');
+    //$("#marketorder1").attr('checked', 'checked');
     var buysell = data.dataset.buysell;
     localStorage.setItem("buysell1", buysell);
     
@@ -845,26 +845,37 @@ function Researchbuysell(data) {
 
     var nconstant = data.dataset.nconstant;
     localStorage.setItem("nconstant", nconstant);
+
     var ntoken = data.dataset.ntoken;
     localStorage.setItem("ntoken", ntoken);
+
     var CallTypeorder = data.dataset.calltypeorder;
     localStorage.setItem("CallTypeorder", CallTypeorder);
+
     var sScrip = data.dataset.sscrip;
-    localStorage.setItem("sScrip", sScrip)
+    localStorage.setItem("sScrip", sScrip);
+
     var sExpiry = data.dataset.sexpiry;
     localStorage.setItem("sExpiry", sExpiry);
+
     var vstrike = data.dataset.vstrike
     localStorage.setItem("vstrike", vstrike);
     
     var sCallPut = data.dataset.scallput;
     localStorage.setItem("sCallPut", sCallPut);
 
+    var stocktype = data.dataset.ssegment;
+    localStorage.setItem("sStocktype", stocktype);
+
+    var ExchangeName = 'NSE';
+    localStorage.setItem("nExchangeName", ExchangeName);
+
     var ltpid = nconstant + '_' + ntoken;
 
     $("#ltprice1").html(parseFloat($('.' + ltpid + '_LR').text()).toFixed(2))
     $("#tradeprice1").val(parseFloat($('.' + ltpid + '_LR').text()).toFixed(2));
 
-    var minqty, stocktype;
+    var minqty;
 
     if (data.dataset.insnumber != 3) {
         minqty = data.dataset.nminqty;
@@ -872,7 +883,8 @@ function Researchbuysell(data) {
     } else {
         $("#tradeqty1").val('1');
     }
-    stocktype = data.dataset.ssegment;
+
+    
     VarMargin1(1, ntoken, stocktype, 'varper2')
     
     var CncMis = 0;//set
@@ -888,7 +900,7 @@ function Researchbuysell(data) {
     //else {
     //    nCncMis = 0;
     //}
-    var ExchangeName = 'NSE';
+    
     var price = $("#tradeprice1").val();
     var Qty = $("#tradeqty1").val();
     //var CncMis = 0;//set
@@ -954,22 +966,27 @@ $("#Buyordersearch").click(function () {
         CncMis = 1;
     }
 
-    var nStockType = localStorage.getItem("CallTypeorder")
+    var sScript = $("#scripname").html();
+    var ExchangeName = localStorage.getItem("nExchangeName");
+    var nStockType = localStorage.getItem("sStocktype");
     var ntoken = localStorage.getItem("ntoken");
-    var nOrderAmt = $("#tradeprice1").val();
+    var nOrderAmt = parseFloat($("#tradeprice1").val());
     var nconstant1 = localStorage.getItem("nconstant");
-    var ntoken = localStorage.getItem("ntoken");
-    var ltpid = nconstant1 + "_" + ntoken
-    var ltp = parseFloat($("." + ltpid + "_LR").text()).toFixed(2)
+    var sS = localStorage.getItem("ntoken");
+
+    var ltpid = nconstant1 + "_" + ntoken;
+    var ltp = parseFloat($("." + ltpid + "_LR").text()).toFixed(2);
     var nMarketRate = ltp;
-    var nQty = $("#tradeqty1").val();
+    var nQty = parseInt($("#tradeqty1").val());
     var buysell = localStorage.getItem("buysell1");
     if (buysell == "BUY") {
-        var nBuySell = 1
+        var nBuySell = "1";
     }
     else {
-        var nBuySell = 0
+        var nBuySell = "0";
     }
+
+    var Expiry, Strike, CP;
 
     if (nStockType == 2 || nStockType == 5 || nStockType == 7) {
 
@@ -988,12 +1005,26 @@ $("#Buyordersearch").click(function () {
         CP = '';
     }
     var sScrip = localStorage.getItem("sScrip");
-    var OrderType = 11;
-    var TriggerPrice = 0;
+    var OrderType = parseInt($('input[name="oTypechecked"]:checked').val());
+    var TriggerPrice = parseFloat($("#txttrigprice1").val());;
     var DQ = 0;
-    var MarketPrice = 0;
+    var MarketPrice = $("#ltprice1").html();
     var successstring = '';
     var buysellstring = '';
+
+    var segmentindex = GetStringInstrumentForDisplay(nStockType);
+
+    if (localStorage.getItem("sCallPut") == "C") {
+        $('#rSegmentType').html((ExchangeName) + ',' + segmentindex + ', CALL');
+    }
+    else if (localStorage.getItem("sCallPut") == "P") {
+        $('#rSegmentType').html((ExchangeName) + ',' + segmentindex + ', PUT');
+    }
+    else {
+        $('#rSegmentType').html((ExchangeName) + ',' + segmentindex);
+    }
+
+    $('#rSegmentType').attr("data-segement", segmentindex);
 
     if ($('#Day').is(':checked')) {
         var DayIoc = 1
@@ -1008,7 +1039,19 @@ $("#Buyordersearch").click(function () {
         empclientid = gblnUserId;
         Source = "W";
     }
-        var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim()
+    var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
+
+    successstring = '<h1>YOUR ORDER TO ' + buysell + '<br>' + sScript + '(' + $("#segmenttype").html() + ')<br><b>' + parseInt($("#tradeqty1").val()) + ' SHARES @ ₹' + parseFloat($("#tradeprice1").val()) + '</b><br> WAS PLACED</h1>';
+
+
+    $('#successmsg').html(successstring);
+    //if (ExchangeID == 1) {
+    //    successstring = '<h1>YOUR ORDER TO ' + buysell + '<br>' + sScript + '(' + $("#segmenttype").html() + ')<br><b>' + parseInt($("#tradeqty1").val()) + 'SHARES @ ₹' + parseFloat($("#tradeprice1").val()) + '</b><br> WAS PLACED</h1>';
+    //}
+    //else {
+    //    successstring = '<h1>YOUR ORDER TO ' + buysell + '<br>' + sScript + '(' + $("#segmenttype").html() + ')<br><b>' + parseInt($("#tradeqty1").val()) + 'SHARES @ ₹' + parseFloat($("#tradeprice1").val()) + '</b><br> WAS PLACED</h1>';
+    //}
+
     var UpdateOrderParams = JSON.stringify({
 
         'userId': ClientCode, //gblnUserId,// nuserId,
@@ -1021,7 +1064,7 @@ $("#Buyordersearch").click(function () {
         'Expiry': Expiry,
         'CP': CP,
         'Strike': Strike,
-        'OrderType': OrderType,
+        'OrderType': 1,
         'TriggerPrice': TriggerPrice,
         'DayIoc': DayIoc,
         'DQ': DQ,
@@ -1029,20 +1072,42 @@ $("#Buyordersearch").click(function () {
         'Source': Source,
         'OrderHandling': CncMis,
         'ExchangeId': 1,
-        'CTCLId': localStorage.getItem("CTCLId")//gblCTCLid
-
+        'CTCLId': localStorage.getItem("CTCLId"),
+        'IsBoiOrder': 0
     });
-
+    //return false;
     $.ajax({
-        url: "https://1trade.investmentz.com/EasyTradeAPI/api/OrderV4/",
-        // url: "http://localhost:1610/api/OrderV4",
+        //url: "http://localhost:1610/api/OrderV5",
         url: gblurl + "OrderV5/",
-        type: 'PUT',
+        type: 'POST',
         contentType: 'application/json',
         data: UpdateOrderParams,
         dataType: "json",
-        success: function (data) {
-            alert("success");
+        complete: function (data, status, xhr) {
+            $('#Sellordersearch').prop("disabled", false);
+            console.log(data);
+            if (JSON.parse(data.responseText).ResultStatus == 1) {
+
+                KendoWindow("modrmsvalidation", 450, 160, "Order", 0, true);
+                $('#displayrms').html("" + JSON.parse(data.responseText).Result);
+
+            } else if (JSON.parse(data.responseText).ResultStatus == 3) {
+
+                //$('#OrderResult').html("Order Request Created with ID : " + JSON.parse(data.responseText).Result.Id);
+
+                KendoWindow("myModalnt", 450, 225, "Order", 0, true);
+                var window = $("#researchbuysell").data('kendoWindow');
+
+                window.close();
+                //var npRefresh;
+                //if (npRefresh != undefined && npRefresh != null)
+                //    npRefresh();
+            }
+            else {
+                $('#modrmsvalidation').modal('show');
+                $('#displayrms').html("" + JSON.parse(data.responseText).Result);
+
+            }
 
         },
         error: function (data) {

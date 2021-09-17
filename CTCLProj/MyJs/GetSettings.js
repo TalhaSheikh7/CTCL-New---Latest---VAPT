@@ -12,7 +12,7 @@ function getSettings() {
         dataType: "json",
         success: function (data) {
 
-            console.log(data);
+            //console.log(data);
 
             if (data.Count > 0) {
                 $("#WatchlistSet").closest(".k-window").css({

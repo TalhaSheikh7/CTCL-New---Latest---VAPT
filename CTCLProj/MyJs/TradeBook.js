@@ -7,29 +7,29 @@
             }
         }
     });
-    var timer1 = setInterval(myFunctionClient, 2000);
-    function myFunctionClient() {
+
+    var timer = setInterval(myTradeFunction, 1000);
+    function myTradeFunction() {
         if ($("#txtSelectedClient").val() == "" || $("#txtSelectedClient").val() == undefined) {
 
         } else {
-            clearInterval(timer1);
-            CCC = $("#txtSelectedClient").val().toString().split('-')[0].trim();
-            Name = $("#txtSelectedClient").val().toString().split('-')[1].trim();
+            clearInterval(timer);
+        
+            var nAction = 6;
+            var sUserId = $("#txtSelectedClient").val().split('-')[0].trim(); //gblnUserId;
+            var sProCli = 'Cli';
+            var sInstrumentName = 'All';
+            var nPageIndex = 0;
+            var nToken = 0;
+            var sScript = '';
+            var sCTCLId = gblCTCLid;//400072001005;
+            var CCC = '';
+            var Name = '';
 
+            GetApiLoginStatus(6);
+
+            tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId);
         }
-        var nAction = 6;
-        var sUserId = $("#txtSelectedClient").val().split('-')[0].trim(); //gblnUserId;
-        var sProCli = 'Cli';
-        var sInstrumentName = 'All';
-        var nPageIndex = 0;
-        var nToken = 0;
-        var sScript = '';
-        var sCTCLId = gblCTCLid;//400072001005;
-        var CCC = '';
-        var Name = '';
-
-        GetApiLoginStatus(6);
-        tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId);
     }
  
 });
@@ -39,7 +39,9 @@ MarketExchange.push({
     Id: "1",
     Name: "Scrip (ALL)"
 })
+
 script = [];
+
 function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId) {
 
     var MarketSegmentchange =
@@ -70,36 +72,37 @@ function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToke
         method: "get",
         data: rowdata,
         dataType: "json",
-        success: function (data) {
-            //console.log(data);
+        success: function (data123) {
+            //console.log(data123);
             tradebook1 = [];
             var company = "";
+            var Exchange = "";
+            var CNCMIS = "";
 
-            var datafalse = data.IsResultSuccess;
+            var datafalse = data123.IsResultSuccess;
             if (datafalse == false) {
                 tradebook1 = [];
             }
             else {
 
-                $.each(data.Result, function (i, row) {
+                $.each(data123.Result, function (i, row) {
 
                     if (row.QtyRem == 0) { partial = 'Complete'; } else { partial = 'Partial'; }
                     if (row.CncMis == 0) {
-                        var CNCMIS = "CNC / NORMAL";
+                        CNCMIS = "CNC / NORMAL";
                     }
                     else {
-                        var CNCMIS = "MIS";
+                        CNCMIS = "MIS";
                     }
 
-                    if (row.Exchange = 1) {
-                        var Exchange = "NSE"
+                    if (row.Exchange == 1) {
+                        Exchange = "NSE"
                     }
                     else {
-                        var Exchange = "BSE"
+                        Exchange = "BSE"
                     }
                     strDisplay = $.trim(row.Script + ' ' + (row.Instrument == "" ? '' : row.Instrument) + '-' + (Exchange == "" ? '' : Exchange) + ' ' + (row.Expiry == "" ? '' : Expiry(row.Type, row.Expiry)));
                     // var Scrip = '<span style="color:red;"> ' + row.Script + ' ' + row.Instrument + '-' + Exchange + '</span>';
-                    // alert(strDisplay);
                     //MarketExchange.push({
                     //    Id: i,
                     //    Name: row.Script.toUpperCase()
@@ -229,7 +232,7 @@ function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToke
                     ]
                 });
         },
-        error: function (data) {
+        error: function (data123) {
 
         }
     });
@@ -351,7 +354,7 @@ function btnConvert(data) {
     } else {
         nBuySell = 2;
     }
-    KendoWindow("windowForconvertScrip1", 500, 200, "MIS/CNC Conversion", 0);
+    KendoWindow("windowForconvertScrip1", 500, 250, "MIS/CNC Conversion", 0);
     $("#windowForconvertScrip1").closest(".k-window").css({
         top: 285,
         left: 445
@@ -733,45 +736,6 @@ function tWatchSelection() {
     tradebook(6, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId);
 }
 
-function GetBoiLienSetting() {
-     
-    if ($("#hfldBOIYN").val() == "Y") {
-        document.getElementById("fgft").style.visibility = "visible";
-        $("#FL").prop("disabled", false); $("#FL").prop("checked", true);
-        return;
-    }
-    $("#FL").prop("disabled", true); $("#FL").prop("checked", false);
-    //   document.getElementById("fgft").style.visibility = "visible";
-    $.ajax(
-       {
-           url: gblurl + "BOIAccountV1/",
-           method: "get",
-           async: false,
-           data: {
-               CommonClientCode: "869397",//gblnUserId
-               nActionId: 2
-           },
-           dataType: "json"
-       });
-    success: (function (msg) {
-        if (msg.ResultStatus == 3) {
-            if (msg.Result == true) {
-                //$("#FL").attr('checked', true);
-                $("#FL").prop("disabled", false); $("#FL").prop("checked", true);
-            }
-            else {
-                //$("#FL").attr('checked', false);
-                $("#FL").prop("disabled", true); $("#FL").prop("checked", false);
-            }
-        }
-        else {
-            $("#FL").prop("disabled", true); $("#FL").prop("checked", false);
-        }
-    });
-    error: (function (jqXHR, textStatus) {
-        alert("Request failed: " + textStatus + ' GetBoiLienSetting');
-    });
-}
 function ConvertOrder(nStockType, sTradeNo, sDealerCode, sOrderNo, nCNCMIS, nOrderId, Exchange) {
     var ConvertOrder =   $.ajax({
         url: gblurl + "OrderV5/",
@@ -816,12 +780,15 @@ function ConvertOrder(nStockType, sTradeNo, sDealerCode, sOrderNo, nCNCMIS, nOrd
                 tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId);
             }, 100);
 
+            $('#cnvrtmsg').html(msg.Result);
         }
         else {
-            $("#windowForconvertScrip1").data("kendoWindow").close();
+            
             $('#cnvrtmsg').html("Failed : " + msg.Result);
             KendoWindow("ConverorderMsg", 450, 110, "CNC To MIS", 1, true);
         }
+        $("#windowForconvertScrip1").data("kendoWindow").close();
+        KendoWindow("ConverorderMsg", 450, 110, "CNC To MIS", 1, true);
     });
 
     ConvertOrder.fail(function (jqXHR, textStatus) {

@@ -592,26 +592,26 @@
                                 </td>
 
 
-                                    <td>
-                                        <a href="https://www.investmentz.com/QRReports/ConNote" class="fundData" target="_blank">QUICK REPORTS</a>
-                                    </td>
-                                    <td>
-                                        <a id="BOReport" onclick="Backoffice()" class="fundData">BACKOFFICE REPORTS</a>
-                                    </td>
-                                    <td>
-                                        <a href="~/Home/FundTransfer" class="fundData" target="_blank">FUND PAYIN</a>
-                                    </td>
-                                    <td>
-                                        <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">WITHDRAW FUND</a>
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
+                                <td>
+                                    <a href="https://www.investmentz.com/QRReports/ConNote" class="fundData" target="_blank">QUICK REPORTS</a>
+                                </td>
+                                <td>
+                                    <a id="BOReport" onclick="Backoffice()" class="fundData">BACKOFFICE REPORTS</a>
+                                </td>
+                                <td>
+                                    <a href="~/Home/FundTransfer" class="fundData" target="_blank">FUND PAYIN</a>
+                                </td>
+                                <td>
+                                    <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">WITHDRAW FUND</a>
+                                </td>
+                            </tr>
+                        </table>
                     </div>
                 </div>
             </div>
         </div>
     </div>
+</div>
 </div>
 <div id="windowForAdd" style="display:none">
     <h4>Set as Default ?</h4>
@@ -679,6 +679,22 @@
     <h5 id="cnvrtmsg"></h5>
 </div>
 
+<div id="BoiModal" style="display:none; text-align:center">
+    <div class="col-md-10">
+        <h3 style="font-size: 27px !important; margin-bottom: 5px !important; color: #f31d58; padding-left: 35px;">
+            <span id="BoiLienHead">Fund Block Processing
+        </h3>
+        <h2 style="margin: 0; font-size: 45px; font-weight: 600; color: #575757; padding-left: 5px;"><span id="LienAmt"></span></h2>
+        <p style="font-size: 20px !important; padding-left: 35px;">From Your Bank Account</p>
+        <p style="font-size: 20px !important; padding-left: 30px;">Please Wait</p>
+        <div id="lienResult" style="display: none; color: white; padding-left: 4%;">
+            <h3 style="color: #333; font-size: 24px;">
+                <img id="checkUncheck" src="../img/check2.PNG" width="50" heoght="50" style="padding-left: 35px;" /> &nbsp;<span id="LienAmtResult"></span>
+            </h3>
+        </div>
+    </div>
+</div>
+
 <div id="modrmsvalidation" style="display:none; text-align:center">
     <div style="text-align: center">
         <h5>
@@ -730,13 +746,13 @@
                     </div>
                 </span>
                 @*<span class="form" id="myForm1">
-                    <div class="switch-field">
-                        <input type="radio" id="NSE" name="exchange" value="NSE" checked />
-                        <label for="NSE">NSE</label>
-                        <input type="radio" id="BSE" name="exchange" value="BSE" />
-                        <label for="BSE">BSE</label>
-                    </div>
-                </span>*@
+                        <div class="switch-field">
+                            <input type="radio" id="NSE" name="exchange" value="NSE" checked />
+                            <label for="NSE">NSE</label>
+                            <input type="radio" id="BSE" name="exchange" value="BSE" />
+                            <label for="BSE">BSE</label>
+                        </div>
+                    </span>*@
             </span>
         </div>
         <span id="markettype" data-stocktype="1" style="display:none;"></span>
@@ -745,7 +761,7 @@
             <span id="scriptname" data-token="0" data-buysell="0"></span>
             @*<span>22<sup>nd</sup></span>
 
-            <span>APR 14500 CR x 75 Qty</span>&nbsp;*@
+                <span>APR 14500 CR x 75 Qty</span>&nbsp;*@
 
             <span id="tdISINCode"></span>
             <span id="segmenttype" data-segement="CASH" style="float: right;" hidden="hidden"></span>
@@ -753,7 +769,6 @@
             <span style="padding-left: 7%;" id="Clientnameucc"></span>
         </div>
         <div style="font-size: 13px; text-align: left; color: #ccc;">
-            <span style="color: #ccc; width: 175px;float: left;">NFO: ₹17.80</span>
             <span style="width: 135px;float: left;">Holding:&nbsp;<span id="Hqty">0</span></span>
             <span style="width: 135px;float: left;">Position(Net Wise)</span>
         </div>
@@ -998,6 +1013,8 @@
             <span style="padding-left: 20%;" id="NameCodeData1"></span>
         </div>
 
+        <input type="hidden" name="name" data-segement="CASH" id="rSegmentType" />
+
         <div style="font-size: 13px;text-align: left;color: #ccc;width: 100%;float: left;">
             <span style="color: #ccc; width: 175px;float: left;">LTP : ₹<span id="ltprice1"></span></span>
         </div>
@@ -1072,7 +1089,7 @@
                                 <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Discolsed QTY.</td>
                             </tr>
                             <tr>
-                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="number" idvalue="0" class="inpulvalue" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
+                                <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="number" id="txtdisclosedqtyres" value="0" class="inpulvalue" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
                             </tr>
                         </table>
                     </td>
@@ -1081,10 +1098,10 @@
                         <table style="width:100%;">
                             <tr>
                                 <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                    <input id="marketorder1" type="radio" name="checkked" class="radionew" checked /> Market
+                                    <input id="marketorder1" type="radio" name="oTypechecked" class="radionew" value="11" /> Market
                                 </td>
                                 <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                    <input id="limitorder1" type="radio" name="checkked" class="radionew" /> Limit
+                                    <input id="limitorder1" type="radio" name="oTypechecked" class="radionew" value="1" checked /> Limit
                                 </td>
                             </tr>
                         </table>
@@ -1094,10 +1111,10 @@
                         <table style="width:100%;">
                             <tr>
                                 <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                    <input id="stoploss1" type="radio" name="checkked" class="radionew" /> SL
+                                    <input id="stoploss1" type="radio" name="oTypechecked" class="radionew" value="3" /> SL
                                 </td>
                                 <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                    <input id="stoplossmarket1" type="radio" name="checkked" class="radionew" /> SL-M
+                                    <input id="stoplossmarket1" type="radio" name="oTypechecked" class="radionew" value="12" /> SL-M
                                 </td>
                             </tr>
                         </table>
@@ -1221,14 +1238,14 @@
             </td>
         </tr>
     </table>-->
-    @*<input ID="hfldUser" type="text" hidden />*@
+@*<input ID="hfldUser" type="text" hidden />*@
 <!--</div>-->
 
 
 <div id="Chartswindow" style="display:none; text-align:center">
     <div class="popup_panel">
-        <span id="markettype" data-stocktype="1" style="display:none;"></span>
-        <span id="ltp" data-ltp="" style="display:none;"></span>
+        <span id="chartmarkettype" data-stocktype="1" style="display:none;"></span>
+        <span id="ltp1" data-ltp="" style="display:none;"></span>
         <div style="font-size: 13px; text-align: left; color: #ccc;">
             <div class="row">
                 <div class="col-md-2">
@@ -1245,15 +1262,15 @@
                         <option value="30">30 Min</option>
                         <option value="60">1 Hr</option>
                         @*<option value="" disabled="disabled">----------------</option>
-                        <option value="1D">1 D</option>
-                        <option value="1W">1 W</option>
-                        <option value="1Mo">1 Mo</option>*@
+                            <option value="1D">1 D</option>
+                            <option value="1W">1 W</option>
+                            <option value="1Mo">1 Mo</option>*@
                     </select>
                 </div>
 
                 <div class="col-md-2 pd-top text-right">
-                    <span id="scripname" style="font-size: 20px; font-weight:600"></span>
-                    <span  id="ltprate"></span>
+                    <span id="chartscripname" style="font-size: 20px; font-weight:600"></span>
+                    <span id="ltprate"></span>
                 </div>
                 <div class="col-md-1 pd-tops">
                     <span id="ltprate"></span>
@@ -1262,7 +1279,7 @@
 
                     <span class="arrows" style="margin-top: 1px;" id="plrate"></span>
                     <span class="sare-color"><strong id="mrate"></strong></span>
-                    <span class="sare-color"  id="perrate"></span>
+                    <span class="sare-color" id="perrate"></span>
                     <span style="float: right; font-size: 18px; color: #f60; font-weight: 800; margin-right: 20px;">
                         <span id="stime"></span>
                     </span>
@@ -1413,6 +1430,9 @@
         chart.draw(data, options);
     }
 </script>
+
+
+<script src="~/MyJs/BOISettings.js"></script>
 <script src="~/MyJs/MarketWatch.js"></script>
 <script src="~/MyJs/TradeBook.js"></script>
 <script src="~/MyJs/Holding.js"></script>

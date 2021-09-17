@@ -143,11 +143,11 @@ namespace CTCLProj.Controllers
 
         public JsonResult Old_GoToBackReport()
         {
-            //var LoginId = Request.Cookies["LoginId"]?.Value;
-            //var sessioncompaire = Request.Cookies["SessionId"]?.Value;
+            var LoginId = Request.Cookies["LoginId"]?.Value;
+            var sessioncompaire = Request.Cookies["SessionId"]?.Value;
 
-            var LoginId = "tsheikh7";
-            var sessioncompaire = "23583c99-9b42-42c3-9e32-5ce4e9b54d60";
+            //var LoginId = "tsheikh7";
+            //var sessioncompaire = "23583c99-9b42-42c3-9e32-5ce4e9b54d60";
             List<string> AuthorList = new List<string>();
             AuthorList.Add(LoginId);
             AuthorList.Add(sessioncompaire);

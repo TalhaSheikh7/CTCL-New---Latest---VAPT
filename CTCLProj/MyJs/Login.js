@@ -51,9 +51,8 @@ $("#btnForgotLoginid").click(function () {
         swal("Please Enter Your ClientCode!");
         return false;
     }
-
     $.ajax({
-        url: "http://accountopening.investmentz.co.in/eKYC/api/eKYCMaster/ForgotLogin?Option=FL3&CCC='" + UCC + "'&MobOTP=0",
+        url: "http://accountopening.investmentz.co.in/eKYC/api/eKYCMaster/ForgotLogin?Option=FL3&CCC="+ UCC +"&MobOTP=0",
         type: "GET",
         data: {
         },

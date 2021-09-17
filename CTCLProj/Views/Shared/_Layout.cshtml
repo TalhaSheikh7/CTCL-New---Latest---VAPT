@@ -37,87 +37,213 @@
     <script src="~/MyJs/BroadCast.js"></script>
     <script src="~/MyJs/CommonFunctions.js"></script>
     <script src="~/MyJs/lz-string.js"></script>
-    <script src="~/MyJs/BOISettings.js"></script>
     <script src="~/Scripts/jquery.autocomplete.min.js"></script>
     <script src="~/MyJs/ClientSearch.js"></script>
     <script src="~/MyJs/SettingManager.js"></script>
+
+    <style>
+        .form-control.scrip-search-box {
+            width: 90% !important;
+            font-size: 12px;
+            position: relative;
+            bottom: 5px;
+            border-radius: 30px;
+            text-transform: uppercase;
+            font-weight: bold;
+            color: #000000;
+            padding: 0 10px;
+            height: auto !important;
+        }
+
+        .container-block {
+            display: block !important;
+        }
+
+        .searchclose .fa.fa-times {
+            position: absolute !important;
+            z-index: 999;
+            right: 25px !important;
+            top: -4px !important;
+            color: #000;
+        }
+
+        .k-widget.form-control .k-input {
+            padding: 2px !important;
+            height: 30px !important;
+            font-size: 14px !important;
+            border-color: #0e0e0e !important;
+        }
+
+        .form-control.k-widget {
+            padding: 0;
+            height: 25px !important;
+            width: 85%;
+        }
+
+        .k-dropdown .k-dropdown-wrap {
+            height: 30px !important;
+            position: relative;
+            bottom: 5px;
+        }
+
+        .m-top20 {
+            margin-top: 1.60%;
+        }
+
+        .m-top25 {
+            margin-top: 2%;
+        }
+
+        .m-top40 {
+            margin-top: 0.8%;
+        }
+
+        .drpdwncls {
+            background-color: #000000;
+            border-color: white;
+        }
+
+        .noHover {
+            pointer-events: none;
+        }
+
+        .dropdowndesign {
+            width: 13rem;
+            margin-left: -7rem;
+            margin-top: 0.2rem;
+            background-color: black;
+            color: white;
+            border-color: white;
+        }
+    </style>
 </head>
 <body class="k-content">
     <input type="hidden" id="cmbClients" value="All" />
     <input type="hidden" id="hfldUser" value="" />
     <input type="hidden" id="hfldBOIYN" value="" />
-    
+
     <nav class="navbar navbar-dark bg-dark">
-        <div class="container-fluid d-flex justify-content-between p-0">
-            <h1 class="navbar-brand d-flex align-items-center">
-                <a href="https://www.investmentz.com/explore-products" target="_blank">
-                    <img src="~/img/investment_logo.png" style="width: 225px; margin-top: -10px;" />
-                </a>
-            </h1>
-            <table border="1" style="width:20%">
-                <tr class="indicesTr">
-                    <th>Nifty 50</th>
-                    <th>Nifty Bank</th>
-                    <th>Sensex</th>
-                </tr>
-                <tr class="indicesTr">
-                    <td class="17_999908_nf">
-                        <span class="17_999908_LR">00000.00</span>
-                        <img class="17_999908_IRateChange" style="height: 14px;" src="../img/icons/up-arrow.png" />
-                    </td>
-                    <td class="17_999988_nf">
-                        <span class="17_999988_LR">00000.00</span>
-                        <img class="17_999988_IRateChange" style="height: 14px;" src="../img/icons/up-arrow.png" />
-                        <span type="hidden" class="17_999988_PC" hidden />
-                        <span type="hidden" class="17_999908_PC" hidden />
-                    </td>
-                    <td class="5_1_nf">
-                        <span class="5_1_LR">00000.00</span>
-                        <img class="5_1_IRateChange" style="height: 14px;" src="../img/icons/up-arrow.png" />
-                        <span type="hidden" class="5_1_PC" hidden />
-                    </td>
-                </tr>
-                <tr class="indicesTr">
-                    <td class="17_999908_nf1">
-                        <span class="17_999908_RateChange">0.00</span>
-                        <span class="17_999908_RateChangePc">(0.00%)</span>
-                    </td>
-                    <td class="17_999988_nf1">
-                        <span class="17_999988_RateChange">0.00</span>
-                        <span class="17_999988_RateChangePc">(0.00%)</span>
-                    </td>
-                    <td class="5_1_nf1">
-                        <span class="5_1_RateChange">0.00</span>
-                        <span class="5_1_RateChangePc">(0.00%)</span>
-                    </td>
-                </tr>
-            </table>
-            <input id="colorDrop" style="width: 10%; font-size: 12px;" />
-            <button id="configure" class="k-rpanel-toggle k-button k-primary btn-toggle">
-                <span class="k-icon k-i-menu"></span>
-            </button>
-            <span class="pull-right">
-                <span>
-                    <img id="Broadcast1" src="../img/dis-2.png"> B
-                    <img id="Exchang1" src="../img/dis-2.png"> E
-                </span>
-            </span>
-            <span id="BANameCode"></span>
+        <div class="container-fluid container-block">
+            <div class="row">
+                <div class="col-md-2">
+                    <a href="https://www.investmentz.com/explore-products" target="_blank">
+                        <img src="~/img/investment_logo.png" style="max-width: 100%;" />
+                    </a>
+                </div>
+                <div class="col-md-3">
+                    <table border="1" style="width:100%;">
+                        <tr class="indicesTr">
+                            <th>Nifty 50</th>
+                            <th>Nifty Bank</th>
+                            <th>Sensex</th>
+                        </tr>
+                        <tr class="indicesTr">
+                            <td class="17_999908_nf">
+                                <span class="17_999908_LR">00000.00</span>
+                                <img class="17_999908_IRateChange" src="../img/icons/up-arrow.png" />
+                            </td>
+                            <td class="17_999988_nf">
+                                <span class="17_999988_LR">00000.00</span>
+                                <img class="17_999988_IRateChange" src="../img/icons/up-arrow.png" />
+                                <span type="hidden" class="17_999988_PC" hidden />
+                                <span type="hidden" class="17_999908_PC" hidden />
+                            </td>
+                            <td class="5_1_nf">
+                                <span class="5_1_LR">00000.00</span>
+                                <img class="5_1_IRateChange" src="../img/icons/up-arrow.png" />
+                                <span type="hidden" class="5_1_PC" hidden />
+                            </td>
+                        </tr>
+                        <tr class="indicesTr">
+                            <td class="17_999908_nf1">
+                                <span class="17_999908_RateChange">0.00</span>
+                                <span class="17_999908_RateChangePc">(0.00%)</span>
+                            </td>
+                            <td class="17_999988_nf1">
+                                <span class="17_999988_RateChange">0.00</span>
+                                <span class="17_999988_RateChangePc">(0.00%)</span>
+                            </td>
+                            <td class="5_1_nf1">
+                                <span class="5_1_RateChange">0.00</span>
+                                <span class="5_1_RateChangePc">(0.00%)</span>
+                            </td>
+                        </tr>
+                    </table>
+                </div>
 
-            <input type="text" class="scrip-search-box" style="width: 20%; font-size: 12px;" id="txtSelectedClient" placeholder="Search By Code" autocomplete="off" />
-            <input type="hidden" id="hdnSelectedClient" />
+                @*<input id="colorDrop" style="width: 10%; font-size: 12px;" />*@
 
-             <span class="searchclose">
-                <i class="fa fa-times" aria-hidden="true" id="btnCleanText"></i>
-             </span>
-             <span class="user-plan" id="hideheadloader">
-                 <i class="fa fa-spin fa-spinner fa-lg" id="iLoader"></i>
-             </span>
 
-            <input id="clntSearchType" style="width: 5%; font-size: 12px;" />
+                @*<button id="configure" class="k-rpanel-toggle k-button k-primary btn-toggle">
+            <span class="k-icon k-i-menu"></span>
+        </button>*@
+                <div class="col-md-1" style="margin-top: 1.2%;">
+                    <div class="m-top20">
+                        <span>
+                            <img id="Broadcast1" src="../img/dis-2.png"> B
+                            <img id="Exchang1" src="../img/dis-2.png"> E
+                        </span>
+                    </div>
+                </div>
 
-            <button><i class="fa fa-power-off" aria-hidden="true" id="btnLogout" onclick="location.href='@Url.Action("Logout", "Home")'"></i></button>
-        </div>      
+
+                @*<span id="BANameCode"></span>*@
+
+                <div class="col-md-3 m-top25">
+
+                    <input type="text" class="form-control scrip-search-box" id="txtSelectedClient" placeholder="Search By Code" autocomplete="off" />
+                    <input type="hidden" id="hdnSelectedClient" />
+
+                    <span class="searchclose">
+                        <i class="fa fa-times" aria-hidden="true" style="display: inline-block; margin-right: 30px; margin-top: 3px;" id="btnCleanText"></i>
+                    </span>
+                    <span class="user-plan" id="hideheadloader">
+                        <i class="fa fa-spin fa-spinner fa-lg" id="iLoader"></i>
+                    </span>
+                </div>
+
+                <div class="col-md-1 m-top20">
+                    <select id="clntSearchType" class="search-type">
+                        <option value="N">Name</option>
+                        <option value="C" selected="selected">Code</option>
+                    </select>
+                </div>
+
+                <div class="col-md-1 m-top20">
+                    <input id="colorDrop" style="width: 100%; font-size: 12px;" /><br />
+                </div>
+
+                <div class="col-md-1 m-top40 pull-right">
+                    <div class="dropdown">
+
+                        <button class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">
+                            Menu
+                            <span class="caret"></span>
+                        </button>
+                        <div class="dropdown-menu dropdowndesign">
+                            <u><span id="BANameCode"></span></u><br /><br />
+                             
+                            <div class="switch-field" id="BOIDiv" hidden>
+                                <lable>Auto Lien:</lable>&nbsp;&nbsp;
+                                    <input type="radio" id="lienOn" class="lc" name="lien" value="On" checked />
+                                    <label for="lienOn">ON</label>
+                                    <input type="radio" id="lienOff" class="lc" name="lien" value="Off" />
+                                    <label for="lienOff">OFF</label>
+                            </div><br/>
+                            <a href="#" class="dropdown-item" style="color:white;" onclick="location.href='@Url.Action("Logout", "Home")'">
+                                Logout
+                                <i class="fa fa-power-off" aria-hidden="true" id="btnLogout"></i>
+                            </a><br />
+                        </div>
+                    </div>
+                    @*<div class="dropdown-menu drpdwncls" aria-labelledby="dropdownMenuButton">
+                <a class="dropdown-item" style="color:white;">Logout<i class="fa fa-power-off" aria-hidden="true" id="btnLogout" onclick="location.href='@Url.Action("Logout", "Home")'"></i></a>
+                <a class="dropdown-item" style="color:white;">Logout<i class="fa fa-power-off" aria-hidden="true" id="btnLogout" onclick="location.href='@Url.Action("Logout", "Home")'"></i></a>
+            </div>*@
+                </div>
+                @*<button><i class="fa fa-power-off" aria-hidden="true" id="btnLogout" onclick="location.href='@Url.Action("Logout", "Home")'"></i></button>*@
+            </div>
+        </div>
     </nav>
 
     <main>
@@ -127,7 +253,6 @@
     </main>
 
     <footer class="footer text-center d-flex align-items-center">
-        
     </footer>
 
     <script>
@@ -135,10 +260,25 @@
         var gblurl1 = "http://localhost:49180/";
         //var gblurl1 = "https://ctcluat.investmentz.com/";
         $(document).ready(function () {
-           // alert(sessionStorage.getItem("MyId"));
+            // alert(sessionStorage.getItem("MyId"));
 
-          //themeChange(sessionStorage.getItem("ThemeColor"))
-            theme = [
+            //themeChange(sessionStorage.getItem("ThemeColor"))
+
+
+            //var Searchtype = [
+            //    { value: "C", name: "Code" },
+            //    { value: "N", name: "Name" }
+            //];
+
+            //$("#clntSearchType").kendoDropDownList({
+            //    dataTextField: "name",
+            //    dataValueField: "value",
+            //    dataSource: Searchtype,
+            //    index: 0
+            //});
+
+
+            var theme = [
                 { value: "kendo.metroblack.min", Id: 0, name: "Metro-Black" },
                 { value: "kendo.blueopal.min", Id: 1, name: "Opal" },
                 { value: "kendo.highcontrast.min", Id: 2, name: "HighContrast" },
@@ -146,6 +286,7 @@
                 { value: "kendo.Moonlight.min", Id: 4, name: "Moonlight" },
             ];
 
+            
             //KendoDropDownList("colorDrop", theme, "value", "name", themeChange, false, "", 0);
 
             $("#colorDrop").kendoDropDownList({
@@ -153,7 +294,6 @@
                 dataValueField: "value",
                 dataTextField: "name",
                 change: function (e) {
-                    console.log(this);
                     var value = $("#colorDrop").data("kendoDropDownList").dataItem($("#colorDrop").data("kendoDropDownList").select()).Id;
                     //alert(value);
                     themeChange(value);
@@ -168,32 +308,11 @@
                 }
             });
 
-            var Searchtype = [
-                { value: "C", name: "Code" },
-                { value: "N", name: "Name" }
-            ];
-
-            $("#clntSearchType").kendoDropDownList({
-                dataTextField: "name",
-                dataValueField: "value",
-                dataSource: Searchtype,
-                index: 0
-            });
-
-            var myDropDownList = $("#colorDrop");
-
-            var remoteDropDown = $("#colorDrop").data("kendoDropDownList");
-
-            remoteDropDown.list.width("auto");
-
-            myDropDownList.closest(".k-dropdownlist").css({
-                'z-index': 2
-            });
-//---------
+            //---------
             //KendoDropDownList(DropId, DropDownData, ValueField, TextField, ChangeFunctionName, autobind, casccade, index)
             //KendoDropDownList("clntSearchType123", Searchtype, "value", "name", "", false, "", 1);
 
-           // themeChange(sessionStorage.getItem("ThemeColor"));
+            // themeChange(sessionStorage.getItem("ThemeColor"));
 
             $("#responsive-panel").kendoResponsivePanel({
                 breakpoint: 768,
@@ -205,7 +324,7 @@
             GetBcastUrl(6);
 
             $.ajax({
-               // url: "https://ctcluat.investmentz.com/Home/clientnameanducc",
+                // url: "https://ctcluat.investmentz.com/Home/clientnameanducc",
                 url: "/Home/clientnameanducc",
                 type: "GET",
                 data: {
@@ -223,9 +342,9 @@
                         setTimeout(function () {
                             setLoginEmp(code, 'E');
                             setSearchTrip();
-                         //   var str = $("#txtSelectedClient").val().toString().split('-')[1].trim();
-                          
-                           // $("#txtClientCode").val($("#txtSelectedClient").val().toString().split('-')[0].trim());
+                            //   var str = $("#txtSelectedClient").val().toString().split('-')[1].trim();
+
+                            // $("#txtClientCode").val($("#txtSelectedClient").val().toString().split('-')[0].trim());
                         }, 10);
                     }
                     else {
@@ -234,17 +353,17 @@
                             setSearchTrip();
                         }, 10);
                     }
-                  
-                   
+
+
                 },
                 error: function (data) {
                     console.log(data);
                 }
             });
-            
+
         });
 
-        
+
 
         //$(document).on("change", "#clntSearchType123", function (event) {
         //    if ($(this).val() == "C") {
@@ -265,20 +384,15 @@
 
             if (ncolor != '' || ncolor == undefined || ncolor == null) {
                 var Id = $("#colorDrop").data("kendoDropDownList").dataItem($("#colorDrop").data("kendoDropDownList").select()).Id;
-                if (ncolor == 0)
-                {
+                if (ncolor == 0) {
                     localStr = "kendo.metroblack.min";
-                } else if (ncolor == 1)
-                {
+                } else if (ncolor == 1) {
                     localStr = "kendo.blueopal.min";
-                } else if (ncolor == 2)
-                {
+                } else if (ncolor == 2) {
                     localStr = "kendo.highcontrast.min";
-                } else if (ncolor == 3)
-                {
+                } else if (ncolor == 3) {
                     localStr = "kendo.black.min";
-                } else if (ncolor == 4)
-                {
+                } else if (ncolor == 4) {
                     localStr = "kendo.Moonlight.min";
                 }
 
@@ -288,14 +402,14 @@
                 $("head").append(cssLink);
 
                 if ($("link.ui-theme").length > 3) {
-                   $("link.ui-theme:first").remove();
+                    $("link.ui-theme:first").remove();
                 }
                 $("#colorDrop").data('kendoDropDownList').value(localStr);
             } else {
                 localStr = $("#colorDrop").val();
                 cssLink = $('<link href="../Content/kendo/2021.1.224/' + localStr + '.css" type="text/css" rel="Stylesheet"/>');
                 $("head").append(cssLink);
-                
+
                 //if ($("link.ui-theme").size() > 3) {
                 //    $("link.ui-theme:first").remove();
                 //}
@@ -303,6 +417,14 @@
 
         }
 
+        var switchStatus = false;
+        $('input[type=radio][name=lien]').change(function () {
+            if (this.value == 'On') {
+                UpdateBoiSetting(true);
+            } else if (this.value == 'Off') {
+                UpdateBoiSetting(false);
+            }
+        });
     </script>
 </body>
 </html>

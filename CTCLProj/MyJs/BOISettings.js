@@ -3,39 +3,61 @@
 });
 
 function GetBoiLienSetting() {
-    if ($("#hfldBOIYN").val() == "Y") {
-        document.getElementById("fgft").style.visibility = "visible";
-        $("#FL").prop("disabled", false); $("#FL").prop("checked", true);
-        return;
+
+    var timer = setInterval(myFunction, 1000);
+    function myFunction() {
+        if ($("#txtSelectedClient").val() == "" || $("#txtSelectedClient").val() == undefined) {
+
+        } else {
+            clearInterval(timer);
+            BOISettingState();
+        }
+        
     }
-    $("#FL").prop("disabled", true); $("#FL").prop("checked", false);
-    $.ajax(
-       {
-           url: gblurl + "BOIAccountV1/",
-           method: "get",
-           async: false,
-           data: {
-               CommonClientCode: "869397",//gblnUserId
-               nActionId: 2
-           },
-           dataType: "json"
-       });
-    success: (function (msg) {
-        if (msg.ResultStatus == 3) {
-            if (msg.Result == true) {
-                $("#FL").prop("disabled", false); $("#FL").prop("checked", true);
-            }
-            else {
-                $("#FL").prop("disabled", true); $("#FL").prop("checked", false);
-            }
-        }
-        else {
-            $("#FL").prop("disabled", true); $("#FL").prop("checked", false);
-        }
-    });
-    error: (function (jqXHR, textStatus) {
-        alert("Request failed: " + textStatus + ' GetBoiLienSetting');
-    });
+}
+
+
+
+function BOISettingState()
+{
+    if ($("#hfldBOIYN").val() != "Y") {
+        $("#BOIDiv").attr("hidden", true);
+        //$("#lienOff").prop("checked", true);
+        //$("#lienOn").prop("checked", false);
+    } else {
+        $("#BOIDiv").attr("hidden", false);
+        //$("#lienOff").prop("checked", false);
+        //$("#lienOn").prop("checked", true);
+        $.ajax({
+            url: gblurl + "BOIAccountV1/",
+            method: "get",
+            async: false,
+            data: {
+                CommonClientCode: $("#txtSelectedClient").val().split('-')[0].trim(),
+                nActionId: 2
+            },
+            dataType: "json",
+            success: (function (msg) {
+                if (msg.ResultStatus == 3) {
+                    if (msg.Result == true) {
+                        $("#lienOff").prop("checked", false);
+                        $("#lienOn").prop("checked", true);
+                    }
+                    else {
+                        $("#lienOff").prop("checked", true);
+                        $("#lienOn").prop("checked", false);
+                    }
+                }
+                else {
+                    $("#lienOff").prop("checked", true);
+                    $("#lienOn").prop("checked", false);
+                }
+            }),
+            error: (function (jqXHR, textStatus) {
+                alert("Request failed: " + textStatus + ' GetBoiLienSetting');
+            })
+        });
+    }
 }
 
 function UpdateBoiSetting(smode) {
@@ -44,7 +66,6 @@ function UpdateBoiSetting(smode) {
         'UCC': $("#cmbClients").val(),//gblnUserId,//
         'AutoModeOn': smode,
     });
-
     $.ajax({
         url: gblurl + "BOIAccountV1/",
         type: 'PUT',
@@ -61,7 +82,4 @@ function UpdateBoiSetting(smode) {
             alert('Error while Saving Settings');
         },
     });
-
-
-
 }

@@ -9,6 +9,7 @@ $(document).ready(function () {
 
     
 });
+
 $("#nFunds").click(function () {
     var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
     //var ClientCode = 5014669;

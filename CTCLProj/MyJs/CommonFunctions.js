@@ -32,51 +32,6 @@ function floatSafeModulus(val, step) {
     return (valInt % stepInt) / Math.pow(10, decCount);
 }
 
-function GetBcastUrl(nAction) {
-    var GetUrl = $.ajax(
-        {
-            url: gblurl + "AccoutingV1/",
-            method: "get",
-            async: false,
-            data: {
-                nAction: nAction,
-                sUserId: "",
-                nPageIndex: 1,
-                AccountSegment: 0,
-                nExchange: 1
-            },
-            dataType: "json"
-        });
-
-    GetUrl.done(function (msg) {
-
-        if (msg.ResultStatus == 3) {
-            if (msg.Result.nLoginStatus == 1) {
-                $("#Exchange").attr("src", "../img/dis-2.png");
-                $("#Exchang1").attr("src", "../img/dis-2.png");
-
-                if (msg.Result.sAmoMsg.toString().trim() != "") {
-                    $("#amomsg").html("This Order will be treated as AMO Order, Order Will be Processed on next trading Day.");
-                }
-                savegblBCastUrl(msg.Result.sCtclBroadcastUrl.toString().trim());
-            }
-            else {
-                $("#Exchange").attr("src", "../img/dis-1.png");
-                $("#Exchang1").attr("src", "../img/dis-1.png");
-                $("#amomsg").html("");
-            }
-        } else {
-            $("#Exchange").attr("src", "../img/dis-1.png");
-            $("#Exchang1").attr("src", "../img/dis-1.png");
-            $("#amomsg").html("");
-        }
-    });
-
-    GetUrl.fail(function (jqXHR, textStatus) {
-        alert("Request failed: " + textStatus + ' GetOStatus');
-    });
-}
-
 function GetRequiredStockMargin(nCncMis, nToken, Exchange, nOrderAmt, nBuySell, nQty, nSegment) {
     var nStockType;
     if (nQty == -1) {
@@ -387,31 +342,25 @@ function getLotSize(nToken, nstockType) {
 
             if (startsWith(TopicName, '17.') == true || startsWith(TopicName, '5.') == true) { 
                 $("#lblLow52").html((msg.Result.WeekLow52).toFixed(isCd ? 4 : 2));
-                //$("#lblLow52_1").html((msg.Result.WeekLow52).toFixed(isCd ? 4 : 2));
                 $("#lblHigh52").html((msg.Result.WeekHigh52).toFixed(isCd ? 4 : 2));
-                //$("#lblHigh52_1").html((msg.Result.WeekHigh52).toFixed(isCd ? 4 : 2));
 
                 $("#lblLowLim").html((msg.Result.MinPrice).toFixed(isCd ? 4 : 2));
                 $("#lblUpLim").html((msg.Result.MaxPrice).toFixed(isCd ? 4 : 2));
-                //$("#lblLowLim_1").html((msg.Result.MinPrice).toFixed(isCd ? 4 : 2));
-                //$("#lblUpLim_1").html((msg.Result.MaxPrice).toFixed(isCd ? 4 : 2));
             }
 
             else {
                 $("#lblLow52").html("N/A");
-                //$("#lblLow52_1").html("N/A");
                 $("#lblHigh52").html("N/A");
-                //$("#lblHigh52_1").html("N/A");
 
 
                 $("#lblLowLim").html((msg.Result.MinPrice).toFixed(isCd ? 4 : 2));
                 $("#lblUpLim").html((msg.Result.MaxPrice).toFixed(isCd ? 4 : 2));
             }
             $("#sISIN").text('');
-
-
+            $("#tdISINCode").html('');
             if (nstockType == 3) {
                 $("#sISIN").text(msg.Result.ISINNumber);
+                $("#tdISINCode").html(msg.Result.ISINNumber);
             }
         }
         else {
@@ -504,9 +453,11 @@ function GetHolding(sScript) {
         empclientid = gblnUserId;
     }
     if (empclientid == "All") { empclientid = ''; }
+
+    var ClientCode = $("#txtSelectedClient").val().toString().split('-')[0].trim();
     rowdata = {
         nAction: 3,
-        sUserid: 3010098,
+        sUserid: ClientCode,
         strScript: sScript,
         nPageIndex: 1,
         AccountSegment: 0

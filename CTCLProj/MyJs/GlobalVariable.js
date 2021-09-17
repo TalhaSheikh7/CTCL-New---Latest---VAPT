@@ -17,6 +17,8 @@ $(document).ready(function () {
     $("#NameCodeData1").html(NameCode);
     //$("#NameCodeData2").html(NameCode);
 
+    $("#BOIDiv").attr("hidden", true);
+
     clearClntDetails = function () {
         setGlobalVariable("AvailEmpClnts", "");
 
@@ -334,7 +336,6 @@ function GetBcastUrl(nAction) {
         });
 
     GetUrl.done(function (msg) {
-
         if (msg.ResultStatus == 3) {
             if (msg.Result.nLoginStatus == 1) {
                 $("#Exchange").attr("src", "../img/dis-2.png");
