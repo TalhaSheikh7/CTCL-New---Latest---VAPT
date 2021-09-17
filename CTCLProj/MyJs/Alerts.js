@@ -947,6 +947,7 @@ $("#marketorder1").click(function () {
     $("#tradeprice1").val("0.00");
 })
 $("#stoplossmarket1").click(function () {
+
     $("#tradeprice1").prop("disabled", false);
     var nconstant1 = localStorage.getItem("nconstant");
     var ntoken = localStorage.getItem("ntoken");
