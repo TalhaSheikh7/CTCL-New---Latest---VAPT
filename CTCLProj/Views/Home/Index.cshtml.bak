@@ -129,15 +129,6 @@
     .clear {
         clear: both;
     }
-
-    .btncm {
-        background-color: #4987ee;
-        width: 85px;
-        font-size: 14px;
-        padding: 10px 0px;
-        color: #fff;
-    }
-
 </style>
 @*<link rel="stylesheet" href="styles/kendo.common.min.css" />
     <link rel="stylesheet" href="styles/kendo.default.min.css" />
@@ -226,7 +217,7 @@
         <div id="tabstrip">
             <ul>
 
-                <li id="tBook">
+                <li id="tBook" class="k-state-active">
                     TradeBook
                 </li>
                 <li id="oBook">
@@ -235,7 +226,7 @@
                 <li id="nPosition">
                     Net Position
                 </li>
-                <li id="hValuation" class="k-state-active">
+                <li id="hValuation">
                     Holding Valuation
                 </li>
                 <li id="aLog">
@@ -246,8 +237,7 @@
                 </li>
             </ul>
             <div>
-
-                <input id="marketsegment" style="width: 12%; font-size: 12px;" />
+                <input id="mraketsegment" style="width: 12%; font-size: 12px;" />
                 <input id="marketscript" style="width: 12%; font-size: 12px;" />
                 <input id="selectTrades" style="width: 12%; font-size: 12px;" />
 
@@ -299,70 +289,30 @@
             </div>
             <div>
                 @*<input id="Omraketsegment" style="width: 12%; font-size: 12px;" />
-        <input id="Omarketscript" style="width: 12%; font-size: 12px;" />
-        <input id="OStatus" />*@
-
-                <input id="obmarketsegment" style="width: 12%; font-size: 12px;" />
-                @*<input id="obmarketScripFilter" style="width: 12%; font-size: 12px;" />*@
-                <input id="obmarketStatus" style="width: 12%; font-size: 12px;" />
-                <input id="obselectTrades" style="width: 12%; font-size: 12px;" />
-
+                    <input id="Omarketscript" style="width: 12%; font-size: 12px;" />
+                    <input id="OStatus" />*@
                 <div id="OrderBookgrid" style="height:100%;">
                 </div>
 
                 <div id="modifycancel" style="display:none; text-align:center">
-                    <span id="mcsegmenttype" data-segement="CASH" style="float: right;" hidden="hidden"></span>
-
                     <div class="popup_panel">
-                        <div style="font-size: 14px;">
+
+                        <div style="font-size: 14px;text-align: left;color: #ccc;width: 100%;float: left;">
+                            <span style="font-weight: 600; float:left; font-size: 14px; text-align: left; color: #ccc;">
+                                <span id="buysell"></span>
+                                <span id="modscrip"></span>
+                                <span id="qyt"></span>
+                            </span>
                             <span class="pull-right">
-                                <span>
-                                    <img id="Broadcast1" src="../img/dis-2.png"> B
-                                    <img id="Exchange1" src="../img/dis-2.png"> E
-                                </span>
-                                <span class="form" id="OBmyForm">
-                                    <div class="switch-field">
-                                        <input type="radio" id="radio-three" name="modswitch" value="buy" checked />
-                                        <label for="radio-three">BUY</label>
-                                        <input type="radio" id="radio-four" name="modswitch" value="sell" />
-                                        <label for="radio-four">SELL</label>
-                                    </div>
-                                </span>
+                                <span style="text-align:left; font-size: 16px;" id="NameCodeData"></span>
                             </span>
                         </div>
-                        <span id="mcmarkettype" data-stocktype="1" style="display:none;" hidden="hidden"></span>
-                        <div style="font-size: 14px;text-align: left;padding: 10px 0;color: #ccc;">
-                            <span id="modscrip" data-token="0" data-buysell="0"></span>
-                            <span id="mcsegmenttype" data-segement="CASH" style="float: right;" hidden="hidden"></span>
 
-                            <span style="padding-left: 7%;" id="OBClientnameucc"></span>
-                        </div>
+
                         <div style="font-size: 13px;text-align: left;color: #ccc;width: 100%;float: left;">
                             <span style="color: #ccc; width: 175px;float: left;">LTP : ₹<span id="ltprice"></span></span>
-                            <span style="width: 175px;float: left;">Position(Net Wise): </span>
+                            <span style="width: 175px;float: left;">Position(Net Wise)</span>
                             <span style="width: 175px;float: left;">Holdings : <span id="Oholdings"></span></span>
-                        </div>
-                        <div style="font-size: 13px; text-align: left; color: #ccc;">
-                            <div style="font-size: 13px; text-align: left; color: #ccc;">
-                                <table style="width:100%; text-align: left;" id="OBForm">
-                                    <tr>
-                                        <td id="mcExpDate" style="padding: 5px 0px; font-size: 13px; color: #ccc; width: 205px;">
-                                            <label id="lblexpdate">Exp.Date</label><br />
-                                            <select id="mcExpirydate" name="service-area"></select>
-                                        </td>
-
-                                        <td id="mcOption" style="padding: 5px 0px; font-size: 13px; color: #ccc; width: 205px;">
-                                            <label id="lblcallput">Option</label><br />
-                                            <select id="mcOptCallPut" name="service-area"></select>
-                                        </td>
-
-                                        <td id="mcPrice" style="padding: 5px 0px; font-size: 13px; color: #ccc;">
-                                            <label id="lblstrike">Strike Price</label><br />
-                                            <select id="mcOptStrike" name="service-area"></select>
-                                        </td>
-                                    </tr>
-                                </table>
-                            </div>
                         </div>
                         <div style="padding: 5px 0;clear: both;">
                             <table style="width:100%;text-align: left;border-bottom: 1px solid #312f2f;border-top: 1px solid #312f2f;margin: 15px 0;">
@@ -370,13 +320,13 @@
                                     <td>
                                         <table style="width:100%; text-align: left;">
                                             <tr>
-                                                <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="ONRML" type="radio" class="radionew" name="name" />CNC/Normal</td>
+                                                <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="OMIS" type="radio" name="name" class="radionew" /> Intraday MIS</td>
                                             </tr>
                                             <tr>
                                                 <td>
                                                     <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
                                                         <tr>
-                                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Qty.&nbsp; <span>(Min Lot Size <span id="MClotsize" style="font-weight: 600;"></span>)</span></td>
+                                                            <td style="padding: 0 10px; font-size: 13px; color: #ccc;">Qty.</td>
                                                         </tr>
                                                         <tr>
                                                             <td style="padding: 0 10px; font-size: 13px; color: #ccc;"><input type="number" id="tradeqty" class="inpulvalue" onchange="changeQty();" style="border: 0 !important; background: transparent !important; color: #fff !important;" /></td>
@@ -389,7 +339,7 @@
                                     <td>
                                         <table style="width:100%; text-align: left;">
                                             <tr>
-                                                <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="OMIS" type="radio" name="name" class="radionew" />MIS</td>
+                                                <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="ONRML" type="radio" class="radionew" name="name" /> Overnight NRML/CNC</td>
                                             </tr>
                                             <tr>
                                                 <td>
@@ -428,21 +378,7 @@
                                 </tr>
 
                                 <tr>
-                                    <td>
-                                        <table style="width:100%; text-align: left;">
-                                            <tr>
-                                                <td style="padding: 5px 0px; font-size: 13px; color: #ccc;">
-                                                    <input type="radio" name="name4" class="radionew" id="oDay" onclick="OBDayClick()" checked /> Day
-                                                </td>
-                                                <td style="padding: 5px 0px; font-size: 13px; color: #ccc;">
-                                                    <input type="radio" name="name4" class="radionew" id="oIoc" onclick="OBIocClick()" /> IOC
-                                                </td>
-                                            </tr>
-                                        </table>
-                                    </td>
-                                </tr>
 
-                                <tr>
                                     <td>
                                         <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
                                             <tr>
@@ -458,10 +394,10 @@
                                         <table style="width:100%;">
                                             <tr>
                                                 <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                                    <input type="radio" name="modOType" class="radionew typeRadio" id="mOrder" value="11" /> Market
+                                                    <input id="marketorder" type="radio" name="name1" class="radionew" checked /> Market
                                                 </td>
                                                 <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                                    <input type="radio" name="modOType" class="radionew typeRadio" id="lOrder" value="1" checked /> Limit
+                                                    <input id="limitorder" type="radio" name="name1" class="radionew" /> Limit
                                                 </td>
                                             </tr>
                                         </table>
@@ -471,10 +407,10 @@
                                         <table style="width:100%;">
                                             <tr>
                                                 <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                                    <input type="radio" name="modOType" class="radionew typeRadio" id="SLOrder" value="3" /> SL
+                                                    <input id="stoploss" type="radio" name="name1" class="radionew" /> SL
                                                 </td>
                                                 <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                                    <input type="radio" name="modOType" class="radionew typeRadio" id="SLMOrder" value="12" /> SL-M
+                                                    <input type="radio" name="name1" class="radionew" /> SL-M
                                                 </td>
                                             </tr>
                                         </table>
@@ -538,10 +474,10 @@
                                                     <table style="width:100%;">
                                                         <tr>
                                                             <td style="padding: 5px 10px; text-align: right;">
-                                                                <button class="btncm" id="CancelOrder">Cancel Order</button>
+                                                                <button class="btn btn-buy" id="CancelOrder">Cancel</button>
                                                             </td>
                                                             <td style="padding: 5px 10px;text-align: left;">
-                                                                <button class="btncm" id="ModifyOrder">Modify</button>
+                                                                <button class="btn btn-buy" id="ModifyOrder">Modify</button>
                                                             </td>
                                                         </tr>
                                                     </table>
@@ -553,7 +489,6 @@
                                 </tr>
                             </table>
                         </div>
-                        <span id="OBamomsg"></span>
                     </div>
                 </div>
                 <div id="modTradeOrderModify" style="display:none; text-align:center">
@@ -561,27 +496,20 @@
                 </div>
             </div>
             <div>
-                <input id="drpMarketSelection" style="width: 12%; font-size: 12px;" />
-                <input id="dtrange" style="width: 12%; font-size: 12px;" />
 
-                <button id="btnRefresh" class="float-right" style="width: 12%; font-size: 12px;">Refresh</button>
-                <button id="btnsqoff" class="float-right" style="width: 12%; font-size: 12px;">Sq. Off</button>
-
+                @*<input id="drpMarketSelection" style="width: 12%; font-size: 12px;" />
+                    <input id="dtrange" style="width: 12%; font-size: 12px;" />*@
+                <button id="btnRefresh" style="width: 12%; font-size: 12px;">Refresh</button>
+                <button id="btnsqoff" style="width: 12%; font-size: 12px;">Sq. Off</button>
                 <div id="sqoffpopup" style="display:none; text-align:center">
-                    <div>
-                        <div id="sqallgrid">
-                        </div>
-                    </div>
-                    <div style="margin-top: 3%;">
-                        <input type="button" onclick="btnSqALL();" id="btnSqlAll" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;" value="OK">
-                        <button id="btncancel" onclick="sqALLCancel();" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;">CANCEL</button>
-                    </div>
 
+                    <div id="sqallgrid" style="height:100%;">
+                    </div>
                     @*  <div class="form-group" style="margin-top: 45px;">*@
-
+                    <input type="button" onclick="btnSqALL();" id="btnSqlAll" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;" value="OK">
+                    <button id="btncancel" class="cancel_butt" style="padding: 7px 70px; color: #fff !important; background-color: #4f5095 !important; border-radius: 0; color: #fff;  padding: 5px 25px 5px 25px; font-size: 20px; box-shadow: none; border: 0px; font-size: 16px;">CANCEL</button>
                     <!--</div>-->
                 </div>
-
                 <div id="NetPositionGrid" style="height:100%;">
                 </div>
 
@@ -598,13 +526,13 @@
             <div>
                 <div id="tabstrip1">
                     <ul>
-                        <li class="k-state-active">
+                        <li>
                             Orders
                         </li>
                         <li id="NClick_A">
                             Notifications
                         </li>
-                        <li id="RClick_A">
+                        <li id="RClick_A" clss="k-state-active">
                             Research Calls
                         </li>
                         <li id="EClick_A">
@@ -671,7 +599,7 @@
                                     <a id="BOReport" onclick="Backoffice()" class="fundData">BACKOFFICE REPORTS</a>
                                 </td>
                                 <td>
-                                    <a id="fundPayin" class="fundData" target="_blank">FUND PAYIN</a>
+                                    <a href="~/Home/FundTransfer" class="fundData" target="_blank">FUND PAYIN</a>
                                 </td>
                                 <td>
                                     <a id="https://www.investmentz.com/QRReports/Tradebook" class="fundData">WITHDRAW FUND</a>
@@ -945,10 +873,10 @@
                         <table style="width:100%; text-align: left;">
                             <tr>
                                 <td style="padding: 5px 0px; font-size: 13px; color: #ccc;">
-                                    <input type="radio" name="name2" class="radionew" id="Day" onclick="DayClick()" checked /> Day
+                                    <input type="radio" name="name2" class="radionew" id="Day" checked /> Day
                                 </td>
                                 <td style="padding: 5px 0px; font-size: 13px; color: #ccc;">
-                                    <input type="radio" name="name2" class="radionew" id="Ioc" onclick="IocClick()" /> IOC
+                                    <input type="radio" name="name2" class="radionew" id="Ioc" /> IOC
                                 </td>
                             </tr>
                         </table>
@@ -977,10 +905,10 @@
                         <table style="width:100%;">
                             <tr>
                                 <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                    <input type="radio" name="oType" class="radionew typeRadio" id="mktOrder" value="11" /> Market
+                                    <input type="radio" name="oType" class="radionew typeRadio" id="" value="11" /> Market
                                 </td>
                                 <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                    <input type="radio" name="oType" class="radionew typeRadio" id="lmtOrder" value="1" checked /> Limit
+                                    <input type="radio" name="oType" class="radionew typeRadio" id="" value="1" checked /> Limit
                                 </td>
                             </tr>
                         </table>
@@ -990,10 +918,10 @@
                         <table style="width:100%;">
                             <tr>
                                 <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                    <input type="radio" name="oType" class="radionew typeRadio" id="stlOrder" value="3" /> SL
+                                    <input type="radio" name="oType" class="radionew typeRadio" id="" value="3" /> SL
                                 </td>
                                 <td style="padding: 5px 10px; font-size: 14px; color: #ccc;">
-                                    <input type="radio" name="oType" class="radionew typeRadio" id="stlmOrder" value="12" /> SL-M
+                                    <input type="radio" name="oType" class="radionew typeRadio" id="" value="12" /> SL-M
                                 </td>
                             </tr>
                         </table>
@@ -1096,7 +1024,7 @@
                     <td>
                         <table style="width:100%; text-align: left;">
                             <tr>
-                                <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="ONRML1" type="radio" class="radionew" name="name" checked />CNC / NORMAL</td>
+                                <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="ONRML1" type="radio" class="radionew" name="name" checked /> Overnight NRML/CNC</td>
                             </tr>
                             <tr>
                                 <td>
@@ -1115,7 +1043,7 @@
                     <td>
                         <table style="width:100%; text-align: left;">
                             <tr>
-                                <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="OMIS1" type="radio" name="name" class="radionew" /> MIS</td>
+                                <td style="padding-top: 10px; font-size: 13px; color: #ccc;"><input id="OMIS1" type="radio" name="name" class="radionew" /> Intraday MIS</td>
                             </tr>
                             <tr>
                                 <td>
@@ -1154,21 +1082,7 @@
                 </tr>
 
                 <tr>
-                    <td>
-                        <table style="width:100%; text-align: left;">
-                            <tr>
-                                <td style="padding: 5px 0px; font-size: 13px; color: #ccc;">
-                                    <input type="radio" name="name3" class="radionew" id="rDay" onclick="ResDayClick()" checked /> Day
-                                </td>
-                                <td style="padding: 5px 0px; font-size: 13px; color: #ccc;">
-                                    <input type="radio" name="name3" class="radionew" id="rIoc" onclick="ResIocClick()" /> IOC
-                                </td>
-                            </tr>
-                        </table>
-                    </td>
-                </tr>
 
-                <tr>
                     <td>
                         <table style="width:95%;text-align: left;border: 1px dashed #464444; margin: 10px 0; padding: 10px;">
                             <tr>
@@ -1489,88 +1403,6 @@
     <div id="sDetails">
 
     </div>
-</div>
-
-<div id="modOrderDetails" style="display:none; text-align:center">
-    <table>
-        <tbody>
-            <tr>
-                <td class="valign">
-                    <table width="100%" cellpadding="0" cellspacing="0">
-                        <tbody>
-                            <tr>
-                                <td style="height: 65px !important;"><span style="font-size:16pt;" id="scripExchange"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">Trade Price:- <span class="orderdtlsfont" id="tPrice"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">Exchange:- <span class="orderdtlsfont" id="oExchange"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">Order Type:- <span class="orderdtlsfont" id="otype"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">Validity Product:- <span class="orderdtlsfont" id="daycnc"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">Internal Order Id:- <span class="orderdtlsfont" id="oid"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">Exchange Order Id:- <span class="orderdtlsfont" id="exoid"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">Exchange Trade Number:- <span class="orderdtlsfont" id="tradenumber"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">Disclosed Qty:- <span class="orderdtlsfont" id="discQuantity"></span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-                <td class="valign">
-                    <table width="100%" cellpadding="0" cellspacing="0">
-                        <tbody>
-                            <tr>
-                                <td style="height: 65px !important;"><span style="font-size:16pt;" id="Span1"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">Trade Quantity:- <span class="orderdtlsfont" id="fillqty"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">Pending Quantity:- <span class="orderdtlsfont" id="penqty"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">Status:- <span class="orderdtlsfont" id="odstatus"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">Trigger Price:- <span class="orderdtlsfont" id="trprice"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">User:- <span class="orderdtlsfont" id="user"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">Internal Order Time:- <span class="orderdtlsfont" id="otime"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">Order / Modify Time:- <span class="orderdtlsfont" id="exotime"></span></td>
-                            </tr>
-                            <tr>
-                                <td class="orderdtls">Exchange Trade Time:- <span class="orderdtlsfont" id="exchtradetime"></span></td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </td>
-            </tr>
-        </tbody>
-    </table>
-    <table border="1">
-        <tbody>
-            <tr>
-                <td class="orderdtls">Error:- <span class="orderdtlsfont" id="errordet1"></span></td>
-            </tr>
-        </tbody>
-    </table>
 </div>
 
 

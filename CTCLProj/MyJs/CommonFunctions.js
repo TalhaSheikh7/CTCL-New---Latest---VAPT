@@ -23,6 +23,70 @@ function floatSafeModulusQty(val, step, segment) {
     return parseFloat(x);
 }
 
+function GetSegement(sotype) {
+    var Otypval = '';
+
+    if (sotype == "EQ") { //3
+        Otypval = 'CASH'
+    }
+    else if (sotype == "BE") { //3 
+        Otypval = 'CASH_BE'
+    }
+    else if (sotype == "SM") { //3 
+        Otypval = 'CASH_SM'
+    }
+    else if (sotype == "FUTIDX") { //1
+        Otypval = 'FUTURE'
+    }
+    else if (sotype == "FUTSTK") { //4
+        Otypval = 'FUTURE'
+    }
+    else if (sotype == "FUTCUR") { //6
+        Otypval = 'FUTURE'
+    }
+    else if (sotype == "OPTIDX") { //2
+        Otypval = 'OPTION'
+    }
+    else if (sotype == "OPTSTK") { //5
+        Otypval = 'OPTION'
+    }
+    else if (sotype == "OPTCUR") { //7
+        Otypval = 'OPTION'
+    }
+    else {
+        Otypval = ''
+    }
+    return Otypval;
+}
+
+function GetInstrument(sinstrument) {
+    sinstrument = sinstrument.trim();
+    var constval = '';
+
+    if (sinstrument == "INDEX_FUTURE" || sinstrument == "FUTIDX") {
+        constval = 1; // show FUTURE
+    }
+    else if (sinstrument == "INDEX_OPTION" || sinstrument == "OPTIDX") {
+        constval = 2; //OPTION
+    }
+    else if (sinstrument == "CASH" || sinstrument == "EQ") {
+        constval = 3; //CASH
+    }
+    else if (sinstrument == "CASH_FUTURE" || sinstrument == "FUTSTK") {
+        constval = 4; //FUTURE
+    }
+    else if (sinstrument == "OPTSTK" || sinstrument == "CASH_OPTION") {
+        constval = 5;  //OPTION
+    }
+    else if (sinstrument == "CURRENCY_FUTURE" || sinstrument == "FUTCUR") {
+        constval = 6; //CURR
+    }
+    else if (sinstrument == "CURRENCY_OPTION" || sinstrument == "OPTCUR") {
+        constval = 7; //CURR
+    }
+    return constval;
+}
+
 function floatSafeModulus(val, step) {
     var valDecCount = (val.toString().split('.')[1] || '').length;
     var stepDecCount = (step.toString().split('.')[1] || '').length;
@@ -86,7 +150,7 @@ function GetRequiredStockMargin(nCncMis, nToken, Exchange, nOrderAmt, nBuySell, 
         nStockType: nStockType,
         nToken: nToken,
         nExchangeId: nExchangeId,
-        nUserId: 869368,
+        nUserId: $("#txtSelectedClient").val().split('-')[0].trim(),
         nOrderId: nOrderId,
         nOrderAmt: parseFloat(nOrderAmt),
         nMarketRate: parseFloat(nMarketRate),
@@ -274,7 +338,7 @@ function GetRequiredStockOrMargin(nCncMis, nToken, Exchange, nOrderAmt, nBuySell
 
 }
 
-function getLotSize(nToken, nstockType) {
+function getLotSize(nToken, nstockType, pageid, keys, sName, idList) {
 
     if (nstockType == "" || nstockType == "8" || nstockType == "9") {
         nstockType = "3";
@@ -304,32 +368,32 @@ function getLotSize(nToken, nstockType) {
         //console.log(msg);
         if (msg.IsResultSuccess) {
             if (instrumentindex != 3 && instrumentindex != 8) {
-                $("#txtqty").val(msg.Result.LotSize);
-                $("#lotsize").html(msg.Result.LotSize);
+                $("#" + keys.key1).val(msg.Result.LotSize);
+                $("#" + keys.key4).html(msg.Result.LotSize);
 
-                $("#txtqty").attr("data-qty", msg.Result.LotSize);
-                $("#txtqty").attr("data-lotsize", msg.Result.LotSize);
-                $("#txtqty").attr("data-oldvalue", msg.Result.LotSize);
-                $("#txtqty").attr("step", msg.Result.LotSize);
-                $("#txtqty").attr("min", msg.Result.LotSize);
+                $("#" + keys.key1).attr("data-qty", msg.Result.LotSize);
+                $("#" + keys.key1).attr("data-lotsize", msg.Result.LotSize);
+                $("#" + keys.key1).attr("data-oldvalue", msg.Result.LotSize);
+                $("#" + keys.key1).attr("step", msg.Result.LotSize);
+                $("#" + keys.key1).attr("min", msg.Result.LotSize);
             } else {
-                $("#txtqty").val(1);
-                $("#lotsize").html(1);
+                $("#" + keys.key1).val(1);
+                $("#" + keys.key4).html(1);
 
-                $("#txtqty").attr("data-qty", 1);
-                $("#txtqty").attr("data-lotsize", 1);
-                $("#txtqty").attr("data-oldvalue", 1);
-                $("#txtqty").attr("step", 1);
-                $("#txtqty").attr("min", 1);
+                $("#" + keys.key1).attr("data-qty", 1);
+                $("#" + keys.key1).attr("data-lotsize", 1);
+                $("#" + keys.key1).attr("data-oldvalue", 1);
+                $("#" + keys.key1).attr("step", 1);
+                $("#" + keys.key1).attr("min", 1);
             }
 
             if (msg.Result.TickPrice != 0) {
                 tickprice = msg.Result.TickPrice;
-                $("#txtorderprice").attr("step", msg.Result.TickPrice);
-                $("#txtorderprice").attr("min", msg.Result.TickPrice);
+                $("#" + keys.key2).attr("step", msg.Result.TickPrice);
+                $("#" + keys.key2).attr("min", msg.Result.TickPrice);
 
-                $("#txttrigprice").attr("step", msg.Result.TickPrice);
-                $("#txttrigprice").attr("min", msg.Result.TickPrice);
+                $("#" + keys.key3).attr("step", msg.Result.TickPrice);
+                $("#" + keys.key3).attr("min", msg.Result.TickPrice);
             }
             else {
                 tickprice = 0.05;
@@ -364,13 +428,13 @@ function getLotSize(nToken, nstockType) {
             }
         }
         else {
-            $("#txtqty").val(1);
+            $("#" + keys.key1).val(1);
         }
 
         $("#sISIN").text(msg.Result.ISINNumber);
         $("#lblesttot").text('');
 
-        SetEstTotal($("#txtqty").val(), $("#txtorderprice").val());
+        SetEstTotal($("#" + keys.key1).val(), $("#" + keys.key2).val());
 
         
 
@@ -383,12 +447,12 @@ function getLotSize(nToken, nstockType) {
             nBuySell = 2;
         }
 
-        var nOrderAmt = $("#txtorderprice").val();
+        var nOrderAmt = $("#" + keys.key2).val();
         
         sinstrument = $("#cmbSegment1").val();
         if (sinstrument == 9 || sinstrument == 8 || sinstrument == 1 || sinstrument == 2 || sinstrument == 4 || sinstrument == 5) {
-            
-            //GetRequiredStockOrMargin(0, $("#scriptname").data("token"), $("#Select2").val(), nOrderAmt, nBuySell, $("#txtqty").val(), sinstrument);
+            //alert($("#" + sName).data("token"));
+            GetRequiredStockOrMargin(0, $("#" + sName).data("token"), GetExchangeType($("#" + sName).data("ExchangeID")), nOrderAmt, nBuySell, $("#txtqty").val(), sinstrument, '', 1, idList);
         }
 
         //GetNetPositionDetails(nToken, nstockType, 0)
@@ -399,6 +463,70 @@ function getLotSize(nToken, nstockType) {
         alert('Error Description : ' + jqXHR + "At getLotSize");
 
     });
+}
+
+function ChangeOrderType(IDs)
+{
+
+    if ($('input[name="' + IDs.key1 + '"]:checked').val() == 11 || $('input[name="' + IDs.key1 + '"]:checked').val() == 1) {
+        document.getElementById(IDs.key2).disabled = false;
+        document.getElementById(IDs.key3).disabled = true;
+        $("#" + IDs.key4).val('0');
+        document.getElementById(IDs.key4).disabled = false;
+
+    } else if ($('input[name="' + IDs.key1 + '"]:checked').val() == 3 || $('input[name="' + IDs.key1 + '"]:checked').val() == 12) {
+        document.getElementById(IDs.key2).disabled = true;
+        document.getElementById(IDs.key3).disabled = false;
+
+        if ($('input[name="' + IDs.key1 + '"]:checked').val() == 12) {
+            $("#" + IDs.key4).invisible = true;
+            $("#" + IDs.key4).val('');
+            document.getElementById(IDs.key4).disabled = true;
+        }
+        $("#" + IDs.key4).val('');
+        document.getElementById(IDs.key4).disabled = true;
+    }
+
+    if ($('#' + IDs.key5).attr("data-segement") == "CURR") {
+        if ($('input[name="' + IDs.key1 + '"]:checked').val() == 1 || $('input[name="' + IDs.key1 + '"]:checked').val() == 3) {
+            $("#" + IDs.key6).val(parseFloat($("#" + IDs.key7).html()).toFixed(4));
+        } else {
+            $("#" + IDs.key6).val("0.0000");
+        }
+
+        $("#" + IDs.key3).val("");
+    } else {
+        if ($('input[name="' + IDs.key1 + '"]:checked').val() == 1 || $('input[name="' + IDs.key1 + '"]:checked').val() == 3) {
+            $("#" + IDs.key6).val(parseFloat($("#" + IDs.key7).html()).toFixed(2));
+        } else {
+            $("#" + IDs.key6).val("0.0000");
+        }
+        $("#" + IDs.key3).val("");
+    }
+
+    if ($('input[name="' + IDs.key1 + '"]:checked').val() == 11 || $('input[name="' + IDs.key1 + '"]:checked').val() == 12) {
+        document.getElementById(IDs.key6).disabled = true;
+        DayClick();
+        document.getElementById(IDs.key2).disabled = true;
+    } else {
+        document.getElementById(IDs.key6).disabled = false;
+    }
+
+    if ($('#' + IDs.key5).attr("data-segement") == "FUTURE" || $('#' + IDs.key5).attr("data-segement") == "OPTION") {
+        $("#" + IDs.key4).invisible = true;
+        $("#" + IDs.key4).val('');
+        document.getElementById(IDs.key4).disabled = true;
+    }
+}
+
+function GetExchangeType(exhangeid) {
+
+    if (exhangeid == 1) {
+        return "NSE";
+    }
+    else if (exhangeid == 2) {
+        return "BSE";
+    }
 }
 
 function SetEstTotal(Qty, price) {

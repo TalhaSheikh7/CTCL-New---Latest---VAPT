@@ -2,7 +2,7 @@
 var HeaderColumns = [];
 var TrancationColumn = [];
 var HoldingDataColumns = [];
-var ClientCode;
+
 $(document).ready(function () {
 
 
@@ -10,36 +10,8 @@ $(document).ready(function () {
     
 });
 
-$("#fundPayin").click(function () {
-    var ccc = $("#txtSelectedClient").val().split('-')[0].trim();
-    $.ajax({
-        url: "/Home/FundTransfer",
-        data: {
-            CCC: ccc
-        },
-        success: function (data) {
-
-            if (data[1] == "0")
-            {
-                window.open(data[0]);
-            }
-            else if (data[1] == "1")
-            {
-                alert("Fund Transfer for Non BOI clients Not possible");
-            }
-            else if (data[1] == "2")
-            {
-                window.open(data[0]);
-            }
-        },
-        error: function (data) {
-
-        }
-    });
-})
-
 $("#nFunds").click(function () {
-    ClientCode = 
+    var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
     //var ClientCode = 5014669;
     GetHoldingDetails(3, ClientCode, 1, 0);
     GetAccountDetails(ClientCode, 8, 1, 0);
@@ -72,7 +44,7 @@ function GetHoldingDetails(nAction, sUserID, nPageIndex, nAccountSegment)
     HoldingDataColumns = [];
     kendo.ui.progress($("#holdingData"), true);
     $.ajax({
-        url: gblurl + "AccoutingV1/",
+        url: "https://ctcl.investmentz.com/iCtclService/api/AccoutingV1/",
         method: "get",
         data: {
             nAction: nAction,

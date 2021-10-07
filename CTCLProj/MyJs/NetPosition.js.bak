@@ -1,8 +1,6 @@
 ﻿var OrderPosition = [];
 var totalNA = [];
 var totalNAqty = [];
-var totalbuy = [];
-var totalsell = [];
 var items = [];
 $(document).ready(function () {
     $("#tabstrip").kendoTabStrip({
@@ -29,52 +27,7 @@ $(document).ready(function () {
         }
         //PositionData();
     }
-
-    var Netwisedaywise =
-        [
-            { value: "2", Id: "2", name: "Day wise" },
-            { value: "1", Id: "1", name: "Net Wise" }
-        ]
-
-    KendoDropDownList("dtrange", Netwisedaywise, "Id", "name", NPdtChange, false, "", 0);
-
-    var NPMarketSegment =
-        [
-            { value: "All", Id: "1", name: "All" },
-            { value: "CM", Id: "2", name: "CM" },
-            { value: "FO", Id: "3", name: "FO" },
-            { value: "CD", Id: "4", name: "CD" }
-        ];
-
-    KendoDropDownList("drpMarketSelection", NPMarketSegment, "Id", "name", npmktsegChange, false, "", 0);
 });
-
-function npmktsegChange()
-{
-    var strdtrange = '';
-
-    if ($("#drpMarketSelection").data("kendoDropDownList").text() == 'FO') {
-        strdtrange = 'Till Today';
-
-    } else if ($("#drpMarketSelection").data("kendoDropDownList").text() == 'All') {
-        strdtrange = 'Only Today';
-    }
-
-    setTimeout(GetNetPositionReport($("#drpMarketSelection").data("kendoDropDownList").text(), strdtrange), 100);
-}
-
-function NPdtChange()
-{
-    var strdtrange = "";
-    if ($('#dtrange').val() == 2) {
-        strdtrange = 'Only Today';
-    } else if ($('#dtrange').val() == 1) {
-        strdtrange = 'Till Today';
-    }
-
-    setTimeout(GetNetPositionReport($('#dtrange').val(), strdtrange), 100);
-}
-
 $("#nPosition").click(function () {
     var strdtrange = "";
     var strInst = 1
@@ -140,11 +93,8 @@ function GetNetPositionReport(strInst, strdtrange) {
 
 
     //strdtrange = $('#dtrange').find(":selected").text(); //$('#dtrange').find(":selected").text();
-    strInst = $("#drpMarketSelection").data("kendoDropDownList").text();
-    if (strdtrange == "")
-    {
-        strdtrange = "Only Today";
-    }
+    strInst = $('#drpMarketSelection').find(":selected").text(); 
+    if (strdtrange == "") { strdtrange = "Only Today"; }
     var nAction = 5;
     var sUserID = 0;
     var nPageIndex = 1;
@@ -154,7 +104,7 @@ function GetNetPositionReport(strInst, strdtrange) {
     var sFromDate = "2010/01/29"
     var sTillDate = "";
     var sProCli = "Cli";
-    var sInstrumentName = strInst;
+    var sInstrumentName = "ALL";
 
     if (gblCTCLtype.toString().toLocaleLowerCase() == "emp" || gblCTCLtype.toString().toLocaleLowerCase() == "ba") {
         empclientid = $("#cmbClients").val();
@@ -165,10 +115,17 @@ function GetNetPositionReport(strInst, strdtrange) {
     if (empclientid == "All") { empclientid = ''; }
 
     if ($("#cmbCtclSelect").val() == "") {
+        //gblCTCLid = '';
     }
     var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
     var GetNetPosition = $.ajax({
+
+        //url: "http://192.168.0.104/EasyTradeAPI/api/ReportsV2/",
+        //url: "http://120.63.142.234/EasyTradeAPIv2/api/ReportsV2/",
         url: gblurl + "ReportsV2/",
+        //url: "https://1trade.investmentz.com/EasyTradeAPI/api/ReportsV2",
+
+
         method: "get",
         data: {
             nAction: nAction,
@@ -186,7 +143,7 @@ function GetNetPositionReport(strInst, strdtrange) {
         type: "json"
     });
     GetNetPosition.done(function (msg) {
-        console.log(msg);
+
         if (msg.IsResultSuccess) {
             FillGrid(msg.Result);
         }
@@ -202,30 +159,19 @@ function GetNetPositionReport(strInst, strdtrange) {
 
 
 }
-
 function getTotalNetAvg()
 {
+    //alert(parseFloat(totalNA[totalNA.length - 1].TotalNetAverage).toFixed(2))
     return parseFloat(totalNA[totalNA.length - 1].TotalNetAverage).toFixed(2);
-}
-
-function getTotalNetVal() {
-    return parseFloat(totalNAqty[totalNAqty.length - 1].TotalNetVal).toFixed(2);
 }
 
 function getTotalNetQty() {
+    //alert(parseFloat(totalNAqty[totalNAqty.length - 1].TotalNetQty))
     return parseFloat(totalNAqty[totalNAqty.length - 1].TotalNetQty);
 }
-
-function getTotalBuyVal() {
-    return parseFloat(totalNA[totalNA.length - 1].TotalNetAverage).toFixed(2);
-}
-
-function getTotalBuyQty() {
-    return parseFloat(totalNAqty[totalNAqty.length - 1].TotalNetQty);
-}
-
-
 function FillGrid(msg) {
+
+    console.log(msg);
     var htmlval = '';
     var strExp = '';
     $('#tblheader tbody').empty();
@@ -273,37 +219,32 @@ function FillGrid(msg) {
                 arr.push(row.Script);
             }
             if (row.ExchangeBroadcastConstant == 12 || row.ExchangeBroadcastConstant == 13) {
-                currrate = '<span><strong class= "' + row.ExchangeBroadcastConstant + '_' + row.Token + '_LR"></strong></span>';
+                currrate = '<span class= "' + row.ExchangeBroadcastConstant + '_' + row.Token + '_LR"></span>';
 
                 NetM2M = '<span  class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdM2M' + vcncmis + '_' + nrow + '" class="netposition-12 ' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdM2M" style="font-weight: bold;">0.00</span>';
 
-                buyqty = row.BuyQty;
-                buyavg = parseFloat(row.BuyAvg).toFixed(4);
-                buyval = parseFloat(row.BuyValue).toFixed(4);
-                sellqty = row.SellQty;
-                sellval = parseFloat(row.SellValue).toFixed(4);
-                sellavg = parseFloat(row.SellAvg).toFixed(4);
+                buyqty = '<td>' + row.BuyQty + '<br></td>';
 
-                //if (parseFloat(row.BuyValue) >= 0) {
-                //    //buyval = '<td>' + parseFloat(row.BuyAvg).toFixed(4) + '<br><Span  class="num-qty1">' + parseFloat(row.BuyValue).toFixed(4) + '</span></td>';
-                //    buyavg = parseFloat(row.BuyAvg).toFixed(4);
-                //    buyval = parseFloat(row.BuyValue).toFixed(4);
-                //}
-                //else {
-                //    //buyval = '<td>' + parseFloat(row.BuyAvg).toFixed(4) + '<br><span class="num-qty2">' + parseFloat(row.BuyValue).toFixed(4) + '</span></td>';
-                //    buyavg = parseFloat(row.BuyAvg).toFixed(4);
-                //    buyval = parseFloat(row.BuyValue).toFixed(4);
-                //}
-             
-                //if (parseFloat(row.SellValue) >= 0) {
-                //    sellval = '<td>' + parseFloat(row.SellAvg).toFixed(4) + '<br><span class="num-qty2">' + parseFloat(row.SellValue).toFixed(4) + '</span></td>';
-                //}
-                //{
-                //    sellval = '<td>' + parseFloat(row.SellAvg).toFixed(4) + '<br><span class="num-qty1">' + parseFloat(row.SellValue).toFixed(4) + '</span></td>';
-                //}
 
-                netqty = '<td class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdNQ">' + row.NetQty + '</td>';
-                netval = '<td class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdNV">' + parseFloat(row.NetValue).toFixed(4) + '</td>';
+                if (parseFloat(row.BuyValue) >= 0) {
+                    buyval = '<td>' + parseFloat(row.BuyAvg).toFixed(4) + '<br><Span  class="num-qty1">' + parseFloat(row.BuyValue).toFixed(4) + '</span></td>';
+                }
+                else {
+                    buyval = '<td>' + parseFloat(row.BuyAvg).toFixed(4) + '<br><span class="num-qty2">' + parseFloat(row.BuyValue).toFixed(4) + '</span></td>';
+                }
+
+                sellqty = '<td>' + row.SellQty + '<br>' +
+                       '</td>';
+
+                if (parseFloat(row.SellValue) >= 0) {
+                    sellval = '<td>' + parseFloat(row.SellAvg).toFixed(4) + '<br><span class="num-qty2">' + parseFloat(row.SellValue).toFixed(4) + '</span></td>';
+                }
+                {
+                    sellval = '<td>' + parseFloat(row.SellAvg).toFixed(4) + '<br><span class="num-qty1">' + parseFloat(row.SellValue).toFixed(4) + '</span></td>';
+                }
+
+                netqty = '<td class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdNQ" >' + row.NetQty + '<br></td>';
+                netval = '<td class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdNV" class="netposition-10">' + parseFloat(row.NetValue).toFixed(4) + '</td>';
 
                 if (row.NetQty > 0) {
 
@@ -319,33 +260,32 @@ function FillGrid(msg) {
                 }
             }
             else {
-                currrate = '<span><strong class= "' + row.ExchangeBroadcastConstant + '_' + row.Token + '_LR">0.0000</strong></span>';
+                currrate = '<span class= "' + row.ExchangeBroadcastConstant + '_' + row.Token + '_LR">0.0000</span>';
                 NetM2M = '<span  class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdM2M' + vcncmis + '_' + nrow + '" >0.00</span>';
                 //NetM2M = '<span  class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdM2M' + vcncmis + '_' + nrow + '"  class="netposition-12 ' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdM2M" style="font-weight: bold;">0.00</span>';
-                buyqty = row.BuyQty;
-                buyavg = parseFloat(row.BuyAvg).toFixed(2);
-                buyval = parseFloat(row.BuyValue).toFixed(2);
-                sellqty = row.SellQty;
-                sellval = parseFloat(row.SellValue).toFixed(2);
-                sellavg = parseFloat(row.SellAvg).toFixed(2);
+                buyqty = '<td>' + row.BuyQty + '<br>' +
+                         '</td>';
 
-                //if (parseFloat(row.BuyValue) >= 0) {
-                //    buyval = '<td>' + parseFloat(row.BuyAvg).toFixed(2) + '<br><span  class="num-qty1">' + parseFloat(row.BuyValue).toFixed(2) + '</span></td>';
-                //}
-                //else {
-                //    buyval = '<td>' + parseFloat(row.BuyAvg).toFixed(2) + '<br><span class="num-qty2">' + parseFloat(row.BuyValue).toFixed(2) + '</span></td>';
-                //}
 
-                //if (parseFloat(row.SellValue) >= 0) {
-                //    sellval = '<td>' + parseFloat(row.SellAvg).toFixed(2) + '<br><span  class="num-qty2">' + parseFloat(row.SellValue).toFixed(2) + '</span></td>';
-                //}
-                //{
-                //    sellval = '<td>' + parseFloat(row.SellAvg).toFixed(2) + '<br><span class="num-qty1">' + parseFloat(row.SellValue).toFixed(2) + '</span></td>';
-                //}
-                
-                netqty = '<span class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdNQ">' + row.NetQty + '</span>';
+                if (parseFloat(row.BuyValue) >= 0) {
+                    buyval = '<td>' + parseFloat(row.BuyAvg).toFixed(2) + '<br><span  class="num-qty1">' + parseFloat(row.BuyValue).toFixed(2) + '</span></td>';
+                }
+                else {
+                    buyval = '<td>' + parseFloat(row.BuyAvg).toFixed(2) + '<br><span class="num-qty2">' + parseFloat(row.BuyValue).toFixed(2) + '</span></td>';
+                }
+
+                sellqty = '<td>' + row.SellQty + '<br></td>';
+                if (parseFloat(row.SellValue) >= 0) {
+                    sellval = '<td>' + parseFloat(row.SellAvg).toFixed(2) + '<br><span  class="num-qty2">' + parseFloat(row.SellValue).toFixed(2) + '</span></td>';
+                }
+                {
+                    sellval = '<td>' + parseFloat(row.SellAvg).toFixed(2) + '<br><span class="num-qty1">' + parseFloat(row.SellValue).toFixed(2) + '</span></td>';
+                }
+                sellqty = '<td>' + row.SellQty + '<br>' +
+                          '</td>';
+                netqty = '<span class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdNQ">' + row.NetQty + '<br></span>';
                 netval = '<span class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdNV">' + parseFloat(row.NetValue).toFixed(2) + '</span>';
-                
+
                 if (row.NetQty > 0) {
                     Netavg = '<span class="' + row.ExchangeBroadcastConstant + '_' + row.Token + '_tdnavg" >' + parseFloat(Math.abs((row.BuyValue - row.SellValue) / row.NetQty)).toFixed(2) + '</span>';
                 }
@@ -376,7 +316,8 @@ function FillGrid(msg) {
                 vstrike = '<td id="tdStrike" class="netposition-3"></td>'
             }
             var exchangeval = '';
-            if (row.Exchange == 1) {
+
+            if (Exchange == 1) {
                 exchangeval = 'NSE'
             }
             else {
@@ -402,30 +343,18 @@ function FillGrid(msg) {
             else {
                 var Exchange = "BSE";
             }
-
             totalNA.push({
-                TotalNetAverage: totNetavg
-            });
-
+                TotalNetAverage:totNetavg
+            })
             $("#todaypl").html(NetM2M);
             OrderPosition.push({
                 ClientCode: row.UserCode,
                 MISCNC: CNCMIS,
                 Scrip: strDisplay,
-                BuyQty: buyqty,
-                BuyAvg: buyavg,
-                BuyVal: buyval,
-                SellQty: sellqty,
-                SellAvg: sellavg,
-                SellVal: sellval,
-                NetQty: netqty,
-                Netavg: Netavg,
-                Netval: netval,
-                LTP: currrate,
-                MTOM: NetM2M,
-                //Netavg: $("<div/>").html(Netavg).text(),
-                //LTP: $("<div/>").html(currrate).text(),
-                //MTOM: $("<div/>").html(NetM2M).text() ,
+                NetQty: row.NetQty,
+                Netavg: $("<div/>").html(Netavg).text(),
+                LTP: $("<div/>").html(currrate).text(),
+                MTOM: $("<div/>").html(NetM2M).text() ,
                 Exchange: Exchange,
                 Token: row.Token,
                 ExchangeBroadcastConstant: row.ExchangeBroadcastConstant,
@@ -435,30 +364,16 @@ function FillGrid(msg) {
                 OrderType: row.OrderType
 
             });
-
             totbuyqty = (parseFloat(totbuyqty) + parseFloat(row.BuyQty));
             totbuyval = (parseFloat(totbuyval) + parseFloat(row.BuyValue)).toFixed(2);
             totsellqty = (parseFloat(totsellqty) + parseFloat(row.SellQty));
             totsellval = (parseFloat(totsellval) + parseFloat(row.SellValue)).toFixed(2);
             totNetqty = (parseFloat(totNetqty) + parseFloat(row.NetQty));
-            totNetval = (parseFloat(totNetval) + parseFloat(row.NetValue)).toFixed(2);
-
-            totalbuy.push({
-                TotalBuyQty: totbuyqty,
-                TotalBuyVal: totbuyval
-            });
-
-            totalsell.push({
-                TotalSellQty: totsellqty,
-                TotalSellVal: totsellval
-            });
 
             totalNAqty.push({
-                TotalNetQty: totNetqty,
-                TotalNetVal: totNetval
-            });
-
-            //totNetval = parseFloat(totNetval) + parseFloat(row.NetValue);
+                TotalNetQty: totNetqty
+            })
+            totNetval = parseFloat(totNetval) + parseFloat(row.NetValue);
             sScripts = sScripts + row.ExchangeBroadcastConstant + '.' + row.Token + ','
             if (blnBroadCastFlag == true) {
                 CloseSocket();//Close and open
@@ -466,11 +381,10 @@ function FillGrid(msg) {
             var lblScript = "lblScripts2";
 
             $('#lblScripts2').html(sScripts.substring(0, sScripts.length - 1));
-            //$('#lblScripts2').html($('#lblScripts2').html() + "," + "17.999908,17.999988,5.1");
-            $('#lblScripts2').html($('#lblScripts2').html());
+            $('#lblScripts2').html($('#lblScripts2').html() + "," + "17.999908,17.999988,5.1");
             tokens.push(row.Token);
-            reconnectSocketAndSendTokensNP(lblScript);
-            
+            reconnectSocketAndSendTokens(lblScript);
+
         })
     }
 
@@ -506,148 +420,146 @@ function FillGrid(msg) {
             mode: "row"
         },
         columns: [
-                   {
-                       selectable: true,
-                       width: "50px"
-                   },
-                   {
-                       title: "UCC",
-                       field: "ClientCode",
-                       width: 80
-                       
-                   },
-                   {
-                       title: "MIS/CNC", 
-                       field: "MISCNC",
-                       width: 100
-                   },
-                   {
-                       title: "Scrip", 
-                       field: "Scrip",
-                       width: 100
-                   },
-                   {
-                       title: "Buy Qty",
-                       field: "BuyQty",
-                       width: 95,
-                       hidden: "true"
-                       //footerTemplate: "Total: #=getTotalNetQty()#"
-                   },
-                   {
-                       title: "Buy Avg",
-                       field: "BuyAvg",
-                       width: 100,
-                       hidden: "true"
-                       //footerTemplate: "Total: #=getTotalNetQty()#"
-                   },
-                   {
-                       title: "Buy Value",
-                       field: "BuyVal",
-                       width: 100,
-                       hidden: "true"
-                       //footerTemplate: "Total: #=getTotalNetQty()#"
-                   },
-                   {
-                       title: "Sell Qty",
-                       field: "SellQty",
-                       width: 90,
-                       hidden: "true"
-                       //footerTemplate: "Total: #=getTotalNetQty()#"
-                   },
-                   {
-                       title: "Sell Avg",
-                       field: "SellAvg",
-                       width: 100,
-                       hidden: "true"
-                       //footerTemplate: "Total: #=getTotalNetQty()#"
-                   },
-                   {
-                       title: "Sell Value",
-                       field: "SellVal",
-                       width: 100,
-                       hidden: "true"
-                       //footerTemplate: "Total: #=getTotalNetQty()#"
-                   },
-                   {
-                       title: "Net Qty",
-                       field: "NetQty",
-                       template: "#= NetQty #",
-                       width: 100,
-                       footerTemplate: "Total: #=getTotalNetQty()#"
-                   },
-                   {
-                       title: "Net avg", 
-                       field: "Netavg",
-                       template: "#= Netavg #",
-                       footerTemplate: "Total:#=getTotalNetAvg()#"
-                   },
-                   
-                   {
-                       title: "Net Val", 
-                       field: "Netval",
-                       width: 100,
-                       template: "#= Netval #",
-                       footerTemplate: "Total:#=getTotalNetVal()#"
-                   },
-                   {
-                       title: "LTP",
-                       field: "LTP",
-                       template: "#= LTP #"
-                   },
-                   {
-                       title: "M2M",
-                       field: "MTOM",
-                       template: "#= MTOM #"
-                   },
-                   {
-                       title: "Exchange",
-                       field: "Exchange",
-                       hidden: "true"
-                   },
-                   {
-                       title: "Token",
-                       field: "Token",
-                       hidden:"true"
-                   },
-                   {
-                       title: "ExchangeBroadcastConstant",
-                       field: "ExchangeBroadcastConstant",
-                       hidden:"true"
-                   },
-                   {
-                       title: "Script",
-                       field: "Script",
-                       hidden:"true"
-                   },
-                   {
-                       title: "Expiry",
-                       field: "Expiry",
-                       hidden:"true"
-                   },
-                   {
-                       title: "Strike",
-                       field: "Strike",
-                       hidden: "Strike"
-                   },
-                   {
-                       title: "OrderType",
-                       field: "OrderType",
-                       hidden:"ture"
-                   }
+                  {
+                      selectable: true,
+                      width: "50px"
+                  },
+        {
+            title: "UCC",
+            field: "ClientCode",
+            width: 160,
+            
+        },
+        {
+            title: "MIS/CNC", 
+            field: "MISCNC",
+            width: 163
+        },
+        {
+            title: "Scrip", 
+            field: "Scrip",
+            width: 165
+        },
+        {
+            title: "Net Qty",
+            field: "NetQty",
+            width: 166,
+            footerTemplate: "Total: #=getTotalNetQty()#"
+        },
+        {
+            title: "Net avg", 
+            field: "Netavg",
+            template: "#= Netavg #",
+            footerTemplate: "Total:#=getTotalNetAvg()#"
+        },
+        {
+            title: "LTP",
+            field: "LTP",
+            template: "#= LTP #"
+        },
+        {
+            title: "M2M",
+            field: "MTOM",
+            template: "#= MTOM #"
+        },
+        {
+            title: "Exchange",
+            field: "Exchange",
+            hidden: "true"
+        },
+        {
+            title: "Token",
+            field: "Token",
+            hidden:"true"
+        },
+        {
+            title: "ExchangeBroadcastConstant",
+            field: "ExchangeBroadcastConstant",
+            hidden:"true"
+        },
+        {
+            title: "Script",
+            field: "Script",
+            hidden:"true"
+        },
+        {
+            title: "Expiry",
+            field: "Expiry",
+            hidden:"true"
+        },
+        {
+            title: "Strike",
+            field: "Strike",
+            hidden: "Strike"
+        },
+        {
+            title: "OrderType",
+            field: "OrderType",
+            hidden:"ture"
+        }
         ],
         save: function (e) {
             setTimeout(function () { $("#footerPlaceholder").text(getTotalNetAvg()); });
             setTimeout(function () { $("#footerPlaceholder1").text(getTotalNetQty()); });
-            setTimeout(function () { $("#footerPlaceholder2").text(getTotalNetVal()); });
         }
     });
 
 }
 
+function M2mlive(SymbolId, MtoM) {
+    var nrow = -2;
+
+    $('#tblheader').find('tr').each(function (i, el) {
+        nrow = nrow + 1;
+        var $tds = $(this).find('td');
+        var vsymbolid = "";
+        if ($tds.eq(0).text() != "Total" && $tds.eq(0).text() != "" && $tds.eq(11).text() != "M2M") {
+
+            product = $tds.eq(12).html();
+            netqty = $tds.eq(7).html();
+            sqm2m = $tds.eq(9).html();
+            Netavg = $tds.eq(8).html();
+            vltp = $tds.eq(10).html();
+
+            if (product == "<strong>CNC/NORMAL</strong><br>") {
+                vsymbolid = SymbolId + "_tdM2MCNC" + '_' + nrow;
+            }
+            else {
+                vsymbolid = SymbolId + "_tdM2MMIS" + '_' + nrow;
+            }
+
+            //NetVal = parseFloat($("#" + SymbolId + "_tdNV").text());
+
+            netqty = netqty.substring(netqty.indexOf('>') + 1, netqty.indexOf('/') - 1)
+            Netavg = Netavg.substring(Netavg.indexOf('>') + 1, Netavg.indexOf('/') - 1)
+
+            vltp = vltp.substring(vltp.indexOf('>') + 1, vltp.indexOf('/') - 1)
+
+            var MtoMNew = 0;
+
+            if (parseFloat(netqty) == 0 || parseFloat(vltp) == 0) {
+                $("#" + vsymbolid).text(sqm2m);
+
+            }
+
+            else if (parseFloat(netqty) != 0) {
+                MtoMNew = parseFloat(netqty) * (parseFloat(vltp) - Math.abs(parseFloat(Netavg)));
+                $("#" + vsymbolid).text(parseFloat(MtoMNew).toFixed(2));
+            }
+            else {;
+
+                MtoMNew = Math.abs(parseFloat(netqty)) * (Math.abs(parseFloat(Netavg)) - vltp);
+
+                $("#" + vsymbolid).text(parseFloat(MtoMNew).toFixed(2));
+            }
+
+        }
+    });
+
+}
 $("#btnRefresh").click(function () {
     PositionData();
 })
-
 $("#drpMarketSelection").change(function () {
     var marketsegment = $("#drpMarketSelection").val();
     var strdtrange = "";
@@ -693,49 +605,45 @@ function onChange() {
 }
 
 $("#btnsqoff").click(function () {
-    KendoWindow("sqoffpopup", 900, 380, "Are you sure want to Square off following Scrips ?", 0);
+    KendoWindow("sqoffpopup", 500, 300, "Are you sure want to Square off following Scrips", 0);
     $("#sqoffpopup").closest(".k-window").css({
-        top: 190,
-        left: 285
+        top: 250,
+        left: 100
     });
-
+    
     $("#sqallgrid").kendoGrid({
         dataSource: {
             data: items,
         },
+        height: 100,
+        
         columns: [
-            {
-                title: "UCC",
-                field: "ClientCode",
-                width: 100,
+                  {
+            title: "UCC",
+            field: "ClientCode",
+            width: 100,
 
-            },
-            {
-                title: "MIS/CNC",
-                field: "MISCNC",
-                width: 100
-            },
-            {
-                title: "Scrip",
-                field: "Scrip",
-                width: 100
-            },
-            {
-                title: "Net Qty",
-                field: "NetQty",
-                width: 100
-            }
+        },
+        {
+            title: "MIS/CNC",
+            field: "MISCNC",
+            width: 100
+        },
+        {
+            title: "Scrip",
+            field: "Scrip",
+            width: 100
+        },
+        {
+            title: "Net Qty",
+            field: "NetQty",
+            width: 100
+        }
         ]
     });
-});
-
-function sqALLCancel()
-{
-    $("#sqoffpopup").data("kendoWindow").close();
-}
-
+})
 function btnSqALL() {
-    //console.log(items);
+
     $.each(items, function (i, val) {
         var clientcode = val.ClientCode;
         var MISCNC = val.MISCNC;
@@ -778,6 +686,10 @@ function btnSqALL() {
         SaveRecordSqOffALL(script, Token, bs, Math.abs(NetQty), instrumentindex, cncmis, Exchange)
 
     });
+    
+
+    
+    //alert(ClientCode);
 }
 
 function SaveRecordSqOffALL(sScript, nToken, nBuysell, NetQty, nstocktype, cncmis, ExchangeID) { //Modified by PSN on 29/05/2018
@@ -791,20 +703,20 @@ function SaveRecordSqOffALL(sScript, nToken, nBuysell, NetQty, nstocktype, cncmi
         Source = "W";
     }
 
-    var sScript = sScript;
-    var Token = nToken;
-    var BuySell = nBuysell;
-    var TotalQty = NetQty;
-    var nExchangeID = ExchangeID;
-    var Price = 0;
-    var StockType = nstocktype;
-    var Expiry = '';
-    var CP = '';
+    var sScript = sScript; //$("#scriptname").html();
+    var Token = nToken; //$("#scriptname").data("token");
+    var BuySell = nBuysell; //$("#scriptname").attr("data-buysell");//get it here
+    var TotalQty = NetQty; //parseInt($("#txtqty").val());
+    var nExchangeID = ExchangeID; //Added by PSN on 29/05/2018 for BSE
+    var Price = 0; //parseFloat($("#txtorderprice").val());
+    var StockType = nstocktype; //$("#markettype").data("stocktype");//get it here
+    var Expiry = ''; //= $("#expirydate").val();
+    var CP = '';// $("#optCallPut").val();
     var Strike = 0;
-    var OrderType = 11;
-    var TriggerPrice = 0;
-    var DQ = 0;
-    var MarketPrice = 0;
+    var OrderType = 11; // parseInt($("#ordertype").val());
+    var TriggerPrice = 0; //parseFloat($("#txttrigprice").val());
+    var DQ = 0; //parseInt($("#txtdisclosedqty").val());
+    var MarketPrice = 0; //$("#ltp").text();//parseInt($("#ltp").data("ltp"));
     var successstring = '';
     var buysellstring = '';
     var CncMis;//
@@ -821,9 +733,9 @@ function SaveRecordSqOffALL(sScript, nToken, nBuysell, NetQty, nstocktype, cncmi
     }
 
     if (StockType == 3) {
-        Expiry = '';
-        Strike = 0;
-        CP = '';
+        Expiry = '';// $("#expirydate").val('');
+        Strike = 0;// parseInt($("#optStrike").val(''));
+        CP = '';// $("#optCallPut").val('');
     }
 
     if ($('#Day').is(':checked')) {
@@ -834,7 +746,7 @@ function SaveRecordSqOffALL(sScript, nToken, nBuysell, NetQty, nstocktype, cncmi
     }
 
     var NewOrderParams = JSON.stringify({
-        'userId': empclientid,
+        'userId': empclientid, //gblnUserId,// nuserId,
         'sScript': sScript,
         'Token': Token,
         'BuySell': BuySell,
@@ -851,18 +763,23 @@ function SaveRecordSqOffALL(sScript, nToken, nBuysell, NetQty, nstocktype, cncmi
         'MarketPrice': MarketPrice,
         'Source': Source,
         'OrderHandling': CncMis,
-        'ExchangeId': ExchangeID,
-        'CTCLId': gblCTCLid
+        'ExchangeId': ExchangeID, //Added by PSN on 29/05/2018 for BSE
+        'CTCLId': gblCTCLid //$(element).find("option:first-child").val()
     });
     $.ajax({
+        // url: "http://localhost:1610/api/OrderV4/",
         url: gblurl + "OrderV5/",
+        // url: 'https://1trade.investmentz.com/EasyTradeAPI/api/OrderV4/',
         type: 'POST',
         contentType: 'application/json',
         data: NewOrderParams,
         dataType: "json",
         async: false,
         complete: function (data, status, xhr) {
+            //alert(JSON.stringify(data.responseText).ResultStatus.Id);
             if (JSON.parse(data.responseText).ResultStatus == 1) {
+                // $('#modrmsvalidation').modal('show');
+                // $('#displayrms').html("" + JSON.parse(data.responseText).Result);
                 if (sqAllMessage == '') {
                     sqAllMessage = sqAllMessage + ' ' + sScript + " " + JSON.parse(data.responseText).Result;
                 }

@@ -23,13 +23,14 @@
     <link href="~/Content/kendo/2021.1.224/kendo.common.min.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css" />
     <link href="~/Content/autocomplete.css" rel="stylesheet" />
-    
+    <link rel="shortcut icon" href="../img/fav-icon.png" />
     <script src="~/Scripts/kendo/2021.1.224/jquery.min.js"></script>
     <script src="~/MyJs/GlobalVariable.js"></script>
     <script src="~/MyJs/lz-string.js"></script>
     <script src="~/Scripts/jquery.autocomplete.min.js"></script>
     <script src="~/MyJs/SweetAlert.js"></script>
     <link href="~/Content/SweetAlert.css" rel="stylesheet" />
+    <link rel="shortcut icon" href="../img/fav-icon.png" />
 
     <style>
         .error-detail {
@@ -176,6 +177,7 @@
             position: relative;
             margin-bottom: 45px;
         }
+
         .text_box {
             font-size: 17px;
             padding: 10px 10px 3px 5px;
@@ -346,14 +348,14 @@
             border-radius: 5px;
             padding: 5px 30px 5px 30px;
             color: #fff;
-            cursor:pointer;
+            cursor: pointer;
             border: 0;
         }
 
         .popup_input {
             border: none !important;
             border-bottom: 1px solid #ccc !important;
-            background-color:transparent !important;
+            background-color: transparent !important;
             color: #fff !important;
         }
 
@@ -762,8 +764,6 @@
         .modal-footer {
             background-color: transparent !important;
         }
-
-
     </style>
 
     <script src="~/Scripts/kendo/2021.1.224/jquery.min.js"></script>
@@ -998,8 +998,7 @@
                 }
             });
 
-            document.getElementById("txtLoginMPin").addEventListener("keypress", function (evt)
-            {
+            document.getElementById("txtLoginMPin").addEventListener("keypress", function (evt) {
                 if (evt.which < 48 || evt.which > 57) {
                     evt.preventDefault();
                 }
@@ -1160,7 +1159,7 @@
                 $('#txtFPwdLoginId').focus();//19042018 vpg
             });
 
-            
+
 
             $("#btnLogoutNo").click(function () {
                 $('#txtUid').focus();

@@ -12,16 +12,6 @@ var idList4 = {
     'key6': 'excessMar2'
 };
 
-var ResId = {
-    'key1': 'oTypechecked',
-    'key2': 'rIoc',
-    'key3': 'triggerprice1',
-    'key4': 'txtdisclosedqtyres',
-    'key5': 'rSegmentType',
-    'key6': 'tradeprice1',
-    'key7': 'ltprice1'
-}
-
 $(document).ready(function () {
 
     var norderAction = 5;
@@ -374,7 +364,7 @@ function GetResearchCall(norderAction, npageindex, dDateRange1, dDateRange2) {
                         CloseSocket();
                     }
                     var lblScript = "lblScripts3";
-                    
+
                     $('#lblScripts3').html(sScripts.substring(0, sScripts.length - 1));
                     $('#lblScripts3').html($('#lblScripts3').html() + "," + "17.999908,17.999988,5.1")
                     reconnectSocketAndSendTokens(lblScript);
@@ -563,7 +553,7 @@ function Gettradealert(norderAction, suserID, norderId, npageindex, nOrderSegmen
         },
         dataType: "json",
         success: function (data) {
-            //console.log(data);
+
             var company = "";
 
             var datafalse = data.IsResultSuccess;
@@ -572,28 +562,11 @@ function Gettradealert(norderAction, suserID, norderId, npageindex, nOrderSegmen
                 Gettrade = [];
             }
             else {
-                var btnValues = "";
-                var cp = '';
-                var buysell = "";
-                var vprice = 0;
-                var vtrgprice = 0;
-                var vtradprice = 0;
-                var exorderid = '';
-                var ordtype = "";
-                var cncmis = '';
-                var oerror = "";
-                var qtyremaining = "";
-                var price = 0;
-                var exordtime = "";
-                var exchangetime = "";
-
 
                 $.each(data.Result, function (i, row) {
-                    
                     var date1 = formatDate(row.ActivityTime, '', "DD-MMM-YYYY (hh:mm:ss a)");
                     ordtype = GetOrdetype(row.OrderType);
                     oerror = row.OrderError;
-                    qtyremaining = row.TradedQty.toString().trim() + '/' + row.TotalQty.toString().trim();
                     if (row.BuySell == 1) {
                         buysell = "BUY";
                         //buyselltd = '<span class="num-qty1"><strong>' + buysell + '</strong></span>' + ordtype + '</td>'
@@ -602,91 +575,14 @@ function Gettradealert(norderAction, suserID, norderId, npageindex, nOrderSegmen
                         // buyselltd = '<span class="num-qty2"><strong>' + buysell + '</strong></span>' + ordtype + '</td>'
                     }
                     strDisplay = $.trim(row.sScript + ' ' + (row.Instrument == "" ? '' : row.Instrument) + '-' + (row.ExchangeName == "" ? '' : row.ExchangeName) + ' ' + (row.Expiry == "" ? '' : Expiry(row.Expiry)));
-
-                    if (row.sCP != "XX")
-                    {
-                        cp = row.sCP;
-                        vstrike = row.Strike
-                    } else
-                    {
-                        cp = '';
-                        vstrike = "0"
-                    }
-
-                    if (row.OrderStatusDetail == "COMPLETE") {
-                        price = row.Price;
-                        exordtime = row.OrderEntryTime;
-                        exchangetime = row.TradeTime
-                    } else {
-                        price = row.Price;
-                        exordtime = row.OrderModificationTime;
-                    }
-
-                    var vInstrument = GetInstrument(row.Instrument);
-
-                    if (vInstrument == 6 || vInstrument == 7)
-                    {
-                        vprice = ' data-price = "' + parseFloat(price).toFixed(4) + '"'
-                        vtrgprice = ' data-trigprice= "' + parseFloat(row.TriggerPrice).toFixed(4) + '"'
-                        vtradprice = ' data-avgprice= "' + parseFloat(row.TradedPrice).toFixed(4) + '"'
-
-                    } else
-                    {
-                        vprice = ' data-price = "' + parseFloat(price).toFixed(2) + '"'
-                        vtrgprice = ' data-trigprice= "' + parseFloat(row.TriggerPrice).toFixed(2) + '"'
-                        vtradprice = ' data-avgprice= " ' + parseFloat(row.TradedPrice).toFixed(2) + '"'
-                    }
-
-                    if (row.sExchangeOrderNo == "")
-                    {
-                        exorderid = "-";
-                    } else
-                    {
-                        exorderid = row.sExchangeOrderNo;
-                    }
-
-                    var cncmis = '';
-                    if (row.CncMis == 0)
-                    {
-                        cncmis = "CNC/NORMAL";
-                    } else if (row.CncMis == 1)
-                    {
-                        cncmis = "MIS";
-                    }
-
-                    btnValues = ' data-script= "' + row.sScript + '"' +
-                        cp +
-                        ' data-action = "' + buysell + '"' +
-                        vprice +
-                        ' data-dayIoc = "' + row.DayIoc + '"' +
-                        ' data-ordertime= "' + formatDate(row.OrderEntryRequestTime, '', "YYYY/MM/DD HH:mm:ss") + '"' +
-                        ' data-tradetime= "' + formatDate(row.TradeTime, '', "YYYY/MM/DD HH:mm:ss") + '"' +
-                        ' data-user= "' + row.nUserID + '"' +
-                        ' data-exchorderid= "' + exorderid + '"' +
-                        ' data-orderstatus= "' + row.OrderStatusDetail + '"' +
-                        ' data-ordertype= "' + ordtype + '"' +
-                        ' data-exchange= "' + row.ExchangeName + ', ' + GetSegement(row.Instrument) + '"' +
-                        ' data-orderid= "' + row.ID + '"' +
-                        ' data-cncmis= "' + cncmis + '"' +
-                        vtrgprice +
-                        ' data-exordertime= "' + formatDate(exordtime, '', "YYYY/MM/DD HH:mm:ss") + '"' +
-                        vtradprice +
-                        ' data-tradeno= "' + row.TradedNumber + '"' +
-                        ' data-disqty= "' + row.DisclosedQty + '"' +
-                        ' data-penqty= "' + row.QtyRemaining + '"' +
-                        ' data-errordet1 = "' + oerror + '"' +
-                        ' data-fillqty=  " ' + qtyremaining + '"';
-
                     Gettrade.push({
                         UCC: row.sUserID,
                         sExchangeOrderNo: row.sExchangeOrderNo,
                         datetime: date1,
                         buysell: buysell,
-                        OrdType: ordtype,
                         Script: strDisplay,
                         QtyRemaining: row.QtyRemaining,
                         Price: row.Price,
-                        btnVal: btnValues,
                         TradedQty: row.TradedQty,
                         TradedPrice: row.TradedPrice,
                         OrderStatusDetail: row.OrderStatusDetail
@@ -740,13 +636,8 @@ function Gettradealert(norderAction, suserID, norderId, npageindex, nOrderSegmen
                         width: 100
                     },
                     {
-                        title: "Buy/Sell",
-                        field: "buysell",
-                        width: 50
-                        },
-                    {
                         title: "Order Type",
-                        field: "OrdType",
+                        field: "buysell",
                         width: 50
                     },
                     {
@@ -772,61 +663,7 @@ function Gettradealert(norderAction, suserID, norderId, npageindex, nOrderSegmen
                     {
                         title: "Status",
                         field: "OrderStatusDetail",
-                        width: 80,
-                        template: "#  if (OrderStatusDetail == 'PLACED') " +
-                                        "{ # " +
-                                            "<center><button id='btOrderStausDet' onclick='StatusButton(this)' style='background-color:orange;width: 55%;color: white;border-radius: 10pt;' #= btnVal # >#= OrderStatusDetail #</button></center>" +
-                                        "#}" +
-                                  "else if(OrderStatusDetail == 'MODIFIED')"+
-                                        "{ # " +
-                                            "<center><button id='btOrderStausDet' onclick='StatusButton(this)' style='background-color:deepskyblue;width: 55%;color: white;border-radius: 10pt;' #= btnVal # >#= OrderStatusDetail #</button></center>" +
-                                        "#}" +
-                                  "else if(OrderStatusDetail == 'CANCELLED')"+
-                                        "{ # " + 
-                                            "<center><button id='btOrderStausDet' onclick='StatusButton(this)' style='background-color:red;width: 55%;color: white;border-radius: 10pt;' #= btnVal # >#= OrderStatusDetail #</button></center>" +
-                                        "#}" +
-                                  "else if(OrderStatusDetail == 'CONFIRM')"+
-                                        "{ # " +
-                                            "<center><button id='btOrderStausDet' onclick='StatusButton(this)' style='background-color:green;width: 55%;color: white;border-radius: 10pt;' #= btnVal # >#= OrderStatusDetail #</button></center>" +
-                                        "#}" +
-                                  "else if(OrderStatusDetail == 'COMPLETE')"+
-                                        "{ # " + 
-                                            "<center><button id='btOrderStausDet' onclick='StatusButton(this)' style='background-color:orange;width: 55%;color: white;border-radius: 10pt;' #= btnVal # >#= OrderStatusDetail #</button></center>" +
-                                        "#}" +
-                                  "else if(OrderStatusDetail == 'PARTIAL')"+
-                                        "{ # " +
-                                            "<center><button id='btOrderStausDet' onclick='StatusButton(this)' style='background-color:green;width: 55%;color: white;border-radius: 10pt;' #= btnVal # >#= OrderStatusDetail #</button></center>" +
-                                        "#}" +
-                                  "else if(OrderStatusDetail == 'REJECTED')"+
-                                        "{ # " + 
-                                            "<center><button id='btOrderStausDet' onclick='StatusButton(this)' style='background-color:green;width: 55%;color: white;border-radius: 10pt;' #= btnVal # >#= OrderStatusDetail #</button></center>" +
-                                        "#}" +
-                                  "else if(OrderStatusDetail == 'INPROCESS')"+
-                                        "{ # " +
-                                            "<center><button id='btOrderStausDet' onclick='StatusButton(this)' style='background-color:green;width: 55%;color: white;border-radius: 10pt;' #= btnVal # >#= OrderStatusDetail #</button></center>" +
-                                        "#}" +
-                                  "else if(OrderStatusDetail == 'DELETED')"+
-                                        "{ # " + 
-                                            "<center><button id='btOrderStausDet' onclick='StatusButton(this)' style='background-color:green;width: 55%;color: white;border-radius: 10pt;' #= btnVal # >#= OrderStatusDetail #</button></center>" +
-                                        "#}" +
-                                  "else if(OrderStatusDetail == 'FREEZE')"+
-                                        "{ # " +
-                                            "<center><button id='btOrderStausDet' onclick='StatusButton(this)' style='background-color:green;width: 55%;color: white;border-radius: 10pt;' #= btnVal # >#= OrderStatusDetail #</button></center>" +
-                                        "#}" +
-                                  "else if(OrderStatusDetail == 'REQUESTED')"+
-                                        "{ # " + 
-                                            "<center><button id='btOrderStausDet' onclick='StatusButton(this)' style='background-color:green;width: 55%;color: white;border-radius: 10pt;' #= btnVal # >#= OrderStatusDetail #</button></center>" +
-                                        "#}" +
-                                  "else if(OrderStatusDetail == 'NA')"+
-                                        "{ # " +
-                                            "<center><button id='btOrderStausDet' onclick='StatusButton(this)' style='background-color:green;width: 55%;color: white;border-radius: 10pt;' #= btnVal # >#= OrderStatusDetail #</button></center>" +
-                                        "#}" +
-                                  "else if(OrderStatusDetail == 'AMO')"+
-                                        "{ # " + 
-                                            "<center><button id='btOrderStausDet' onclick='StatusButton(this)' style='background-color:red;width: 55%;color: white;border-radius: 10pt;' #= btnVal # >#= OrderStatusDetail #</button></center>" +
-                                        "#}" +
-                                  "#"
-                                        
+                        width: 80
                     }
                     ]
                 });
@@ -838,121 +675,6 @@ function Gettradealert(norderAction, suserID, norderId, npageindex, nOrderSegmen
         }
     });
 }
-
-function StatusButton(data) {
-
-     //var tbl = "<table>" +
-     //           "<tr>" +
-     //               "<td class='valign'>" +
-     //                   "<table width='100%' cellpadding='0' cellspacing='0'>" +
-     //                       "<tr>" +
-     //                           "<td style='height: 65px !important;'><span id='scripExchange'></span></td>" +
-     //                       "</tr>" +
-     //                       "<tr>" +
-     //                           "<td>Symbol</td>" +
-     //                       "</tr>" +
-     //                       "<tr>" +
-     //                           "<td>Series</td>" +
-     //                       "</tr>" +
-     //                       "<tr>" +
-     //                           "<td>Trading Symbol</td>" +
-     //                       "</tr>" +
-     //                       "<tr>" +
-     //                           "<td>Scrip Token</td>" +
-     //                       "</tr>" +
-     //                       "<tr>" +
-     //                           "<td>Scrip Name</td>" +
-     //                       "</tr>" +
-     //                       "<tr>" +
-     //                           "<td>Board Lot Qty</td>" +
-     //                       "</tr>" +
-     //                       "<tr>" +
-     //                           "<td>Tick Size</td>" +
-     //                       "</tr>" +
-     //                       "<tr>" +
-     //                           "<td>Instrument Type</td>" +
-     //                       "</tr>" +
-     //                       "<tr>" +
-     //                           "<td>Strike Price</td>" +
-     //                       "</tr>" +
-     //                   "</table>" +
-     //               "</td>" +
-     //               "<td class='valign'>" +
-     //               "<table width='100%' cellpadding='0' cellspacing='0'>" +
-     //                   "<tr>" +
-     //                           "<td style='height: 65px !important;'>General Numerator</td>" +
-     //                   "</tr>" +
-     //                   "<tr>" +
-     //                           "<td>General Denominator</td>" +
-     //                   "</tr>" +
-     //                   "<tr>" +
-     //                           "<td>Listing Date</td>" +
-     //                   "</tr>" +
-     //                   "<tr>" +
-     //                           "<td>Issue Start Date</td>" +
-     //                   "</tr>" +
-     //                   "<tr>" +
-     //                           "<td>Issue Maturity Date</td>" +
-     //                   "</tr>" +
-     //                   "<tr>" +
-     //                           "<td>ReAdm Date</td>" +
-     //                   "</tr>" +
-     //                   "<tr>" +
-     //                           "<td>Expulsion Date</td>" +
-     //                   "</tr>" +
-     //                   "<tr>" +
-     //                           "<td>IntPay Date</td>" +
-     //                   "</tr>" +
-     //                   "<tr>" +
-     //                           "<td>Expiry Date</td>" +
-     //                   "</tr>" +
-     //                   "<tr>" +
-     //                           "<td>Expiry Date</td>" +
-     //                   "</tr>" +
-     //               "</table>" +
-     //               "</td>" +
-     //               "</tr>" +
-     //             "</table>";
-
-    $("#scripExchange").text(data.dataset.script + " (" + data.dataset.exchange + ")");
-    $("#oExchange").html(data.dataset.exchange);
-    $('#Span1').html(data.dataset.orderstatus + " - " + data.dataset.action);
-    $("#tPrice").html(data.dataset.price);
-    $('#otype').html(data.dataset.ordertype);
-    $('#daycnc').html(data.dataset.dayioc);
-    $('#oid').html(data.dataset.orderid + ' - ' + data.dataset.cncmis);
-    $('#exoid').html("(" + data.dataset.exchorderid + ")");
-
-    $('#tradenumber').html(data.dataset.tradeno);
-
-    if ($('#tradenumber').html() == "0")
-    {
-        $('#tradenumber').html('NA');
-    }
-    $('#discQuantity').html(data.dataset.disqty);
-    $('#fillqty').html(data.dataset.fillqty);
-    $('#odstatus').html(data.dataset.orderstatus);
-    $('#trprice').html(data.dataset.trigprice);
-    $('#user').html(data.dataset.user);
-    $('#otime').html(data.dataset.ordertime);
-    $('#exotime').html(data.dataset.exordertime);
-    $('#errordet1').html(data.dataset.errordet1);
-
-    if ($('#exotime').html() == "1980-1-1 00:00:00") {
-        $('#exotime').html('-');
-    }
-
-    if ((data.dataset.tradetime) == "0001/01/01 00:00:00") {
-        $('#exchtradetime').html('');
-    }
-    else {
-        $('#exchtradetime').html(data.dataset.tradetime);
-    }
-    $('#penqty').html(data.dataset.penqty);
-
-    KendoWindow("modOrderDetails", 770, 460, "Order Details", 0, true);
-}
-
 
 function exportGridWithTemplatesContent(e) {
     var data = e.data;
@@ -1162,7 +884,7 @@ function Researchbuysell(data) {
         $("#tradeqty1").val('1');
     }
 
-    ResDayClick();
+    
     VarMargin1(1, ntoken, stocktype, 'varper2')
     
     var CncMis = 0;//set
@@ -1235,35 +957,6 @@ $("#stoplossmarket1").click(function () {
     $("#tradeprice1").val(ltp);
 });
 
-$('input[type=radio][name=oTypechecked]').on('change', function ()
-{
-    ChangeOrderType(ResId);
-});
-
-function ResIocClick() {
-    $("#rIoc").prop("checked", true);
-
-    document.getElementById('txtdisclosedqtyres').disabled = true;
-    $('#txtdisclosedqtyres').val("");
-}
-
-function ResDayClick() {
-    $("#rDay").prop("checked", true);
-    document.getElementById('txtdisclosedqtyres').disabled = true;
-    $('#txtdisclosedqtyres').val("");
-
-    if ($('#rSegmentType').attr("data-segement") == "FUTURE" || $('#rSegmentType').attr("data-segement") == "OPTION") {
-        $("#txtdisclosedqtyres").invisible = true;
-        $("#txtdisclosedqtyres").val('');
-        document.getElementById('txtdisclosedqtyres').disabled = true;
-    } else {
-        $("#txtdisclosedqtyres").visible = true;
-        if (parseInt($('input[name="oTypechecked"]:checked').val()) == 1 || parseInt($('input[name="oTypechecked"]:checked').val()) == 11)
-        {
-            document.getElementById('txtdisclosedqtyres').disabled = false;
-        }
-    }
-}
 
 $("#Buyordersearch").click(function () {
     var CncMis = 0;//set
@@ -1314,8 +1007,7 @@ $("#Buyordersearch").click(function () {
     }
     var sScrip = localStorage.getItem("sScrip");
     var OrderType = parseInt($('input[name="oTypechecked"]:checked').val());
-
-    var TriggerPrice = parseFloat($("#triggerprice1").val());;
+    var TriggerPrice = parseFloat($("#txttrigprice1").val());;
     var DQ = 0;
     var MarketPrice = $("#ltprice1").html();
     var successstring = '';
@@ -1335,7 +1027,7 @@ $("#Buyordersearch").click(function () {
 
     $('#rSegmentType').attr("data-segement", segmentindex);
 
-    if ($('#rDay').is(':checked')) {
+    if ($('#Day').is(':checked')) {
         var DayIoc = 1
     }
     else {
@@ -1350,7 +1042,7 @@ $("#Buyordersearch").click(function () {
     }
     var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
 
-    successstring = '<h1>YOUR ORDER TO ' + buysell + '<br>' + sScript + '(' + $("#rSegmentType").html() + ')<br><b>' + parseInt($("#tradeqty1").val()) + ' SHARES @ ₹' + parseFloat($("#tradeprice1").val()) + '</b><br> WAS PLACED</h1>';
+    successstring = '<h1>YOUR ORDER TO ' + buysell + '<br>' + sScript + '(' + $("#segmenttype").html() + ')<br><b>' + parseInt($("#tradeqty1").val()) + ' SHARES @ ₹' + parseFloat($("#tradeprice1").val()) + '</b><br> WAS PLACED</h1>';
 
 
     $('#successmsg').html(successstring);
@@ -1394,7 +1086,7 @@ $("#Buyordersearch").click(function () {
         dataType: "json",
         complete: function (data, status, xhr) {
             $('#Sellordersearch').prop("disabled", false);
-            //console.log(data);
+            console.log(data);
             if (JSON.parse(data.responseText).ResultStatus == 1) {
 
                 KendoWindow("modrmsvalidation", 450, 160, "Order", 0, true);

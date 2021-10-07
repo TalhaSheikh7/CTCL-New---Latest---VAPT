@@ -15,7 +15,7 @@ $("#hValuation").click(function () {
 function getHolding(nAction, sUserID, nPageIndex, nAccountSegment) {
     var nrow = 0;
     $.ajax({
-        url: gblurl + "AccoutingV1/",
+        url: "https://ctcl.investmentz.com/iCtclService/api/AccoutingV1/",
         method: "get",
         data: {
             nAction: nAction,
@@ -425,8 +425,8 @@ function buysellwindow1(data) {
     KendoWindow("windowbuysell", 650, 490, "", 0);
 
     $("#windowbuysell").closest(".k-window").css({
-        top: 140,
-        left: 370
+        top: 250,
+        left: 200
     });
 
     $('#mis').removeAttr("checked");
@@ -447,7 +447,7 @@ function buysellwindow1(data) {
         $("#lotsize").html('1');
     }
 
-    getLotSize(data.dataset.token, instrumentindex,'');
+    getLotSize(data.dataset.token, instrumentindex);
 
     if ($('input[name="oType"]:checked').val() == 1 || $('input[name="oType"]:checked').val() == 11) {
         document.getElementById('Ioc').disabled = false;

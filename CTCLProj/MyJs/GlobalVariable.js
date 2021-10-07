@@ -342,19 +342,19 @@ function GetBcastUrl(nAction) {
                 $("#Exchang1").attr("src", "../img/dis-2.png");
 
                 if (msg.Result.sAmoMsg.toString().trim() != "") {
-                    $("#amomsg").html("This Order will be treated as AMO order, Order Will be Processed on next trading Day.");
+                    $("#amomsg, #OBamomsg").html("This Order will be treated as AMO order, Order Will be Processed on next trading Day.");
                 }
                 savegblBCastUrl(msg.Result.sCtclBroadcastUrl.toString().trim());
             }
             else {
                 $("#Exchange").attr("src", "../img/dis-1.png");
                 $("#Exchang1").attr("src", "../img/dis-1.png");
-                $("#amomsg").html("");
+                $("#amomsg, #OBamomsg").html("");
             }
         } else {
             $("#Exchange").attr("src", "../img/dis-1.png");
             $("#Exchang1").attr("src", "../img/dis-1.png");
-            $("#amomsg").html("");
+            $("#amomsg, #OBamomsg").html("");
         }
     });
 

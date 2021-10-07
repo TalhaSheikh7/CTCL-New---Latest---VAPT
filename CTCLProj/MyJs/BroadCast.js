@@ -45,11 +45,46 @@ function sendTokens(lblScript) {
     }
 }
 
+function reconnectSocketAndSendTokensNP(lblScript) {
+
+    var scriplblName = lblScript;
+    var TokensValues = $('#lblScripts2').html();
+
+    //var TokensValues = $('#lblScripts2').html() + "," + "17.999908,17.999988,5.1"
+    if (ws == null || ws == undefined || ws.readyState != WebSocket.OPEN || ws.readyState != WebSocket.CONNECTING) {
+        ws = new WebSocket(gblBCastUrl);
+        blnBroadCastFlag = true;
+        ws.onopen = function () {
+            setTimeout(function () {
+                SendJson = { SeqNo: 1, Action: "sub.add.topics", RType: "O1", Topic: "", Body: TokensValues };
+                ws.send(JSON.stringify(SendJson));
+            }, 100);
+            //sendTokens(scriplblName);
+        };
+        ws.onmessage = function (evt) {
+            ProcessData(evt.data, lblScript);
+            $("#Broadcast1").attr("src", "../img/dis-2.png");
+        };
+        ws.onerror = function (evt) {
+            $("#Broadcast1").attr("src", "../img/dis-1.png");
+        };
+        ws.onclose = function () {
+
+        };
+    }
+    else {
+        sendTokens(scriplblName);
+    }
+    return false;
+}
+
 
 function reconnectSocketAndSendTokens(lblScript) {
 
     var scriplblName = lblScript;
-    var TokensValues = $('#lblScripts').html() + "," + $('#lblHoldingScripts').html() + "," + $('#lblScripts2').html() + "," + $('#lblScripts3').html() + "," + $('#lblScripts4').html() + "," + $('#lblScriptsObook').html() + "," + "17.999908,17.999988,5.1"
+    var TokensValues = $('#lblScripts').html() + "," + $('#lblHoldingScripts').html() + "," + $('#lblScripts3').html() + "," + $('#lblScripts4').html() + "," + $('#lblScriptsObook').html() + "," + "17.999908,17.999988,5.1"
+
+    //var TokensValues = $('#lblScripts2').html() + "," + "17.999908,17.999988,5.1"
     if (ws == null || ws == undefined || ws.readyState != WebSocket.OPEN || ws.readyState != WebSocket.CONNECTING) {
         ws = new WebSocket(gblBCastUrl);
         blnBroadCastFlag = true;
@@ -174,6 +209,7 @@ function ProcessData(bcastData, lblScript) {
             $("." + SymbolId + "_SR").text(parseFloat($("." + SymbolId + "_SR").text()).toFixed(2));
             $("." + SymbolId + "_ATP").text(parseFloat($("." + SymbolId + "_ATP").text()).toFixed(2));
 
+           // alert($("." + SymbolId + "_LR").text()) 
          //   $("." + SymbolId + "_CV").text(parseFloat($("." + SymbolId + "_LR").text() * qty).toFixed(2));
         }
 
@@ -264,18 +300,18 @@ function ProcessData(bcastData, lblScript) {
 
         if (lblScript == "lblScripts2") {
             var MtoM = 0;
-            var NetVal = parseFloat($("." + SymbolId + "_tdNV").text());
+            var NetVal = parseFloat($("." + SymbolId + "_tdNV").html());
 
-            if (parseFloat($("." + SymbolId + "_tdNQ").text()) == 0) {
+            if (parseFloat($("." + SymbolId + "_tdNQ").html()) == 0) {
                 MtoM = NetVal;
             }
-            else if (parseFloat($("." + SymbolId + "_tdNQ").text()) > 0) {                
-                MtoM = parseFloat($("." + SymbolId + "_tdNQ").text()) * (parseFloat($("." + SymbolId + "_LR").text()) - parseFloat($("." + SymbolId + "_tdnavg").text()));
+            else if (parseFloat($("." + SymbolId + "_tdNQ").html()) > 0) {
+                MtoM = parseFloat($("." + SymbolId + "_tdNQ").html()) * (parseFloat($("." + SymbolId + "_LR").html()) - parseFloat($("." + SymbolId + "_tdnavg").html()));
             }
             else {
-                MtoM = parseFloat($("." + SymbolId + "_tdNQ").text()) * (parseFloat($("." + SymbolId + "_tdnavg").text()) - parseFloat($("." + SymbolId + "_LR").text()));
+                MtoM = parseFloat($("." + SymbolId + "_tdNQ").html()) * (parseFloat($("." + SymbolId + "_tdnavg").html()) - parseFloat($("." + SymbolId + "_LR").html()));
             }
-
+            
             if (MtoM == "" || MtoM == undefined)
             { MtoM = 0; }
 
@@ -321,6 +357,57 @@ function ProcessData(bcastData, lblScript) {
 }
 
 
+function M2mlive(SymbolId, MtoM)
+{
+    var nrow = 0;
+    var $tds;
+    var gview = $("#NetPositionGrid").data("kendoGrid");
+    var selectedItem = gview.dataSource.options;
+    var vsymbolid = "";
+    var netqty;
+    var sqm2m;
+    var Netavg;
+    var vltp;
+    var MtoMNew = 0;
+    var TokenId;
+
+    console.log(selectedItem);
+    $.each(selectedItem.data, function (i, row) {
+        nrow = nrow + 1;
+        //netqty = row.NetQty;
+        //sqm2m = row.Netval;
+        //Netavg = row.Netavg;
+        //vltp = row.LTP;
+        TokenId = row.ExchangeBroadcastConstant + "_" + row.Token;
+        netqty = $("<div/>").html(row.NetQty).text();
+        sqm2m = $("<div/>").html(row.Netval).text();
+        Netavg = $("<div/>").html(row.Netavg).text();
+        vltp = $("." +TokenId + "_LR").html();
+
+        if (row.MISCNC == "CNC / NORMAL") {
+            vsymbolid = SymbolId + "_tdM2MCNC" + '_' + nrow;
+        } else {
+            vsymbolid = SymbolId + "_tdM2MCNC" + '_' + nrow;
+        }
+        
+        var MtoMNew = 0;
+
+        if (parseFloat(netqty) == 0 || parseFloat(vltp) == 0)
+        {
+            $("." + vsymbolid).html(sqm2m);
+        } else if (parseFloat(netqty) != 0)
+        {
+            MtoMNew = parseFloat(netqty) * (parseFloat(vltp) - Math.abs(parseFloat(Netavg)));
+            $("." + vsymbolid).html(parseFloat(MtoMNew).toFixed(2));
+        } else
+        {
+            MtoMNew = Math.abs(parseFloat(netqty)) * (Math.abs(parseFloat(Netavg)) - vltp);
+            $("." + vsymbolid).html(parseFloat(MtoMNew).toFixed(2));
+        }
+
+    });
+
+}
 
 function ResetAll(topicName) {
     $("#lblTopBidQty1").html(0);

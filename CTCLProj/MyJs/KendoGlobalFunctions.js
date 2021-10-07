@@ -57,15 +57,7 @@ $(document).ready(function () {
 
 });
 
-function GetExchangeType(exhangeid) {
-    
-    if (exhangeid == 1) {
-        return "NSE";
-    }
-    else if (exhangeid == 2) {
-        return "BSE";
-    }
-}
+
 function GetOrdetype(sotype) {
     var Otypval = '';
 

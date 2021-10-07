@@ -34,7 +34,6 @@ var idleState = false;
 var idleTimer = null;
 var tokenkey, sScript, gInterval1, gInterval2;
 var cnt = 1;
-var blnBroadCastFlag = false;
 
 var idList = {
     'key1': 'availMarText',
@@ -44,23 +43,6 @@ var idList = {
     'key5': 'excessMarText',
     'key6': 'excessMargin'
 };
-
-var lotId = {
-    'key1': 'txtqty',
-    'key2': 'txtorderprice',
-    'key3': 'txttrigprice',
-    'key4': 'lotsize',
-};
-
-var MktId = {
-    'key1': 'oType',
-    'key2': 'Ioc',
-    'key3': 'txttrigprice',
-    'key4': 'txtdisclosedqty',
-    'key5': 'segmenttype',
-    'key6': 'txtorderprice',
-    'key7': 'ltp'
-}
 
 var ScriptDetails = function (sScript, sPriceStatus, pnScriptID, psInstrument, pnStrike, psCP, pdExpiryDate, pnToken,
                                pnExchangeConstants, pnWatchIndex, pnMktWatchID, pnDetailId, pdCreatedDate, pdModifiedDate) {
@@ -96,6 +78,7 @@ $(document).ready(function () {
     var nExchangeId = 1
     //tokens2 = [];
     getWatch();
+
     //MainKendoWindow("WatchlistSet", 824, 435, 66, 30, "WatchList");
     var mWidth;
 
@@ -302,7 +285,7 @@ function GetHoldinWatchData(OptionID)
         };
     } else {
         
-        URL = gblurl + "HoldingWatch";
+        URL = "http://localhost:1610/api/HoldingWatch";
         rowdata = {
             'HoldingWatchID': option
         }
@@ -1104,7 +1087,7 @@ function GetWatches(nUserId, nMarketWatchID, nMarketSegment, intPageIndex)
 
    var ClientCode= $("#txtSelectedClient").val().split('-')[0].trim();
     $.ajax({
-        url: gblurl + "WatchListV2/",
+        url: "https://ctcl.investmentz.com/iCtclService/api/WatchListV2/",
         method: "get",
         data: {
             pnUserId: gblnUserId,
@@ -2079,7 +2062,7 @@ function buysellwindow(data, Type="")
         GetNetPositionforFO(nToken, CNCMIS);
     }
 
-    //var Code = $("#txtSelectedClient").val().split('-')[0].trim();
+    var Code = $("#txtSelectedClient").val().split('-')[0].trim();
     var Code = $("#txtSelectedClient").val().split('-')[0].trim();
     var Name = $("#txtSelectedClient").val().split('-')[1].trim();
 
@@ -2098,7 +2081,6 @@ function buysellwindow(data, Type="")
 
     $('#mis').removeAttr("checked");
     $('#cnc').prop("checked", "checked");
-    $('#lmtOrder').prop("checked", "checked");
 
     $("#txtqty").attr("data-qty", "1");
     $("#txtqty").attr("data-lotsize", "1");
@@ -2119,8 +2101,7 @@ function buysellwindow(data, Type="")
         SetEstTotal($("#txtqty").val(), $("#txtorderprice").val());
     }
 
-    getLotSize(Token, instrumentindex, 1, lotId, "scriptname", idList);
-    
+    getLotSize(Token, instrumentindex);
 
     if ($('input[name="oType"]:checked').val() == 1 || $('input[name="oType"]:checked').val() == 11) {
         document.getElementById('Ioc').disabled = false;
@@ -2128,16 +2109,16 @@ function buysellwindow(data, Type="")
 
         if ($('#Ioc').attr('Checked') == true) {
             if ($('#segmenttype').attr("data-segement") == "FUTURE" || $('#segmenttype').attr("data-segement") == "OPTION") {
-                $("#txtdisclosedqty").invisible = true;
+                $("#trtxtdisclosedqty").invisible = true;
                 $("#txtdisclosedqty").val('');
                 document.getElementById('txtdisclosedqty').disabled = true;
             }
             else {
-                $("#txtdisclosedqty").visible = true;
+                $("#trtxtdisclosedqty").visible = true;
                 document.getElementById('txtdisclosedqty').disabled = false;
             }
         } else {
-            $("#txtdisclosedqty").visible = true;
+            $("#trtxtdisclosedqty").visible = true;
             document.getElementById('txtdisclosedqty').disabled = false;
         }
     } else if ($('input[name="oType"]:checked').val() == 3 || $('input[name="oType"]:checked').val() == 12)
@@ -2145,7 +2126,7 @@ function buysellwindow(data, Type="")
         document.getElementById('Ioc').disabled = true;
         document.getElementById('txttrigprice').disabled = false;
         if ($('input[name="oType"]:checked').val() == 12) {
-            $("#txtdisclosedqty").invisible = true;
+            $("#trtxtdisclosedqty").invisible = true;
             $("#txtdisclosedqty").val('');
             document.getElementById('txtdisclosedqty').disabled = true;
         }
@@ -2173,11 +2154,12 @@ function buysellwindow(data, Type="")
         var nqty = $("#txtqty").val();
 
         var segment = $("#cmbSegment1").val();
+        
 
         GetRequiredStockOrMargin(nCncMis, nToken, Exchange, nOrderAmt, BuySell, nqty, segment, '', 1, idList);
-        //GetRequiredStockOrMargin(nCncMis, nToken, Exchange, nOrderAmt, BuySell, nqty, segment, '', 1, idList);
         
     }
+
    // $(".typeRadio").click();
 
 }
@@ -2316,6 +2298,7 @@ $('#mis').click(function () {
 
 
 $("#txtqty").change(function () {
+    alert("qty");
     if ($("#txtqty").val() == 0)
     {
         $("#txtqty").val($("#txtqty").attr("min"));
@@ -2358,7 +2341,7 @@ $("#txtqty").change(function () {
 });
 
 $("#tetetete").change(function () {
-    
+    alert("yes");
     var Price = $("#txtorderprice").val();
     if ($('#segmenttype').attr("data-segement") == "CURR") {
 
@@ -2416,77 +2399,99 @@ function ShowHide() {
     var StockType = $("#markettype").data("stocktype")
 
     if (StockType == 2 || StockType == 5 || StockType == 7) { //option
+    
         $("#expDate").show();
         $("#sPrice").show();
         $("#nOption").show();
+
+        //$("#expirydate1").show();
+        //$("#optStrike1").show();
+        //$("#optCallPut1").show();
+
     }
     if (StockType == 1 || StockType === 4 || StockType == 6) { //future
         $("#expDate").show();
         $("#sPrice").hide();
         $("#nOption").hide();
+
+        //$("#expirydate1").show();
+        //$("#optStrike1").hide();
+        //$("#optCallPut1").hide();
+
     }
+
     if (StockType == 3 || StockType == 8 || StockType == 9) { //cash
         $("#expDate").hide();
         $("#sPrice").hide();
         $("#nOption").hide();
+
+        //$("#expirydate1").hide();
+        //$("#optStrike1").hide();
+        //$("#optCallPut1").hide();
+
     }
 }
 
+//$('.typeRadio').change(function () {
+
+//    $('.typeRadio').click();
+//    SetEstTotal($("#txtqty").val(), $("#txtorderprice").val());
+//});
+
 $('input[type=radio][name=oType]').on('change', function () {
 
-    ChangeOrderType(MktId);
-    //if ($(this).val() == 11 || $(this).val() == 1)
-    //{
-    //    document.getElementById('Ioc').disabled = false;
-    //    document.getElementById('txttrigprice').disabled = true;
-    //    $("#txtdisclosedqty").val('0');
-    //    document.getElementById('txtdisclosedqty').disabled = false;
+    if ($(this).val() == 11 || $(this).val() == 1)
+    {
+        document.getElementById('Ioc').disabled = false;
+        document.getElementById('txttrigprice').disabled = true;
+        $("#txtdisclosedqty").val('0');
+        document.getElementById('txtdisclosedqty').disabled = false;
 
-    //} else if ($(this).val() == 3 || $(this).val() == 12)
-    //{
-    //    document.getElementById('Ioc').disabled = true;
-    //    document.getElementById('txttrigprice').disabled = false;
+    } else if ($(this).val() == 3 || $(this).val() == 12)
+    {
+        document.getElementById('Ioc').disabled = true;
+        document.getElementById('txttrigprice').disabled = false;
         
-    //    if ($(this).val() == 12)
-    //    {
-    //        $("#txtdisclosedqty").invisible = true;
-    //        $("#txtdisclosedqty").val('');
-    //        document.getElementById('txtdisclosedqty').disabled = true;
-    //    }
-    //    $("#txtdisclosedqty").val('');
-    //    document.getElementById('txtdisclosedqty').disabled = true;
-    //}
+        if ($(this).val() == 12)
+        {
+            $("#trtxtdisclosedqty").invisible = true;
+            $("#txtdisclosedqty").val('');
+            document.getElementById('txtdisclosedqty').disabled = true;
+        }
+        $("#txtdisclosedqty").val('');
+        document.getElementById('txtdisclosedqty').disabled = true;
+    }
 
-    //if ($('#segmenttype').attr("data-segement") == "CURR") {
-    //    if ($(this).val() == 1 || $(this).val() == 3) {
-    //        $("#txtorderprice").val(parseFloat($("#ltp").html()).toFixed(4));
-    //    } else {
-    //        $("#txtorderprice").val("0.0000");
-    //    }
+    if ($('#segmenttype').attr("data-segement") == "CURR") {
+        if ($(this).val() == 1 || $(this).val() == 3) {
+            $("#txtorderprice").val(parseFloat($("#ltp").html()).toFixed(4));
+        } else {
+            $("#txtorderprice").val("0.0000");
+        }
 
-    //    $("#txttrigprice").val("");
-    //} else {
-    //    if ($(this).val() == 1 || $(this).val() == 3) {
-    //        $("#txtorderprice").val(parseFloat($("#ltp").html()).toFixed(2));
-    //    } else {
-    //        $("#txtorderprice").val("0.0000");
-    //    }
-    //    $("#txttrigprice").val("");
-    //}
+        $("#txttrigprice").val("");
+    } else {
+        if ($(this).val() == 1 || $(this).val() == 3) {
+            $("#txtorderprice").val(parseFloat($("#ltp").html()).toFixed(2));
+        } else {
+            $("#txtorderprice").val("0.0000");
+        }
+        $("#txttrigprice").val("");
+    }
 
-    //if ($(this).val() == 11 || $(this).val() == 12) {
-    //    document.getElementById('txtorderprice').disabled = true;
-    //    DayClick();
-    //    document.getElementById('Ioc').disabled = true;
-    //} else {
-    //    document.getElementById('txtorderprice').disabled = false;
-    //}
+    if ($(this).val() == 11 || $(this).val() == 12) {
+        document.getElementById('txtorderprice').disabled = true;
+        DayClick();
+        document.getElementById('Ioc').disabled = true;
+    } else {
+        document.getElementById('txtorderprice').disabled = false;
+    }
 
-    //if ($('#segmenttype').attr("data-segement") == "FUTURE" || $('#segmenttype').attr("data-segement") == "OPTION") {
-    //    $("#txtdisclosedqty").invisible = true;
-    //    $("#txtdisclosedqty").val('');
-    //    document.getElementById('txtdisclosedqty').disabled = true;
-    //}
+    if ($('#segmenttype').attr("data-segement") == "FUTURE" || $('#segmenttype').attr("data-segement") == "OPTION") {
+        $("#trtxtdisclosedqty").invisible = true;
+        $("#txtdisclosedqty").val('');
+        document.getElementById('txtdisclosedqty').disabled = true;
+    }
 });
 
 $('.typeRadio').click(function () {
@@ -2506,7 +2511,7 @@ $('.typeRadio').click(function () {
 
         DayClick();
         if (OrderType == 12) {
-            $("#txtdisclosedqty").invisible = true;
+            $("#trtxtdisclosedqty").invisible = true;
             $("#txtdisclosedqty").val('');
             document.getElementById('txtdisclosedqty').disabled = true;
         }
@@ -2529,12 +2534,12 @@ function DayClick()
     document.getElementById('txtdisclosedqty').disabled = true;
     $('#txtdisclosedqty').val("");
     //if ($('#segmenttype').attr("data-segement") == "FUTURE" || $('#segmenttype').attr("data-segement") == "OPTION") {
-    //    $("#txtdisclosedqty").invisible = true;
+    //    $("#trtxtdisclosedqty").invisible = true;
     //    document.getElementById('txtdisclosedqty').disabled = true;
     //    $('#txtdisclosedqty').val("");
     //}
     //else {
-    //    $("#txtdisclosedqty").visible = true;
+    //    $("#trtxtdisclosedqty").visible = true;
     //    if ($("#ordertype").val() == 1 || $("#ordertype").val() == 11) {
     //        document.getElementById('txtdisclosedqty').disabled = false;
     //    }
@@ -2679,7 +2684,7 @@ function tradebutton()
         }
     }
 
-    if ($("#hfldBOIYN").val().toString() == "Y" && $("input[type='radio'][name='lien']:checked").val() == "On" && Math.ceil($("#excessMargin").html()) > 0)
+    if ($("#hfldBOIYN").val().toString() && $("input[type='radio'][name='lien']:checked").val() == "On" && Math.ceil($("#excessMargin").html()) > 0)
     {
         if ($("#excessMarText").html() == "EXCESS MARGIN")
         {
@@ -3276,7 +3281,7 @@ function getDepth()
 
         var instrumentindex = GetInstrumentNumber(gridFirst.sInstrument);
 
-        //getLotSize(scrip[1], instrumentindex, 1, lotId);
+        getLotSize(scrip[1], instrumentindex);
 
         RefreshScriptsLevel2(topicName);
         //reconnectSocketAndSendTokens();

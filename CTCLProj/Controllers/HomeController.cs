@@ -60,16 +60,15 @@ namespace CTCLProj.Controllers
             Response.Redirect(OpenUrl);
         }
 
-        public void FundTransfer()
+        public JsonResult FundTransfer(string CCC)
         {
+            List<string> clientData = new List<string>();
             string OpenUrl = "";
-
-            //WebUser CurrentUser = (WebUser)Session[WebUser.SessionName];
-            string userType = "ba";
-            //if(CurrentUser.sUserType.ToLower() == "ba")
-            if (userType == "ba")
+            string resp = "";
+            WebUser CurrentUser = (WebUser)Session[WebUser.SessionName];
+            if (CurrentUser.sUserType.ToLower() == "emp")
             {
-                List<ClientInfo> info = new AcmiilApiServices().GetClientInfo("tsheikh7");
+                List<ClientInfo> info = new AcmiilApiServices().GetClientInfo(CCC);
                 foreach (ClientInfo cinfo in info)
                 {
                     if (cinfo.Segment == AcmiilConstants.SEGMENT_EQ)
@@ -77,59 +76,135 @@ namespace CTCLProj.Controllers
                         if (cinfo.BOIFlag == "Y")
                         {
                             string mStrUrl = String.Format(GlobalVariables.BOIClientURL);
-
                             var dto = new Enr
                             {
-                                clientcode = "200010",
-                                UserId = "boitest"
+                                clientcode = CCC,
+                                UserId = CurrentUser.sLoginId,
                             };
 
                             var sdffd = JsonConvert.SerializeObject(dto);
                             string encrypturl = EncryptDecrypt.EncryptString(sdffd, true);
 
                             OpenUrl = String.Format(mStrUrl + "?u={0}", encrypturl);
-
-                            Response.Redirect(OpenUrl);
+                            resp = "0";
+                            clientData.Add(OpenUrl);
+                            clientData.Add(resp);
                         }
                         else
                         {
-                            Response.Write("<script>alert('Fund Transfer for Non BOI clients Not possible');window.close();</script>");
+                            resp = "1";
+                            OpenUrl = "";
+                            clientData.Add(resp);
+                            //Response.Write("<script>alert('Fund Transfer for Non BOI clients Not possible');window.close();</script>");
                         }
-
-                        
                     }
                 }
             }
             else
             {
-                //SegmentDetails EQDetails = CurrentUser.GetSegmentDetail(MarketSegments.CM);
-                //if (EQDetails.IsBOIClient)
-                var Boi = "N";
-                if (Boi == "Y")
+                SegmentDetails EQDetails = CurrentUser.GetSegmentDetail(MarketSegments.CM);
+                if (EQDetails.IsBOIClient)
                 {
-                    // BOI 
                     string mStrUrl = String.Format(GlobalVariables.BOIClientURL);
                     var dto = new Enr
                     {
-                        clientcode = "200010",
-                        UserId = "boitest"
+                        clientcode = CCC,
+                        UserId = CurrentUser.sLoginId,
                     };
+
                     var sdffd = JsonConvert.SerializeObject(dto);
                     string encrypturl = EncryptDecrypt.EncryptString(sdffd, true);
 
                     OpenUrl = String.Format(mStrUrl + "?u={0}", encrypturl);
+                    resp = "0";
+                    clientData.Add(OpenUrl);
+                    clientData.Add(resp);
                 }
-                else 
+                else
                 {
-                    //non BOI Client
-                   
                     string CurrentPageUrl = System.Web.HttpContext.Current.Request.Url.AbsoluteUri;
                     OpenUrl = String.Format("https://www.investmentz.com/Payment/Index");
+                    resp = "2";
+                    clientData.Add(OpenUrl);
+                    clientData.Add(resp);
                 }
-
-                Response.Redirect(OpenUrl);
             }
+            return Json(clientData, JsonRequestBehavior.AllowGet);
         }
+
+        //public void FundTransfer(string CCC)
+        //{
+        //    string OpenUrl = "";
+
+        //    WebUser CurrentUser = (WebUser)Session[WebUser.SessionName];
+        //    //string userType = "ba";
+        //    if(CurrentUser.sUserType.ToLower() == "emp")
+        //    //if (userType == "ba")
+        //    {
+        //        List<ClientInfo> info = new AcmiilApiServices().GetClientInfo(CCC);
+        //        foreach (ClientInfo cinfo in info)
+        //        {
+        //            if (cinfo.Segment == AcmiilConstants.SEGMENT_EQ)
+        //            {
+        //                if (cinfo.BOIFlag == "Y")
+        //                {
+        //                    string mStrUrl = String.Format(GlobalVariables.BOIClientURL);
+
+        //                    var dto = new Enr
+        //                    {
+        //                        clientcode = CCC,
+        //                        UserId = CurrentUser.sLoginId,
+        //                    };
+
+        //                    var sdffd = JsonConvert.SerializeObject(dto);
+        //                    string encrypturl = EncryptDecrypt.EncryptString(sdffd, true);
+
+        //                    OpenUrl = String.Format(mStrUrl + "?u={0}", encrypturl);
+
+        //                    Response.Write("<script>window.location.('" + OpenUrl + "');</script>");
+                            
+        //                    //Response.Redirect(OpenUrl);
+                           
+        //                }
+        //                else
+        //                {
+        //                    Response.Write("<script>alert('Fund Transfer for Non BOI clients Not possible');window.close();</script>");
+        //                }
+
+                        
+        //            }
+        //        }
+        //    }
+        //    else
+        //    {
+        //        SegmentDetails EQDetails = CurrentUser.GetSegmentDetail(MarketSegments.CM);
+        //        if (EQDetails.IsBOIClient)
+        //        //var Boi = "N";
+        //        //if (Boi == "Y")
+        //        {
+        //            // BOI 
+        //            string mStrUrl = String.Format(GlobalVariables.BOIClientURL);
+        //            var dto = new Enr
+        //            {
+        //                clientcode = CCC,
+        //                UserId = CurrentUser.sLoginId,
+        //            };
+        //            var sdffd = JsonConvert.SerializeObject(dto);
+        //            string encrypturl = EncryptDecrypt.EncryptString(sdffd, true);
+
+        //            OpenUrl = String.Format(mStrUrl + "?u={0}", encrypturl);
+        //        }
+        //        else 
+        //        {
+        //            //non BOI Client
+                   
+        //            string CurrentPageUrl = System.Web.HttpContext.Current.Request.Url.AbsoluteUri;
+        //            OpenUrl = String.Format("https://www.investmentz.com/Payment/Index");
+        //        }
+
+        //        Response.Redirect(OpenUrl);
+        //    }
+        //}
 
         public JsonResult clientnameanducc()
         {

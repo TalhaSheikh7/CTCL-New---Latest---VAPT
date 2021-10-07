@@ -16,13 +16,13 @@
             clearInterval(timer);
         
             var nAction = 6;
-            var sUserId = $("#txtSelectedClient").val().split('-')[0].trim();
+            var sUserId = $("#txtSelectedClient").val().split('-')[0].trim(); //gblnUserId;
             var sProCli = 'Cli';
             var sInstrumentName = 'All';
             var nPageIndex = 0;
             var nToken = 0;
             var sScript = '';
-            var sCTCLId = gblCTCLid;
+            var sCTCLId = gblCTCLid;//400072001005;
             var CCC = '';
             var Name = '';
 
@@ -42,8 +42,7 @@ MarketExchange.push({
 
 script = [];
 
-function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId)
-{
+function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId) {
 
     var MarketSegmentchange =
     [
@@ -53,7 +52,7 @@ function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToke
           { value: "CD", Id: "CD", name: "CD" }
     ];
 
-    KendoDropDownList("marketsegment", MarketSegmentchange, "Id", "name", Segmentchange, false, "", 0);
+    KendoDropDownList("mraketsegment", MarketSegmentchange, "Id", "name", Segmentchange, false, "", 0);
 
     var i = 0;
     var arr = new Array();
@@ -217,12 +216,8 @@ function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToke
                         
                     },
                     {
-                        title: "Buy/Sell", width: 80,
-                        field: "BuySell",
-                    },
-                    {
                         title: "Order Type", width: 80,
-                        field: "OrderType",
+                        field: "BuySell",
                     },
                     {
                         title: "CNC/MIS", width: 80,
@@ -242,7 +237,33 @@ function tradebook(nAction, sUserId, sProCli, sInstrumentName, nPageIndex, nToke
         }
     });
 }
+function GetInstrument(sinstrument) {
+    sinstrument = sinstrument.trim();
+    var constval = '';
 
+    if (sinstrument == "INDEX_FUTURE" || sinstrument == "FUTIDX") {
+        constval = 1; // show FUTURE
+    }
+    else if (sinstrument == "INDEX_OPTION" || sinstrument == "OPTIDX") {
+        constval = 2; //OPTION
+    }
+    else if (sinstrument == "CASH" || sinstrument == "EQ") {
+        constval = 3; //CASH
+    }
+    else if (sinstrument == "CASH_FUTURE" || sinstrument == "FUTSTK") {
+        constval = 4; //FUTURE
+    }
+    else if (sinstrument == "OPTSTK" || sinstrument == "CASH_OPTION") {
+        constval = 5;  //OPTION
+    }
+    else if (sinstrument == "CURRENCY_FUTURE" || sinstrument == "FUTCUR") {
+        constval = 6; //CURR
+    }
+    else if (sinstrument == "CURRENCY_OPTION" || sinstrument == "OPTCUR") {
+        constval = 7; //CURR
+    }
+    return constval;
+}
 function btnConvert(data) {
     // alert(this.data - tradeno);
     var cncmis = ""
@@ -409,7 +430,7 @@ function GetRequiredStockOrMargin12(nStockType, sTradeNo, sDealerCode, sOrderNo,
     });
 }
 function VarMargin12(nExchangeId, nToken, nstockType) {
-    var URL = gblurl + "ScriptV1/";
+    var URL = "https://ctcl.investmentz.com/iCtclService/api/ScriptV1/";
     var rowdata = {
         'stockAction': 4,
         'pageIndex': parseInt(nToken),
@@ -445,7 +466,7 @@ function Segmentchange() {
     var nAction = 6;
     var sUserId = $("#txtSelectedClient").val().split('-')[0].trim();
     var sProCli = 'Cli';
-    var sInstrumentName = $("#marketsegment").val();
+    var sInstrumentName = $("#mraketsegment").val();
     var nPageIndex = 0;
     var nToken = 0;
     var sScript = '';
@@ -458,7 +479,7 @@ function ChangeScript() {
     var nAction = 6;
     var sUserId = $("#txtSelectedClient").val().split('-')[0].trim();
     var sProCli = 'Cli';
-    var sInstrumentName = $("#marketsegment").val();
+    var sInstrumentName = $("#mraketsegment").val();
     var nPageIndex = 0;
     var nToken = 0;
     var sScript = $("marketscript").val();
@@ -702,20 +723,17 @@ function tWatchSelection() {
 
     var sUserId = $("#txtSelectedClient").val().split('-')[0].trim();
     var sProCli = 'Cli';
-    var sInstrumentName = $("#marketsegment").val();
+    var sInstrumentName = $("#mraketsegment").val();
     var nPageIndex = 0;
     var nToken = 0;
     var sScript = '';
+
+    if ($("#selectTrades").data("kendoDropDownList").value()) {
+
+    }
     var sCTCLId = $("#selectTrades").val();
 
-    if ($("#selectTrades").data("kendoDropDownList").value() == 1)
-    {
-        tradebook(6, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, gblCTCLid);
-    }
-    else
-    {
-        tradebook(6, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, "");
-    }
+    tradebook(6, sUserId, sProCli, sInstrumentName, nPageIndex, nToken, sScript, sCTCLId);
 }
 
 function ConvertOrder(nStockType, sTradeNo, sDealerCode, sOrderNo, nCNCMIS, nOrderId, Exchange) {

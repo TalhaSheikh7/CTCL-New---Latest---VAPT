@@ -92,7 +92,7 @@ function saveSettings(ModuleId, settings)
         "LoginType": gblCTCLtype
     }
     $.ajax({
-        url: common_url + "Settings/SaveUserSettings",
+        url: "https://ctcl.investmentz.com/iCtclServiceT/api/Settings/SaveUserSettings",
         type: 'POST',
         data: datarow,
         dataType: "json",

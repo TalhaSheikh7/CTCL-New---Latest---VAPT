@@ -58,12 +58,12 @@ $("#btnForgotLoginid").click(function () {
         },
         dataType: "json",
         success: function (data) {
-            //console.log(data.ForgotLogin[0].RespMessage);
+            console.log(data.ForgotLogin[0].RespMessage);
             if (data.ForgotLogin[0].Response == 1)
             {
                 swal("Your login ID has been send on your registered Mobile No and Email id.");
             } else if(data.ForgotLogin[0].Response == 0) {
-                swal(data.ForgotLogin[0].RespMessage);
+                swal("Something Went Wrong!")
             }
             
             //KendoWindow("remaeks", 650, 120, "", 0);
@@ -285,26 +285,17 @@ $("#btnCPSave1").click(function () {
         },
         dataType: "json",
         success: function (data) {
-            console.log(data);
-            if (data == "You have successfully changed your password. Please Login with your New Password") {
-                $("#forgetpsdotp").hide();
-                $("#changePWD").hide();
-                swal({
-                    title: "Done!",
-                    text: data,
-                    type: "success"
-                }).then(function () {
-                    location.reload();
-                });
-            } else {
-                swal(data);
-                $("#txtChangePwd11").val('');
-                $("#txtChangePwd21").val('');
-            }
-            
+
+            $("#forgetpsdotp").hide();
+            $("#changePWD").hide();
             // alert(data)
-            
-            
+            //KendoWindow("remaeks", 650, 120, "", 0);
+            //$("#remaeks").closest(".k-window").css({
+            //    top: 350,
+            //    left: 200
+            //});
+            //$("#remarkdetails").html(data)
+            alert(MobileNumber);
 
         },
         error: function (data) {
@@ -494,7 +485,7 @@ $("#btnLogin").click(function () {
 
 function GetEmpCTCLId(EmpCode) {
     $.ajax({
-        url: gblurl + "URLSecure/?UCC=" + EmpCode +"&UAction=2",
+        url: "https://ctcl.investmentz.com/iCtclServiceT/api/URLSecure/?UCC=" + EmpCode +"&UAction=2",
         type: "GET",
         data: {
         },
@@ -522,7 +513,7 @@ function GetEmpCTCLId(EmpCode) {
 
 function GetBACTCLId(BACode) {
     $.ajax({
-        url: common_url + "BACtclData?CCode=" + BACode + "",
+        url: "https://ctcl.investmentz.com/iCtclServiceT/api/BACtclData?CCode=" + BACode + "",
         type: "GET",
         data: {
         },
