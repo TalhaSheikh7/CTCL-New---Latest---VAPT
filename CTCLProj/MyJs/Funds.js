@@ -23,7 +23,7 @@ $("#fundPayin").click(function () {
             {
                 window.open(data[0]);
             }
-            else if (data[1] == "1")
+            else if (data[0] == "1")
             {
                 alert("Fund Transfer for Non BOI clients Not possible");
             }
@@ -36,10 +36,10 @@ $("#fundPayin").click(function () {
 
         }
     });
-})
+});
 
 $("#nFunds").click(function () {
-    ClientCode = 
+    var ClientCode = $("#txtSelectedClient").val().split('-')[0].trim();
     //var ClientCode = 5014669;
     GetHoldingDetails(3, ClientCode, 1, 0);
     GetAccountDetails(ClientCode, 8, 1, 0);

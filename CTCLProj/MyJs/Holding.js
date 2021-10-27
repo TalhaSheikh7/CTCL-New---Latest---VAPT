@@ -447,7 +447,7 @@ function buysellwindow1(data) {
         $("#lotsize").html('1');
     }
 
-    getLotSize(data.dataset.token, instrumentindex,'');
+    //getLotSize(data.dataset.token, instrumentindex,'');
 
     if ($('input[name="oType"]:checked').val() == 1 || $('input[name="oType"]:checked').val() == 11) {
         document.getElementById('Ioc').disabled = false;

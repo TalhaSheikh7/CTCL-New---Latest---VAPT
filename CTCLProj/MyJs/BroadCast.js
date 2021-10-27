@@ -1,5 +1,5 @@
 var ws;
-var wsH;
+var wsD;
 var wsManaged;
 var gblBCastUrl;
 var tokens;
@@ -638,32 +638,32 @@ function ProcessData2(bcastData) {
 
 
 function RefreshScriptsDetail(data) {
-    if (ws == null || ws == undefined || ws.readyState != WebSocket.OPEN) {
+    if (wsD == null || wsD == undefined || wsD.readyState != WebSocket.OPEN) {
 
-        ws = new WebSocket("wss://acmfeed.investmentz.com:7005");
-        ws.onopen = function () {
+        wsD = new WebSocket("wss://acmfeed.investmentz.com:7005");
+        wsD.onopen = function () {
             setTimeout(function () {
                 SendJson = { SeqNo: 9, Action: "req", RType: "MASTER", Topic: data, Body: "" };
-                ws.send(JSON.stringify(SendJson));
+                wsD.send(JSON.stringify(SendJson));
             }, 100);
         };
-        ws.onmessage = function (evt) {
-            if (JSON.parse(evt.data).Action == "pub") {
+        wsD.onmessage = function (evt) {
+            if (JSON.parse(evt.data).Action == "reply") {
                 //console.log(JSON.stringify(evt.data));
                 fntblshow(evt.data);
             }
         };
-        ws.onerror = function (evt) {
+        wsD.onerror = function (evt) {
 
         };
-        ws.onclose = function () {
+        wsD.onclose = function () {
 
         };
     }
     else {
         setTimeout(function () {
             SendJson = { SeqNo: 11, Action: "req", RType: "MASTER", Topic: data, Body: "" };
-            ws.send(JSON.stringify(SendJson));
+            wsD.send(JSON.stringify(SendJson));
         }, 100);
     }
     return false;
@@ -691,41 +691,27 @@ function resetServerHbListener() {
 function manageWsData(keysList, level, subscribe) {
     var SendJson;
     var RType = "";
-
     if (wsManaged == null || wsManaged == undefined || wsManaged.readyState == WebSocket.CLOSED) {
-
-        wsManaged = new WebSocket(gblBCastUrl);
+        wsManaged = new WebSocket("wss://acmfeed.investmentz.com:7005");
 
         wsManaged.onopen = function () {
+
+            //$("#Broadcast").attr("src", "../img/dis-2.png");
+            //$("#Broadcast1").attr("src", "../img/dis-2.png");
+
             setTimeout(function () {
                 if (keysList.length > 0)
                     manageWsData(keysList, level, subscribe);
             }, 500);
-
             heartBeatTimer = setInterval(function () {
                 manageWsData(heartBeatSeqNo, 0, true);
                 heartBeatSeqNo++;
-
             }, heartBeatPeriod * 1000);
-
             resetServerHbListener();
         };
         wsManaged.onmessage = function (evt) {
             var RType = JSON.parse(evt.data).RType;
-            if (RType == "O1") {
-                ProcessData(evt.data);
-            }
-            else if (RType == "O2") {
-                ProcessData2(evt.data);
-                ProcessData2FS(evt.data);
-            }
-            else if (RType == "HB") {
-                var serverHBPeriodInBody = parseInt(JSON.parse(evt.data).Body);
-                heartBeatPeriodServer = serverHBPeriodInBody;
-                lastServerHBSeqNo = parseInt(JSON.parse(evt.data).SeqNo);
-                resetServerHbListener();
-            }
-            else if (RType == "TEXT") {
+            if (RType == "TEXT") {
                 var strMsg = JSON.parse(evt.data).Body.split("|");
                 gotSystemMessage(strMsg[2], strMsg[0]);
             }
@@ -734,6 +720,7 @@ function manageWsData(keysList, level, subscribe) {
             alert("Some websocket error = " + JSON.stringify(evt));
         };
         wsManaged.onclose = function (event) {
+
             var reason;
             alert(event.code);
             if (event.code == 1000)
@@ -756,7 +743,7 @@ function manageWsData(keysList, level, subscribe) {
                 reason = "An endpoint is terminating the connection because it has received a message that \"violates its policy\". This reason is given either if there is no other sutible reason, or if there is a need to hide specific details about the policy.";
             else if (event.code == 1009)
                 reason = "An endpoint is terminating the connection because it has received a message that is too big for it to process.";
-            else if (event.code == 1010)
+            else if (event.code == 1010) // Note that this status code is not used by the server, because it can fail the WebSocket handshake instead.
                 reason = "An endpoint (client) is terminating the connection because it has expected the server to negotiate one or more extension, but the server didn't return them in the response message of the WebSocket handshake. <br /> Specifically, the extensions that are needed are: " + event.reason;
             else if (event.code == 1011)
                 reason = "A server is terminating the connection because it encountered an unexpected condition that prevented it from fulfilling the request.";
@@ -770,11 +757,9 @@ function manageWsData(keysList, level, subscribe) {
             setTimeout(function () {
                 if (level == 1) {
                     if (subscribe) {
-
                         var newKeys = keysList.filter(function (el) {
                             return subscribedKeys.indexOf(el) < 0;
                         });
-
                         subscribedKeys = subscribedKeys.concat(newKeys);
 
                         var sendKeys = newKeys.join(",");
@@ -783,14 +768,16 @@ function manageWsData(keysList, level, subscribe) {
                             SendJson = { SeqNo: 1, Action: "sub.add.topics", RType: "O1", Topic: "", Body: sendKeys };
                             wsManaged.send(JSON.stringify(SendJson));
                         }
-                    } else {
+                    }
+                    else {
                         SendJson = { SeqNo: 2, Action: "sub.remove.topics", RType: "O1", Topic: "", Body: keysList };
                         wsManaged.send(JSON.stringify(SendJson));
                         subscribedKeys = subscribedKeys.filter(function (key) {
                             return keysList.indexOf(subKey) < 0;
                         });
                     }
-                } else if (level == 2) {
+                }
+                else if (level == 2) {
                     if (subscribe) {
                         var sendKeys = keysList.filter(function (key) {
                             return subscribedKeys2.indexOf(key) == -1;
@@ -809,7 +796,8 @@ function manageWsData(keysList, level, subscribe) {
                             return keysList.indexOf(subKey) < 0;
                         });
                     }
-                } else if (level == 3) {
+                }
+                else if (level == 3) {
                     if (subscribe) {
 
                         if (!exchangeMsgsSubs) {
@@ -824,7 +812,8 @@ function manageWsData(keysList, level, subscribe) {
                     }
                 }
             }, 200);
-        } else {
+        }
+        else {
             if (level == 0) {
                 if (subscribe) {
                     SendJson = { SeqNo: keysList, Action: "", RType: "HB", Topic: "", Body: heartBeatPeriod.toString() };

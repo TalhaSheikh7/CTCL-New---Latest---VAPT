@@ -26,6 +26,22 @@ namespace CTCLProj.Class
 
         }
 
+        public List<ForgotLogin> ForgotLogin(string CCC)
+        {
+            string mStrUrl = String.Format("{1}ForgotLogin?Option=FL3&CCC={0}&MobOTP=0", CCC, GlobalVariables.AcmiilEKycBaseURL);
+            ForgotLoginResponse forgot = new ForgotLoginResponse();
+            WebRequest req = WebRequest.Create(mStrUrl);
+            req.Method = "GET";
+            //req.Headers.Add("key");
+            req.ContentType = "application/json; charset=utf-8";
+            WebResponse resp = req.GetResponse();
+            Stream stream = resp.GetResponseStream();
+            StreamReader re = new StreamReader(stream);
+            string json = re.ReadToEnd();
+            return JsonConvert.DeserializeObject<ForgotLoginResponse>(json).ForgotLogin;
+            //return JsonConvert.DeserializeObject<ForgotLoginResponse>(json).ForgotLogin;
+        }
+
         public List<ClientInfo> GetClientInfo(string sLoginId)
         {
             string mStrUrl = String.Format("{1}ClientInfo?ClientInfo={0}", sLoginId, GlobalVariables.AcmiilEKycBaseURL);
@@ -285,6 +301,18 @@ namespace CTCLProj.Class
         public string RespMessage { get; set; }
     }
 
+    public class ForgotLoginResponse
+    {
+        public List<ForgotLogin> ForgotLogin { get; set; }
+        
+    }
+
+    public struct ForgotLogin
+    {
+        public string Response { get; set; }
+        public string RespMessage { get; set; }
+    }
+
     public class AcmiilWebWrapper
     {
         public bool IsSuccess { get; set; }
@@ -343,7 +371,6 @@ namespace CTCLProj.Class
         public string SynFlag { get; set; }
         public string UserType { get; set; }
         public string POAFlag { get; set; }
-
         public string BACode { get; set; }
     }
 }

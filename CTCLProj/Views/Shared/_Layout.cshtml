@@ -44,6 +44,19 @@
     <script src="~/MyJs/SettingManager.js"></script>
 
     <style>
+        #loading {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(192, 192, 192, 0.5);
+            background-image: url("https://i.gifer.com/ZZ5H.gif");
+            background-repeat: no-repeat;
+            background-position: center;
+        }
         .form-control.scrip-search-box {
             width: 90% !important;
             font-size: 12px;
@@ -250,6 +263,7 @@
 
     <main>
         <div class="container-fluid">
+            <div id="loading"></div>
             @RenderBody()
         </div>
     </main>
@@ -258,6 +272,23 @@
     </footer>
 
     <script>
+        function onReady(callback) {
+            var intervalId = window.setInterval(function () {
+                if (document.getElementsByTagName('body')[0] !== undefined) {
+                    window.clearInterval(intervalId);
+                    callback.call(this);
+                }
+            }, 3000);
+        }
+
+        function setVisible(selector, visible) {
+            document.querySelector(selector).style.display = visible ? 'block' : 'none';
+        }
+
+        onReady(function () {
+            setVisible('#loading', false);
+        });
+
         var theme = [];
         var gblurl1 = "http://localhost:49180/";
         //var gblurl1 = "https://ctcluat.investmentz.com/";

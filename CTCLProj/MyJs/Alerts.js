@@ -55,6 +55,7 @@ $("#RClick_A").click(function () {
 })
 
 $("#EClick_A").click(function () {
+    
     manageWsData("", 3, true);
 
     //  manageWsData("", 3, true);
@@ -67,11 +68,10 @@ $("#EClick_A").click(function () {
     nOrderSegment = 0;
     OrderId = -1;
     var LoginCode = localStorage.getItem("BACode");
-    GetCorpActions(norderAction, LoginCode, OrderId, "1", nOrderSegment, sOrderStatus, dDateRange1, dDateRange2);
+    //GetCorpActions(norderAction, LoginCode, OrderId, "1", nOrderSegment, sOrderStatus, dDateRange1, dDateRange2);
 })
 function gotSystemMessage(Msg, Time) {
-
-    if (datafalse == false) {
+    if (Time == false) {
         Exchangemessage = [];
     } else {
         Exchangemessage.push({
@@ -94,7 +94,6 @@ function gotSystemMessage(Msg, Time) {
         serverPaging: true,
         noRecords: true,
         serverFiltering: true,
-        toolbar: ["search", { name: 'excel', text: 'Excel' }, { name: 'pdf', text: 'PDF' }],
         filterable: {
             mode: "row"
         },

@@ -52,19 +52,23 @@ $("#btnForgotLoginid").click(function () {
         return false;
     }
     $.ajax({
-        url: "http://accountopening.investmentz.co.in/eKYC/api/eKYCMaster/ForgotLogin?Option=FL3&CCC="+ UCC +"&MobOTP=0",
+        //url: "http://accountopening.investmentz.co.in/eKYC/api/eKYCMaster/ForgotLogin?Option=FL3&CCC="+ UCC +"&MobOTP=0",
+        url: common_url + "Login/btnForgotLoginId",
         type: "GET",
         data: {
+            CCC: UCC
         },
         dataType: "json",
         success: function (data) {
+            swal(data);
+            $("#modFgtLogin").hide();
             //console.log(data.ForgotLogin[0].RespMessage);
-            if (data.ForgotLogin[0].Response == 1)
-            {
-                swal("Your login ID has been send on your registered Mobile No and Email id.");
-            } else if(data.ForgotLogin[0].Response == 0) {
-                swal(data.ForgotLogin[0].RespMessage);
-            }
+            //if (data.ForgotLogin[0].Response == 1)
+            //{
+            //    swal("Your login ID has been send on your registered Mobile No and Email id.");
+            //} else if(data.ForgotLogin[0].Response == 0) {
+            //    swal(data.ForgotLogin[0].RespMessage);
+            //}
             
             //KendoWindow("remaeks", 650, 120, "", 0);
             //$("#remaeks").closest(".k-window").css({
@@ -522,14 +526,14 @@ function GetEmpCTCLId(EmpCode) {
 
 function GetBACTCLId(BACode) {
     $.ajax({
-        url: common_url + "BACtclData?CCode=" + BACode + "",
+        url: gblurl + "BACtclData?CCode=" + BACode + "",
         type: "GET",
         data: {
         },
         dataType: "json",
         success: function (data) {
             console.log(data);
-            var CTCLID = "";
+            var CTCLID = data.Result.CTCLID;
             localStorage.setItem("CTCLId", CTCLID);
             if (data = ! "") {
                 location.href = common_url + "Home/Index"

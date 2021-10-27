@@ -377,14 +377,19 @@ function getLotSize(nToken, nstockType, pageid, keys, sName, idList) {
                 $("#" + keys.key1).attr("step", msg.Result.LotSize);
                 $("#" + keys.key1).attr("min", msg.Result.LotSize);
             } else {
-                $("#" + keys.key1).val(1);
-                $("#" + keys.key4).html(1);
+                if (pageid != 2)
+                {
+                    $("#" + keys.key1).val(1);
+                    $("#" + keys.key4).html(1);
 
-                $("#" + keys.key1).attr("data-qty", 1);
-                $("#" + keys.key1).attr("data-lotsize", 1);
-                $("#" + keys.key1).attr("data-oldvalue", 1);
-                $("#" + keys.key1).attr("step", 1);
-                $("#" + keys.key1).attr("min", 1);
+                    $("#" + keys.key1).attr("data-qty", 1);
+                    $("#" + keys.key1).attr("data-lotsize", 1);
+                    $("#" + keys.key1).attr("data-oldvalue", 1);
+                }
+                    $("#" + keys.key1).attr("step", 1);
+                    $("#" + keys.key1).attr("min", 1);
+                
+                
             }
 
             if (msg.Result.TickPrice != 0) {
@@ -420,10 +425,10 @@ function getLotSize(nToken, nstockType, pageid, keys, sName, idList) {
                 $("#lblLowLim").html((msg.Result.MinPrice).toFixed(isCd ? 4 : 2));
                 $("#lblUpLim").html((msg.Result.MaxPrice).toFixed(isCd ? 4 : 2));
             }
-            $("#sISIN").text('');
+            $("#" + keys.key5).text('');
             $("#tdISINCode").html('');
             if (nstockType == 3) {
-                $("#sISIN").text(msg.Result.ISINNumber);
+                $("#" + keys.key5).text(msg.Result.ISINNumber);
                 $("#tdISINCode").html(msg.Result.ISINNumber);
             }
         }
@@ -431,7 +436,7 @@ function getLotSize(nToken, nstockType, pageid, keys, sName, idList) {
             $("#" + keys.key1).val(1);
         }
 
-        $("#sISIN").text(msg.Result.ISINNumber);
+        $("#" + keys.key5).text(msg.Result.ISINNumber);
         $("#lblesttot").text('');
 
         SetEstTotal($("#" + keys.key1).val(), $("#" + keys.key2).val());
@@ -450,10 +455,13 @@ function getLotSize(nToken, nstockType, pageid, keys, sName, idList) {
         var nOrderAmt = $("#" + keys.key2).val();
         
         sinstrument = $("#cmbSegment1").val();
-        if (sinstrument == 9 || sinstrument == 8 || sinstrument == 1 || sinstrument == 2 || sinstrument == 4 || sinstrument == 5) {
-            //alert($("#" + sName).data("token"));
-            GetRequiredStockOrMargin(0, $("#" + sName).data("token"), GetExchangeType($("#" + sName).data("ExchangeID")), nOrderAmt, nBuySell, $("#txtqty").val(), sinstrument, '', 1, idList);
+        if (sName != '')
+        {
+            if (sinstrument == 9 || sinstrument == 8 || sinstrument == 1 || sinstrument == 2 || sinstrument == 4 || sinstrument == 5) {
+                GetRequiredStockOrMargin(0, $("#" + sName).data("token"), GetExchangeType($("#" + sName).data("ExchangeID")), nOrderAmt, nBuySell, $("#txtqty").val(), sinstrument, '', 1, idList);
+            }
         }
+        
 
         //GetNetPositionDetails(nToken, nstockType, 0)
 

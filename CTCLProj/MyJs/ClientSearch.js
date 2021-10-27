@@ -8,7 +8,7 @@ var setSearchStripReadOnly, setSearchTrip;
 
 //var common_url = "https://ctcluat.investmentz.com/"; //uncomment in Live
 var url_employee_clients_Live = "https://trade.investmentz.com/";
-var gblurl1 = "https://trade.investmentz.com/EasyTradeApi/api/";
+var gblurl1 = "https://trade.investmentz.com/EasyTradeTestApi/api/";
 
 //Global variable Names Holder 
 var logindIdKey = "TNLoggedInId";

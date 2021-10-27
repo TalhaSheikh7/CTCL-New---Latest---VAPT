@@ -194,7 +194,7 @@ function GetOrder(orderstatus)
                     //strDisplay = $.trim(row.StockName + ' ' + (row.StrikePrice == "" ? '' : row.StrikePrice) + ' ' + (row.CallPut == "" ? '' : row.CallPut) + ' ' + (row.Expiry == null ? '' : GetExpiry(row.Type, row.Expiry)));
                     OrderBook.push({
                         ClientId: row.sUserID,
-                        OrderTime: row.OrderEntryTime,
+                        OrderTime: row.OrderEntryRequestTime,
                         Scrip: strDisplay,
                         Quantity: row.TotalQty,
                         OrderPrice: row.Price,
@@ -458,9 +458,10 @@ function btncancelmodify(data) {
     var Code = $("#txtSelectedClient").val().split('-')[0].trim();
     var Name = $("#txtSelectedClient").val().split('-')[1].trim();
 
-    $("#OBClientnameucc").html(Name + '(' + Code + ')')
-
+    $("#OBClientnameucc").html(Name + '(' + Code + ')');
+    
     $("#tradeqty").val(data.dataset.pendqty);
+    
     $("#tradeprice").val(parseFloat(data.dataset.price).toFixed(2));
     $("#txtdisclosedqty1").val(data.dataset.discqty);
     $("#triggerprice").val(data.dataset.trgprice);
@@ -525,7 +526,7 @@ function btncancelmodify(data) {
         top: "20%",
         left: "25%"
     });
-
+    
     $("#tradeqty").attr("data-qty", data.dataset.pendqty);
     $("#tradeqty").attr("data-lotsize", "1");
     $("#tradeqty").attr("data-oldvalue", data.dataset.orderqty);
@@ -538,8 +539,7 @@ function btncancelmodify(data) {
     {
         $("#tradeqty").attr("data-oldvalue", $(this).attr("data-pendqty"));
     }
-
-    getLotSize(data.dataset.token, instrumentindex, 2, lotId1);
+    getLotSize(data.dataset.token, instrumentindex, 2, lotId1, '', idList1);
 }
 
 function MCShowHide() {

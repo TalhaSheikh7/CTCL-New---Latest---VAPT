@@ -380,6 +380,28 @@ namespace CTCLProj.Controllers
             //txtChangePwd1.Text = "";
             //txtChangePwd2.Text = "";
         }
+
+        public JsonResult btnForgotLoginId(string CCC)
+        {
+            //ForgotLoginResponse resp = new AcmiilApiServices().ForgotLogin(CCC);
+            List<ForgotLogin> mLstclientInfos = new AcmiilApiServices().ForgotLogin(CCC);
+            string message = "";
+            if (mLstclientInfos.Count >= 1)
+            {
+                if (mLstclientInfos[0].Response == "1")
+                {
+                    message = mLstclientInfos[0].RespMessage;
+                }
+                
+                else
+                {
+                    message = mLstclientInfos[0].RespMessage;
+                }
+                    
+            }
+            return Json(message, JsonRequestBehavior.AllowGet);
+        }
+
         public JsonResult btnFPwdProceed_Click(string LoginID, string MobileNumber, string hFldOtpVisible, string hFldPopupOperation, string hFldOpenPopupId, string txtFPwdOTP = "")
         {
             string ClientName = "";

@@ -50,6 +50,7 @@ var lotId = {
     'key2': 'txtorderprice',
     'key3': 'txttrigprice',
     'key4': 'lotsize',
+    'key5': 'sISIN'
 };
 
 var MktId = {
@@ -1595,6 +1596,7 @@ function FillWatchGrid(data, type)
             {
                 title: "Buy Price",
                 field: "BuyPrice",
+                template: "#= BuyPrice #",
                 filterable: false,
                 width: 100,
                 hidden: true
@@ -1602,6 +1604,7 @@ function FillWatchGrid(data, type)
             {
                 title: "Sell Qty",
                 field: "SellQty",
+                template: "#= SellQty #",
                 filterable: false,
                 width: 95,
                 hidden: true
@@ -1609,6 +1612,7 @@ function FillWatchGrid(data, type)
             {
                 title: "Sell Price",
                 field: "SellPrice",
+                template: "#= SellPrice #",
                 filterable: false,
                 width: 100,
                 hidden: true
@@ -1616,6 +1620,7 @@ function FillWatchGrid(data, type)
             {
                 title: "LTQ",
                 field: "LTQ",
+                template: "#= LTQ #",
                 filterable: false,
                 width: 80,
                 hidden: true
@@ -1639,6 +1644,7 @@ function FillWatchGrid(data, type)
             {
                 title: "Total Qty",
                 field: "TotalQty",
+                template: "#= TotalQty #",
                 filterable: false,
                 width: 100,
                 hidden: true
@@ -1646,6 +1652,7 @@ function FillWatchGrid(data, type)
             {
                 title: "ATP",
                 field: "ATP",
+                template: "#= ATP #",
                 filterable: false,
                 width: 80,
                 hidden: true
@@ -1653,6 +1660,7 @@ function FillWatchGrid(data, type)
             {
                 title: "Open Int.",
                 field: "OpenInt",
+                template: "#= OpenInt #",
                 filterable: false,
                 width: 100,
                 hidden: true
@@ -3253,6 +3261,7 @@ function getDepth()
         //console.log(selectedItem);
         //console.log(gridFirst);
         if (selectedItem != null) {
+            //console.log(selectedItem);
             ExchangeConstant = selectedItem.nExchangeConstants;
             Token = selectedItem.nToken;
             topicName = selectedItem.nExchangeConstants + '.' + selectedItem.nToken;
@@ -3260,6 +3269,7 @@ function getDepth()
             Instrument = selectedItem.sInstrument;
             Exchange = selectedItem.nExchangeID;
         } else {
+            //console.log(gridFirst);
             ExchangeConstant = gridFirst.nExchangeConstants;
             Token = gridFirst.nToken;
             topicName = gridFirst.nExchangeConstants + '.' + gridFirst.nToken;
@@ -3277,6 +3287,7 @@ function getDepth()
         var instrumentindex = GetInstrumentNumber(gridFirst.sInstrument);
 
         //getLotSize(scrip[1], instrumentindex, 1, lotId);
+        getLotSize(Token, instrumentindex, 1, lotId, '', idList);
 
         RefreshScriptsLevel2(topicName);
         //reconnectSocketAndSendTokens();

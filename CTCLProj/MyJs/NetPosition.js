@@ -186,7 +186,7 @@ function GetNetPositionReport(strInst, strdtrange) {
         type: "json"
     });
     GetNetPosition.done(function (msg) {
-        console.log(msg);
+        //console.log(msg);
         if (msg.IsResultSuccess) {
             FillGrid(msg.Result);
         }
@@ -213,15 +213,23 @@ function getTotalNetVal() {
 }
 
 function getTotalNetQty() {
-    return parseFloat(totalNAqty[totalNAqty.length - 1].TotalNetQty);
+    return parseFloat(totalNAqty[totalNAqty.length - 1].TotalNetQty).toFixed(2);
 }
 
 function getTotalBuyVal() {
-    return parseFloat(totalNA[totalNA.length - 1].TotalNetAverage).toFixed(2);
+    return parseFloat(totalbuy[totalbuy.length - 1].TotalBuyVal);
 }
 
 function getTotalBuyQty() {
-    return parseFloat(totalNAqty[totalNAqty.length - 1].TotalNetQty);
+    return parseFloat(totalbuy[totalbuy.length - 1].TotalBuyQty);
+}
+
+function getTotalSellVal() {
+    return parseFloat(totalsell[totalsell.length - 1].TotalSellVal);
+}
+
+function getTotalSellQty() {
+    return parseFloat(totalsell[totalsell.length - 1].TotalSellQty);
 }
 
 
@@ -438,8 +446,10 @@ function FillGrid(msg) {
 
             totbuyqty = (parseFloat(totbuyqty) + parseFloat(row.BuyQty));
             totbuyval = (parseFloat(totbuyval) + parseFloat(row.BuyValue)).toFixed(2);
+
             totsellqty = (parseFloat(totsellqty) + parseFloat(row.SellQty));
             totsellval = (parseFloat(totsellval) + parseFloat(row.SellValue)).toFixed(2);
+
             totNetqty = (parseFloat(totNetqty) + parseFloat(row.NetQty));
             totNetval = (parseFloat(totNetval) + parseFloat(row.NetValue)).toFixed(2);
 
@@ -524,62 +534,57 @@ function FillGrid(msg) {
                    {
                        title: "Scrip", 
                        field: "Scrip",
-                       width: 100
+                       width: 100,
+                       footerTemplate: "Total: "
                    },
                    {
                        title: "Buy Qty",
                        field: "BuyQty",
                        width: 95,
-                       hidden: "true"
-                       //footerTemplate: "Total: #=getTotalNetQty()#"
+                       footerTemplate: "#=getTotalBuyQty()#"
                    },
                    {
                        title: "Buy Avg",
                        field: "BuyAvg",
-                       width: 100,
-                       hidden: "true"
+                       width: 100
                        //footerTemplate: "Total: #=getTotalNetQty()#"
                    },
                    {
                        title: "Buy Value",
                        field: "BuyVal",
                        width: 100,
-                       hidden: "true"
-                       //footerTemplate: "Total: #=getTotalNetQty()#"
+                       footerTemplate: "#=getTotalBuyVal()#"
                    },
                    {
                        title: "Sell Qty",
                        field: "SellQty",
                        width: 90,
-                       hidden: "true"
-                       //footerTemplate: "Total: #=getTotalNetQty()#"
+                       footerTemplate: "#=getTotalSellQty()#"
                    },
                    {
                        title: "Sell Avg",
                        field: "SellAvg",
-                       width: 100,
-                       hidden: "true"
+                       width: 100
                        //footerTemplate: "Total: #=getTotalNetQty()#"
                    },
                    {
                        title: "Sell Value",
                        field: "SellVal",
                        width: 100,
-                       hidden: "true"
-                       //footerTemplate: "Total: #=getTotalNetQty()#"
+                       footerTemplate: "#=getTotalSellVal()#"
                    },
                    {
                        title: "Net Qty",
                        field: "NetQty",
                        template: "#= NetQty #",
                        width: 100,
-                       footerTemplate: "Total: #=getTotalNetQty()#"
+                       footerTemplate: "#=getTotalNetQty()#"
                    },
                    {
                        title: "Net avg", 
                        field: "Netavg",
                        template: "#= Netavg #",
-                       footerTemplate: "Total:#=getTotalNetAvg()#"
+                       footerTemplate: "#=getTotalNetAvg()#"
                    },
                    
                    {
@@ -587,7 +592,7 @@ function FillGrid(msg) {
                        field: "Netval",
                        width: 100,
                        template: "#= Netval #",
-                       footerTemplate: "Total:#=getTotalNetVal()#"
+                       footerTemplate: "#=getTotalNetVal()#"
                    },
                    {
                        title: "LTP",
@@ -627,12 +632,12 @@ function FillGrid(msg) {
                    {
                        title: "Strike",
                        field: "Strike",
-                       hidden: "Strike"
+                       hidden: "true"
                    },
                    {
                        title: "OrderType",
                        field: "OrderType",
-                       hidden:"ture"
+                       hidden:"true"
                    }
         ],
         save: function (e) {
@@ -723,6 +728,7 @@ $("#btnsqoff").click(function () {
             {
                 title: "Net Qty",
                 field: "NetQty",
+                template: "#= NetQty #",
                 width: 100
             }
         ]
