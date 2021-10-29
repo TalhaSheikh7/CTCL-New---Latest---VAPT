@@ -1371,9 +1371,9 @@
                                                 <input name="txtFPwdOTP" type="password" autocomplete="off" id="txtFPwdOTP" class="popup_input" style="font-size:16px;" />
                                             </div>
                                             <div class="col-sm-7" style="line-height: 18px; padding: 0px 58px; position: relative;  top: -10px;">
-                                                <small>180 Seconds</small>
-                                                <br /><a id="resendotp" style="font-size:12px; color:#000;" href="javascript:__doPostBack(&#39;resendotp&#39;,&#39;&#39;)">Resend OTP</a>
-                                            </div>
+                                                @*<small>180 Seconds</small>--By Afiya*@
+                                                <br /><a id="resendotp" style="font-size:12px; color:#000;" href="javascript:__doPostBack(&#39;resendotp&#39;,&#39;&#39;)"><span id="timer"></span></a><a href="#" class="btn_link Resend_btn" style="display:none;">Resend OTP</a>
+</div>
                                         </div>
                                     </div>
                                     <div class="row" style="padding-top:0px">
@@ -1446,7 +1446,12 @@
                                                 <input name="txtFPwdOTP" type="password" autocomplete="off" id="txtFPwdOTP1" class="popup_input" style="font-size:16px;">
                                             </span>
                                             <span>
-                                                <small>180 Seconds</small><br><a id="resendotp" style="color:#fff;" href="javascript:__doPostBack('resendotp','')">Resend OTP</a>
+                                                @*<small>180 Seconds</small>by afiya*@
+                                                <a id="theTarget" class="btn_link Resend_btn">180</a>
+                                                    <br><a id="resendotp" style="color:#fff;" href="javascript:__doPostBack('resendotp','')"></a>    
+                                                    <br />
+                                                    <span id="timer"></span>
+                                                    <a href="#" class="btn_link Resend_btn" style="display:none;">Resend OTP</a>Resend OTP</a>
                                             </span>
                                         </div>
 

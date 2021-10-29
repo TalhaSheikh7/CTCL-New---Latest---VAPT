@@ -6,6 +6,23 @@ $(document).ready(function () {
     
 });
 
+
+
+///Afiya 28-10-2021
+function CallTimer() {
+    var timer = setInterval(function () {
+
+        var count = parseInt($('#theTarget').html());
+        if (count !== 0) {
+            $('#theTarget').html(count - 1 + " Seconds");
+        } else {
+            clearInterval(timer);
+        }
+    }, 1000);
+}; 
+
+///*End*
+
 $(".toggle-password").click(function () {
 
     $(this).toggleClass("fa-eye fa-eye-slash");
@@ -84,6 +101,8 @@ $("#btnForgotLoginid").click(function () {
 })
 
 $("#btnFPwdProceed").click(function () {
+
+   
     var Loginid = $("#txtFPwdLoginId").val();
     var MobileNumber = $("#txtFPwdMobileNo").val();
     var hFldOtpVisible = "F";//$('#hFldOtpVisible').val('F');
@@ -114,6 +133,8 @@ $("#btnFPwdProceed").click(function () {
                 //$("#modForgotPwd").hide();
                 $("#anyonepopup").show();
                 $("#commenpopup").html(data)
+              
+
                 return false;
             } else if (data == "Wrong Number") {
                 $("#txtFPwdLoginId").val('');
@@ -125,6 +146,7 @@ $("#btnFPwdProceed").click(function () {
             }
             else {
                 $("#forgetpsdotp").show();
+                CallTimer();//Added by Afiya 28-10-2021.
                 $("#clientname").html(data);
             }
         },
@@ -164,6 +186,7 @@ $("#btnCreateId").click(function () {
 $("#FPWDOTP").click(function () {
     $("#modForgotPwd").hide();
     $("#forgetpsdotp").show();
+    CallTimer();//Added by Afiya 28-10-2021
     var Loginid = $("#txtFPwdLoginId").val();
     var MobileNumber = $("#txtFPwdMobileNo").val();
     var hFldOtpVisible = "T";//$("#hFldOtpVisible").val("F");
