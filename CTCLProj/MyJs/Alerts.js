@@ -23,7 +23,16 @@ var ResId = {
 }
 
 $(document).ready(function () {
+    GetOrderLogs();
+});
 
+$("#aLog").click(function ()
+{
+    GetOrderLogs();
+});
+
+function GetOrderLogs()
+{
     var norderAction = 5;
     var suserID = gblnUserId;
     var norderId = -1;
@@ -32,9 +41,12 @@ $(document).ready(function () {
     var dDateRange2 = "";
     var LoginCode = localStorage.getItem("BACode");
     Gettradealert("4", "", norderId, "1", "0", sorderStatus, dDateRange1, dDateRange2);
-  
-});
+}
 
+$("#OStatusLog").click(function ()
+{
+    GetOrderLogs();
+});
 
 $("#NClick_A").click(function () {
     var norderAction = 5;
