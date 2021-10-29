@@ -48,7 +48,7 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment) {
                     HoldingColumns = [];
                 } else {
                     var record = 0;
-
+                    //LTP: $("<div/>").html(currrate).text(),
                     $.each(data.Result.Result, function (i, row) {
 
                         if (row.nBroadCastContants == 12 || row.nBroadCastContants == 13) {
@@ -81,14 +81,15 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment) {
                         //var scripQty = parseFloat(row.nQty).toFixed(2);
 
                         $('#lblHoldingScripts').html(sScripts.substring(0, sScripts.length - 1));
-                        $('#lblHoldingScripts').html($('#lblHoldingScripts').html() + ","+ "17.999908,17.999988,5.1")
+                        $('#lblHoldingScripts').html($('#lblHoldingScripts').html() + "," + "17.999908,17.999988,5.1")
                         tokens.push(row.nToken);
-                        
+
                         reconnectSocketAndSendTokens(lblScript);
                         //return false;
 
                         HoldingColumns.push({
-                            LTPH: currrate,
+                            // LTPH: currrate, //commented by afiya on 27102021
+                            LTPH: $("<div/>").html(currrate).text(),  //added by afiya on 27102021
                             ISIN: row.sISINNumber,
                             ScripName: ScripName,
                             Quantity: row.nQty,
@@ -105,7 +106,8 @@ function getHolding(nAction, sUserID, nPageIndex, nAccountSegment) {
                             CP: row.sCP,
                             Token: row.nToken,
                             BuyVal: parseFloat(BuyingValue).toFixed(2),
-                            Curr: CurrentValue,
+                            //  Curr: CurrentValue,//commented by afiya on 27102021
+                            Curr: $("<div/>").html(CurrentValue).text(),//added by afiya on 27102021
                             PL: ProfLoss,
                             PLPer: ProfLossPerc
                         });
