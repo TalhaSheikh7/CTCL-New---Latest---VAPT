@@ -2365,7 +2365,7 @@ $("#txtqty").change(function () {
     SetEstTotal($("#txtqty").val(), $("#txtorderprice").val());
 });
 
-$("#tetetete").change(function () {
+$("#txtorderprice").change(function () {
     
     var Price = $("#txtorderprice").val();
     if ($('#segmenttype').attr("data-segement") == "CURR") {

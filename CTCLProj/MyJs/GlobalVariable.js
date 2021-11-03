@@ -1,8 +1,8 @@
 ﻿
-var common_url = "http://localhost:49180/";
-//var common_url = "https://ctcluat.investmentz.com/";
+//var common_url = "http://localhost:49180/";
+var common_url = "https://ctcluat.investmentz.com/";
 //var gblurl = "http://localhost:1610/api/";
-var gblurl = "https://ctcl.investmentz.com/iCtclService/api/";
+var gblurl = "https://ctcl.investmentz.com/iCtclServiceT/api/";
 var gblnUserId;
 var clearClntDetails, saveClntDetails, getClntDetails;
 var gblnUserId = localStorage.getItem("CCID");

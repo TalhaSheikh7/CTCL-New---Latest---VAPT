@@ -588,7 +588,7 @@ $("#ModifyOrder").click(function () {
     var ExchangeID = $('#modscrip').data('ExchangeID');
     var Price = parseFloat($("#tradeprice").val());
     var StockType = sinstrument;
-    var OrderType = $('#modscrip').data('ordertype');
+    var OrderType = parseInt($('input[name="modOType"]:checked').val());
     var TriggerPrice = parseFloat($("#triggerprice").val());
     var DQ = parseInt($("#txtdisclosedqty1").val());
     var MarketPrice = $("#ltprice").text();

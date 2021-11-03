@@ -612,7 +612,7 @@ function Gettradealert(norderAction, suserID, norderId, npageindex, nOrderSegmen
                         buysell = "SELL";
                         // buyselltd = '<span class="num-qty2"><strong>' + buysell + '</strong></span>' + ordtype + '</td>'
                     }
-                    strDisplay = $.trim(row.sScript + ' ' + (row.Instrument == "" ? '' : row.Instrument) + '-' + (row.ExchangeName == "" ? '' : row.ExchangeName) + ' ' + (row.Expiry == "" ? '' : Expiry(row.Expiry)));
+                    strDisplay = $.trim(row.sScript + ' ' + (row.Instrument == "" ? '' : row.Instrument) + '-' + (row.ExchangeName == "" ? '' : row.ExchangeName) + ' ' + (row.Expiry == "" ? '' : GetExpiry(row.Expiry)));
 
                     if (row.sCP != "XX")
                     {
