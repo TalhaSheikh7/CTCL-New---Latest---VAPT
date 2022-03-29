@@ -207,7 +207,7 @@ namespace CTCLProj.Controllers
 
         //        Response.Redirect(OpenUrl);
         //    }
-        //}
+        //} 
 
         public JsonResult clientnameanducc()
         {
