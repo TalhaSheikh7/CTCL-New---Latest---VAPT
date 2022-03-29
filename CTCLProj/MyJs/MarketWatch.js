@@ -101,6 +101,7 @@ $(document).ready(function () {
     var mWidth;
 
     $("#cmbClients").val('');
+    $("#txtAddScript").alphanum();
 
     $("#WatchlistSet").kendoWindow({
         width: "58.50%",

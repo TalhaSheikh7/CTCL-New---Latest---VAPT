@@ -4,6 +4,7 @@
 
 
 $(document).on("click", "#btnSave", function (event) {
+    alert("Yes");
     // var CurrentMarketWatchWidth = document.getElementById("WatchlistSet").offsetWidth / $(window).width() * 100;
 
     //window.parent.$("#WatchlistSet").data("kendoWindow").options.height
@@ -80,6 +81,11 @@ $(document).on("click", "#btnSave", function (event) {
         TabWindowHeight: TabWindowHeight,
         WatchListGridOpt: kendo.stringify($("#WatchList").data("kendoGrid").getOptions())
     };
+
+    var griddata = kendo.stringify($("#WatchList").data("kendoGrid").getOptions());
+
+    console.log(griddata);
+
     saveSettings("M001", JSON.stringify(dataset));    
 });
 
@@ -97,7 +103,10 @@ function saveSettings(ModuleId, settings)
         data: datarow,
         dataType: "json",
         success: function (data) {
+            console.log(data);
+            var grid = $("#WatchList").data("kendoGrid");
 
+            grid.setOptions(JSON.parse(griddata));
         },
         error: function (data) {
 

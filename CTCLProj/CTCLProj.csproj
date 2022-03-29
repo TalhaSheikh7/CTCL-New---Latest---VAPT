@@ -114,6 +114,7 @@
     <Compile Include="App_Start\FilterConfig.cs" />
     <Compile Include="App_Start\RouteConfig.cs" />
     <Compile Include="Class\AcmiilApiServices.cs" />
+    <Compile Include="Class\AESEncrytDecry.cs" />
     <Compile Include="Class\CryptoEngine.cs" />
     <Compile Include="Class\EmpInfo.cs" />
     <Compile Include="Class\EncryptDecrypt.cs" />
@@ -635,6 +636,8 @@
     <Content Include="img\left.png" />
     <Content Include="img\line.jpg" />
     <Content Include="img\linked.png" />
+    <Content Include="img\loader.gif" />
+    <Content Include="img\loader_new.gif" />
     <Content Include="img\login-Image1.png" />
     <Content Include="img\login_bg.svg" />
     <Content Include="img\logo.png" />
@@ -674,16 +677,19 @@
     <Content Include="img\watch-list.png" />
     <Content Include="img\withdraw-fund.svg" />
     <Content Include="img\wrench.svg" />
+    <Content Include="MyJs\aes.js" />
     <Content Include="MyJs\Alerts.js" />
     <Content Include="MyJs\BOISettings.js" />
     <Content Include="MyJs\BroadCast.js" />
     <Content Include="MyJs\ClientSearch.js" />
     <Content Include="MyJs\CommonFunctions.js" />
+    <Content Include="MyJs\Crypto.js" />
     <Content Include="MyJs\firebase.js" />
     <Content Include="MyJs\Funds.js" />
     <Content Include="MyJs\GetSettings.js" />
     <Content Include="MyJs\GlobalVariable.js" />
     <Content Include="MyJs\Holding.js" />
+    <Content Include="MyJs\jquery.alphanum.js" />
     <Content Include="MyJs\jquery.autocomplete.min.js" />
     <Content Include="MyJs\KendoGlobalFunctions.js" />
     <Content Include="MyJs\lightweight-charts.standalone.production.js" />

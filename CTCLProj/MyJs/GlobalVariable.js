@@ -1,8 +1,8 @@
 ﻿
-//var common_url = "http://localhost:49180/";
-var common_url = "https://ctcluat.investmentz.com/";
-//var gblurl = "http://localhost:1610/api/";
-var gblurl = "https://ctcl.investmentz.com/iCtclServiceT/api/";
+var common_url = "http://localhost:49180/";
+//var common_url = "https://ctcluat.investmentz.com/";
+var gblurl = "https://ctclvaptapi.investmentz.com/api/";
+//var gblurl = "https://ctcl.investmentz.com/iCtclServiceT/api/";
 var gblnUserId;
 var clearClntDetails, saveClntDetails, getClntDetails;
 var gblnUserId = localStorage.getItem("CCID");
@@ -75,14 +75,14 @@ window.formatDate = function (inputDate, inputDateFormat, outPutFormat) {
 //    gblCTCLtype = getEmpDetails("EmpCTCLtype", "");
 //}
 
-//function getEmpDetails(variableName, defaultValue) {
-//    if (window.localStorage.getItem(variableName) == undefined || window.localStorage.getItem(variableName) == null) {
-//        setGlobalVariable(variableName, defaultValue);
-//        return defaultValue;
-//    }
-//    else
-//        return window.localStorage.getItem(variableName);
-//}
+function getEmpDetails(variableName, defaultValue) {
+    if (window.localStorage.getItem(variableName) == undefined || window.localStorage.getItem(variableName) == null) {
+        setGlobalVariable(variableName, defaultValue);
+        return defaultValue;
+    }
+    else
+        return window.localStorage.getItem(variableName);
+}
 
 
 getClntDetails = function (cbClntDetailsFetched) {
@@ -226,6 +226,7 @@ getClntInfo = function (cbClntInfoFetched, ctclselectedclient) {
                 url: gblurl + "URLSecure/",
                 method: "get",
                 data: {
+                    //UAction: 2,
                     UCC: empCode
                 },
                 dataType: "json"

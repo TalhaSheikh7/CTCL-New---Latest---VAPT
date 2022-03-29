@@ -3,6 +3,9 @@ using investmentz.Models;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.Configuration;
+using System.Data;
+using System.Data.SqlClient;
 using System.Linq;
 using System.Web;
 using System.Web.Mvc;
@@ -208,12 +211,95 @@ namespace CTCLProj.Controllers
 
         public JsonResult clientnameanducc()
         {
-            if (Request.Cookies["LoginId"]?.Value == null && Request.Cookies["SessionId"]?.Value == null)
+            var clientdetails = new clientssdata();
+            try
             {
-                return Json(false, JsonRequestBehavior.AllowGet); ;
-            }
+                if (Request.Cookies["SessionId"]?.Value == "" || Request.Cookies["SessionId"]?.Value == null || Request.Cookies["LoginId"]?.Value == null || Request.Cookies["LoginId"]?.Value == "")
+                {
+                    try
+                    {
+                        //var LoginId = Session["SessionLoginID"] == null ? "" : Session["SessionLoginID"].ToString();
+                        var LoginId = Request.Cookies["LoginId"]?.Value;
+                        var sessionId = HttpContext.Session.SessionID == null ? "" : HttpContext.Session.SessionID;
+                        clientdetails.UserType = Convert.ToString(LoginId);
+                        var sessioncompaire = sessionId;
+                        string FinancialPlanning = ConfigurationManager.ConnectionStrings["DBWHDB1ACMCompare"].ConnectionString;
+                        using (SqlConnection connection = new SqlConnection(FinancialPlanning))
+                        {
+                            //DataTable dto = MFModels.SqlHelper.ReadTable("select top 1 CommonClientCode, sessionid from acmcompare.dbo.SessionLog where LoginID='" + LoginId + "'", GlobalVariables.WHDB1acmcomper, false);
+                            DataTable dto = SqlHelper.ReadTable("select top 1 CommonClientCode, sessionid from acmcompare.dbo.SessionLog where LoginID='" + LoginId + "' and ActiveFlag='Y' and SessionID='" + sessioncompaire + "' order by LoginTime desc", GlobalVariables.WHDB1acmcomper, false);
+                            if (dto.Rows.Count > 0)
+                            {
+                                foreach (DataRow recomm in dto.Rows)
+                                {
+                                    clientdetails.clientcode = recomm["CommonClientCode"].ToString();
+                                    clientdetails.Sessionid = recomm["sessionid"].ToString();
+                                }
+                            }
+                            else
+                            {
+                                return Json(false, JsonRequestBehavior.AllowGet);
+                            }
+                            if (clientdetails.clientcode == "")
+                            {
+                                return Json(false, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
 
-            return Json(true, JsonRequestBehavior.AllowGet);
+                        throw ex;
+                    }
+                }
+                else
+                {
+                    Session["CheckLoginTime"] = Request.Cookies["SessionId"]?.Value;
+                    Session["SessionLoginID"] = Request.Cookies["LoginId"]?.Value;
+                    try
+                    {
+                        var LoginId = Session["SessionLoginID"] == null ? "" : Session["SessionLoginID"].ToString();
+                        var sessionId = Session["CheckLoginTime"] == null ? "" : Session["CheckLoginTime"].ToString();
+                        clientdetails.UserType = Convert.ToString(LoginId);
+                        var sessioncompaire = sessionId;
+                        string FinancialPlanning = ConfigurationManager.ConnectionStrings["DBWHDB1ACMCompare"].ConnectionString;
+                        using (SqlConnection connection = new SqlConnection(FinancialPlanning))
+                        {
+                            DataTable dto = SqlHelper.ReadTable("select top 1 CommonClientCode, sessionid from acmcompare.dbo.SessionLog where LoginID='" + LoginId + "' and ActiveFlag='Y' and SessionID='" + sessioncompaire + "' order by LoginTime desc", GlobalVariables.WHDB1acmcomper, false);
+                            if (dto.Rows.Count > 0)
+                            {
+                                foreach (DataRow recomm in dto.Rows)
+                                {
+                                    clientdetails.clientcode = recomm["CommonClientCode"].ToString();
+                                    clientdetails.Sessionid = recomm["sessionid"].ToString();
+                                }
+                            }
+                            else
+                            {
+                                return Json(false, JsonRequestBehavior.AllowGet);
+                            }
+                            if (clientdetails.clientcode == "")
+                            {
+                                return Json(false, JsonRequestBehavior.AllowGet);
+                            }
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        return Json(ex, JsonRequestBehavior.AllowGet);
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                return Json(ex, JsonRequestBehavior.AllowGet);
+            }
+            //if (Request.Cookies["LoginId"]?.Value == null && Request.Cookies["SessionId"]?.Value == null)
+            //{
+            //    return Json(false, JsonRequestBehavior.AllowGet); ;
+            //}
+
+            return Json(clientdetails, JsonRequestBehavior.AllowGet);
         }
 
         public JsonResult Old_GoToBackReport()
@@ -249,6 +335,7 @@ namespace CTCLProj.Controllers
             }
             Session[WebUser.SessionName] = null;
             Session["KycStatus"] = null;
+            Session.Abandon();
             return RedirectToAction("../Login/Login");
         }
 
@@ -267,6 +354,24 @@ namespace CTCLProj.Controllers
                     ipaddress = Request.ServerVariables["REMOTE_ADDR"];
                 return ipaddress;
             }
+        }
+
+        public class clientssdata
+        {
+            public string clientname { get; set; }
+            public string clientcode { get; set; }
+            public string UserType { get; set; }
+            public double UserSrNo { get; set; }
+            public string Sessionid { get; set; }
+            public string Panno { get; set; }
+            public string BACode { get; set; }
+
+
+
+            public int User_Mst_Id { get; set; }
+            public string User_Code { get; set; }
+            public string User_Name { get; set; }
+            public int Role_ID { get; set; }
         }
     }
 }

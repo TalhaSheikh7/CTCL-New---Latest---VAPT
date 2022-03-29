@@ -10,6 +10,71 @@ namespace CTCLProj.Class
 
         public static string SessionName = "LoggedInUser";
 
+        public class LoginDTO
+        {
+            public LoginDTO()
+            {
+                LoginID = "";
+                Token = "";
+                HideLoginEntity = false;
+                HideAssociate = true;
+                HidePwd = true;
+                HideMpin = true;
+                ErrorMsg = "";
+                IsKycDone = true;
+            }
+
+            public bool IsKycDone { get; set; }
+            public string LoginID { get; set; }
+            public string Key { get; set; }
+            public string LoginMode { get; set; }
+            public string Mpin { get; set; }
+            public string AssociatedUCC { get; set; }
+            public string sLoginID { get; set; }
+
+            public bool HideLoginEntity { get; set; }
+            public bool HidePwd { get; set; }
+            public bool HideMpin { get; set; }
+            public bool HideAssociate { get; set; }
+
+
+            public string Token { get; set; }
+            public string RU { get; set; }
+            public bool IsLoginOK { get; set; }
+            public string ErrorMsg { get; set; }
+            public bool IsForceLogout { get; set; }
+            public string ForceLogoutMsg { get; set; }
+            public bool IsLocked { get; set; }
+            public string LockedMsg { get; set; }
+            public bool IsPasswdExpired { get; set; }
+            public string ExpiredMsg { get; set; }
+
+
+
+            public List<ClientInfo> ClientInfo { get; set; }
+            public List<LoginSelectionData> lstAssociate { get; set; }
+            public string ExpiryMsg { get; set; }
+        }
+
+        public class LoginSelectionData
+        {
+            public string CommonClientCode { get; set; }
+            public string EmailID { get; set; }
+            public string MobileNo { get; set; }
+            public string Name { get; set; }
+            public string PanCard { get; set; }
+
+            public LoginSelectionData(string CCC, string Mobile, string EmailID, string HolderName, string PanNO)
+            {
+                CommonClientCode = CCC;
+                MobileNo = Mobile;
+                this.EmailID = EmailID;
+                Name = HolderName;
+                PanCard = PanNO;
+            }
+
+        }
+
         public WebUser()
         {
             Segments = new List<SegmentDetails>();

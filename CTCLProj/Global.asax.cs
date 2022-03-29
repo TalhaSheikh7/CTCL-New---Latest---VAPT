@@ -12,10 +12,18 @@ namespace CTCLProj
     {
         protected void Application_Start()
         {
+            MvcHandler.DisableMvcResponseHeader = true;
             AreaRegistration.RegisterAllAreas();
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
             BundleConfig.RegisterBundles(BundleTable.Bundles);
+            System.Web.Helpers.AntiForgeryConfig.SuppressXFrameOptionsHeader = true;
+        }
+
+        protected void Application_BeginRequest()
+        {
+            Response.AddHeader("X-Frame-Options", "DENY");
+            HttpContext.Current.Response.ContentType = "text/html";
         }
     }
 }

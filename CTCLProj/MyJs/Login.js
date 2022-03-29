@@ -6,8 +6,6 @@ $(document).ready(function () {
     
 });
 
-
-
 ///Afiya 28-10-2021
 function CallTimer() {
     var timer = setInterval(function () {
@@ -68,12 +66,14 @@ $("#btnForgotLoginid").click(function () {
         swal("Please Enter Your ClientCode!");
         return false;
     }
+    Encrypt(UCC, "HfldCCC");
+    
     $.ajax({
         //url: "http://accountopening.investmentz.co.in/eKYC/api/eKYCMaster/ForgotLogin?Option=FL3&CCC="+ UCC +"&MobOTP=0",
         url: common_url + "Login/btnForgotLoginId",
         type: "GET",
         data: {
-            CCC: UCC
+            CCC: $("#HfldCCC").val()
         },
         dataType: "json",
         success: function (data) {
@@ -100,11 +100,51 @@ $("#btnForgotLoginid").click(function () {
     });
 })
 
+function Encrypt(data, id)
+{
+    var key = CryptoJS.enc.Utf8.parse(EncKey);
+    var iv = CryptoJS.enc.Utf8.parse(EncKey);
+
+    var encrypteddata = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(data), key,
+        {
+            keySize: 128 / 8,
+            iv: iv,
+            mode: CryptoJS.mode.CBC,
+            padding: CryptoJS.pad.Pkcs7
+        });
+
+    $('#' + id).val(encrypteddata);
+}
+
 $("#btnFPwdProceed").click(function () {
 
-   
     var Loginid = $("#txtFPwdLoginId").val();
     var MobileNumber = $("#txtFPwdMobileNo").val();
+
+    if (Loginid == "") {
+        swal("Please Enter LoginId");
+        return false;
+    }
+
+    if (MobileNumber == "") {
+        swal("Please Enter Mobile number");
+        return false;
+    }
+
+    Encrypt(Loginid, "hFldLoginId");
+    Encrypt(MobileNumber, "hFldMobileNo");
+
+    //var encryptedpassword = CryptoJS.AES.encrypt(CryptoJS.enc.Utf8.parse(MobileNumber), key,
+    //    {
+    //        keySize: 128 / 8,
+    //        iv: iv,
+    //        mode: CryptoJS.mode.CBC,
+    //        padding: CryptoJS.pad.Pkcs7
+    //    });
+
+    //$('#hFldMobileNo').val(encryptedpassword);
+
+
     var hFldOtpVisible = "F";//$('#hFldOtpVisible').val('F');
     var hFldPopupOperation = "FPWD";//$('#hFldPopupOperation').val('FPWD');
     var hFldOpenPopupId = "modForgotPwd";
@@ -118,8 +158,8 @@ $("#btnFPwdProceed").click(function () {
         url: common_url + "Login/btnFPwdProceed_Click",
         type: "GET",
         data: {
-            Loginid: Loginid,
-            MobileNumber: MobileNumber,
+            Loginid: $('#hFldLoginId').val(),
+            MobileNumber: $('#hFldMobileNo').val(),
             hFldOtpVisible: hFldOtpVisible,
             hFldPopupOperation: hFldPopupOperation,
             hFldOpenPopupId: hFldOpenPopupId
@@ -127,19 +167,17 @@ $("#btnFPwdProceed").click(function () {
         },
         dataType: "json",
         success: function (data) {
-            if (data == "Incorrect User") {
+            if (data.ClientName == "Incorrect User") {
                 $("#txtFPwdLoginId").val('');
                 $("#txtFPwdMobileNo").val('');
-                //$("#modForgotPwd").hide();
+                $("#modForgotPwd").hide();
                 $("#anyonepopup").show();
-                $("#commenpopup").html(data)
-              
-
+                $("#commenpopup").html("Incorrect Login ID.")
                 return false;
-            } else if (data == "Wrong Number") {
+            } else if (data.ResponseCode == "7") {
                 $("#txtFPwdLoginId").val('');
                 $("#txtFPwdMobileNo").val('');
-                //$("#modForgotPwd").hide();
+                $("#modForgotPwd").hide();
                 $("#anyonepopup").show();
                 $("#commenpopup").html("Number does not match with registered mobile number.");
                 return false;
@@ -183,7 +221,8 @@ $("#btnCreateId").click(function () {
 
 })
 
-$("#FPWDOTP").click(function () {
+function FPWDOTP()
+{
     $("#modForgotPwd").hide();
     $("#forgetpsdotp").show();
     CallTimer();//Added by Afiya 28-10-2021
@@ -199,14 +238,13 @@ $("#FPWDOTP").click(function () {
 
     }
 
-
     var txtFPwdOTP = $("#txtFPwdOTP1").val();
     $.ajax({
         url: common_url + "Login/btnFPwdProceed_Click",
         type: "GET",
         data: {
-            Loginid: Loginid,
-            MobileNumber: MobileNumber,
+            Loginid: $('#hFldLoginId').val(),
+            MobileNumber: $('#hFldMobileNo').val(),
             hFldOtpVisible: hFldOtpVisible,
             hFldPopupOperation: hFldPopupOperation,
             txtFPwdOTP: txtFPwdOTP
@@ -215,14 +253,23 @@ $("#FPWDOTP").click(function () {
         dataType: "json",
         success: function (data) {
 
-            $("#forgetpsdotp").hide();
-            if ($("#changeType").val() == "pwd") {
-                $("#changePWD").show();
-            } else if ($("#changeType").val() == "mPin") {
-                $("#modChangeMpin").show()
-            } else {
+            if (data.ResponseMsg == "OTP verified successfully.") {
+                $("#txtFPwdOTP1").val('');
+                $("#forgetpsdotp").hide();
+                if ($("#changeType").val() == "pwd") {
+                    $("#changePWD").show();
+                } else if ($("#changeType").val() == "mPin") {
+                    $("#modChangeMpin").show()
+                } else {
 
+                }
+            } else {
+                $("#txtFPwdOTP1").val('');
+                $("#commenpopup").html(data.ResponseMsg);
+                $("#anyonepopup").show();
+                return false;
             }
+            
 
             //KendoWindow("remaeks", 650, 120, "", 0);
             //$("#remaeks").closest(".k-window").css({
@@ -236,7 +283,11 @@ $("#FPWDOTP").click(function () {
             console.log(data);
         }
     });
-});
+}
+
+//$("#FPWDOTP").click(function () {
+    
+//});
 
 $("#txtChangemPin1, #txtChangemPin2").keypress(function (event) {
     return /\d/.test(String.fromCharCode(event.keyCode));
@@ -272,7 +323,7 @@ $("#btnCMPinSave").click(function () {
                 txtmPin1: txtmPin1,
                 txtmPin2: txtmPin2,
                 hFldOpenPopupId: hFldOpenPopupId,
-                Loginid: "tsheikh7"
+                Loginid: Loginid
             },
             dataType: "json",
             success: function (data) {
@@ -312,7 +363,7 @@ $("#btnCPSave1").click(function () {
         },
         dataType: "json",
         success: function (data) {
-            console.log(data);
+
             if (data == "You have successfully changed your password. Please Login with your New Password") {
                 $("#forgetpsdotp").hide();
                 $("#changePWD").hide();
@@ -341,16 +392,18 @@ $("#btnCPSave1").click(function () {
 })
 
 $("#btnForceLogout1").click(function () {
-
     var LoginID = $("#txtUid").val();
     var Loginpassword = $("#txtPassWd").val();
+
+    Encrypt(LoginID, "hFldLoginId");
+    Encrypt(Loginpassword, "hFldpassword");
 
     $.ajax({
         url: common_url + "Login/btnForceLogout_Click",
         type: "GET",
         data: {
-            LoginID: LoginID,
-            LoginPassword: Loginpassword
+            LoginID: $("#hFldLoginId").val(),
+            LoginPassword: $("#hFldpassword").val()
         },
         dataType: "json",
         success: function (data) {
@@ -381,18 +434,23 @@ $("#btnVerifyMPin").click(function () {
         swal("Please Enter Your M-pin");
         return false;
     }
+
+    Encrypt(LoginID, "hFlduserLoginId");
+    Encrypt(txtLoginMPin, "hFldmpin");
+
+    document.getElementById("Loginloading").style.display = "block";
     $.ajax({
         url: common_url + "Login/btnCancelMPinVerification_Click",
         type: "GET",
         data: {
-            txtLoginMPin: txtLoginMPin,
-            LoginID: LoginID
+            txtLoginMPin: $("#hFldmpin").val(),
+            LoginID: $("#hFlduserLoginId").val()
         },
         dataType: "json",
         success: function (data) {
             var str = data;
             if (data.sName == null) {
-
+                document.getElementById("Loginloading").style.display = "none";
                 //KendoWindow("remaeks", 650, 120, "", 0);
                 //$("#remaeks").closest(".k-window").css({
                 //    top: 350,
@@ -475,12 +533,15 @@ $("#btnLogin").click(function () {
         return false;
     }
     var strmsg = "";
+    Encrypt(LoginID, "hFlduserLoginId");
+    Encrypt(Loginpassword, "hFldpassword");
+
     $.ajax({
         url: common_url + "Login/btnLogin_Click",
         type: "GET",
         data: {
-            LoginID: LoginID,
-            LoginPassword: Loginpassword
+            LoginID: $("#hFlduserLoginId").val(),
+            LoginPassword: $("#hFldpassword").val()
         },
         dataType: "json",
         success: function (data) {
@@ -490,9 +551,14 @@ $("#btnLogin").click(function () {
 
             if (strmsg == "Incorrect") {
 
+                if (str[1] != "password") {
+                    $("#anyonepopup").show();
+                    $("#commenpopup").html("Wrong Credentials!!!");
+                } else {
+                    $("#anyonepopup").show();
+                    $("#commenpopup").html("Wrong Credentials!!!   <br/>" + data);
+                }
                 
-                $("#anyonepopup").show();
-                $("#commenpopup").html(data)
 
                 //KendoWindow("remaeks", 650, 120, "", 0);
                 //$("#remaeks").closest(".k-window").css({
@@ -500,7 +566,7 @@ $("#btnLogin").click(function () {
                 //    left: 200
                 //});
                 //$("#remarkdetails").html(data)
-                return false;
+                //return false;
             }
 
             if (data == "modMpinValidate") {
@@ -532,9 +598,8 @@ function GetEmpCTCLId(EmpCode) {
             var CTCLID = data.EmpCTCL[0].CTCLID;
 
             localStorage.setItem("CTCLId", CTCLID);
-
+            document.getElementById("Loginloading").style.display = "none";
            // alert(CTCLID);
-
             if (data = ! "") {
                 location.href = common_url + "Home/Index"
             }
@@ -555,9 +620,10 @@ function GetBACTCLId(BACode) {
         },
         dataType: "json",
         success: function (data) {
-            console.log(data);
+            //console.log(data);
             var CTCLID = data.Result.CTCLID;
             localStorage.setItem("CTCLId", CTCLID);
+            document.getElementById("Loginloading").style.display = "none";
             if (data = ! "") {
                 location.href = common_url + "Home/Index"
             }

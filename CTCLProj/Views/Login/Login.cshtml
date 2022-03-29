@@ -28,10 +28,14 @@
     <script src="~/MyJs/GlobalVariable.js"></script>
     <script src="~/MyJs/lz-string.js"></script>
     <script src="~/Scripts/jquery.autocomplete.min.js"></script>
+    <script src="~/MyJs/aes.js"></script>
+    <script src="~/MyJs/Crypto.js"></script>
     <script src="~/MyJs/SweetAlert.js"></script>
     <link href="~/Content/SweetAlert.css" rel="stylesheet" />
     <link rel="shortcut icon" href="../img/fav-icon.png" />
-
+    <script>
+        var EncKey = '@System.Configuration.ConfigurationManager.AppSettings["EncryptionKey"]';
+    </script>
     <style>
         .error-detail {
             display: block;
@@ -764,6 +768,20 @@
         .modal-footer {
             background-color: transparent !important;
         }
+
+        #Loginloading {
+            display: block;
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 100;
+            width: 100vw;
+            height: 100vh;
+            background-color: rgba(192, 192, 192, 0.5);
+            background-image: url("https://i.gifer.com/ZZ5H.gif");
+            background-repeat: no-repeat;
+            background-position: center;
+        }
     </style>
 
     <script src="~/Scripts/kendo/2021.1.224/jquery.min.js"></script>
@@ -773,61 +791,7 @@
     <script>
         $(document).ready(function () {
 
-            function notifyMe() {
-                // Let's check if the browser supports notifications
-                if (!("Notification" in window)) {
-                    console.log("This browser does not support desktop notification");
-                }
-
-                // Let's check whether notification permissions have alredy been granted
-                else if (Notification.permission === "granted") {
-                    // If it's okay let's create a notification
-                    //var notification = new Notification("Thank you for subscription!");
-                    console.log("Already subscribe to notifcations!");
-                    Notification.requestPermission().then((permission) => {
-                        if (permission === 'granted') {
-                            //console.log('Notification permission granted.');
-                            //var notification = new Notification("Thank you for subscription!");
-                            messaging.getToken().then((refreshedToken) => {
-                                console.log('Token refreshed.');
-                                console.log(refreshedToken);
-                                $("#Token").val(refreshedToken);
-                                subscribeTokenToTopic(refreshedToken, "General");
-                                // Indicate that the new Instance ID token has not yet been sent to the
-                                // app server.
-                                // setTokenSentToServer(false);
-                                // Send Instance ID token to app server.
-                                // sendTokenToServer(refreshedToken);
-                                // [START_EXCLUDE]
-                                // Display new Instance ID token and clear UI of all previous messages.
-                                // resetUI();
-                                // [END_EXCLUDE]
-                            }).catch((err) => {
-                                console.log('Unable to retrieve refreshed token ', err);
-                                // showToken('Unable to retrieve refreshed token ', err);
-                            });
-                        } else {
-                            console.log('Unable to get permission to notify.');
-                        }
-                    });
-                }
-
-                // Otherwise, we need to ask the user for permission
-                else if (Notification.permission !== 'denied' || Notification.permission === "default") {
-
-                    $("#modNotificationPermission").modal("show");
-
-                    /*Notification.requestPermission(function (permission) {
-                        // If the user accepts, let's create a notification
-                        if (permission === "granted") {
-                            var notification = new Notification("Hi there!");
-                        }
-                    });*/
-                }
-
-                // At last, if the user has denied notifications, and you
-                // want to be respectful there is no need to bother them any more.
-            }
+            notifyMe()
 
             var fcmPubKey = 'BDTM2QWDxgDfPHDTHKYHS7WZC2pVsxRimAy-XD4rhlehHKrxenY5bUCQpTV3wHn4plmmIxV9jYoDyvdjaZQn4WY';
             function subscribeTokenToTopic(token, topic) {
@@ -949,6 +913,62 @@
             //[END BG Message]
 
         });
+
+        function notifyMe() {
+            // Let's check if the browser supports notifications
+            if (!("Notification" in window)) {
+                console.log("This browser does not support desktop notification");
+            }
+
+            // Let's check whether notification permissions have alredy been granted
+            else if (Notification.permission === "granted") {
+                // If it's okay let's create a notification
+                //var notification = new Notification("Thank you for subscription!");
+                console.log("Already subscribe to notifcations!");
+                Notification.requestPermission().then((permission) => {
+                    if (permission === 'granted') {
+                        //console.log('Notification permission granted.');
+                        //var notification = new Notification("Thank you for subscription!");
+                        messaging.getToken().then((refreshedToken) => {
+                            console.log('Token refreshed.');
+                            console.log(refreshedToken);
+                            $("#Token").val(refreshedToken);
+                            subscribeTokenToTopic(refreshedToken, "General");
+                            // Indicate that the new Instance ID token has not yet been sent to the
+                            // app server.
+                            // setTokenSentToServer(false);
+                            // Send Instance ID token to app server.
+                            // sendTokenToServer(refreshedToken);
+                            // [START_EXCLUDE]
+                            // Display new Instance ID token and clear UI of all previous messages.
+                            // resetUI();
+                            // [END_EXCLUDE]
+                        }).catch((err) => {
+                            console.log('Unable to retrieve refreshed token ', err);
+                            // showToken('Unable to retrieve refreshed token ', err);
+                        });
+                    } else {
+                        console.log('Unable to get permission to notify.');
+                    }
+                });
+            }
+
+            // Otherwise, we need to ask the user for permission
+            else if (Notification.permission !== 'denied' || Notification.permission === "default") {
+
+                $("#modNotificationPermission").modal("show");
+
+                /*Notification.requestPermission(function (permission) {
+                    // If the user accepts, let's create a notification
+                    if (permission === "granted") {
+                        var notification = new Notification("Hi there!");
+                    }
+                });*/
+            }
+
+            // At last, if the user has denied notifications, and you
+            // want to be respectful there is no need to bother them any more.
+        }
         // Your web app's Firebase configuration
         var firebaseConfig = {
             apiKey: "AIzaSyA5RKpJkXyjLy095J4A9XDPopAwDWRtlP4",
@@ -1128,6 +1148,7 @@
                 $('#hFldOtpVisible').val('F');
                 OpenPopuptfromHiddenField('modForgotPwd');
                 $('#txtFPwdLoginId').focus();//19042018 vpg
+                GenerateCaptcha();
             });
 
             $('#btnCreateId').click(function () {
@@ -1209,6 +1230,7 @@
 <body class="k-content">
     <main>
         <div class="container-fluid">
+            <div id="Loginloading" style="display:none;"></div>
             <h2></h2>
             <form method="post" action="" id="form1">
                 <div class="modal" id="modNotificationPermission" tabindex="-1" role="dialog" aria-labelledby="modNotificationPermissionLabel" aria-hidden="true">
@@ -1238,650 +1260,655 @@
                         </div>
                     </div>
                 </div>
-                </form>
-                <div class="modal" id="modSessionTerminate" tabindex="-1" role="dialog" aria-labelledby="modSessionTerminateLabel" aria-hidden="true">
+            </form>
+            <div class="modal" id="modSessionTerminate" tabindex="-1" role="dialog" aria-labelledby="modSessionTerminateLabel" aria-hidden="true">
+                <div class="modal-dialog" role="document">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <span onclick="document.getElementById('modSessionTerminate').style.display='none'" class="close" title="Close">×</span>
+                            <h4 class="modal-title2" id="modSessionTerminateLabel">Session terminated</h4>
+                        </div>
+                        <div class="modal-body" style="padding: 15px 0 5px 0 !important;">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div>
+                                        <p style="font-size: 16px;">
+                                            You have been logged out due to inactive session to protect your account.
+                                            <br />Please login again to continue.
+                                        </p>
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <br />
+                                        <div style="text-align:right">
+                                            <button type="button" class="butt_cancel" data-dismiss="modal">Close</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- END : SESSION-TERMINATE POPUP HVB  09/07/2020 -->
+            <div class="container">
+                <div class="row">
+                    <div class="col-sm-12">
+                        <div class="login-wrap">
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <img src="~/img/investment_logo.png" style="width: 285px;" />
+                                </div>
+                                <div class="col-md-12 form-group text-center">
+                                    <img src="~/images/logo.svg" alt="" style="width:229px;">
+                                    <h1 class="main-title1 marginbottom0 text-center">LOGIN</h1>
+                                    <h2 class="main-title2 margintop0 text-center">To continue with Investmentz</h2>
+                                </div>
+                                <div class="col-md-12">
+                                    <div class="floating-label">
+                                        <input name="txtUid" id="txtUid" class="floating-input" type="text" placeholder=" " autocomplete="off" style="color:#fff !important;" onkeypress="return event.charCode != 32" />
+                                        <input type="hidden" name="hFlduserLoginId" id="hFlduserLoginId" />
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label class="float-label">Login Id</label>	<a id="btnForgotLogin" style="cursor:pointer; color:#fff;font-size: 12px;font-weight: 600; float:right;"> Forgot your Login?</a>
+                                    </div>
+                                    <div class="floating-label">
+                                        <input type="hidden" name="hFldpassword" id="hFldpassword" />
+                                        <input name="txtPassWd" id="txtPassWd" class="floating-input active" placeholder=" " autocomplete="off" type="password" style="color:#fff !important;" onkeypress="return event.charCode != 32" />
+                                        <span toggle="#txtPassWd" class="fa fa-fw fa-eye field-icon toggle-password" style="color: #fff;position: absolute;right: 14px;top: 11px;cursor: pointer;font-size: 16px;"></span>
+
+                                        <span class="highlight"></span>
+                                        <span class="bar"></span>
+                                        <label class="float-label">Password</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    @*<a id="btnCreateId" style="cursor:pointer; color:#fff;font-size: 12px;font-weight: 600;"> First Time Login?</a>*@
+                                </div>
+                                <div class="col-md-6 text-right">
+                                    <a id="btnForgotPwd" style="cursor:pointer; color:#fff;font-size: 12px;font-weight: 600;">Forgot your password?</a>
+                                </div>
+                            </div>
+                            <hr class="m-top10">
+                            <div class="row">
+                                <div class="col-md-12 form-group text-center">
+                                    <input type="button" name="btnLogin" value="Login" id="btnLogin" class="btn btn-success" />
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12 text-center">
+                                    <div class="form-group">
+                                        <div style="color:#fff;">For assistance in Login, Call Customer Service Desk</div>
+                                        <div class="number">022-28584545</div>
+                                    </div>
+                                </div>
+                                <div class="col-md-12 text-center">
+                                    <a href="~/Login Help File.pdf" target="_blank" style="cursor:pointer; color:#fff;font-size: 16px;font-weight: bold;">Login Help</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal for Forgot Password start -->
+                <div class="modal" id="modForgotPwd" tabindex="-1" role="dialog" aria-labelledby="modForgotPwdLabel" aria-hidden="true">
                     <div class="modal-dialog" role="document">
                         <div class="modal-content">
                             <div class="modal-header">
-                                <span onclick="document.getElementById('modSessionTerminate').style.display='none'" class="close" title="Close">×</span>
-                                <h4 class="modal-title2" id="modSessionTerminateLabel">Session terminated</h4>
+                                <span onclick="document.getElementById('modForgotPwd').style.display='none'" class="close" title="Close">×</span>
+                                @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                            </button>*@
+                                <h4 class="modal-title2" id="modForgotPwdLabel">Forgot Password</h4>
+                            </div>
+                            <div class="modal-body">
+                                <div class="container-fluid">
+                                    <div id="WelcomeMsg" class="">
+                                        <span id="clientWelcome" class="succes-title">Welcome</span>
+                                        <span id="clientname" class="succes-title"></span>
+                                        <br /> <span id="clientMessage">Please enter the <big><strong>OTP</strong></big> sent to your registered mobile number.</span>
+                                        <br />
+                                        <br />
+                                    </div>
+                                    <div id="loginrow">
+                                        <div class="row">
+                                            <div class="floating-label" style="margin-bottom: 15px !important;">
+                                                @*<input type="hidden" name="hFldFPwdLoginId" id="hFldFPwdLoginId" />*@
+                                                <input type="hidden" name="hFldPopupOperation" id="hFldPopupOperation" />
+                                                <input type="hidden" name="hFldPopupOperation" id="hFldLoginId" />
+                                                <input name="txtFPwdLoginId" type="text" autocomplete="off" id="txtFPwdLoginId" class="floating-input" placeholder=" " style="color: black " /> <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label class="new-field" id="lblForgotpwdUid"></label> <span id="txthiddenLoginId" class="popup_input"></span>
+                                            </div>
+                                        </div>
+                                        <div class="row" id="mobilerow">
+                                            <div class="floating-label" style="margin-bottom: 15px !important;">
+                                                <input type="hidden" name="hFldPopupOperation" id="hFldMobileNo" />
+                                                <input name="txtFPwdMobileNo" type="text" autocomplete="off" maxlength="10" id="txtFPwdMobileNo" onkeypress="return isNumberKey(event);" class="floating-input" placeholder=" " /> <span class="highlight"></span>
+                                                <span class="bar"></span>
+                                                <label class="new-field">Regd. Mobile No.</label> <span id="txthiddenMobNo" class="popup_input no-spinners" TextMode="Number" MaxLength="10"></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding-top:8px; padding-bottom:8px; display:flex" id="divOtpBlock">
+                                        <input type="hidden" name="hFldOtpVisible" id="hFldOtpVisible" value="F" />
+                                        <div class="col-sm-5" style="padding: 0;">
+                                            <input name="txtFPwdOTP" type="password" autocomplete="off" id="txtFPwdOTP" class="popup_input" style="font-size:16px;" />
+                                        </div>
+                                        <div class="col-sm-7" style="line-height: 18px; padding: 0px 58px; position: relative;  top: -10px;">
+                                            @*<small>180 Seconds</small>--By Afiya*@
+                                            <br /><a id="resendotp" style="font-size:12px; color:#000;" href="javascript:__doPostBack(&#39;resendotp&#39;,&#39;&#39;)"><span id="timer"></span></a><a href="#" class="btn_link Resend_btn" style="display:none;">Resend OTP</a>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row" style="padding-top:0px">
+                                    <div class="col-md-10 error-detail" style="text-align:center">
+                                        <span id="lblFPwdError"></span>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="text-align:left; padding-top: 0px !important;">
+                                    <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
+                                    <input type="button" name="btnFPwdProceed" value="Submit" id="btnFPwdProceed" class="butt_save" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- Modal for Forgot Password start -->
+                <div class="modal" id="forgetpsdotp" tabindex="-1" role="dialog" aria-labelledby="modForgotPwdLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span onclick="document.getElementById('forgetpsdotp').style.display='none'" class="close" title="Close">×</span>
+                                @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">×</span><span class="sr-only">Close</span>
+                            </button>*@
+                                <h4 class="modal-title2" id="modForgotPwdLabel">Forgot Password</h4>
+                            </div>
+                            <div class="modal-body">
+                                <input type="hidden" id="changeType" />
+                                <div class="container-fluid">
+                                    <div id="WelcomeMsg" class="row">
+
+                                        <span id="clientWelcome" class="succes-title">Welcome</span><br />
+                                        <span id="clientname" class="succes-title"></span><br>
+                                        <span id="clientMessage" style="color:#fff !important;">Please enter the <big><strong>OTP</strong></big> sent to your registered mobile number.</span><br><br>
+
+                                    </div>
+                                    @*<div id="loginrow" hidden="hidden">
+
+                                    <div class="row">
+                                        <div class="floating-label" style="margin-bottom: 15px !important;">
+
+                                            <input type="hidden" name="hFldFPwdLoginId" id="hFldFPwdLoginId">
+                                            <input type="hidden" name="hFldPopupOperation" id="hFldPopupOperation" value="FPWD">
+                                            <input name="txtFPwdLoginId" type="text" value="bittu68" id="txtFPwdLoginId" class="floating-input" placeholder=" " style="color: black ">
+                                            <span class="highlight"></span>
+                                            <span class="bar"></span>
+                                            <label class="new-field" id="lblForgotpwdUid">Login Id</label>
+                                            <span id="txthiddenLoginId" class="popup_input"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row" id="mobilerow" hidden="hidden">
+
+                                        <div class="floating-label" style="margin-bottom: 15px !important;">
+
+                                            <input name="txtFPwdMobileNo" type="text" value="" maxlength="15" id="txtFPwdMobileNo" class="floating-input" placeholder=" " onkeyup="integersOnly(this)" style="color: black">
+                                            <span class="highlight"></span>
+                                            <span class="bar"></span>
+                                            <label class="new-field">Regd. Mobile No.</label>
+                                            <span id="txthiddenMobNo" class="popup_input no-spinners" textmode="Number" maxlength="15"></span>
+                                        </div>
+                                    </div>
+                                </div>*@
+                                    <div class="row" style="padding-top: 8px; padding-bottom: 8px; display: block;" id="divOtpBlock">
+                                        <input type="hidden" name="hFldOtpVisible" id="hFldOtpVisible" value="T">
+
+                                        <span>
+                                            <input name="txtFPwdOTP" type="password" autocomplete="off" id="txtFPwdOTP1" class="popup_input" style="font-size:16px;">
+                                        </span>
+                                        <span>
+                                            @*<small>180 Seconds</small>by afiya*@
+                                            <a id="theTarget" class="btn_link Resend_btn">180</a>
+                                            <br><a id="resendotp" style="color:#fff;" href="javascript:__doPostBack('resendotp','')"></a>
+                                            <br />
+                                            <span id="timer"></span>
+                                            <a href="#" class="btn_link Resend_btn" style="display:none;">Resend OTP</a>Resend OTP</a>
+                                        </span>
+                                    </div>
+
+                                </div>
+                                <div class="row" style="padding-top:0px">
+                                    <div class="col-md-10 error-detail" style="text-align:center">
+                                        <span id="lblFPwdError" style="color:Green;">Please enter OTP you have recieved!!</span>
+                                    </div>
+                                </div>
+                                <div class="modal-footer" style="text-align:left; padding-top: 0px !important;">
+                                    <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
+                                    <input type="button" name="btnFPwdProceed" value="Submit" id="FPWDOTP" onclick="FPWDOTP();" class="butt_save">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal for Forgot Password start -->
+                <!-- Modal for change Password start -->
+                <div class="modal" id="modChangePwd" tabindex="-1" role="dialog" aria-labelledby="modChangePwdLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span onclick="document.getElementById('modChangePwd').style.display='none'" class="close" title="Close">×</span>
+                                @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                            </button>*@
+                                <h4 class="modal-title2" id="modChangePwdLabel">Change Password</h4>
+                            </div>
+                            <div class="">
+                                <div class="">
+                                    <div id="WelcomeMsgcp">
+                                        <span id="clientWelcomecp" class="succes-title">Welcome</span>
+                                        <span id="clientnamecp"></span>
+                                        <br />	<span id="clientMessagecp">Please create a new password to continue</span>
+                                        <br /> <span id="clientMessagecp1"></span>
+                                        <span id="lblLoginIdCp">Rajesh</span>  <span>"</span>
+                                        <br />
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 lable_style">
+                                            <input type="hidden" name="hFldLoginIdCp" id="hFldLoginIdCp" />
+                                            <input type="hidden" name="hFldOldwPwdCp" id="hFldOldwPwdCp" />
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding-top:5px">
+                                        <div class="col-md-12">
+                                            <input name="txtChangePwd1" type="password" autocomplete="off" id="txtChangePwd1" class="popup_input new-popup" placeholder="Password" style="margin-bottom: 10px;" />
+
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding-top:5px">
+                                        <div class="col-md-12">
+                                            <input name="txtChangePwd2" type="password" autocomplete="off" id="txtChangePwd2" class="popup_input new-popup" placeholder="Re- Enter Password" />
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding-top:5px">
+                                        <div class="col-md-10 error-detail" style="text-align:center">
+                                            <span id="lblCPError"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="text-align:left;padding: 16px 0px !important;">
+                                <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
+                                <input type="submit" name="btnCPSave" value="Submit" id="btnCPSave" class="butt_save" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal for change Password start -->
+                <div class="modal" id="modFgtLogin" tabindex="-1" role="dialog" aria-labelledby="modFGTLoginLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span onclick="document.getElementById('modFgtLogin').style.display='none'" class="close" title="Close">×</span>
+                                @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                            </button>*@
+                                <h4 class="modal-title2" id="modFGTLoginLabel">Forgot Login</h4>
+                            </div>
+                            <div class="">
+                                <div class="">
+                                    <div>
+                                        <span class="succes-title"></span>
+                                        <span></span>
+                                        <br /> <span></span>
+                                    </div>
+                                    <div class="row">
+                                        <div class="col-md-12 lable_style">
+                                            <input type="hidden" name="HiddenField1" id="HiddenField1" />
+                                            <input type="hidden" name="HiddenField2" id="HiddenField2" />
+                                        </div>
+                                    </div>
+                                    <div class="" style="padding-top:5px">
+                                        <div class="">
+                                            <input type="hidden" name="HfldCCC" id="HfldCCC" />
+                                            <input name="TextBox1" type="text" autocomplete="off" id="forgotLoginId" class="popup_input new-popup" placeholder="Enter UCC" style="margin-bottom: 10px;" />
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding-top:5px">
+                                        <div class="col-md-12"></div>
+                                    </div>
+                                    <div class="row" style="padding-top:5px">
+                                        <div class="col-md-10 error-detail" style="text-align:center">
+                                            <span id="Label3"></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="text-align:left;padding: 16px 0px !important;">
+                                <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
+                                <input type="submit" name="btnForgotLoginid" value="Submit" id="btnForgotLoginid" class="butt_save" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!-- Modal for change Password start -->
+                <div class="modal" id="changePWD" tabindex="-1" role="dialog" aria-labelledby="modFGTLoginLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span onclick="document.getElementById('changePWD').style.display='none'" class="close" title="Close">×</span>
+                                @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">×</span><span class="sr-only">Close</span>
+                            </button>*@
+                                <h4 class="modal-title2" id="modChangePwdLabel">Change Password</h4>
+                            </div>
+                            <div class="">
+                                <div class="">
+                                    <div id="WelcomeMsgcp">
+                                        <span id="clientWelcomecp" class="succes-title">Welcome</span><br />
+                                        <span id="clientnamecp" style="color:#fff;"></span><br>
+                                        <span id="clientMessagecp" style="color:#fff;">Please create a new password to continue with your</span><br>
+                                        <span id="clientMessagecp1" style="color:#fff;">login id</span>
+                                        <span id="lblLoginIdCp" style="color:#fff;"></span> <span>"</span><br>
+
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col-md-12 lable_style">
+                                            <input type="hidden" name="hFldLoginIdCp" id="hFldLoginIdCp" value="">
+                                            <input type="hidden" name="hFldOldwPwdCp" id="hFldOldwPwdCp">
+
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding-top:5px">
+
+                                        <div class="col-md-12">
+
+
+                                            <input name="txtChangePwd1" type="password" autocomplete="off" id="txtChangePwd11" class="popup_input new-popup" placeholder="Password" style="margin-bottom: 10px;">
+                                            <span toggle="#txtChangePwd11" class="fa fa-fw fa-eye field-icon toggle-password" style="color: #fff;position: absolute;right: 14px;top: 5px;cursor: pointer;font-size: 16px;"></span>
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding-top:5px">
+
+                                        <div class="col-md-12">
+
+
+                                            <input name="txtChangePwd2" type="password" autocomplete="off" id="txtChangePwd21" class="popup_input new-popup" placeholder="Re- Enter Password">
+
+                                        </div>
+                                    </div>
+
+                                    <div class="row" style="padding-top:5px">
+                                        <div class="col-md-10 error-detail" style="text-align:center">
+                                            <span id="lblCPError" class="information-popup-label" style="color:Orange;"></span>
+                                        </div>
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="text-align:left;padding: 16px 0px !important;">
+                                <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
+
+                                <input type="button" name="btnCPSave" value="Submit" id="btnCPSave1" class="butt_save">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!-- Modal for success message-->
+                <div class="modal" id="modSuccess" tabindex="-1" role="dialog" aria-labelledby="modSuccessLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="col-sm-12 modal-header">
+                                <span onclick="document.getElementById('modSuccess').style.display='none'" class="close" title="Close">×</span>
+                                @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                            </button>*@
+                                <h4 class="modal-title2" id="modSuccessLabel">Success!</h4>
+                            </div>
+                            <div class="col-sm-12 modal-body">
+                                <div class="sucess-body1">
+                                    <span class="succes-title">Hi </span>
+                                    <span id="clientnameSuccess" class="succes-title"></span>
+                                    <br />	<span id="lblSucces" class="succes-title"></span>
+                                </div>
+                            </div>
+                            <div class="col-sm-12 modal-footer btnft" style="text-align: left">
+                                <button type="button" class="butt_cancel btnorng" data-dismiss="modal">Continue</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <!--/Modal for success message-->
+                <!-- Modal for mpin validation added by hvb on 31/10/2017-->
+                <div id="aPanel">
+                    <div class="modal" id="modMpinValidate" tabindex="-1" role="dialog" aria-labelledby="modMPinLabel" aria-hidden="true">
+                        <div class="modal-dialog" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <span onclick="document.getElementById('modMpinValidate').style.display='none'" class="close" title="Close">×</span>
+                                    @*<button type="button" class="close" data-dismiss="modal">
+                                    <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                                </button>*@
+                                    <h4 class="modal-title2" id="modMPinLabel">M-Pin Verification</h4>
+                                </div>
+                                <div class="modal-body" style="padding: 10px 0 14px 0 !important;">
+                                    <div class="sucess-body1">
+                                        <span class="succes-title">Welcome</span>
+                                        <br />	<span id="lblClientName"></span>
+                                        <br />Please enter your M-Pin to continue
+                                        <br />
+                                        <div class="container-fluid">
+                                            <div class="row">
+                                                <div class="col-sm-6" style="padding:0;">
+                                                    <input type="hidden" name="hFldmpin" id="hFldmpin" />
+                                                    <input name="txtLoginMPin" type="password" autocomplete="off" maxlength="4" id="txtLoginMPin" class="popup_input no-spinners" />
+                                                    <i class="fa password-viewer fa-eye" style="color: white;position: absolute;right: 3px;top: 10px;cursor: pointer;"></i>
+                                                </div>
+                                                <div class="col-sm-6">
+                                                    <a id="btnForgotMpin" style="color:#f00;">Forgot M-Pin?</a>
+                                                </div>
+                                            </div>
+                                            <div class="row"></div>
+                                            <div class="row" style="padding-top:0px">
+                                                <div class="col-md-10 error-detail" style="text-align:center">
+                                                    <span id="lblMPinVerError"></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="" style="text-align:left; padding:0;">
+                                    <input type="button" name="btnCancelMPinVerification" value="Cancel" id="btnCancelMPinVerification1" class="butt_cancel" />
+                                    <input type="button" name="btnVerifyMPin" value="Submit" id="btnVerifyMPin" class="butt_save" />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <!--/Modal for mpin validation added by hvb on 31/10/2017-->
+                </div>
+                <!-- Added By hvb on 07/11/2017 Modal for change mPin start -->
+                <div class="modal" id="modChangeMpin" tabindex="-1" role="dialog" aria-labelledby="modChangeMpinLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span onclick="document.getElementById('modChangeMpin').style.display='none'" class="close" title="Close">×</span>
+                                @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                            </button>*@
+                                <h4 class="modal-title2" id="modChangeMpinLabel">Change M-Pin</h4>
                             </div>
                             <div class="modal-body" style="padding: 15px 0 5px 0 !important;">
                                 <div class="container-fluid">
+                                    <div id="Div1" class="row">
+                                        <span id="Span1">Hi</span>
+                                        <span id="lblLoginIdCMpin"></span> 	<span id="Span2">Please create a new M-pin to continue</span>
+                                        <br /> <span>login id "<span id="clientnameMpin"></span></span>
+                                        <br />
+                                    </div>
                                     <div class="row">
-                                        <div>
-                                            <p style="font-size: 16px;">
-                                                You have been logged out due to inactive session to protect your account.
-                                                <br />Please login again to continue.
-                                            </p>
-                                            <br />
-                                            <br />
-                                            <br />
-                                            <br />
-                                            <div style="text-align:right">
-                                                <button type="button" class="butt_cancel" data-dismiss="modal">Close</button>
-                                            </div>
+                                        <div class="lable_style">
+                                            <input type="hidden" name="hFldLoginIdCMpin" id="hFldLoginIdCMpin" />
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding-top:8px">
+                                        <div class="">
+                                            <input name="txtChangemPin1" type="password" autocomplete="off" id="txtChangemPin1" class="popup_input new-popup" placeholder="New M-Pin" />
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding-top:10px">
+                                        <div class="">
+                                            <input name="txtChangemPin2" type="password" autocomplete="off" id="txtChangemPin2" class="popup_input new-popup" placeholder="Re-enter M-Pin" />
+                                        </div>
+                                    </div>
+                                    <div class="row" style="padding-top:15px">
+                                        <div class="col-md-10 error-detail" style="text-align:center">
+                                            <span id="lblCMpinError"></span>
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                            <div class="modal-footer" style="text-align:left">
+                                <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
+                                <input type="submit" name="btnCMPinSave" value="Submit" id="btnCMPinSave" class="butt_save" />
                             </div>
                         </div>
                     </div>
                 </div>
-                <!-- END : SESSION-TERMINATE POPUP HVB  09/07/2020 -->
-                <div class="container">
-                    <div class="row">
-                        <div class="col-sm-12">
-                            <div class="login-wrap">
-                                <div class="row">
-                                    <div class="col-md-12 text-center">
-                                        <img src="~/img/investment_logo.png" style="width: 285px;" />
-                                    </div>
-                                    <div class="col-md-12 form-group text-center">
-                                        <img src="~/images/logo.svg" alt="" style="width:229px;">
-                                        <h1 class="main-title1 marginbottom0 text-center">LOGIN</h1>
-                                        <h2 class="main-title2 margintop0 text-center">To continue with Investmentz</h2>
-                                    </div>
-                                    <div class="col-md-12">
-                                        <div class="floating-label">
-                                            <input name="txtUid" id="txtUid" class="floating-input" type="text" placeholder=" " autocomplete="off" style="color:#fff !important;" onkeypress="return event.charCode != 32" />
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label class="float-label">Login Id</label>	<a id="btnForgotLogin" style="cursor:pointer; color:#fff;font-size: 12px;font-weight: 600; float:right;"> Forgot your Login?</a>
-                                        </div>
-                                        <div class="floating-label">
-                                            <input name="txtPassWd" id="txtPassWd" class="floating-input active"  placeholder=" " autocomplete="off" type="password" style="color:#fff !important;" onkeypress="return event.charCode != 32" />
-                                            <span toggle="#txtPassWd" class="fa fa-fw fa-eye field-icon toggle-password" style="color: #fff;position: absolute;right: 14px;top: 11px;cursor: pointer;font-size: 16px;"></span>
-
-                                            <span class="highlight"></span>
-                                            <span class="bar"></span>
-                                            <label class="float-label">Password</label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-6">
-                                        @*<a id="btnCreateId" style="cursor:pointer; color:#fff;font-size: 12px;font-weight: 600;"> First Time Login?</a>*@
-                                    </div>
-                                    <div class="col-md-6 text-right">
-                                        <a id="btnForgotPwd" style="cursor:pointer; color:#fff;font-size: 12px;font-weight: 600;">Forgot your password?</a>
-                                    </div>
-                                </div>
-                                <hr class="m-top10">
-                                <div class="row">
-                                    <div class="col-md-12 form-group text-center">
-                                        <input type="button" name="btnLogin" value="Login" id="btnLogin" class="btn btn-success" />
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-md-12 text-center">
-                                        <div class="form-group">
-                                            <div style="color:#fff;">For assistance in Login, Call Customer Service Desk</div>
-                                            <div class="number">022-28584545</div>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-12 text-center">
-                                        <a href="~/Login Help File.pdf" target="_blank" style="cursor:pointer; color:#fff;font-size: 16px;font-weight: bold;">Login Help</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Modal for Forgot Password start -->
-                    <div class="modal" id="modForgotPwd" tabindex="-1" role="dialog" aria-labelledby="modForgotPwdLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <span onclick="document.getElementById('modForgotPwd').style.display='none'" class="close" title="Close">×</span>
-                                    @*<button type="button" class="close" data-dismiss="modal">
-                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                            </button>*@
-                                    <h4 class="modal-title2" id="modForgotPwdLabel">Forgot Password</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <div class="container-fluid">
-                                        <div id="WelcomeMsg" class="">
-                                            <span id="clientWelcome" class="succes-title">Welcome</span>
-                                            <span id="clientname" class="succes-title"></span>
-                                            <br /> <span id="clientMessage">Please enter the <big><strong>OTP</strong></big> sent to your registered mobile number.</span>
-                                            <br />
-                                            <br />
-                                        </div>
-                                        <div id="loginrow">
-                                            <div class="row">
-                                                <div class="floating-label" style="margin-bottom: 15px !important;">
-                                                    <input type="hidden" name="hFldFPwdLoginId" id="hFldFPwdLoginId" />
-                                                    <input type="hidden" name="hFldPopupOperation" id="hFldPopupOperation" />
-                                                    <input name="txtFPwdLoginId" type="text" autocomplete="off" id="txtFPwdLoginId" class="floating-input" placeholder=" " style="color: black " /> <span class="highlight"></span>
-                                                    <span class="bar"></span>
-                                                    <label class="new-field" id="lblForgotpwdUid"></label> <span id="txthiddenLoginId" class="popup_input"></span>
-                                                </div>
-                                            </div>
-                                            <div class="row" id="mobilerow">
-                                                <div class="floating-label" style="margin-bottom: 15px !important;">
-                                                    <input name="txtFPwdMobileNo" type="text" autocomplete="off" maxlength="10" id="txtFPwdMobileNo" onkeypress="return isNumberKey(event);" class="floating-input" placeholder=" " /> <span class="highlight"></span>
-                                                    <span class="bar"></span>
-                                                    <label class="new-field">Regd. Mobile No.</label> <span id="txthiddenMobNo" class="popup_input no-spinners" TextMode="Number" MaxLength="10"></span>
-                                                </div>
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding-top:8px; padding-bottom:8px; display:flex" id="divOtpBlock">
-                                            <input type="hidden" name="hFldOtpVisible" id="hFldOtpVisible" value="F" />
-                                            <div class="col-sm-5" style="padding: 0;">
-                                                <input name="txtFPwdOTP" type="password" autocomplete="off" id="txtFPwdOTP" class="popup_input" style="font-size:16px;" />
-                                            </div>
-                                            <div class="col-sm-7" style="line-height: 18px; padding: 0px 58px; position: relative;  top: -10px;">
-                                                @*<small>180 Seconds</small>--By Afiya*@
-                                                <br /><a id="resendotp" style="font-size:12px; color:#000;" href="javascript:__doPostBack(&#39;resendotp&#39;,&#39;&#39;)"><span id="timer"></span></a><a href="#" class="btn_link Resend_btn" style="display:none;">Resend OTP</a>
-</div>
-                                        </div>
-                                    </div>
-                                    <div class="row" style="padding-top:0px">
-                                        <div class="col-md-10 error-detail" style="text-align:center">
-                                            <span id="lblFPwdError"></span>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer" style="text-align:left; padding-top: 0px !important;">
-                                        <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
-                                        <input type="button" name="btnFPwdProceed" value="Submit" id="btnFPwdProceed" class="butt_save" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-                    <!-- Modal for Forgot Password start -->
-                    <div class="modal" id="forgetpsdotp" tabindex="-1" role="dialog" aria-labelledby="modForgotPwdLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <span onclick="document.getElementById('forgetpsdotp').style.display='none'" class="close" title="Close">×</span>
-                                    @*<button type="button" class="close" data-dismiss="modal">
-                                <span aria-hidden="true" class="closespan">×</span><span class="sr-only">Close</span>
-                            </button>*@
-                                    <h4 class="modal-title2" id="modForgotPwdLabel">Forgot Password</h4>
-                                </div>
-                                <div class="modal-body">
-                                    <input type="hidden" id="changeType" />
-                                    <div class="container-fluid">
-                                        <div id="WelcomeMsg" class="row">
-
-                                            <span id="clientWelcome" class="succes-title">Welcome</span><br />
-                                            <span id="clientname" class="succes-title"></span><br>
-                                            <span id="clientMessage" style="color:#fff !important;">Please enter the <big><strong>OTP</strong></big> sent to your registered mobile number.</span><br><br>
-
-                                        </div>
-                                        @*<div id="loginrow" hidden="hidden">
-
-                                            <div class="row">
-                                                <div class="floating-label" style="margin-bottom: 15px !important;">
-
-                                                    <input type="hidden" name="hFldFPwdLoginId" id="hFldFPwdLoginId">
-                                                    <input type="hidden" name="hFldPopupOperation" id="hFldPopupOperation" value="FPWD">
-                                                    <input name="txtFPwdLoginId" type="text" value="bittu68" id="txtFPwdLoginId" class="floating-input" placeholder=" " style="color: black ">
-                                                    <span class="highlight"></span>
-                                                    <span class="bar"></span>
-                                                    <label class="new-field" id="lblForgotpwdUid">Login Id</label>
-                                                    <span id="txthiddenLoginId" class="popup_input"></span>
-                                                </div>
-                                            </div>
-                                            <div class="row" id="mobilerow" hidden="hidden">
-
-                                                <div class="floating-label" style="margin-bottom: 15px !important;">
-
-                                                    <input name="txtFPwdMobileNo" type="text" value="" maxlength="15" id="txtFPwdMobileNo" class="floating-input" placeholder=" " onkeyup="integersOnly(this)" style="color: black">
-                                                    <span class="highlight"></span>
-                                                    <span class="bar"></span>
-                                                    <label class="new-field">Regd. Mobile No.</label>
-                                                    <span id="txthiddenMobNo" class="popup_input no-spinners" textmode="Number" maxlength="15"></span>
-                                                </div>
-                                            </div>
-                                        </div>*@
-                                        <div class="row" style="padding-top: 8px; padding-bottom: 8px; display: block;" id="divOtpBlock">
-                                            <input type="hidden" name="hFldOtpVisible" id="hFldOtpVisible" value="T">
-
-                                            <span>
-                                                <input name="txtFPwdOTP" type="password" autocomplete="off" id="txtFPwdOTP1" class="popup_input" style="font-size:16px;">
-                                            </span>
-                                            <span>
-                                                @*<small>180 Seconds</small>by afiya*@
-                                                <a id="theTarget" class="btn_link Resend_btn">180</a>
-                                                    <br><a id="resendotp" style="color:#fff;" href="javascript:__doPostBack('resendotp','')"></a>    
-                                                    <br />
-                                                    <span id="timer"></span>
-                                                    <a href="#" class="btn_link Resend_btn" style="display:none;">Resend OTP</a>Resend OTP</a>
-                                            </span>
-                                        </div>
-
-                                    </div>
-                                    <div class="row" style="padding-top:0px">
-                                        <div class="col-md-10 error-detail" style="text-align:center">
-                                            <span id="lblFPwdError" style="color:Green;">Please enter OTP you have recieved!!</span>
-                                        </div>
-                                    </div>
-                                    <div class="modal-footer" style="text-align:left; padding-top: 0px !important;">
-                                        <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
-                                        <input type="button" name="btnFPwdProceed" value="Submit" id="FPWDOTP" class="butt_save">
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Modal for Forgot Password start -->
-                    <!-- Modal for change Password start -->
-                    <div class="modal" id="modChangePwd" tabindex="-1" role="dialog" aria-labelledby="modChangePwdLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <span onclick="document.getElementById('modChangePwd').style.display='none'" class="close" title="Close">×</span>
-                                    @*<button type="button" class="close" data-dismiss="modal">
-                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                            </button>*@
-                                    <h4 class="modal-title2" id="modChangePwdLabel">Change Password</h4>
-                                </div>
-                                <div class="">
-                                    <div class="">
-                                        <div id="WelcomeMsgcp">
-                                            <span id="clientWelcomecp" class="succes-title">Welcome</span>
-                                            <span id="clientnamecp"></span>
-                                            <br />	<span id="clientMessagecp">Please create a new password to continue</span>
-                                            <br /> <span id="clientMessagecp1"></span>
-                                            <span id="lblLoginIdCp">Rajesh</span>  <span>"</span>
-                                            <br />
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12 lable_style">
-                                                <input type="hidden" name="hFldLoginIdCp" id="hFldLoginIdCp" />
-                                                <input type="hidden" name="hFldOldwPwdCp" id="hFldOldwPwdCp" />
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding-top:5px">
-                                            <div class="col-md-12">
-                                                <input name="txtChangePwd1" type="password" autocomplete="off" id="txtChangePwd1" class="popup_input new-popup" placeholder="Password" style="margin-bottom: 10px;" />
-
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding-top:5px">
-                                            <div class="col-md-12">
-                                                <input name="txtChangePwd2" type="password" autocomplete="off" id="txtChangePwd2" class="popup_input new-popup" placeholder="Re- Enter Password" />
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding-top:5px">
-                                            <div class="col-md-10 error-detail" style="text-align:center">
-                                                <span id="lblCPError"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer" style="text-align:left;padding: 16px 0px !important;">
-                                    <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
-                                    <input type="submit" name="btnCPSave" value="Submit" id="btnCPSave" class="butt_save" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Modal for change Password start -->
-                    <div class="modal" id="modFgtLogin" tabindex="-1" role="dialog" aria-labelledby="modFGTLoginLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <span onclick="document.getElementById('modFgtLogin').style.display='none'" class="close" title="Close">×</span>
-                                    @*<button type="button" class="close" data-dismiss="modal">
-                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                            </button>*@
-                                    <h4 class="modal-title2" id="modFGTLoginLabel">Forgot Login</h4>
-                                </div>
-                                <div class="">
-                                    <div class="">
-                                        <div>
-                                            <span class="succes-title"></span>
-                                            <span></span>
-                                            <br /> <span></span>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-12 lable_style">
-                                                <input type="hidden" name="HiddenField1" id="HiddenField1" />
-                                                <input type="hidden" name="HiddenField2" id="HiddenField2" />
-                                            </div>
-                                        </div>
-                                        <div class="" style="padding-top:5px">
-                                            <div class="">
-                                                <input name="TextBox1" type="text" autocomplete="off" id="forgotLoginId" class="popup_input new-popup" placeholder="Enter UCC" style="margin-bottom: 10px;" />
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding-top:5px">
-                                            <div class="col-md-12"></div>
-                                        </div>
-                                        <div class="row" style="padding-top:5px">
-                                            <div class="col-md-10 error-detail" style="text-align:center">
-                                                <span id="Label3"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer" style="text-align:left;padding: 16px 0px !important;">
-                                    <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
-                                    <input type="submit" name="btnForgotLoginid" value="Submit" id="btnForgotLoginid" class="butt_save" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-
-
-
-                    <!-- Modal for change Password start -->
-                    <div class="modal" id="changePWD" tabindex="-1" role="dialog" aria-labelledby="modFGTLoginLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <span onclick="document.getElementById('changePWD').style.display='none'" class="close" title="Close">×</span>
-                                    @*<button type="button" class="close" data-dismiss="modal">
-                                <span aria-hidden="true" class="closespan">×</span><span class="sr-only">Close</span>
-                            </button>*@
-                                    <h4 class="modal-title2" id="modChangePwdLabel">Change Password</h4>
-                                </div>
-                                <div class="">
-                                    <div class="">
-                                        <div id="WelcomeMsgcp">
-                                            <span id="clientWelcomecp" class="succes-title">Welcome</span><br />
-                                            <span id="clientnamecp" style="color:#fff;"></span><br>
-                                            <span id="clientMessagecp" style="color:#fff;">Please create a new password to continue with your</span><br>
-                                            <span id="clientMessagecp1" style="color:#fff;">login id</span>
-                                            <span id="lblLoginIdCp" style="color:#fff;"></span> <span>"</span><br>
-
-                                        </div>
-                                        <div class="row">
-
-                                            <div class="col-md-12 lable_style">
-                                                <input type="hidden" name="hFldLoginIdCp" id="hFldLoginIdCp" value="">
-                                                <input type="hidden" name="hFldOldwPwdCp" id="hFldOldwPwdCp">
-
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding-top:5px">
-
-                                            <div class="col-md-12">
-
-
-                                                <input name="txtChangePwd1" type="password" autocomplete="off" id="txtChangePwd11" class="popup_input new-popup" placeholder="Password" style="margin-bottom: 10px;">
-                                                <span toggle="#txtChangePwd11" class="fa fa-fw fa-eye field-icon toggle-password" style="color: #fff;position: absolute;right: 14px;top: 5px;cursor: pointer;font-size: 16px;"></span>
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding-top:5px">
-
-                                            <div class="col-md-12">
-
-
-                                                <input name="txtChangePwd2" type="password" autocomplete="off" id="txtChangePwd21" class="popup_input new-popup" placeholder="Re- Enter Password">
-
-                                            </div>
-                                        </div>
-
-                                        <div class="row" style="padding-top:5px">
-                                            <div class="col-md-10 error-detail" style="text-align:center">
-                                                <span id="lblCPError" class="information-popup-label" style="color:Orange;"></span>
-                                            </div>
-                                        </div>
-
-
-
-                                    </div>
-                                </div>
-                                <div class="modal-footer" style="text-align:left;padding: 16px 0px !important;">
-                                    <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
-
-                                    <input type="button" name="btnCPSave" value="Submit" id="btnCPSave1" class="butt_save">
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Modal for success message-->
-                    <div class="modal" id="modSuccess" tabindex="-1" role="dialog" aria-labelledby="modSuccessLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="col-sm-12 modal-header">
-                                    <span onclick="document.getElementById('modSuccess').style.display='none'" class="close" title="Close">×</span>
-                                    @*<button type="button" class="close" data-dismiss="modal">
-                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                            </button>*@
-                                    <h4 class="modal-title2" id="modSuccessLabel">Success!</h4>
-                                </div>
-                                <div class="col-sm-12 modal-body">
-                                    <div class="sucess-body1">
-                                        <span class="succes-title">Hi </span>
-                                        <span id="clientnameSuccess" class="succes-title"></span>
-                                        <br />	<span id="lblSucces" class="succes-title"></span>
-                                    </div>
-                                </div>
-                                <div class="col-sm-12 modal-footer btnft" style="text-align: left">
-                                    <button type="button" class="butt_cancel btnorng" data-dismiss="modal">Continue</button>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!--/Modal for success message-->
-                    <!-- Modal for mpin validation added by hvb on 31/10/2017-->
-                    <div id="aPanel">
-                        <div class="modal" id="modMpinValidate" tabindex="-1" role="dialog" aria-labelledby="modMPinLabel" aria-hidden="true">
-                            <div class="modal-dialog" role="document">
-                                <div class="modal-content">
-                                    <div class="modal-header">
-                                        <span onclick="document.getElementById('modMpinValidate').style.display='none'" class="close" title="Close">×</span>
-                                        @*<button type="button" class="close" data-dismiss="modal">
-                                    <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                                </button>*@
-                                        <h4 class="modal-title2" id="modMPinLabel">M-Pin Verification</h4>
-                                    </div>
-                                    <div class="modal-body" style="padding: 10px 0 14px 0 !important;">
-                                        <div class="sucess-body1">
-                                            <span class="succes-title">Welcome</span>
-                                            <br />	<span id="lblClientName"></span>
-                                            <br />Please enter your M-Pin to continue
-                                            <br />
-                                            <div class="container-fluid">
-                                                <div class="row">
-                                                    <div class="col-sm-6" style="padding:0;">
-                                                        <input name="txtLoginMPin" type="password" autocomplete="off" maxlength="4" id="txtLoginMPin" class="popup_input no-spinners" />
-                                                        <i class="fa password-viewer fa-eye" style="color: white;position: absolute;right: 3px;top: 10px;cursor: pointer;"></i>
-                                                    </div>
-                                                    <div class="col-sm-6">
-                                                        <a id="btnForgotMpin" style="color:#f00;">Forgot M-Pin?</a>
-                                                    </div>
-                                                </div>
-                                                <div class="row"></div>
-                                                <div class="row" style="padding-top:0px">
-                                                    <div class="col-md-10 error-detail" style="text-align:center">
-                                                        <span id="lblMPinVerError"></span>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="" style="text-align:left; padding:0;">
-                                        <input type="button" name="btnCancelMPinVerification" value="Cancel" id="btnCancelMPinVerification1" class="butt_cancel" />
-                                        <input type="button" name="btnVerifyMPin" value="Submit" id="btnVerifyMPin" class="butt_save" />
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        <!--/Modal for mpin validation added by hvb on 31/10/2017-->
-                    </div>
-                    <!-- Added By hvb on 07/11/2017 Modal for change mPin start -->
-                    <div class="modal" id="modChangeMpin" tabindex="-1" role="dialog" aria-labelledby="modChangeMpinLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <span onclick="document.getElementById('modChangeMpin').style.display='none'" class="close" title="Close">×</span>
-                                    @*<button type="button" class="close" data-dismiss="modal">
-                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                            </button>*@
-                                    <h4 class="modal-title2" id="modChangeMpinLabel">Change M-Pin</h4>
-                                </div>
-                                <div class="modal-body" style="padding: 15px 0 5px 0 !important;">
-                                    <div class="container-fluid">
-                                        <div id="Div1" class="row">
-                                            <span id="Span1">Hi</span>
-                                            <span id="lblLoginIdCMpin"></span> 	<span id="Span2">Please create a new M-pin to continue</span>
-                                            <br /> <span>login id "<span id="clientnameMpin"></span></span>
-                                            <br />
-                                        </div>
-                                        <div class="row">
-                                            <div class="lable_style">
-                                                <input type="hidden" name="hFldLoginIdCMpin" id="hFldLoginIdCMpin" />
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding-top:8px">
-                                            <div class="">
-                                                <input name="txtChangemPin1" type="password" autocomplete="off" id="txtChangemPin1" class="popup_input new-popup" placeholder="New M-Pin" />
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding-top:10px">
-                                            <div class="">
-                                                <input name="txtChangemPin2" type="password" autocomplete="off" id="txtChangemPin2" class="popup_input new-popup" placeholder="Re-enter M-Pin" />
-                                            </div>
-                                        </div>
-                                        <div class="row" style="padding-top:15px">
-                                            <div class="col-md-10 error-detail" style="text-align:center">
-                                                <span id="lblCMpinError"></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer" style="text-align:left">
-                                    <button type="button" class="butt_cancel" data-dismiss="modal">Cancel</button>
-                                    <input type="submit" name="btnCMPinSave" value="Submit" id="btnCMPinSave" class="butt_save" />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Modal for change mPin end -->
-                    <!-- Modal for New credentials start -->
-                    <div class="modal" id="modNewCred" tabindex="-1" role="dialog" aria-labelledby="modNewCredLabel" aria-hidden="true">
-                        <div class="modal-dialog" role="document">
-                            <div class="modal-content">
-                                <div class="modal-header">
-                                    <span onclick="document.getElementById('modNewCred').style.display='none'" class="close" title="Close">×</span>
-                                    @*<button type="button" class="close" data-dismiss="modal">
-                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
-                            </button>*@
-                                    <h4 class="modal-title2" id="modNewCredLabel">Enter New Credentials</h4>
-                                </div>
-                                <div class="modal-body" style="padding:5px 0 15px 0 !important;">
-                                    <div class="container-fluid">
-                                        <div class="row" id="">
-                                            <div class="col-sm-12 no-padd lable_style">
-                                                <span left_title">UCC</span><br />
-                                                <input type="hidden" name="hFldNCUserId " id="hFldNCUserId " />
-
-
-
-                                                <input name="txtNCCommonId " type="text" id="txtNCCommonId " class="input-field " />
-
-                                            </div>
-                                        </div>
-                                        <div class="row " style="padding-top:0px ">
-
-
-                                            <div class="col-sm-12 no-padd lable_style ">
-
-                                                <input name="txtNCNewId " type="text" autocomplete="off " id="txtNCNewId " class="input-field " placeholder="Login ID " />
-                                            </div>
-                                        </div>
-                                        <div class="row " style="padding-top:0px ">
-                                            <div class="col-sm-12 no-padd ">
-
-                                                <input name="txtNCPassWd " type="password" autocomplete="off " id="txtNCPassWd " class="input-field " placeholder="Password " />
-                                            </div>
-                                        </div>
-                                        <div class="row " style="padding-top:0px ">
-                                            <div class="col-sm-12 no-padd ">
-
-                                                <input name="txtNCPassWd2 " type="password" autocomplete="off " id="txtNCPassWd2 " class="input-field " placeholder="Re- Enter Password " />
-                                            </div>
-                                        </div>
-                                        <div class="row " style="padding-top:0px ">
-                                            <div class="col-sm-12 no-padd ">
-
-                                                <input name="txtNCMpin " type="password" autocomplete="off " maxlength="4 " id="txtNCMpin " class="input-field no-spinners " placeholder="M-Pin " />
-                                            </div>
-                                        </div>
-                                        <div class="row " style="padding-top:0px ">
-                                            <div class="col-md-10 error-detail " style="text-align:center ">
-                                                <span id="lblNCError "></span>
-                                            </div>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="modal-footer" style="text-align:left ">
-                                    <button type="button" class="butt_cancel " data-dismiss="modal ">Close</button>
-                                    <input type="submit" name="btnSendCred " value="Submit " id="btnSendCred " class="butt_save " />
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                </div>
+                <!-- Modal for change mPin end -->
                 <!-- Modal for New credentials start -->
-                <!-- Modal for force logout start -->
-                <div class="modal" id="modForceLogout" tabindex="-1 " role="dialog " aria-labelledby="modForceLogoutLabel " aria-hidden="true ">
-                    <div class="modal-dialog " role="document">
-                        <div class="modal-content ">
-                            <div class="modal-header ">
-                                <span onclick="document.getElementById('modForceLogout').style.display='none'" class="close" title="Close">×</span>
-                                @*<button type="button" class="close " data-dismiss="modal ">
-                            <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only ">Close</span>
-                        </button>*@
-                                <h4 class="modal-title2 " id="H1 ">Force Logout</h4>
+                <div class="modal" id="modNewCred" tabindex="-1" role="dialog" aria-labelledby="modNewCredLabel" aria-hidden="true">
+                    <div class="modal-dialog" role="document">
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <span onclick="document.getElementById('modNewCred').style.display='none'" class="close" title="Close">×</span>
+                                @*<button type="button" class="close" data-dismiss="modal">
+                                <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only">Close</span>
+                            </button>*@
+                                <h4 class="modal-title2" id="modNewCredLabel">Enter New Credentials</h4>
                             </div>
-                            <div class="modal-body " style="padding: 15px 0 5px 0 !important; ">
-                                <div class="container-fluid ">
-                                    <div class="row ">
-                                        <div class="col-sm-9 ">
-                                            <input type="hidden" name="hfldUserId " id="hfldUserId " />
-                                            <input type="hidden" name="hfldSessionId " id="hfldSessionId " />
-                                            <input type="hidden" name="hfldLogoutPwd " id="hfldLogoutPwd " />
-                                            <input type="hidden" name="hfldIPAddress " id="hfldIPAddress " />
-                                            <p class="" id="flogoutmsg"></p>
-                                            <h4 class=""><strong id="delscrip" style="color:#000;"></strong></h4>
-                                            <input type="button" name="btnForceLogout" value="Yes " id="btnForceLogout1" class="butt_save " />
-                                            &nbsp;&nbsp;&nbsp;&nbsp;
-                                            <button id="btnLogoutNo" type="button" class="butt_cancel ">No</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Modal for force logout end here -->
-                <!-- Modal for force logout start -->
-                <div class="modal" id="anyonepopup" tabindex="-1 " role="dialog" aria-labelledby="modForceLogoutLabel " aria-hidden="true ">
-                    <div class="modal-dialog " role="document">
-                        <div class="modal-content ">
-                            <div class="modal-header ">
-                                <span onclick="document.getElementById('anyonepopup').style.display='none'" class="close" title="Close">×</span>
-                                @*<button type="button" class="close " data-dismiss="modal ">
-                            <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only ">Close</span>
-                        </button>*@
-                               
-                            </div>
-                            <div class="modal-body">
-                                <div class="container-fluid ">
-                                    <div class="row ">
-                                        <div class="col-sm-12">
-                                           <div id="commenpopup"></div>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-                <!-- Modal for force logout end here -->
+                            <div class="modal-body" style="padding:5px 0 15px 0 !important;">
+                                <div class="container-fluid">
+                                    <div class="row" id="">
+                                        <div class="col-sm-12 no-padd lable_style">
+                                            <span left_title">UCC</span><br />
+                                            <input type="hidden" name="hFldNCUserId " id="hFldNCUserId " />
 
+
+
+                                            <input name="txtNCCommonId " type="text" id="txtNCCommonId " class="input-field " />
+
+                                        </div>
+                                    </div>
+                                    <div class="row " style="padding-top:0px ">
+
+
+                                        <div class="col-sm-12 no-padd lable_style ">
+
+                                            <input name="txtNCNewId " type="text" autocomplete="off " id="txtNCNewId " class="input-field " placeholder="Login ID " />
+                                        </div>
+                                    </div>
+                                    <div class="row " style="padding-top:0px ">
+                                        <div class="col-sm-12 no-padd ">
+
+                                            <input name="txtNCPassWd " type="password" autocomplete="off " id="txtNCPassWd " class="input-field " placeholder="Password " />
+                                        </div>
+                                    </div>
+                                    <div class="row " style="padding-top:0px ">
+                                        <div class="col-sm-12 no-padd ">
+
+                                            <input name="txtNCPassWd2 " type="password" autocomplete="off " id="txtNCPassWd2 " class="input-field " placeholder="Re- Enter Password " />
+                                        </div>
+                                    </div>
+                                    <div class="row " style="padding-top:0px ">
+                                        <div class="col-sm-12 no-padd ">
+
+                                            <input name="txtNCMpin " type="password" autocomplete="off " maxlength="4 " id="txtNCMpin " class="input-field no-spinners " placeholder="M-Pin " />
+                                        </div>
+                                    </div>
+                                    <div class="row " style="padding-top:0px ">
+                                        <div class="col-md-10 error-detail " style="text-align:center ">
+                                            <span id="lblNCError "></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="modal-footer" style="text-align:left ">
+                                <button type="button" class="butt_cancel " data-dismiss="modal ">Close</button>
+                                <input type="submit" name="btnSendCred " value="Submit " id="btnSendCred " class="butt_save " />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+            <!-- Modal for New credentials start -->
+            <!-- Modal for force logout start -->
+            <div class="modal" id="modForceLogout" tabindex="-1 " role="dialog " aria-labelledby="modForceLogoutLabel " aria-hidden="true ">
+                <div class="modal-dialog " role="document">
+                    <div class="modal-content ">
+                        <div class="modal-header ">
+                            <span onclick="document.getElementById('modForceLogout').style.display='none'" class="close" title="Close">×</span>
+                            @*<button type="button" class="close " data-dismiss="modal ">
+                            <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only ">Close</span>
+                        </button>*@
+                            <h4 class="modal-title2 " id="H1 ">Force Logout</h4>
+                        </div>
+                        <div class="modal-body " style="padding: 15px 0 5px 0 !important; ">
+                            <div class="container-fluid ">
+                                <div class="row ">
+                                    <div class="col-sm-9 ">
+                                        <input type="hidden" name="hfldUserId " id="hfldUserId " />
+                                        <input type="hidden" name="hfldSessionId " id="hfldSessionId " />
+                                        <input type="hidden" name="hfldLogoutPwd " id="hfldLogoutPwd " />
+                                        <input type="hidden" name="hfldIPAddress " id="hfldIPAddress " />
+                                        <p class="" id="flogoutmsg"></p>
+                                        <h4 class=""><strong id="delscrip" style="color:#000;"></strong></h4>
+                                        <input type="button" name="btnForceLogout" value="Yes " id="btnForceLogout1" class="butt_save " />
+                                        &nbsp;&nbsp;&nbsp;&nbsp;
+                                        <button id="btnLogoutNo" type="button" class="butt_cancel ">No</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal for force logout end here -->
+            <!-- Modal for force logout start -->
+            <div class="modal" id="anyonepopup" tabindex="-1 " role="dialog" aria-labelledby="modForceLogoutLabel " aria-hidden="true ">
+                <div class="modal-dialog " role="document">
+                    <div class="modal-content ">
+                        <div class="modal-header ">
+                            <span onclick="document.getElementById('anyonepopup').style.display='none'" class="close" title="Close">×</span>
+                            @*<button type="button" class="close " data-dismiss="modal ">
+                            <span aria-hidden="true" class="closespan">&times;</span><span class="sr-only ">Close</span>
+                        </button>*@
+
+                        </div>
+                        <div class="modal-body">
+                            <div class="container-fluid ">
+                                <div class="row ">
+                                    <div class="col-sm-12">
+                                        <div id="commenpopup"></div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <!-- Modal for force logout end here -->
             @*</form>*@
             <div id="remaeks" style="display:none; text-align:center">
                 <span id="remarkdetails"></span>

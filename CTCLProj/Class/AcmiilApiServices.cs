@@ -28,8 +28,23 @@ namespace CTCLProj.Class
 
         public List<ForgotLogin> ForgotLogin(string CCC)
         {
-            string mStrUrl = String.Format("{1}ForgotLogin?Option=FL3&CCC={0}&MobOTP=0", CCC, GlobalVariables.AcmiilEKycBaseURL);
+            string mStrUrl = String.Format("{0}LoginV1?nAction={1}&Option={2}&UCC={3}&OTP={4}", GlobalVariables.VitcoApiBaseURL, 1, "FL3", CCC, '0');
             ForgotLoginResponse forgot = new ForgotLoginResponse();
+            WebRequest req = WebRequest.Create(mStrUrl);
+            req.Method = "GET";
+            req.ContentType = "application/json; charset=utf-8";
+            WebResponse resp = req.GetResponse();
+            Stream stream = resp.GetResponseStream();
+            StreamReader re = new StreamReader(stream);
+            string json = re.ReadToEnd();
+            //return new List<ForgotLoginResponse>(json).ForgotLogin;
+            return JsonConvert.DeserializeObject<ForgotLoginResponse>(json).Result;
+        }
+
+        public List<ClientInfo> GetClientInfo(string sLoginId)
+        {
+            string mStrUrl = String.Format("{0}LoginV1?nAction={1}&UCC={2}&LType={3}", GlobalVariables.VitcoApiBaseURL, 2, sLoginId, "C");
+
             WebRequest req = WebRequest.Create(mStrUrl);
             req.Method = "GET";
             //req.Headers.Add("key");
@@ -38,11 +53,26 @@ namespace CTCLProj.Class
             Stream stream = resp.GetResponseStream();
             StreamReader re = new StreamReader(stream);
             string json = re.ReadToEnd();
-            return JsonConvert.DeserializeObject<ForgotLoginResponse>(json).ForgotLogin;
-            //return JsonConvert.DeserializeObject<ForgotLoginResponse>(json).ForgotLogin;
+            return JsonConvert.DeserializeObject<ClientInforResponse>(json).Result;
         }
 
-        public List<ClientInfo> GetClientInfo(string sLoginId)
+        //public List<ForgotLogin> ForgotLogin1(string CCC)
+        //{
+        //    string mStrUrl = String.Format("{1}ForgotLogin?Option=FL3&CCC={0}&MobOTP=0", CCC, GlobalVariables.AcmiilEKycBaseURL);
+        //    ForgotLoginResponse forgot = new ForgotLoginResponse();
+        //    WebRequest req = WebRequest.Create(mStrUrl);
+        //    req.Method = "GET";
+        //    //req.Headers.Add("key");
+        //    req.ContentType = "application/json; charset=utf-8";
+        //    WebResponse resp = req.GetResponse();
+        //    Stream stream = resp.GetResponseStream();
+        //    StreamReader re = new StreamReader(stream);
+        //    string json = re.ReadToEnd();
+        //    return JsonConvert.DeserializeObject<ForgotLoginResponse>(json).Result;
+        //    //return JsonConvert.DeserializeObject<ForgotLoginResponse>(json).ForgotLogin;
+        //}
+
+        public List<ClientInfo> GetClientInfo1(string sLoginId)
         {
             string mStrUrl = String.Format("{1}ClientInfo?ClientInfo={0}", sLoginId, GlobalVariables.AcmiilEKycBaseURL);
 
@@ -54,12 +84,12 @@ namespace CTCLProj.Class
             Stream stream = resp.GetResponseStream();
             StreamReader re = new StreamReader(stream);
             string json = re.ReadToEnd();
-            return JsonConvert.DeserializeObject<ClientInforResponse>(json).ClientInfo;
+            return JsonConvert.DeserializeObject<ClientInforResponse>(json).Result;
         }
 
-        public AcmiilApiResponse ValidateMPIN(string sLoginId, string sMpin)
+        public List<ClientInfo> ValidateMPIN(string sLoginId, string sMpin)
         {
-            string mStrUrl = String.Format("{2}Authenticate/ValidateMPIN?LoginId={0}&MPIN={1}&Type=V", sLoginId, sMpin, GlobalVariables.AcmiilApiBaseURL);
+            string mStrUrl = String.Format("{2}LoginV1/?nAction=3&LoginId={0}&MPIN={1}", sLoginId, sMpin, GlobalVariables.VitcoApiBaseURL);
 
             WebRequest req = WebRequest.Create(mStrUrl);
             req.Method = "GET";
@@ -69,12 +99,12 @@ namespace CTCLProj.Class
             Stream stream = resp.GetResponseStream();
             StreamReader re = new StreamReader(stream);
             string json = re.ReadToEnd();
-            return JsonConvert.DeserializeObject<AcmiilApiResponse>(json);
+            return JsonConvert.DeserializeObject<ClientInforResponse>(json).Result;
         }
 
-        public AcmiilEmpInfoResponse GetEmployeeInfo(string sEmpCode)
+        public List<EmpCTCL> GetEmployeeInfo(string sEmpCode)
         {
-            string mStrUrl = String.Format("{1}EmpCTCLid?EmpCd={0}", sEmpCode , GlobalVariables.AcmiilEKycBaseURL);
+            string mStrUrl = String.Format("{0}LoginV1?nAction={1}&UCC={2}&LType={3}", GlobalVariables.VitcoApiBaseURL, 2, sEmpCode, "E");
 
             WebRequest req = WebRequest.Create(mStrUrl);
             req.Method = "GET";
@@ -84,7 +114,7 @@ namespace CTCLProj.Class
             Stream stream = resp.GetResponseStream();
             StreamReader re = new StreamReader(stream);
             string json = re.ReadToEnd();
-            return JsonConvert.DeserializeObject<AcmiilEmpInfoResponse>(json);
+            return JsonConvert.DeserializeObject<EmpCTCLResponse>(json).Result;
         }
 
         public static bool LogoutSessionFromAcmiil(WebUser objLoggedInUser, AuthenticateService svcClnt = null)
@@ -277,6 +307,11 @@ namespace CTCLProj.Class
 
     }
 
+    public class EmpCTCLResponse
+    {
+        public List<EmpCTCL> Result { get; set; }
+    }
+
     public class EmpCTCL
     {
         public int MsgCode { get; set; }
@@ -303,14 +338,14 @@ namespace CTCLProj.Class
 
     public class ForgotLoginResponse
     {
-        public List<ForgotLogin> ForgotLogin { get; set; }
+        public List<ForgotLogin> Result { get; set; }
         
     }
 
     public struct ForgotLogin
     {
-        public string Response { get; set; }
-        public string RespMessage { get; set; }
+        public string Status { get; set; }
+        public string ResponseMessage { get; set; }
     }
 
     public class AcmiilWebWrapper
@@ -339,7 +374,7 @@ namespace CTCLProj.Class
 
     public class ClientInforResponse
     {
-        public List<ClientInfo> ClientInfo { get; set; }
+        public List<ClientInfo> Result { get; set; }
     }
 
     public struct ClientInfo

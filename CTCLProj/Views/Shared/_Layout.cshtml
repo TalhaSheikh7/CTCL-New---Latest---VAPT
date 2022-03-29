@@ -24,8 +24,8 @@
 
     <script src="~/Scripts/jquery-3.6.0.min.js"></script>
     <script src="~/Scripts/kendo.all.min.js"></script>
-
-    <script src="@Url.Content("~/Scripts/kendo/2021.1.224/angular.min.js")"></script>
+    <script src="~/MyJs/jquery.alphanum.js"></script>
+    @*<script src="@Url.Content("~/Scripts/kendo/2021.1.224/angular.min.js")"></script>*@
     <script src="@Url.Content("~/Scripts/kendo/2021.1.224/jszip.min.js")"></script>
     @*<script src="@Url.Content("~/Scripts/kendo/2021.1.224/kendo.all.min.js")"></script>*@
     <script src="@Url.Content("~/Scripts/bootstrap.min.js")"></script>
@@ -227,7 +227,7 @@
                 <div class="col-md-1 m-top20">
                     <input id="colorDrop" style="width: 100%; font-size: 12px;" /><br />
                 </div>
-
+                @*<button><i class="fa fa-floppy-o" aria-hidden="true" id="btnSave"></i></button>*@
                 <div class="col-md-1 m-top40 pull-right">
                     <div class="dropdown">
 
@@ -237,14 +237,14 @@
                         </button>
                         <div class="dropdown-menu dropdowndesign">
                             <u><span id="BANameCode"></span></u><br /><br />
-                             
+
                             <div class="switch-field" id="BOIDiv" hidden>
                                 <lable>Auto Lien:</lable>&nbsp;&nbsp;
-                                    <input type="radio" id="lienOn" class="lc" name="lien" value="On" checked />
-                                    <label for="lienOn">ON</label>
-                                    <input type="radio" id="lienOff" class="lc" name="lien" value="Off" />
-                                    <label for="lienOff">OFF</label>
-                            </div><br/>
+                                <input type="radio" id="lienOn" class="lc" name="lien" value="On" checked />
+                                <label for="lienOn">ON</label>
+                                <input type="radio" id="lienOff" class="lc" name="lien" value="Off" />
+                                <label for="lienOff">OFF</label>
+                            </div><br />
                             <a href="#" class="dropdown-item" style="color:white;" onclick="location.href='@Url.Action("Logout", "Home")'">
                                 Logout
                                 <i class="fa fa-power-off" aria-hidden="true" id="btnLogout"></i>
@@ -290,8 +290,8 @@
         });
 
         var theme = [];
-        var gblurl1 = "http://localhost:49180/";
-        //var gblurl1 = "https://ctcluat.investmentz.com/";
+        //var gblurl1 = "http://localhost:49180/";
+        var gblurl1 = "https://ctcluat.investmentz.com/";
         $(document).ready(function () {
             // alert(sessionStorage.getItem("MyId"));
 
@@ -365,27 +365,29 @@
                 dataType: "json",
                 success: function (data) {
                     //console.log(data);
-                    if (data == false) {
-                        location.href = gblurl1 + "Login/Login";
-                    }
-                    var UserType = localStorage.getItem("EmpCTCLtype");
-                    var code = localStorage.getItem("BACode");
+                    if (data == false || data.Sessionid == "" || data.Sessionid == null) {
 
-                    if (UserType == "Emp") {
-                        setTimeout(function () {
-                            setLoginEmp(code, 'E');
-                            setSearchTrip();
-                            //   var str = $("#txtSelectedClient").val().toString().split('-')[1].trim();
+                    } else {
+                        var UserType = localStorage.getItem("EmpCTCLtype");
+                        var code = localStorage.getItem("BACode");
 
-                            // $("#txtClientCode").val($("#txtSelectedClient").val().toString().split('-')[0].trim());
-                        }, 10);
+                        if (UserType == "Emp") {
+                            setTimeout(function () {
+                                setLoginEmp(code, 'E');
+                                setSearchTrip();
+                                //   var str = $("#txtSelectedClient").val().toString().split('-')[1].trim();
+
+                                // $("#txtClientCode").val($("#txtSelectedClient").val().toString().split('-')[0].trim());
+                            }, 10);
+                        }
+                        else {
+                            setTimeout(function () {
+                                setLoginEmp(code, 'B');
+                                setSearchTrip();
+                            }, 10);
+                        }
                     }
-                    else {
-                        setTimeout(function () {
-                            setLoginEmp(code, 'B');
-                            setSearchTrip();
-                        }, 10);
-                    }
+                    
 
 
                 },

@@ -33,10 +33,12 @@ namespace CTCLProj.Class
                         IP = Convert.ToString(dtSessLog.Rows[0]["sIpAddress"]);
                         BrowserInfo = Convert.ToString(dtSessLog.Rows[0]["sBrowser"]);
                     }
+
                     AcmiilApiServices service = new AcmiilApiServices();
                     List<ClientInfo> mLstclientInfos = service.GetClientInfo(LoginID);
-                    AcmiilEmpInfoResponse empInfo;
 
+                    //AcmiilEmpInfoResponse empInfo;
+                    List<EmpCTCL> empInfo;
 
                     WebUser mObjloggedInUser = new WebUser();
                     mObjloggedInUser.sLoginId = LoginID;
@@ -136,9 +138,9 @@ namespace CTCLProj.Class
 
                                 empInfo = service.GetEmployeeInfo(mLstclientInfos[0].CommonClientcode);
 
-                                if (empInfo.EmpCTCL.Count > 0)
+                                if (empInfo.Count > 0)
                                 {
-                                    if (empInfo.EmpCTCL[0].MsgCode == 0)
+                                    if (empInfo[0].MsgCode == 0)
                                     {
                                         //lblError.Text = String.Format("Get EmpInfo Error : {0}", empInfo.EmpCTCL[0].Msg);
                                         //AcmiilApiServices.LogoutSessionFromAcmiil(LoginId, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
@@ -146,7 +148,7 @@ namespace CTCLProj.Class
                                     }
                                     else
                                     {
-                                        foreach (EmpCTCL empCtclInfo in empInfo.EmpCTCL)
+                                        foreach (EmpCTCL empCtclInfo in empInfo)
                                             mObjloggedInUser.AddEmpInfo(empCtclInfo);
 
                                         objWebUser = mObjloggedInUser;
@@ -231,9 +233,9 @@ namespace CTCLProj.Class
                             objWebUser = mObjloggedInUser;
                             empInfo = service.GetEmployeeInfo(mLstclientInfos[0].CommonClientcode);
 
-                            if (empInfo.EmpCTCL.Count > 0)
+                            if (empInfo.Count > 0)
                             {
-                                if (empInfo.EmpCTCL[0].MsgCode == 0)
+                                if (empInfo[0].MsgCode == 0)
                                 {
                                     //lblError.Text = String.Format("Get EmpInfo Error : {0}", empInfo.EmpCTCL[0].Msg);
 
@@ -241,7 +243,7 @@ namespace CTCLProj.Class
                                 }
                                 else
                                 {
-                                    foreach (EmpCTCL empCtclInfo in empInfo.EmpCTCL)
+                                    foreach (EmpCTCL empCtclInfo in empInfo)
                                         mObjloggedInUser.AddEmpInfo(empCtclInfo);
 
                                     objWebUser = mObjloggedInUser;

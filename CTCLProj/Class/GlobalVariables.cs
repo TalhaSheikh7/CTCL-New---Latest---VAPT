@@ -87,6 +87,8 @@ public static class GlobalVariables
 
     static public string SqlConnectionStringMstoreInformativeDb { get { return ConfigurationManager.ConnectionStrings["Mstore_2705ConnectionString"].ConnectionString; } }
     //static public string SqlConnectionStringMstoreInformativeDb { get { return ConfigurationManager.ConnectionStrings["MStoreInformative"].ConnectionString; } }
+
+    public static string WHDB1acmcomper { get { return ConfigurationManager.ConnectionStrings["DBWHDB1ACMCompare"].ConnectionString; } }
     static public string NotificationImagePath { get { return ConfigurationManager.AppSettings["NotificationImagePath"]; } }
     static public string SAdvertisementsImagePath { get { return ConfigurationManager.AppSettings["AdvertiseImagePath"]; } }
 

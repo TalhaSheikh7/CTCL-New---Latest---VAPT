@@ -12,6 +12,9 @@ using System.Web.Mvc;
 using System.Web.UI;
 using System.Data.Entity;
 using CTCLProj.Class;
+using static CTCLProj.Class.WebUser;
+using investmentz.Models;
+using System.Text;
 
 namespace CTCLProj.Controllers
 {
@@ -21,14 +24,74 @@ namespace CTCLProj.Controllers
         // GET: Login
         public ActionResult Login()
         {
-            if (client == null)
-                client = new AuthenticateService();
-            return View();
+            string strRU = "";
+            
+            LoginDTO DTO = new LoginDTO();
+            DTO.RU = strRU;
+
+            if (Session[WebUser.SessionName] != null && ((WebUser)Session[WebUser.SessionName]).nSessionId > 0)
+            {
+                Dictionary<string, string> dictCheckLogin = new Dictionary<string, string>();
+                dictCheckLogin.Add("LoginId", ((WebUser)Session[WebUser.SessionName]).sLoginId);
+                dictCheckLogin.Add("SessionId", ((WebUser)Session[WebUser.SessionName]).sSessionID);
+                dictCheckLogin.Add("ProductID", AcmiilConstants.PRODUCT_WEB);
+                dictCheckLogin.Add("BrowserInfo", ((WebUser)Session[WebUser.SessionName]).sBrowser);
+                dictCheckLogin.Add("DeviceInfo", AcmiilConstants.DEVICES_WEB);
+                dictCheckLogin.Add("IPAdd", ((WebUser)Session[WebUser.SessionName]).sIpAddress);
+                dictCheckLogin.Add("SType", AcmiilConstants.SESSION_VALIDATE);
+
+                AcmiilApiResponse AcmResp = UtilityClass.ExternalApi<AcmiilApiResponse>(GlobalVariables.ACMIILBaseURL, "AcmiilService/Authenticate/SessionManage", dictCheckLogin).Result;
+
+                if (Convert.ToInt32(AcmResp.RespCode) != 1)
+                {
+                    Session[WebUser.SessionName] = null;
+                    Session["KycStatus"] = null;
+                    return View(DTO);
+                }
+                else
+                {
+                    return Redirect("http://localhost:49180/Home/Index");
+                }
+            }
+            else
+            {
+                var LoginValue = Request.QueryString["Value"];
+
+                if (LoginValue == "true")
+                {
+                    Session["LoginTypes_"] = LoginValue;
+                }
+                else
+                {
+                   // Session["LoginTypes_"] = "";
+                }
+
+
+
+                if (Request.Url.AbsoluteUri.Contains("RU"))
+                {
+                    strRU = Request.Url.AbsoluteUri;
+                    string[] array = strRU.Split('?');
+                    strRU = array[1];
+                    array = new string[] { };
+                    array = strRU.Split('=');
+                    strRU = array[1];
+
+                }
+                // return View();
+
+                return View();
+            }
+
+            //    if (client == null)
+            //    client = new AuthenticateService();
+            //return View();
         }
+
 
         public JsonResult btnLogin_Click(string LoginID, string LoginPassword)
         {
-          
+
             bool isSessionCreated = false;
             string strIpAddress = "";
             string strTemp = "";
@@ -43,289 +106,304 @@ namespace CTCLProj.Controllers
             strIpAddress = ClientIP;
             try
             {
-               
+                LoginID = AESEncrytDecry.DecryptStringAES(LoginID);
+                LoginPassword = AESEncrytDecry.DecryptStringAES(LoginPassword);
+
                 strIpAddress = ClientIP;//ClientIP; "120.63.142.234";//TODO: Use clientip when deploying
-             
 
-                    strTemp = CryptoEngine.Encrypt(LoginPassword, EncryptionKey);
 
-                    AuthResponse resp = client.LoginAuthenticate(LoginID, strTemp, strIpAddress, AcmiilConstants.PRODUCT_WEB, RequestingBrowser);
+                strTemp = CryptoEngine.Encrypt(LoginPassword, EncryptionKey);
 
-                    AcmiilApiServices service = new AcmiilApiServices();
+                AuthResponse resp = client.LoginAuthenticate(LoginID, strTemp, strIpAddress, AcmiilConstants.PRODUCT_WEB, RequestingBrowser);
 
-                    switch (Convert.ToInt32(resp.RespCode))
-                    {
-                        case -1:
+                AcmiilApiServices service = new AcmiilApiServices();
+
+                switch (Convert.ToInt32(resp.RespCode))
+                {
+                    case -1:
                         //Account locked , redirect to forget password page
-                       //  ResetForgotPassword(resp.RespMessage, LoginID);
+                        //  ResetForgotPassword(resp.RespMessage, LoginID);
                         hFldPopupOperation = GlobalVariables.hFldPopupOperation1;
                         hFldOpenPopupId = GlobalVariables.hFldOpenPopupId1;
                         break;
 
-                        case 1:
-
-                            
-                            string strTemp1 = AcmiilApiServices.IsUserLoggedin(LoginID, AcmiilConstants.PRODUCT_WEB, client);
-
-                            if (strTemp1 != "")
-                                if (strTemp1.IndexOf("You are already logged") != -1)
-                                {
-                                    hFldOpenPopupId = GlobalVariables.POPUP_FORCELOGOUT1;
-                                    hfldUserId =LoginID;
-                                    hfldLogoutPwd =LoginPassword;
-                                    hfldIPAddress = strTemp1 + ". Do you want to forcefully logout from the previous session?";
-                                     return Json(hfldIPAddress,JsonRequestBehavior.AllowGet);
-                                    //  GlobalFunctions.LogOut(Session, Response, Context, Page);
-                                }
+                    case 1:
 
 
-                            WebUser mObjloggedInUser = new WebUser();
-                            mObjloggedInUser.sLoginId =LoginID;
-                            mObjloggedInUser.bExpiryMessageShown = false;
-                            mObjloggedInUser.sExpiryDaysMessage = resp.RespMessage;
-                            Session["password"] =LoginPassword;
+                        string strTemp1 = AcmiilApiServices.IsUserLoggedin(LoginID, AcmiilConstants.PRODUCT_WEB, client);
 
-                            //1. Create session
-                            resp = client.SessionManage(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, AcmiilConstants.SESSION_CREATE);
-                            switch (Convert.ToInt32(resp.RespCode))
+                        if (strTemp1 != "")
+                        {
+                            if (strTemp1.IndexOf("You are already logged") != -1)
                             {
-                                case 1:
-
-                                    isSessionCreated = true;
-                                    AcmiilEmpInfoResponse empInfo;
-
-                                    mObjloggedInUser.sSessionID = Session.SessionID;
-                                    mObjloggedInUser.sProduct = AcmiilConstants.PRODUCT_WEB;
-                                    mObjloggedInUser.sBrowser = RequestingBrowser;
-                                    mObjloggedInUser.sDevice = AcmiilConstants.DEVICES_WEB;
-                                    mObjloggedInUser.sIpAddress = strIpAddress;
-
-                                    //2. Fetch client
-                                    List<ClientInfo> mLstclientInfos = service.GetClientInfo(LoginID);
-
-                                    //Read info and set client session object
-                                    if (mLstclientInfos.Count == 1)
-                                    {
-
-                                        if (mLstclientInfos[0].Status == 0)
-                                        {
-                                        //Error ??
-                                            ViewBag.Message = String.Format("Get Info Error : {0}", mLstclientInfos[0].ResponseMessage);
-                                            AcmiilApiServices.LogoutSessionFromAcmiil(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
-                                            //client.SessionManage(txtUid.Text, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, AcmiilConstants.SESSION_LOGOUT);
-                                        }
-                                        else
-                                        {
-                                            mObjloggedInUser.sName = mLstclientInfos[0].ClientName;
-                                            mObjloggedInUser.sUserType = mLstclientInfos[0].UserType;
-
-                                            if (mLstclientInfos[0].UserType.ToUpper() == "BA")//added by tsheikh for BA login in CTCL
-                                            {
-                                                mObjloggedInUser.AddSegment(MarketSegments.FO, mLstclientInfos[0].CommonClientcode, mLstclientInfos[0].ClientCode, "Y", "Y");
-
-                                                Session[WebUser.SessionName] = mObjloggedInUser;
-
-                                                string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo(); setEmpDetails('" + "" + "', '" + mObjloggedInUser.sUserType + "');},150);   </script> ";
-                                                //ScriptManager.RegisterStartupScript(this, typeof(Page), "CCIDfn", script, false);
-                                            }
-                                            else if (mLstclientInfos[0].UserType == "Emp")
-                                            {
-
-                                                if (GlobalVariables.IsCTCLEnabled.ToUpper() == "FALSE")
-                                                {
-                                                //    Page.ClientScript.RegisterStartupScript(GetType(), "msgbox", "alert('CTCL Login is not allowed, please check URL'); ", true);
-                                                //    return;
-                                                }
-
-                                                mObjloggedInUser.AddSegment(MarketSegments.FO, mLstclientInfos[0].CommonClientcode, mLstclientInfos[0].ClientCode, "Y", "Y");
-
-                                                Session[WebUser.SessionName] = mObjloggedInUser;
-
-                                                empInfo = service.GetEmployeeInfo(mLstclientInfos[0].CommonClientcode);
-
-                                                if (empInfo.EmpCTCL.Count > 0)
-                                                {
-                                                    if (empInfo.EmpCTCL[0].MsgCode == 0)
-                                                    {
-                                                    ViewBag.Message = String.Format("Get EmpInfo Error : {0}", empInfo.EmpCTCL[0].Msg);
-                                                        AcmiilApiServices.LogoutSessionFromAcmiil(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
-                                                        Session[WebUser.SessionName] = null; //if no ctcl id found 
-                                                    }
-                                                    else
-                                                    {
-                                                        foreach (EmpCTCL empCtclInfo in empInfo.EmpCTCL)
-                                                            mObjloggedInUser.AddEmpInfo(empCtclInfo);
-
-                                                        Session[WebUser.SessionName] = mObjloggedInUser;
-
-                                                      
-                                                        //here it is coming employee details so set it along with common client code
-                                                        
-                                                        //string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); clearClntDetails(); clearClntInfo(); setEmpDetails('" + mObjloggedInUser.GetEmployeeDetail(MarketSegments.CM).CTCLID + "', '" + mObjloggedInUser.sUserType + "');},150);   </script> ";
-                                                        string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo(); setEmpDetails('" + mObjloggedInUser.GetEmployeeDetail(MarketSegments.CM).CTCLID + "', '" + mObjloggedInUser.sUserType + "');},150);   </script> ";
-                                                        //ScriptManager.RegisterStartupScript(this, typeof(Page), "CCIDfn", script, false);
-
-                                                        //string script1 = " <script type=\"text/javascript\"> setTimeout(function(){ clearClntDetails(); },150);   </script> ";
-                                                        //ScriptManager.RegisterStartupScript(this, typeof(Page), "CTCLIDfn", script1, false);
-                                                    }
-
-
-                                                }
-                                                else
-                                                {
-                                                   ViewBag.Message = String.Format("Get EmpInfo Error : {0}", "something went wrong with employee info api");
-                                                    AcmiilApiServices.LogoutSessionFromAcmiil(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
-                                                }
-                                            }
-                                            else
-                                            {
-                                                //cliental login
-
-                                                // in a session store client data
-
-                                                MarketSegments enSegmentType = MarketSegments.NotRecognised;
-
-                                                switch (mLstclientInfos[0].Segment)
-                                                {
-                                                    case AcmiilConstants.SEGMENT_FO:
-                                                        enSegmentType = MarketSegments.FO;
-                                                        break;
-                                                    case AcmiilConstants.SEGMENT_EQ:
-                                                        enSegmentType = MarketSegments.CM;
-                                                        break;
-                                                    case AcmiilConstants.SEGMENT_CD:
-                                                        enSegmentType = MarketSegments.CD;
-                                                        break;
-                                                }
-                                                    //mObjloggedInUser.AddSegment(enSegmentType, mLstclientInfos[0].CommonClientcode.ToString(), mLstclientInfos[0].ClientCode, mLstclientInfos[0].ActiveFlag, mLstclientInfos[0].TrdAllowed);
-
-                                                mObjloggedInUser.AddSegment(enSegmentType, mLstclientInfos[0].CommonClientcode.ToString(), mLstclientInfos[0].ClientCode, mLstclientInfos[0].ActiveFlag, mLstclientInfos[0].TrdAllowed, mLstclientInfos[0].ETFlag, mLstclientInfos[0].BOIFlag, mLstclientInfos[0].SynFlag, mLstclientInfos[0].UserType, mLstclientInfos[0].POAFlag);
-                                                Session[WebUser.SessionName] = mObjloggedInUser;
-                                                //System.Diagnostics.Debug.WriteLine(mObjloggedInUser.ToString());
-
-                                            
-
-                                 
-                                                //string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); clearClntDetails(); clearClntInfo();},150);   </script> ";
-                                                string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo();},150);   </script> ";
-
-                                                //ScriptManager.RegisterStartupScript(this, typeof(Page), "CCIDfn", script, false);
-                                            }///
-                                        }
-                                    }
-                                    else
-                                    {
-                                        // this is never error
-                                        mObjloggedInUser.sName = mLstclientInfos[0].ClientName;
-                                        mObjloggedInUser.sUserType = mLstclientInfos[0].UserType;
-
-                                        if (mLstclientInfos[0].UserType == "Emp")
-                                        {
-                                   
-
-                                            if (GlobalVariables.IsCTCLEnabled.ToUpper() == "FALSE")
-                                            {
-                                                //Page.ClientScript.RegisterStartupScript(GetType(), "msgbox", "alert('CTCL Login is not allowed, please check URL'); ", true);
-                                              //  return;
-                                            }
-                                            mObjloggedInUser.AddSegment(MarketSegments.FO, mLstclientInfos[0].CommonClientcode, mLstclientInfos[0].ClientCode, "Y", "Y");
-                                            Session[WebUser.SessionName] = mObjloggedInUser;
-                                            empInfo = service.GetEmployeeInfo(mLstclientInfos[0].CommonClientcode);
-
-                                            if (empInfo.EmpCTCL.Count > 0)
-                                            {
-                                                if (empInfo.EmpCTCL[0].MsgCode == 0)
-                                                {
-                                                //  lblError.Text = String.Format("Get EmpInfo Error : {0}", empInfo.EmpCTCL[0].Msg);
-                                                ViewBag.Message = String.Format("Get EmpInfo Error : {0}", empInfo.EmpCTCL[0].Msg);
-
-                                                AcmiilApiServices.LogoutSessionFromAcmiil(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
-                                                    Session[WebUser.SessionName] = null;
-                                                }
-                                                else
-                                                {
-                                                    foreach (EmpCTCL empCtclInfo in empInfo.EmpCTCL)
-                                                        mObjloggedInUser.AddEmpInfo(empCtclInfo);
-
-                                                    Session[WebUser.SessionName] = mObjloggedInUser;
-                                                }
-
-                                   
-                                                //string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); clearClntDetails(); clearClntInfo(); setEmpDetails('" + mObjloggedInUser.GetEmployeeDetail(MarketSegments.CM).CTCLID + "', '" + mObjloggedInUser.sUserType + "');},150);   </script> ";
-                                            
-                                                string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo(); setEmpDetails('" + mObjloggedInUser.GetEmployeeDetail(MarketSegments.CM).CTCLID + "', '" + mObjloggedInUser.sUserType + "');},150);   </script> ";
-                                                //ScriptManager.RegisterStartupScript(this, typeof(Page), "CCIDfn", script, false);
-                                            }
-                                            else
-                                            {
-                                                ViewBag.Message = String.Format("Get EmpInfo Error : {0}", "something went wrong with employee info api");
-                                                AcmiilApiServices.LogoutSessionFromAcmiil(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
-                                            }
-                                        }
-                                        else
-                                        {
-                                            //cliental login
-                                            foreach (ClientInfo mObjClientDetail in mLstclientInfos)
-                                            {
-                                                MarketSegments enSegmentType = MarketSegments.NotRecognised;
-
-                                                switch (mObjClientDetail.Segment)
-                                                {
-                                                    case AcmiilConstants.SEGMENT_FO:
-                                                        enSegmentType = MarketSegments.FO;
-                                                        break;
-                                                    case AcmiilConstants.SEGMENT_EQ:
-                                                        enSegmentType = MarketSegments.CM;
-                                                        break;
-                                                    case AcmiilConstants.SEGMENT_CD:
-                                                        enSegmentType = MarketSegments.CD;
-                                                        break;
-                                                }
-
-                                      
-                                                //mObjloggedInUser.AddSegment(enSegmentType, mObjClientDetail.CommonClientcode.ToString(), mObjClientDetail.ClientCode, mObjClientDetail.ActiveFlag, mObjClientDetail.TrdAllowed);
-                                                mObjloggedInUser.AddSegment(enSegmentType, mObjClientDetail.CommonClientcode.ToString(), mObjClientDetail.ClientCode, mObjClientDetail.ActiveFlag, mObjClientDetail.TrdAllowed, mObjClientDetail.ETFlag, mObjClientDetail.BOIFlag, mObjClientDetail.SynFlag, mObjClientDetail.UserType, mObjClientDetail.POAFlag);
-                                            }
-                                            Session[WebUser.SessionName] = mObjloggedInUser;
-                                            //System.Diagnostics.Debug.WriteLine(mObjloggedInUser.ToString()); 
-                                            System.Diagnostics.Debug.WriteLine(mObjloggedInUser.ToString());
-
-                                         
-                                            //string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); clearClntDetails(); clearClntInfo();},150);   </script> ";
-                                    
-                                            string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo();},150);   </script> ";
-                                            //ScriptManager.RegisterStartupScript(this, typeof(Page), "CCIDfn", script, false);
-
-                                        }
-                                    }
-
-                                    if (Session[WebUser.SessionName] != null)
-                                    {
-                                    
-                                        lblClientName = mObjloggedInUser.sName; 
-                                        hFldOpenPopupId = GlobalVariables.POPUP_MPINVALIDATE1;
-                                    return Json(hFldOpenPopupId, JsonRequestBehavior.AllowGet);
-                                    }
-                                    break;
-
-
+                                hFldOpenPopupId = GlobalVariables.POPUP_FORCELOGOUT1;
+                                hfldUserId = LoginID;
+                                hfldLogoutPwd = LoginPassword;
+                                hfldIPAddress = strTemp1 + ". Do you want to forcefully logout from the previous session?";
+                                return Json(hfldIPAddress, JsonRequestBehavior.AllowGet);
+                                //  GlobalFunctions.LogOut(Session, Response, Context, Page);
                             }
-                            break;
+                        }
+                        {
+                            hFldOpenPopupId = GlobalVariables.POPUP_MPINVALIDATE1;
+                            return Json(hFldOpenPopupId, JsonRequestBehavior.AllowGet);
+                        }
 
-                        case 2:
-                       
-                            OpenChangePasswordPopup(LoginID,LoginPassword, resp.RespMessage);
-                            break;
+                        //region commented by tsheikh 15/02/2022 as session creation will be done after M-Pin Verification
+                        #region
+                        //WebUser mObjloggedInUser = new WebUser();
+                        //mObjloggedInUser.sLoginId = LoginID;
+                        //mObjloggedInUser.bExpiryMessageShown = false;
+                        //mObjloggedInUser.sExpiryDaysMessage = resp.RespMessage;
+                        //Session["password"] = LoginPassword;
 
-                        default:
-  
+                        ////1. Create session
+                        //resp = client.SessionManage(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, AcmiilConstants.SESSION_CREATE);
+                        //switch (Convert.ToInt32(resp.RespCode))
+                        //{
+
+                            //case 1:
+
+                            //// region commented by tsheikh 15/02/2022 as session will be created after M-Pin Validate
+                            
+
+                            //case 2:
+
+                                //isSessionCreated = true;
+                                //AcmiilEmpInfoResponse empInfo;
+
+                                //mObjloggedInUser.sSessionID = Session.SessionID;
+                                //mObjloggedInUser.sProduct = AcmiilConstants.PRODUCT_WEB;
+                                //mObjloggedInUser.sBrowser = RequestingBrowser;
+                                //mObjloggedInUser.sDevice = AcmiilConstants.DEVICES_WEB;
+                                //mObjloggedInUser.sIpAddress = strIpAddress;
+
+                                ////2. Fetch client
+                                //List<ClientInfo> mLstclientInfos = service.GetClientInfo(LoginID);
+
+                                ////Read info and set client session object
+                                //if (mLstclientInfos.Count == 1)
+                                //{
+
+                                    //if (mLstclientInfos[0].Status == 0)
+                                    //{
+                                        ////Error ??
+                                        //ViewBag.Message = String.Format("Get Info Error : {0}", mLstclientInfos[0].ResponseMessage);
+                                        //AcmiilApiServices.LogoutSessionFromAcmiil(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
+                                        ////client.SessionManage(txtUid.Text, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, AcmiilConstants.SESSION_LOGOUT);
+                                    //}
+                                    //else
+                                    //{
+                                        //mObjloggedInUser.sName = mLstclientInfos[0].ClientName;
+                                        //mObjloggedInUser.sUserType = mLstclientInfos[0].UserType;
+
+                                        //if (mLstclientInfos[0].UserType.ToUpper() == "BA")//added by tsheikh for BA login in CTCL
+                                        //{
+                                            //mObjloggedInUser.AddSegment(MarketSegments.FO, mLstclientInfos[0].CommonClientcode, mLstclientInfos[0].ClientCode, "Y", "Y");
+
+                                            //Session[WebUser.SessionName] = mObjloggedInUser;
+
+                                            //string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo(); setEmpDetails('" + "" + "', '" + mObjloggedInUser.sUserType + "');},150);   </script> ";
+                                            ////ScriptManager.RegisterStartupScript(this, typeof(Page), "CCIDfn", script, false);
+                                        //}
+                                        //else if (mLstclientInfos[0].UserType == "Emp")
+                                        //{
+
+                                            //if (GlobalVariables.IsCTCLEnabled.ToUpper() == "FALSE")
+                                            //{
+                                                ////    Page.ClientScript.RegisterStartupScript(GetType(), "msgbox", "alert('CTCL Login is not allowed, please check URL'); ", true);
+                                                ////    return;
+                                            //}
+
+                                            //mObjloggedInUser.AddSegment(MarketSegments.FO, mLstclientInfos[0].CommonClientcode, mLstclientInfos[0].ClientCode, "Y", "Y");
+
+                                            //Session[WebUser.SessionName] = mObjloggedInUser;
+
+                                            //empInfo = service.GetEmployeeInfo(mLstclientInfos[0].CommonClientcode);
+
+                                            //if (empInfo.EmpCTCL.Count > 0)
+                                            //{
+                                                //if (empInfo.EmpCTCL[0].MsgCode == 0)
+                                                //{
+                                                    //ViewBag.Message = String.Format("Get EmpInfo Error : {0}", empInfo.EmpCTCL[0].Msg);
+                                                    //AcmiilApiServices.LogoutSessionFromAcmiil(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
+                                                    //Session[WebUser.SessionName] = null; //if no ctcl id found 
+                                                //}
+                                                //else
+                                                //{
+                                                    //foreach (EmpCTCL empCtclInfo in empInfo.EmpCTCL)
+                                                        //mObjloggedInUser.AddEmpInfo(empCtclInfo);
+
+                                                    //Session[WebUser.SessionName] = mObjloggedInUser;
+
+
+                                                    ////here it is coming employee details so set it along with common client code
+
+                                                    ////string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); clearClntDetails(); clearClntInfo(); setEmpDetails('" + mObjloggedInUser.GetEmployeeDetail(MarketSegments.CM).CTCLID + "', '" + mObjloggedInUser.sUserType + "');},150);   </script> ";
+                                                    //string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo(); setEmpDetails('" + mObjloggedInUser.GetEmployeeDetail(MarketSegments.CM).CTCLID + "', '" + mObjloggedInUser.sUserType + "');},150);   </script> ";
+                                                    ////ScriptManager.RegisterStartupScript(this, typeof(Page), "CCIDfn", script, false);
+
+                                                    ////string script1 = " <script type=\"text/javascript\"> setTimeout(function(){ clearClntDetails(); },150);   </script> ";
+                                                    ////ScriptManager.RegisterStartupScript(this, typeof(Page), "CTCLIDfn", script1, false);
+                                                //}
+
+
+                                            //}
+                                            //else
+                                            //{
+                                                //ViewBag.Message = String.Format("Get EmpInfo Error : {0}", "something went wrong with employee info api");
+                                                //AcmiilApiServices.LogoutSessionFromAcmiil(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
+                                            //}
+                                        //}
+                                        //else
+                                        //{
+                                            ////cliental login
+
+                                            //// in a session store client data
+
+                                            //MarketSegments enSegmentType = MarketSegments.NotRecognised;
+
+                                            //switch (mLstclientInfos[0].Segment)
+                                            //{
+                                                //case AcmiilConstants.SEGMENT_FO:
+                                                    //enSegmentType = MarketSegments.FO;
+                                                    //break;
+                                                //case AcmiilConstants.SEGMENT_EQ:
+                                                    //enSegmentType = MarketSegments.CM;
+                                                    //break;
+                                                //case AcmiilConstants.SEGMENT_CD:
+                                                    //enSegmentType = MarketSegments.CD;
+                                                    //break;
+                                            //}
+                                            ////mObjloggedInUser.AddSegment(enSegmentType, mLstclientInfos[0].CommonClientcode.ToString(), mLstclientInfos[0].ClientCode, mLstclientInfos[0].ActiveFlag, mLstclientInfos[0].TrdAllowed);
+
+                                            //mObjloggedInUser.AddSegment(enSegmentType, mLstclientInfos[0].CommonClientcode.ToString(), mLstclientInfos[0].ClientCode, mLstclientInfos[0].ActiveFlag, mLstclientInfos[0].TrdAllowed, mLstclientInfos[0].ETFlag, mLstclientInfos[0].BOIFlag, mLstclientInfos[0].SynFlag, mLstclientInfos[0].UserType, mLstclientInfos[0].POAFlag);
+                                            //Session[WebUser.SessionName] = mObjloggedInUser;
+                                            ////System.Diagnostics.Debug.WriteLine(mObjloggedInUser.ToString());
+
+
+
+
+                                            ////string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); clearClntDetails(); clearClntInfo();},150);   </script> ";
+                                            //string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo();},150);   </script> ";
+
+                                            ////ScriptManager.RegisterStartupScript(this, typeof(Page), "CCIDfn", script, false);
+                                        //}///
+                                    //}
+                                //}
+                                //else
+                                //{
+                                    //// this is never error
+                                    //mObjloggedInUser.sName = mLstclientInfos[0].ClientName;
+                                    //mObjloggedInUser.sUserType = mLstclientInfos[0].UserType;
+
+                                    //if (mLstclientInfos[0].UserType == "Emp")
+                                    //{
+
+
+                                        //if (GlobalVariables.IsCTCLEnabled.ToUpper() == "FALSE")
+                                        //{
+                                            ////Page.ClientScript.RegisterStartupScript(GetType(), "msgbox", "alert('CTCL Login is not allowed, please check URL'); ", true);
+                                            ////  return;
+                                        //}
+                                        //mObjloggedInUser.AddSegment(MarketSegments.FO, mLstclientInfos[0].CommonClientcode, mLstclientInfos[0].ClientCode, "Y", "Y");
+                                        //Session[WebUser.SessionName] = mObjloggedInUser;
+                                        //empInfo = service.GetEmployeeInfo(mLstclientInfos[0].CommonClientcode);
+
+                                        //if (empInfo.EmpCTCL.Count > 0)
+                                        //{
+                                            //if (empInfo.EmpCTCL[0].MsgCode == 0)
+                                            //{
+                                                ////  lblError.Text = String.Format("Get EmpInfo Error : {0}", empInfo.EmpCTCL[0].Msg);
+                                                //ViewBag.Message = String.Format("Get EmpInfo Error : {0}", empInfo.EmpCTCL[0].Msg);
+
+                                                //AcmiilApiServices.LogoutSessionFromAcmiil(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
+                                                //Session[WebUser.SessionName] = null;
+                                            //}
+                                            //else
+                                            //{
+                                                //foreach (EmpCTCL empCtclInfo in empInfo.EmpCTCL)
+                                                    //mObjloggedInUser.AddEmpInfo(empCtclInfo);
+
+                                                //Session[WebUser.SessionName] = mObjloggedInUser;
+                                            //}
+
+
+                                            ////string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); clearClntDetails(); clearClntInfo(); setEmpDetails('" + mObjloggedInUser.GetEmployeeDetail(MarketSegments.CM).CTCLID + "', '" + mObjloggedInUser.sUserType + "');},150);   </script> ";
+
+                                            //string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo(); setEmpDetails('" + mObjloggedInUser.GetEmployeeDetail(MarketSegments.CM).CTCLID + "', '" + mObjloggedInUser.sUserType + "');},150);   </script> ";
+                                            ////ScriptManager.RegisterStartupScript(this, typeof(Page), "CCIDfn", script, false);
+                                        //}
+                                        //else
+                                        //{
+                                            //ViewBag.Message = String.Format("Get EmpInfo Error : {0}", "something went wrong with employee info api");
+                                            //AcmiilApiServices.LogoutSessionFromAcmiil(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
+                                        //}
+                                    //}
+                                    //else
+                                    //{
+                                        ////cliental login
+                                        //foreach (ClientInfo mObjClientDetail in mLstclientInfos)
+                                        //{
+                                            //MarketSegments enSegmentType = MarketSegments.NotRecognised;
+
+                                            //switch (mObjClientDetail.Segment)
+                                            //{
+                                                //case AcmiilConstants.SEGMENT_FO:
+                                                    //enSegmentType = MarketSegments.FO;
+                                                    //break;
+                                                //case AcmiilConstants.SEGMENT_EQ:
+                                                    //enSegmentType = MarketSegments.CM;
+                                                    //break;
+                                                //case AcmiilConstants.SEGMENT_CD:
+                                                    //enSegmentType = MarketSegments.CD;
+                                                    //break;
+                                            //}
+
+
+                                            ////mObjloggedInUser.AddSegment(enSegmentType, mObjClientDetail.CommonClientcode.ToString(), mObjClientDetail.ClientCode, mObjClientDetail.ActiveFlag, mObjClientDetail.TrdAllowed);
+                                            //mObjloggedInUser.AddSegment(enSegmentType, mObjClientDetail.CommonClientcode.ToString(), mObjClientDetail.ClientCode, mObjClientDetail.ActiveFlag, mObjClientDetail.TrdAllowed, mObjClientDetail.ETFlag, mObjClientDetail.BOIFlag, mObjClientDetail.SynFlag, mObjClientDetail.UserType, mObjClientDetail.POAFlag);
+                                        //}
+                                        //Session[WebUser.SessionName] = mObjloggedInUser;
+                                        ////System.Diagnostics.Debug.WriteLine(mObjloggedInUser.ToString()); 
+                                        //System.Diagnostics.Debug.WriteLine(mObjloggedInUser.ToString());
+
+
+                                        ////string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); clearClntDetails(); clearClntInfo();},150);   </script> ";
+
+                                        //string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo();},150);   </script> ";
+                                        ////ScriptManager.RegisterStartupScript(this, typeof(Page), "CCIDfn", script, false);
+
+                                    //}
+                                //}
+
+                                //if (Session[WebUser.SessionName] != null)
+                                //{
+
+                                    //lblClientName = mObjloggedInUser.sName;
+                                    //hFldOpenPopupId = GlobalVariables.POPUP_MPINVALIDATE1;
+                                    //return Json(hFldOpenPopupId, JsonRequestBehavior.AllowGet);
+                                //}
+                                //break;
+                                
+
+                        //}
+                        //break;
+                        #endregion
+                    case 2:
+
+                        OpenChangePasswordPopup(LoginID, LoginPassword, resp.RespMessage);
+                        break;
+
+                    default:
+
                         ViewBag.Message = resp.RespMessage;
 
                         hFldOpenPopupId = resp.RespMessage;
                         return Json(hFldOpenPopupId, JsonRequestBehavior.AllowGet);
                         break;
-                    }
-              
+                }
+
 
             }
             catch (Exception exError)
@@ -367,7 +445,7 @@ namespace CTCLProj.Controllers
         {
             get { return String.Format("{0} v {1}", Request.Browser.Browser, Request.Browser.Version); }
         }
-        
+
         private void OpenChangePasswordPopup(string sUserID, string sOldPassword, string sChagePwdMessage)
         {
             //hFldOpenPopupId.Value = POPUP_CHANGEPWD;
@@ -384,27 +462,31 @@ namespace CTCLProj.Controllers
         public JsonResult btnForgotLoginId(string CCC)
         {
             //ForgotLoginResponse resp = new AcmiilApiServices().ForgotLogin(CCC);
+            CCC = AESEncrytDecry.DecryptStringAES(CCC);
             List<ForgotLogin> mLstclientInfos = new AcmiilApiServices().ForgotLogin(CCC);
             string message = "";
             if (mLstclientInfos.Count >= 1)
             {
-                if (mLstclientInfos[0].Response == "1")
+                if (mLstclientInfos[0].Status == "1")
                 {
-                    message = mLstclientInfos[0].RespMessage;
+                    message = mLstclientInfos[0].ResponseMessage;
                 }
-                
+
                 else
                 {
-                    message = mLstclientInfos[0].RespMessage;
+                    message = mLstclientInfos[0].ResponseMessage;
                 }
-                    
+
             }
             return Json(message, JsonRequestBehavior.AllowGet);
         }
 
-        public JsonResult btnFPwdProceed_Click(string LoginID, string MobileNumber, string hFldOtpVisible, string hFldPopupOperation, string hFldOpenPopupId, string txtFPwdOTP = "")
+        public JsonResult btnFPwdProceed_Click(FormCollection fc,string LoginID, string MobileNumber, string hFldOtpVisible, string hFldPopupOperation, string hFldOpenPopupId, string txtFPwdOTP = "")
         {
             string ClientName = "";
+            string ResponseMsg = "";
+            string ResponseCode = "";
+            string HDName = fc["HDName"];
             if (client == null)
                 client = new AuthenticateService();
             try
@@ -414,13 +496,16 @@ namespace CTCLProj.Controllers
                 //string txtFPwdOTP = "";
                 hFldOpenPopupId = hFldOpenPopupId;
                 AuthResponse resp = null;
-                string strLoginId = LoginID;
+                //string strLoginId = LoginID;
+
+                string strLoginId = AESEncrytDecry.DecryptStringAES(LoginID);
+                string MobNumber = AESEncrytDecry.DecryptStringAES(MobileNumber);
 
                 ClientName = GetClientName(strLoginId);
 
-                if(ClientName == "Incorrect User")
+                if (ClientName == "Incorrect User")
                 {
-                    
+
                 }
                 else
                 {
@@ -440,11 +525,11 @@ namespace CTCLProj.Controllers
 
                     if (strTemp == "")
                     {
-                        if (MobileNumber == "")
+                        if (MobNumber == "")
                         {
                             strTemp = "Mobile no. should not be left blank!!";
                         }
-                        else if (MobileNumber.All(char.IsDigit) && MobileNumber.Length <= 15 && MobileNumber.Length >= 10)
+                        else if (MobNumber.All(char.IsDigit) && MobNumber.Length <= 15 && MobNumber.Length >= 10)
                         {
                             strTemp = "";
                             if (hFldOtpVisible == "T")
@@ -456,12 +541,14 @@ namespace CTCLProj.Controllers
                                 else if (txtFPwdOTP.All(char.IsDigit))
                                 {
                                     resp = client.ChangePassword("FP2", strLoginId, "", txtFPwdOTP);
+                                    ResponseMsg = resp.RespMessage;
+                                    ResponseCode = resp.RespCode;
                                     switch (Convert.ToInt32(resp.RespCode))
                                     {
                                         case 1:
                                             if (hFldPopupOperation == "FPWD")
                                             {
-                                                ResetForgotPassword("", "", strLoginId, MobileNumber);
+                                                ResetForgotPassword("", "", strLoginId, MobNumber);
                                                 OpenChangePasswordPopup(strLoginId, null, "");
 
                                             }
@@ -481,11 +568,11 @@ namespace CTCLProj.Controllers
                                 }
                                 else
                                 {
-                                    strTemp = String.Format("{0} is not in valid format!!", MobileNumber);
+                                    strTemp = String.Format("{0} is not in valid format!!", MobNumber);
                                 }
 
                             }
-                            else
+                            else//goes here
                             {
 
                                 if (hFldPopupOperation == "FLOGIN")
@@ -493,12 +580,19 @@ namespace CTCLProj.Controllers
                                 else
                                     resp = new AuthResponse() { RespCode = "1", RespMessage = "For forgot password above check is not required!!" };
 
-                                if (resp.RespCode == "1")
+                                if (resp.RespCode == "1")//here
                                 {
-                                    resp = client.ChangePassword("FP1", strLoginId, "", MobileNumber);
-                                    if(resp.RespCode == "0")
+                                    if (txtFPwdOTP == string.Empty)
+                                    {
+
+                                    }
+                                    resp = client.ChangePassword("FP1", strLoginId, "", MobNumber);
+                                    ResponseMsg = resp.RespMessage;
+                                    ResponseCode = resp.RespCode;
+                                    if (resp.RespCode == "0")
                                     {
                                         ClientName = "Wrong Number";
+                                        ResponseCode = "7";
                                     }
                                     else
                                     {
@@ -506,7 +600,7 @@ namespace CTCLProj.Controllers
                                         {
                                             case 1:
                                                 //Success sent otp
-                                                hFldOtpVisible = "T";
+                                                hFldOtpVisible = "T";//here
 
                                                 break;
 
@@ -515,7 +609,7 @@ namespace CTCLProj.Controllers
                                                 hFldOtpVisible = "F";
                                                 break;
                                         }
-                                    }    
+                                    }
                                 }
                                 else
                                 {
@@ -526,7 +620,7 @@ namespace CTCLProj.Controllers
                             }
                         }
                         else
-                            strTemp = String.Format("{0} is not valid mobile number!!", MobileNumber);
+                            strTemp = String.Format("{0} is not valid mobile number!!", MobNumber);
                     }
                     if (strTemp != "")
                     {
@@ -543,15 +637,15 @@ namespace CTCLProj.Controllers
                 pLngErr = ReportError("btnFPwdProceed_Click", "Login", pLngErr, exError.GetBaseException().GetType().ToString(), exError.Message, exError.StackTrace);
 
             }
-
-            return Json(ClientName, JsonRequestBehavior.AllowGet);
+            return Json(new { ClientName, ResponseMsg, ResponseCode }, JsonRequestBehavior.AllowGet);
+            //return Json(ClientName, JsonRequestBehavior.AllowGet);
         }
         private string GetClientName(string UID)
         {
             List<ClientInfo> mLstclientInfos = new AcmiilApiServices().GetClientInfo(UID);
             if (mLstclientInfos.Count >= 1)
             {
-                if(mLstclientInfos[0].ResponseMessage == "Incorrect User")
+                if (mLstclientInfos[0].ResponseMessage == "Incorrect User")
                 {
                     return mLstclientInfos[0].ResponseMessage;
                 }
@@ -700,6 +794,9 @@ namespace CTCLProj.Controllers
         }
         public JsonResult btnForceLogout_Click(string LoginID, string LoginPassword)
         {
+            LoginID = AESEncrytDecry.DecryptStringAES(LoginID);
+            LoginPassword = AESEncrytDecry.DecryptStringAES(LoginPassword);
+
             // var respons = "";
             if (client == null)
                 client = new AuthenticateService();
@@ -707,7 +804,23 @@ namespace CTCLProj.Controllers
                                                       AcmiilConstants.PRODUCT_WEB,
                                                       RequestingBrowser, AcmiilConstants.DEVICES_WEB, "", client);
 
-            var respons = btnLogin_Click(LoginID, LoginPassword);
+            string id = AESEncrytDecry.EncryptStringAES(LoginID);
+            string pwd = AESEncrytDecry.EncryptStringAES(LoginPassword);
+            //StringBuilder encLogin = new StringBuilder();
+            //foreach (byte item in id)
+            //{
+            //    encLogin.Append(item.ToString("X2") + " ");
+            //}
+
+            
+            //StringBuilder encPwd = new StringBuilder();
+            //foreach (byte item in id)
+            //{
+            //    encPwd.Append(item.ToString("X2") + " ");
+            //}
+
+            var respons = btnLogin_Click(id, pwd);
+
             return Json(respons, JsonRequestBehavior.AllowGet);
         }
         public JsonResult btnCancelMPinVerification_Click(string txtLoginMPin, string LoginID)
@@ -715,11 +828,24 @@ namespace CTCLProj.Controllers
             string RU = "";
             string returnurl = "";
             string mergevalue = "";
+
+
+            string strIpAddress = "";
+            bool isSessionCreated = false;
+            string hFldOpenPopupId = "";
+            string hfldUserId = "";
+            string hfldLogoutPwd = "";
+            string hfldIPAddress = "";
+            string lblClientName = "";
+
             var clientdetails = new clientssdata();
             if (client == null)
                 client = new AuthenticateService();
             try
             {
+                LoginID = AESEncrytDecry.DecryptStringAES(LoginID);
+                txtLoginMPin = AESEncrytDecry.DecryptStringAES(txtLoginMPin);
+
                 string sErr = "";
                 if (txtLoginMPin.Trim() == "")
                     sErr = "m-Pin should not be blank.";
@@ -727,12 +853,221 @@ namespace CTCLProj.Controllers
 
                 if (sErr == "")
                 {
-                    WebUser mObjUser = (WebUser)Session[WebUser.SessionName];
-                    AcmiilApiResponse resp = new AcmiilApiServices().ValidateMPIN(mObjUser.sLoginId, txtLoginMPin);
-                    if (resp.RespCode == "1")
+                    // AcmiilApiResponse resp = new AcmiilApiServices().ValidateMPIN(LoginID, txtLoginMPin);
+                    AcmiilApiServices service = new AcmiilApiServices();
+                    List<ClientInfo> resp = service.ValidateMPIN(LoginID, txtLoginMPin);
+
+                    WebUser mObjloggedInUser = new WebUser();
+                    mObjloggedInUser.sLoginId = LoginID;
+                    mObjloggedInUser.bExpiryMessageShown = false;
+                    mObjloggedInUser.sExpiryDaysMessage = resp[0].ResponseMessage;
+
+                    if (resp[0].Status == 1)
                     {
+                        
+                        strIpAddress = ClientIP;
+                        AuthResponse Resp1 = client.SessionManage(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, AcmiilConstants.SESSION_CREATE);
+                        switch (Convert.ToInt32(Resp1.RespCode))
+                        {
+                            case 1:
+                                isSessionCreated = true;
+                                
+
+                                mObjloggedInUser.sSessionID = Session.SessionID;
+                                mObjloggedInUser.sProduct = AcmiilConstants.PRODUCT_WEB;
+                                mObjloggedInUser.sBrowser = RequestingBrowser;
+                                mObjloggedInUser.sDevice = AcmiilConstants.DEVICES_WEB;
+                                mObjloggedInUser.sIpAddress = strIpAddress;
+
+                                List<ClientInfo> mLstclientInfos = service.GetClientInfo(LoginID);
+
+                                List<EmpCTCL> empInfo;
+                                //AcmiilEmpInfoResponse empInfo;
+                                //Read info and set client session object
+                                if (mLstclientInfos.Count == 1)
+                                {
+                                    if (mLstclientInfos[0].Status == 0)
+                                    {
+                                        ViewBag.Message = String.Format("Get Info Error : {0}", mLstclientInfos[0].ResponseMessage);
+                                        AcmiilApiServices.LogoutSessionFromAcmiil(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
+                                    }
+                                    else
+                                    {
+                                        mObjloggedInUser.sName = mLstclientInfos[0].ClientName;
+                                        mObjloggedInUser.sUserType = mLstclientInfos[0].UserType;
+
+                                        if (mLstclientInfos[0].UserType.ToUpper() == "BA")
+                                        {
+                                            mObjloggedInUser.AddSegment(MarketSegments.FO, mLstclientInfos[0].CommonClientcode, mLstclientInfos[0].ClientCode, "Y", "Y");
+
+                                            Session[WebUser.SessionName] = mObjloggedInUser;
+
+                                            string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo(); setEmpDetails('" + "" + "', '" + mObjloggedInUser.sUserType + "');},150);   </script> ";
+                                        }
+                                        else if (mLstclientInfos[0].UserType == "Emp")
+                                        {
+                                            if (GlobalVariables.IsCTCLEnabled.ToUpper() == "FALSE")
+                                            {
+                                                //    Page.ClientScript.RegisterStartupScript(GetType(), "msgbox", "alert('CTCL Login is not allowed, please check URL'); ", true);
+                                                //    return;
+                                            }
+
+                                            mObjloggedInUser.AddSegment(MarketSegments.FO, mLstclientInfos[0].CommonClientcode, mLstclientInfos[0].ClientCode, "Y", "Y");
+
+                                            Session[WebUser.SessionName] = mObjloggedInUser;
+
+                                            empInfo = service.GetEmployeeInfo(mLstclientInfos[0].CommonClientcode);
+
+                                            if (empInfo.Count > 0)
+                                            {
+                                                if (empInfo[0].MsgCode == 0)
+                                                {
+                                                    ViewBag.Message = String.Format("Get EmpInfo Error : {0}", empInfo[0].Msg);
+                                                    AcmiilApiServices.LogoutSessionFromAcmiil(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
+                                                    Session[WebUser.SessionName] = null; //if no ctcl id found 
+                                                }
+                                                else
+                                                {
+                                                    foreach (EmpCTCL empCtclInfo in empInfo)
+                                                        mObjloggedInUser.AddEmpInfo(empCtclInfo);
+
+                                                    Session[WebUser.SessionName] = mObjloggedInUser;
+
+                                                    string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo(); setEmpDetails('" + mObjloggedInUser.GetEmployeeDetail(MarketSegments.CM).CTCLID + "', '" + mObjloggedInUser.sUserType + "');},150);   </script> ";
+                                                }
+                                            }
+                                            else
+                                            {
+                                                ViewBag.Message = String.Format("Get EmpInfo Error : {0}", "something went wrong with employee info api");
+                                                AcmiilApiServices.LogoutSessionFromAcmiil(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
+                                            }
+                                        }
+                                        else
+                                        {
+                                            //client login
+
+                                            MarketSegments enSegmentType = MarketSegments.NotRecognised;
+
+                                            switch (mLstclientInfos[0].Segment)
+                                            {
+                                                case AcmiilConstants.SEGMENT_FO:
+                                                    enSegmentType = MarketSegments.FO;
+                                                    break;
+                                                case AcmiilConstants.SEGMENT_EQ:
+                                                    enSegmentType = MarketSegments.CM;
+                                                    break;
+                                                case AcmiilConstants.SEGMENT_CD:
+                                                    enSegmentType = MarketSegments.CD;
+                                                    break;
+                                            }
+                                            //mObjloggedInUser.AddSegment(enSegmentType, mLstclientInfos[0].CommonClientcode.ToString(), mLstclientInfos[0].ClientCode, mLstclientInfos[0].ActiveFlag, mLstclientInfos[0].TrdAllowed);
+
+                                            mObjloggedInUser.AddSegment(enSegmentType, mLstclientInfos[0].CommonClientcode.ToString(), mLstclientInfos[0].ClientCode, mLstclientInfos[0].ActiveFlag, mLstclientInfos[0].TrdAllowed, mLstclientInfos[0].ETFlag, mLstclientInfos[0].BOIFlag, mLstclientInfos[0].SynFlag, mLstclientInfos[0].UserType, mLstclientInfos[0].POAFlag);
+                                            Session[WebUser.SessionName] = mObjloggedInUser;
+                                            //System.Diagnostics.Debug.WriteLine(mObjloggedInUser.ToString());
+                                            //string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); clearClntDetails(); clearClntInfo();},150);   </script> ";
+
+                                            string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo();},150);   </script> ";
+
+                                            //ScriptManager.RegisterStartupScript(this, typeof(Page), "CCIDfn", script, false);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    // this is never error
+                                    mObjloggedInUser.sName = mLstclientInfos[0].ClientName;
+                                    mObjloggedInUser.sUserType = mLstclientInfos[0].UserType;
+
+                                    if (mLstclientInfos[0].UserType == "Emp")
+                                    {
 
 
+                                        if (GlobalVariables.IsCTCLEnabled.ToUpper() == "FALSE")
+                                        {
+                                            //Page.ClientScript.RegisterStartupScript(GetType(), "msgbox", "alert('CTCL Login is not allowed, please check URL'); ", true);
+                                            //  return;
+                                        }
+                                        mObjloggedInUser.AddSegment(MarketSegments.FO, mLstclientInfos[0].CommonClientcode, mLstclientInfos[0].ClientCode, "Y", "Y");
+                                        Session[WebUser.SessionName] = mObjloggedInUser;
+                                        empInfo = service.GetEmployeeInfo(mLstclientInfos[0].CommonClientcode);
+
+                                        if (empInfo.Count > 0)
+                                        {
+                                            if (empInfo[0].MsgCode == 0)
+                                            {
+                                                //  lblError.Text = String.Format("Get EmpInfo Error : {0}", empInfo.EmpCTCL[0].Msg);
+                                                ViewBag.Message = String.Format("Get EmpInfo Error : {0}", empInfo[0].Msg);
+
+                                                AcmiilApiServices.LogoutSessionFromAcmiil(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
+                                                Session[WebUser.SessionName] = null;
+                                            }
+                                            else
+                                            {
+                                                foreach (EmpCTCL empCtclInfo in empInfo)
+                                                    mObjloggedInUser.AddEmpInfo(empCtclInfo);
+
+                                                Session[WebUser.SessionName] = mObjloggedInUser;
+                                            }
+
+
+                                            //string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); clearClntDetails(); clearClntInfo(); setEmpDetails('" + mObjloggedInUser.GetEmployeeDetail(MarketSegments.CM).CTCLID + "', '" + mObjloggedInUser.sUserType + "');},150);   </script> ";
+
+                                            string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo(); setEmpDetails('" + mObjloggedInUser.GetEmployeeDetail(MarketSegments.CM).CTCLID + "', '" + mObjloggedInUser.sUserType + "');},150);   </script> ";
+                                            //ScriptManager.RegisterStartupScript(this, typeof(Page), "CCIDfn", script, false);
+                                        }
+                                        else
+                                        {
+                                            ViewBag.Message = String.Format("Get EmpInfo Error : {0}", "something went wrong with employee info api");
+                                            AcmiilApiServices.LogoutSessionFromAcmiil(LoginID, Session.SessionID, AcmiilConstants.PRODUCT_WEB, RequestingBrowser, AcmiilConstants.DEVICES_WEB, strIpAddress, client);
+                                        }
+                                    }
+                                    else
+                                    {
+                                        //cliental login
+                                        foreach (ClientInfo mObjClientDetail in mLstclientInfos)
+                                        {
+                                            MarketSegments enSegmentType = MarketSegments.NotRecognised;
+
+                                            switch (mObjClientDetail.Segment)
+                                            {
+                                                case AcmiilConstants.SEGMENT_FO:
+                                                    enSegmentType = MarketSegments.FO;
+                                                    break;
+                                                case AcmiilConstants.SEGMENT_EQ:
+                                                    enSegmentType = MarketSegments.CM;
+                                                    break;
+                                                case AcmiilConstants.SEGMENT_CD:
+                                                    enSegmentType = MarketSegments.CD;
+                                                    break;
+                                            }
+
+
+                                            //mObjloggedInUser.AddSegment(enSegmentType, mObjClientDetail.CommonClientcode.ToString(), mObjClientDetail.ClientCode, mObjClientDetail.ActiveFlag, mObjClientDetail.TrdAllowed);
+                                            mObjloggedInUser.AddSegment(enSegmentType, mObjClientDetail.CommonClientcode.ToString(), mObjClientDetail.ClientCode, mObjClientDetail.ActiveFlag, mObjClientDetail.TrdAllowed, mObjClientDetail.ETFlag, mObjClientDetail.BOIFlag, mObjClientDetail.SynFlag, mObjClientDetail.UserType, mObjClientDetail.POAFlag);
+                                        }
+                                        Session[WebUser.SessionName] = mObjloggedInUser;
+                                        //System.Diagnostics.Debug.WriteLine(mObjloggedInUser.ToString()); 
+                                        System.Diagnostics.Debug.WriteLine(mObjloggedInUser.ToString());
+
+
+                                        //string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); clearClntDetails(); clearClntInfo();},150);   </script> ";
+
+                                        string script = " <script type=\"text/javascript\"> setTimeout(function(){setGlobalVariable('CCID','" + mObjloggedInUser.sTradingCode + "'); cleardefualtwatchlist(); clearClntDetails(); clearClntInfo();},150);   </script> ";
+                                        //ScriptManager.RegisterStartupScript(this, typeof(Page), "CCIDfn", script, false);
+
+                                    }
+                                }
+                                if (Session[WebUser.SessionName] != null)
+                                {
+
+                                    lblClientName = mObjloggedInUser.sName;
+                                    //hFldOpenPopupId = GlobalVariables.POPUP_MPINVALIDATE1;
+                                    //return Json(hFldOpenPopupId, JsonRequestBehavior.AllowGet);
+                                }
+                                break;
+                        }
+                        WebUser mObjUser = (WebUser)Session[WebUser.SessionName];
                         if (Request.Cookies["username"] != null)
                         {
 
@@ -751,12 +1086,12 @@ namespace CTCLProj.Controllers
                         Response.Cookies["LoginId"].Value = mObjUser.sLoginId;
                         Response.Cookies["LoginId"].Expires = DateTime.Now.AddMinutes(45);
 
-                       // Response.Cookies["LoginId"].Domain = ".investmentz.com";
+                        // Response.Cookies["LoginId"].Domain = ".investmentz.com";
 
                         Response.Cookies["SessionId"].Value = mObjUser.sSessionID;
                         Response.Cookies["SessionId"].Expires = DateTime.Now.AddMinutes(45);
 
-                        Response.Cookies["SessionId"].Domain = ".investmentz.com";
+                        Response.Cookies["SessionId"].Domain = "ctclvapt.investmentz.com";
 
                         #endregion
 
@@ -772,39 +1107,27 @@ namespace CTCLProj.Controllers
 
                         if (RU != "")
                             clientdetails.sTradingCode = "N";
-
-                        //  return Redirect(RU);
                         else
                         {
-                            //token 
-                            //ARV
                             AcmiilApiServices.PutNotification(ref mObjUser, true, "");
                             Session[WebUser.SessionName] = mObjUser;
-                          
+
 
                             clientdetails.sTradingCode = mObjUser.sTradingCode;
                             clientdetails.sName = mObjUser.sName;
                             clientdetails.UserType = mObjUser.sUserType;
                             clientdetails.passwordsExpiry = mObjUser.sExpiryDaysMessage;
                             clientdetails.Sessionid = mObjUser.sSessionID;
-
-
-                           // mergevalue = mObjUser.sName + " (" + mObjUser.sTradingCode + ")";
-                            //  returnurl = String.Format("https://www.Google.com");
-                            //return RedirectToActionPermanent(returnurl);
                         }
-                        //GlobalFunctions.SafelyTrasnsferPage("~/WebForms/MktWatch.aspx", Response, Context);
                     }
                     else
                     {
-                        // lblMPinVerError.ForeColor = System.Drawing.Color.Red;
-                        // lblMPinVerError.Text = resp.RespMessage;
+
                     }
                 }
                 else
                 {
-                    // lblMPinVerError.ForeColor = System.Drawing.Color.Red;
-                    // lblMPinVerError.Text = sErr;
+
                 }
             }
             catch (Exception exError)
@@ -844,7 +1167,7 @@ namespace CTCLProj.Controllers
         public static System.Web.HttpContext Current { get; set; }
         public HttpResponse Response1 { get; }
 
-        
+
         public class clientssdata
         {
             public string sName { get; set; }
