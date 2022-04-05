@@ -546,8 +546,7 @@ $("#btnLogin").click(function () {
         dataType: "json",
         success: function (data) {
             var str = data.split(" ");
-            strmsg = str[0]
-            //  alert(strmsg);
+            strmsg = str[0];
 
             if (strmsg == "Incorrect") {
 
